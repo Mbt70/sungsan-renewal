@@ -4,6 +4,9 @@ if (!defined('_GNUBOARD_')) {
 }
 
 global $is_member;
+
+$sungsan_free_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+$sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -12,13 +15,13 @@ global $is_member;
             <?php if ($write_href) { ?><a class="ss-button" href="<?php echo get_text($write_href); ?>">글쓰기</a><?php } ?>
         </div>
 
-        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($_SERVER['SCRIPT_NAME']); ?>">
+        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($sungsan_free_search_action); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label for="free_board_stx">검색어</label>
             <div class="ss-search-row">
-                <input id="free_board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
+                <input id="free_board_stx" name="stx" value="<?php echo get_text($sungsan_free_search_term); ?>" placeholder="제목과 내용을 검색">
                 <button type="submit">검색</button>
             </div>
         </form>

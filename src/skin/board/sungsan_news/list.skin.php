@@ -6,6 +6,8 @@ if (!defined('_GNUBOARD_')) {
 global $sungsan_news_categories, $is_admin;
 
 $current_category = isset($sca) ? $sca : '';
+$sungsan_news_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+$sungsan_news_search_term = isset($stx) ? stripslashes($stx) : '';
 $visible_count = 0;
 $sungsan_news_list_url = G5_BBS_URL.'/board.php?bo_table='.$bo_table;
 ?>
@@ -26,14 +28,14 @@ $sungsan_news_list_url = G5_BBS_URL.'/board.php?bo_table='.$bo_table;
             <?php } ?>
         </div>
 
-        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($_SERVER['SCRIPT_NAME']); ?>">
+        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($sungsan_news_search_action); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
-            <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
+            <input type="hidden" name="sca" value="<?php echo get_text($current_category); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label for="board_stx">검색어</label>
             <div class="ss-search-row">
-                <input id="board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
+                <input id="board_stx" name="stx" value="<?php echo get_text($sungsan_news_search_term); ?>" placeholder="제목과 내용을 검색">
                 <button type="submit">검색</button>
             </div>
         </form>

@@ -1025,19 +1025,53 @@ describe('sungsan theme static contract', () => {
   });
 
   it('escapes board search terms before rendering them in form attributes', () => {
-    for (const file of [
-      'src/skin/board/sungsan_news/list.skin.php',
-      'src/skin/board/sungsan_free/list.skin.php',
-    ]) {
+    const cases = [
+      {
+        file: 'src/skin/board/sungsan_news/list.skin.php',
+        actionVariable: 'sungsan_news_search_action',
+        termVariable: 'sungsan_news_search_term',
+      },
+      {
+        file: 'src/skin/board/sungsan_free/list.skin.php',
+        actionVariable: 'sungsan_free_search_action',
+        termVariable: 'sungsan_free_search_term',
+      },
+    ];
+
+    for (const { file, actionVariable, termVariable } of cases) {
       const source = read(file);
 
-      assert.match(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should escape form action`);
+      assert.match(
+        source,
+        new RegExp(`\\$${actionVariable} = isset\\(\\$_SERVER\\['SCRIPT_NAME'\\]\\) \\? \\$_SERVER\\['SCRIPT_NAME'\\] : '';`),
+        `${file} should normalize form action before rendering`,
+      );
+      assert.match(
+        source,
+        new RegExp(`\\$${termVariable} = isset\\(\\$stx\\) \\? stripslashes\\(\\$stx\\) : '';`),
+        `${file} should normalize search term before rendering`,
+      );
+      assert.match(
+        source,
+        new RegExp(`action="<\\?php echo get_text\\(\\$${actionVariable}\\); \\?>"`),
+        `${file} should escape normalized form action`,
+      );
       assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should escape bo_table`);
-      assert.match(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should escape stx`);
+      assert.match(
+        source,
+        new RegExp(`name="stx" value="<\\?php echo get_text\\(\\$${termVariable}\\); \\?>"`),
+        `${file} should escape normalized stx`,
+      );
+      assert.doesNotMatch(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should not render superglobal directly`);
       assert.doesNotMatch(source, /action="<\?php echo \$_SERVER\['SCRIPT_NAME'\]; \?>"/, `${file} should not echo raw form action`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo \$bo_table; \?>"/, `${file} should not echo raw bo_table`);
+      assert.doesNotMatch(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should not normalize stx inline while rendering`);
       assert.doesNotMatch(source, /echo\s+stripslashes\(\$stx\)/, `${file} should not echo raw stx`);
     }
+
+    const news = read('src/skin/board/sungsan_news/list.skin.php');
+    assert.match(news, /<input type="hidden" name="sca" value="<\?php echo get_text\(\$current_category\); \?>">/);
+    assert.doesNotMatch(news, /name="sca" value="<\?php echo get_text\(\$sca\); \?>"/);
   });
 
   it('escapes board return parameters before rendering hidden form attributes', () => {
