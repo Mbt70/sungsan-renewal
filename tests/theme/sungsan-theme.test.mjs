@@ -1061,11 +1061,18 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
       assert.match(source, /<textarea id="wr_content" name="wr_content" required[^>]*><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
       assert.match(source, /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>"/, `${file} should escape cancel url`);
+      assert.match(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/, `${file} should normalize existing file rows`);
+      assert.match(source, /\$sungsan_write_file_exists = isset\(\$sungsan_write_file\['file'\]\) \? \$sungsan_write_file\['file'\] : '';/, `${file} should normalize existing file state`);
+      assert.match(source, /\$sungsan_write_file_source = isset\(\$sungsan_write_file\['source'\]\) \? \$sungsan_write_file\['source'\] : '';/, `${file} should normalize existing file label`);
+      assert.match(source, /if \(\$w === 'u' && \$sungsan_write_file_exists !== ''\)/, `${file} should test normalized file state`);
+      assert.match(source, /get_text\(\$sungsan_write_file_source\)/, `${file} should escape normalized existing file label`);
 
       assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
       assert.doesNotMatch(source, /value="<\?php echo \$subject/);
       assert.doesNotMatch(source, /<textarea id="wr_content" name="wr_content" required><\?php echo \$content/);
       assert.doesNotMatch(source, /href="<\?php echo \$sungsan_cancel_url/);
+      assert.doesNotMatch(source, /isset\(\$file\[\$i\]\['file'\]\)/);
+      assert.doesNotMatch(source, /get_text\(\$file\[\$i\]\['source'\]\)/);
     }
 
     const news = read('src/skin/board/sungsan_news/write.skin.php');

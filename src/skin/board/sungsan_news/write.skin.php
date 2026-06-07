@@ -89,13 +89,18 @@ $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((
             <?php if ($is_file) { ?>
                 <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG처럼 브라우저에서 실행될 수 있는 파일은 업로드할 수 없습니다.</p>
                 <?php for ($i = 0; $i < $file_count; $i++) { ?>
+                    <?php
+                    $sungsan_write_file = isset($file[$i]) ? $file[$i] : array();
+                    $sungsan_write_file_exists = isset($sungsan_write_file['file']) ? $sungsan_write_file['file'] : '';
+                    $sungsan_write_file_source = isset($sungsan_write_file['source']) ? $sungsan_write_file['source'] : '';
+                    ?>
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                         <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" aria-describedby="ss-attachment-help">
-                        <?php if ($w === 'u' && isset($file[$i]['file']) && $file[$i]['file']) { ?>
+                        <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
                             <label class="ss-checkline">
                                 <input type="checkbox" name="bf_file_del[<?php echo $i; ?>]" value="1">
-                                기존 파일 삭제: <?php echo get_text($file[$i]['source']); ?>
+                                기존 파일 삭제: <?php echo get_text($sungsan_write_file_source); ?>
                             </label>
                         <?php } ?>
                     </div>
