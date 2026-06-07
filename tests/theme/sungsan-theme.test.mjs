@@ -1707,6 +1707,9 @@ describe('sungsan theme static contract', () => {
     assert.match(comment, /<form name="fviewcomment" id="fviewcomment"/);
     assert.match(comment, /name="token" value=""/);
     assert.match(comment, /id="wr_content" name="wr_content"/);
+    assert.match(comment, /<div id="edit_<\?php echo \$sungsan_comment_id; \?>" class="ss-comment-placeholder" hidden><\/div>/);
+    assert.match(comment, /<div id="reply_<\?php echo \$sungsan_comment_id; \?>" class="ss-comment-placeholder" hidden><\/div>/);
+    assert.doesNotMatch(comment, /<span id="(?:edit|reply)_<\?php echo \$sungsan_comment_id; \?>" class="ss-comment-placeholder"/);
     assert.match(comment, /set_comment_token\(f\)/);
     assert.match(comment, /function comment_box\(comment_id, work\)/);
     assert.match(css, /\.ss-comment-section\s*\{/);

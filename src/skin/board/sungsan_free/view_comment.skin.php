@@ -53,8 +53,8 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
                         <?php echo $sungsan_comment_content; ?>
                     </div>
 
-                    <span id="edit_<?php echo $sungsan_comment_id; ?>" class="ss-comment-placeholder" hidden></span>
-                    <span id="reply_<?php echo $sungsan_comment_id; ?>" class="ss-comment-placeholder" hidden></span>
+                    <div id="edit_<?php echo $sungsan_comment_id; ?>" class="ss-comment-placeholder" hidden></div>
+                    <div id="reply_<?php echo $sungsan_comment_id; ?>" class="ss-comment-placeholder" hidden></div>
                     <input type="hidden" id="secret_comment_<?php echo $sungsan_comment_id; ?>" value="<?php echo $sungsan_comment_secret ? 'secret' : ''; ?>">
                     <textarea id="save_comment_<?php echo $sungsan_comment_id; ?>" hidden><?php echo get_text($sungsan_comment_saved_content, 0); ?></textarea>
 
