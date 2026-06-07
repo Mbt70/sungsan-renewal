@@ -93,7 +93,11 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
+      assert.match(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should escape form action`);
+      assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should escape bo_table`);
       assert.match(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should escape stx`);
+      assert.doesNotMatch(source, /action="<\?php echo \$_SERVER\['SCRIPT_NAME'\]; \?>"/, `${file} should not echo raw form action`);
+      assert.doesNotMatch(source, /name="bo_table" value="<\?php echo \$bo_table; \?>"/, `${file} should not echo raw bo_table`);
       assert.doesNotMatch(source, /echo\s+stripslashes\(\$stx\)/, `${file} should not echo raw stx`);
     }
   });

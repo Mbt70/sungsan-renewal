@@ -24,8 +24,8 @@ $visible_count = 0;
             <?php } ?>
         </div>
 
-        <form class="ss-search-form ss-board-search" method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-            <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
+        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($_SERVER['SCRIPT_NAME']); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
             <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">

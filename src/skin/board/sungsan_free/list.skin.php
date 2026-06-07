@@ -10,8 +10,8 @@ if (!defined('_GNUBOARD_')) {
             <?php if ($write_href) { ?><a class="ss-button" href="<?php echo $write_href; ?>">글쓰기</a><?php } ?>
         </div>
 
-        <form class="ss-search-form ss-board-search" method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
-            <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
+        <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($_SERVER['SCRIPT_NAME']); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label class="sound_only" for="free_board_stx">자유게시판 검색어</label>
