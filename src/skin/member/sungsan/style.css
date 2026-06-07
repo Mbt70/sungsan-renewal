@@ -71,6 +71,8 @@
 }
 
 #info_fs > label:not(.sound_only),
+#mb_confirm fieldset > label:not(.sound_only),
+#pw_confirm fieldset > label:not(.sound_only),
 .form_01 li > label:not(.sound_only),
 .form_01 li > .frm_label {
   display: block;
@@ -79,6 +81,8 @@
 }
 
 #info_fs > label:not(.sound_only) strong,
+#mb_confirm fieldset > label:not(.sound_only) strong,
+#pw_confirm fieldset > label:not(.sound_only) strong,
 .form_01 li > label:not(.sound_only) strong,
 .form_01 li > .frm_label strong {
   color: var(--ss-color-danger, #b42318);

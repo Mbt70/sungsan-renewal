@@ -476,6 +476,14 @@ describe('sungsan theme static contract', () => {
         fields: ['mb_pw', 'mb_pw2'],
       },
       {
+        file: 'src/skin/member/sungsan/member_confirm.skin.php',
+        fields: ['confirm_mb_password'],
+      },
+      {
+        file: 'src/skin/member/sungsan/password.skin.php',
+        fields: ['password_wr_password'],
+      },
+      {
         file: 'src/skin/member/sungsan/memo_form.skin.php',
         fields: ['me_recv_mb_id', 'me_memo'],
       },
@@ -523,6 +531,8 @@ describe('sungsan theme static contract', () => {
     const css = read('src/skin/member/sungsan/style.css');
 
     assert.match(css, /#info_fs\s*>\s*label:not\(\.sound_only\)/);
+    assert.match(css, /#mb_confirm\s+fieldset\s*>\s*label:not\(\.sound_only\)/);
+    assert.match(css, /#pw_confirm\s+fieldset\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /\.form_01\s+li\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /\.form_01\s+li\s*>\s*\.frm_label/);
     assert.match(css, /display:\s*block/);
