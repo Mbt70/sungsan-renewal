@@ -293,6 +293,17 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('renders news visibility write options from the centralized visibility labels', () => {
+    const source = read('src/skin/board/sungsan_news/write.skin.php');
+
+    assert.match(source, /\$sungsan_visibility_options = array\('public', 'member', 'officer'\);/);
+    assert.match(source, /foreach \(\$sungsan_visibility_options as \$sungsan_visibility\)/);
+    assert.match(source, /<option value="<\?php echo get_text\(\$sungsan_visibility\); \?>"<\?php echo sungsan_selected\(\$visibility, \$sungsan_visibility\); \?>><\?php echo get_text\(sungsan_get_visibility_label\(\$sungsan_visibility\)\); \?><\/option>/);
+    assert.doesNotMatch(source, /<option value="public"<\?php echo sungsan_selected\(\$visibility, 'public'\); \?>>/);
+    assert.doesNotMatch(source, /<option value="member"<\?php echo sungsan_selected\(\$visibility, 'member'\); \?>>/);
+    assert.doesNotMatch(source, /<option value="officer"<\?php echo sungsan_selected\(\$visibility, 'officer'\); \?>>/);
+  });
+
   it('URL-encodes news board ids before building category filter links', () => {
     const source = read('src/skin/board/sungsan_news/list.skin.php');
 

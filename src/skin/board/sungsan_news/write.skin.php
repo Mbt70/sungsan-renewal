@@ -17,6 +17,7 @@ $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table,
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
 $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $board : array());
+$sungsan_visibility_options = array('public', 'member', 'officer');
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -70,9 +71,9 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
                 <div class="ss-field">
                     <label for="wr_2">공개 범위</label>
                     <select id="wr_2" name="wr_2">
-                        <option value="public"<?php echo sungsan_selected($visibility, 'public'); ?>>누구나</option>
-                        <option value="member"<?php echo sungsan_selected($visibility, 'member'); ?>>회원</option>
-                        <option value="officer"<?php echo sungsan_selected($visibility, 'officer'); ?>>임원</option>
+                        <?php foreach ($sungsan_visibility_options as $sungsan_visibility) { ?>
+                            <option value="<?php echo get_text($sungsan_visibility); ?>"<?php echo sungsan_selected($visibility, $sungsan_visibility); ?>><?php echo get_text(sungsan_get_visibility_label($sungsan_visibility)); ?></option>
+                        <?php } ?>
                     </select>
                 </div>
                 <div class="ss-field">
