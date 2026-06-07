@@ -304,16 +304,28 @@ describe('sungsan theme static contract', () => {
       );
     }
 
-    assert.match(source, /name="cert_type" value="<\?php echo get_text\(\$member\['mb_certify'\]\); \?>"/);
-    assert.match(source, /name="mb_sex" value="<\?php echo get_text\(\$member\['mb_sex'\]\); \?>"/);
     assert.match(source, /<div class="ss-register-compat-fields" hidden>/);
     assert.match(source, /\$sungsan_member_raw = function \(\$field, \$default = ''\) use \(\$member\)/);
     assert.match(source, /\$sungsan_member_value = function \(\$field, \$default = ''\) use \(\$sungsan_member_raw\)/);
     assert.match(source, /isset\(\$member\[\$field\]\) \? \$member\[\$field\] : \$default/);
     assert.match(source, /\$sungsan_member_zip = \$sungsan_member_value\('mb_zip1'\)\.\$sungsan_member_value\('mb_zip2'\);/);
-    assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
-    assert.match(source, /name="old_email" value="<\?php echo get_text\(\$member\['mb_email'\]\); \?>"/);
-    assert.match(source, /name="mb_email" value="<\?php echo isset\(\$member\['mb_email'\]\) \? get_text\(\$member\['mb_email'\]\) : ''; \?>"/);
+    for (const field of ['mb_certify', 'mb_sex', 'mb_id', 'mb_name', 'mb_email', 'mb_hp', 'mb_nick']) {
+      assert.match(
+        source,
+        new RegExp(`\\$sungsan_member_value\\('${field}'\\)`),
+        `registration form should render ${field} through the member value helper`,
+      );
+      assert.doesNotMatch(
+        source,
+        new RegExp(`get_text\\(\\$member\\['${field}'\\]\\)`),
+        `registration form should not read ${field} directly while rendering`,
+      );
+    }
+    assert.match(source, /name="cert_type" value="<\?php echo \$sungsan_member_value\('mb_certify'\); \?>"/);
+    assert.match(source, /name="mb_sex" value="<\?php echo \$sungsan_member_value\('mb_sex'\); \?>"/);
+    assert.match(source, /name="mb_id" value="<\?php echo \$sungsan_member_value\('mb_id'\); \?>"/);
+    assert.match(source, /name="old_email" value="<\?php echo \$sungsan_member_value\('mb_email'\); \?>"/);
+    assert.match(source, /name="mb_email" value="<\?php echo \$sungsan_member_value\('mb_email'\); \?>"/);
     assert.match(source, /name="mb_homepage" value="<\?php echo \$sungsan_member_value\('mb_homepage'\); \?>"/);
     assert.match(source, /name="mb_tel" value="<\?php echo \$sungsan_member_value\('mb_tel'\); \?>"/);
     assert.match(source, /name="mb_zip" value="<\?php echo \$sungsan_member_zip; \?>"/);

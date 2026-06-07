@@ -14,6 +14,8 @@ $sungsan_member_value = function ($field, $default = '') use ($sungsan_member_ra
     return get_text($sungsan_member_raw($field, $default));
 };
 $sungsan_member_zip = $sungsan_member_value('mb_zip1').$sungsan_member_value('mb_zip2');
+$sungsan_member_certify = $sungsan_member_raw('mb_certify');
+$sungsan_member_adult = (int) $sungsan_member_raw('mb_adult', 0);
 $sungsan_cancel_url = $w == 'u' ? G5_URL.'/sungsan/mypage.php' : G5_URL;
 $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 ?>
@@ -26,12 +28,12 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
 	<input type="hidden" name="agree" value="<?php echo get_text($agree); ?>">
 	<input type="hidden" name="agree2" value="<?php echo get_text($agree2); ?>">
-	<input type="hidden" name="cert_type" value="<?php echo get_text($member['mb_certify']); ?>">
+	<input type="hidden" name="cert_type" value="<?php echo $sungsan_member_value('mb_certify'); ?>">
 	<input type="hidden" name="cert_no" value="">
-	<?php if (isset($member['mb_sex'])) {  ?><input type="hidden" name="mb_sex" value="<?php echo get_text($member['mb_sex']); ?>"><?php }  ?>
+	<?php if (isset($member['mb_sex'])) {  ?><input type="hidden" name="mb_sex" value="<?php echo $sungsan_member_value('mb_sex'); ?>"><?php }  ?>
 	<?php if (isset($member['mb_nick_date']) && $member['mb_nick_date'] > date("Y-m-d", G5_SERVER_TIME - ($config['cf_nick_modify'] * 86400))) { // 닉네임수정일이 지나지 않았다면  ?>
-	<input type="hidden" name="mb_nick_default" value="<?php echo get_text($member['mb_nick']) ?>">
-	<input type="hidden" name="mb_nick" value="<?php echo get_text($member['mb_nick']) ?>">
+	<input type="hidden" name="mb_nick_default" value="<?php echo $sungsan_member_value('mb_nick'); ?>">
+	<input type="hidden" name="mb_nick" value="<?php echo $sungsan_member_value('mb_nick'); ?>">
 	<?php }  ?>
 	<div class="ss-register-compat-fields" hidden>
 		<input type="hidden" name="mb_homepage" value="<?php echo $sungsan_member_value('mb_homepage'); ?>">
@@ -58,7 +60,7 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 	                    <button type="button" class="tooltip_icon"><i class="fa fa-question-circle-o" aria-hidden="true"></i><span class="sound_only">설명보기</span></button>
 	                    <span class="tooltip">영문자, 숫자, _ 만 입력 가능. 최소 3자이상 입력하세요.</span>
 	                </label>
-	                <input type="text" name="mb_id" value="<?php echo get_text($member['mb_id']); ?>" id="reg_mb_id" <?php echo $required ?> <?php echo $readonly ?> class="frm_input full_input <?php echo $required ?> <?php echo $readonly ?>" minlength="3" maxlength="20" placeholder="아이디">
+	                <input type="text" name="mb_id" value="<?php echo $sungsan_member_value('mb_id'); ?>" id="reg_mb_id" <?php echo $required ?> <?php echo $readonly ?> class="frm_input full_input <?php echo $required ?> <?php echo $readonly ?>" minlength="3" maxlength="20" placeholder="아이디">
 	                <span id="msg_mb_id"></span>
 	            </li>
 	            <li class="half_input left_input margin_input">
@@ -100,8 +102,8 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
                         echo '<noscript>본인확인을 위해서는 자바스크립트 사용이 가능해야합니다.</noscript>'.PHP_EOL;
 						?>
 						<?php
-	                if ($member['mb_certify']) {
-                        switch ($member['mb_certify']) {
+	                if ($sungsan_member_certify) {
+                        switch ($sungsan_member_certify) {
 							case "simple": 
 								$mb_cert = "간편인증";
 								break;
@@ -114,14 +116,14 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 						}
 	                ?>
 	                <div id="msg_certify">
-	                    <strong><?php echo $mb_cert; ?> 본인확인</strong><?php if ($member['mb_adult']) { ?> 및 <strong>성인인증</strong><?php } ?> 완료
+	                    <strong><?php echo $mb_cert; ?> 본인확인</strong><?php if ($sungsan_member_adult) { ?> 및 <strong>성인인증</strong><?php } ?> 완료
 	                </div>
 					<?php } ?>
 				</li>
 				<?php } ?>
 	            <li>
 	                <label for="reg_mb_name">이름 (필수)<?php echo $desc_name ?></label>
-	                <input type="text" id="reg_mb_name" name="mb_name" value="<?php echo get_text($member['mb_name']) ?>" <?php echo $required ?> <?php echo $name_readonly; ?> class="frm_input full_input <?php echo $required ?> <?php echo $name_readonly ?>" size="10" placeholder="이름">
+	                <input type="text" id="reg_mb_name" name="mb_name" value="<?php echo $sungsan_member_value('mb_name'); ?>" <?php echo $required ?> <?php echo $name_readonly; ?> class="frm_input full_input <?php echo $required ?> <?php echo $name_readonly ?>" size="10" placeholder="이름">
 	            </li>
 	            <?php if ($req_nick) {  ?>
 	            <li>
@@ -131,8 +133,8 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 						<span class="tooltip">공백없이 한글,영문,숫자만 입력 가능 (한글2자, 영문4자 이상)<br> 닉네임을 바꾸시면 앞으로 <?php echo (int)$config['cf_nick_modify'] ?>일 이내에는 변경 할 수 없습니다.</span>
 	                </label>
 	                
-                    <input type="hidden" name="mb_nick_default" value="<?php echo isset($member['mb_nick'])?get_text($member['mb_nick']):''; ?>">
-                    <input type="text" name="mb_nick" value="<?php echo isset($member['mb_nick'])?get_text($member['mb_nick']):''; ?>" id="reg_mb_nick" required class="frm_input required nospace full_input" size="10" maxlength="20" placeholder="닉네임">
+                    <input type="hidden" name="mb_nick_default" value="<?php echo $sungsan_member_value('mb_nick'); ?>">
+                    <input type="text" name="mb_nick" value="<?php echo $sungsan_member_value('mb_nick'); ?>" id="reg_mb_nick" required class="frm_input required nospace full_input" size="10" maxlength="20" placeholder="닉네임">
                     <span id="msg_mb_nick"></span>	                
 	            </li>
 	            <?php }  ?>
@@ -149,17 +151,17 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 	                <?php }  ?>
 					</label>
 
-	                <input type="hidden" name="old_email" value="<?php echo get_text($member['mb_email']); ?>">
-	                <input type="text" name="mb_email" value="<?php echo isset($member['mb_email']) ? get_text($member['mb_email']) : ''; ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" placeholder="E-mail">
+	                <input type="hidden" name="old_email" value="<?php echo $sungsan_member_value('mb_email'); ?>">
+	                <input type="text" name="mb_email" value="<?php echo $sungsan_member_value('mb_email'); ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" placeholder="E-mail">
 	            </li>
 	
 				<li>
 	            <?php if ($config['cf_use_hp'] || ($config["cf_cert_use"] && ($config['cf_cert_hp'] || $config['cf_cert_simple']))) {  ?>
 	                <label for="reg_mb_hp">휴대폰번호<?php if (!empty($hp_required)) { ?> (필수)<?php } ?><?php echo $desc_phone ?></label>
 	                
-	                <input type="text" name="mb_hp" value="<?php echo get_text($member['mb_hp']) ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" placeholder="휴대폰번호">
+	                <input type="text" name="mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" placeholder="휴대폰번호">
 	                <?php if ($config['cf_cert_use'] && ($config['cf_cert_hp'] || $config['cf_cert_simple'])) { ?>
-	                <input type="hidden" name="old_mb_hp" value="<?php echo get_text($member['mb_hp']) ?>">
+	                <input type="hidden" name="old_mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>">
 	                <?php } ?>
 	            <?php }  ?>
 	            </li>
