@@ -1180,6 +1180,30 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /border:\s*1px solid var\(--ss-color-border\)/);
   });
 
+  it('uses search input semantics for board list search fields', () => {
+    const cases = [
+      {
+        file: 'src/skin/board/sungsan_news/list.skin.php',
+        id: 'board_stx',
+      },
+      {
+        file: 'src/skin/board/sungsan_free/list.skin.php',
+        id: 'free_board_stx',
+      },
+    ];
+
+    for (const { file, id } of cases) {
+      const source = read(file);
+      const inputLine = source.split('\n').find((line) => line.includes(`id="${id}"`));
+
+      assert.ok(inputLine, `${file} should render the ${id} search input`);
+      assert.match(inputLine, /name="stx"/, `${file} should keep the board search query field name`);
+      assert.match(inputLine, /type="search"/, `${file} should expose board search as a search input`);
+      assert.match(inputLine, /enterkeyhint="search"/, `${file} should request the search action on mobile keyboards`);
+      assert.doesNotMatch(inputLine, new RegExp(`<input id="${id}" name="stx" value=`), `${file} should not leave board search as a default text input`);
+    }
+  });
+
   it('escapes board search terms before rendering them in form attributes', () => {
     const cases = [
       {
@@ -1213,11 +1237,7 @@ describe('sungsan theme static contract', () => {
         `${file} should escape normalized form action`,
       );
       assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should escape bo_table`);
-      assert.match(
-        source,
-        new RegExp(`name="stx" value="<\\?php echo get_text\\(\\$${termVariable}\\); \\?>"`),
-        `${file} should escape normalized stx`,
-      );
+      assert.match(source, new RegExp(`<input[^\\n]+name="stx"[^\\n]+value="<\\?php echo get_text\\(\\$${termVariable}\\); \\?>"`), `${file} should escape normalized stx`);
       assert.doesNotMatch(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should not render superglobal directly`);
       assert.doesNotMatch(source, /action="<\?php echo \$_SERVER\['SCRIPT_NAME'\]; \?>"/, `${file} should not echo raw form action`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo \$bo_table; \?>"/, `${file} should not echo raw bo_table`);
