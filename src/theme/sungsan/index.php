@@ -12,7 +12,7 @@ $notice_posts = sungsan_latest_board_posts('news', array('category' => '공지',
 $event_posts = sungsan_latest_board_posts('news', array('category' => '행사', 'upcoming' => true, 'limit' => 3));
 $resource_posts = sungsan_latest_board_posts('news', array('category' => array('자료', '규정'), 'limit' => 5));
 $free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
-$photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 'limit' => 4));
+$photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 'thumbnail' => true, 'limit' => 4));
 ?>
 <section class="ss-hero">
     <div class="ss-container ss-hero-layout">
@@ -83,7 +83,11 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
         <div class="ss-media-grid">
             <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>
                 <a class="ss-media-tile" href="<?php echo $photo_posts[$i]['href']; ?>">
-                    <span class="ss-media-thumb" aria-hidden="true"></span>
+                    <?php if (!empty($photo_posts[$i]['thumb_src'])) { ?>
+                        <img class="ss-media-thumb" src="<?php echo get_text($photo_posts[$i]['thumb_src']); ?>" alt="<?php echo get_text($photo_posts[$i]['thumb_alt']); ?>" loading="lazy">
+                    <?php } else { ?>
+                        <span class="ss-media-thumb" aria-hidden="true"></span>
+                    <?php } ?>
                     <strong><?php echo $photo_posts[$i]['subject']; ?></strong>
                     <span><?php echo get_text($photo_posts[$i]['date']); ?></span>
                 </a>

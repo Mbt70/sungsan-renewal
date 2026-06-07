@@ -600,10 +600,12 @@ img {
 
 .ss-media-thumb {
   display: block;
+  width: 100%;
   aspect-ratio: 16 / 10;
   border: 1px solid var(--ss-color-border);
   border-radius: var(--ss-radius-md);
   background: var(--ss-color-primary-soft);
+  object-fit: cover;
 }
 
 .ss-empty-state {

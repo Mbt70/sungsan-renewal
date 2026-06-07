@@ -54,4 +54,17 @@ describe('sungsan theme static contract', () => {
       assert.match(css, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     }
   });
+
+  it('renders home media posts with GnuBoard thumbnails when available', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(extend, /get_list_thumbnail\(\$board_id,\s*\$row\['wr_id'\]/);
+    assert.match(extend, /thumb_src/);
+    assert.match(index, /'thumbnail'\s*=>\s*true/);
+    assert.match(index, /<img class="ss-media-thumb"/);
+    assert.match(index, /loading="lazy"/);
+    assert.match(css, /object-fit:\s*cover/);
+  });
 });

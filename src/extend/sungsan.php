@@ -135,7 +135,14 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     }
 
     $limit = isset($args['limit']) ? max(1, min(10, (int) $args['limit'])) : 5;
+    $with_thumbnail = !empty($args['thumbnail']);
+    $thumb_width = isset($args['thumbWidth']) ? max(120, (int) $args['thumbWidth']) : 420;
+    $thumb_height = isset($args['thumbHeight']) ? max(90, (int) $args['thumbHeight']) : 260;
     $where = array('wr_is_comment = 0');
+
+    if ($with_thumbnail && !function_exists('get_list_thumbnail') && defined('G5_LIB_PATH') && is_file(G5_LIB_PATH.'/thumbnail.lib.php')) {
+        include_once G5_LIB_PATH.'/thumbnail.lib.php';
+    }
 
     if (!empty($args['category'])) {
         $categories = is_array($args['category']) ? $args['category'] : array($args['category']);
@@ -177,6 +184,13 @@ function sungsan_latest_board_posts($bo_table, $args = array())
         $row['href'] = sungsan_board_href($board_id, $row['wr_id']);
         $row['subject'] = get_text($row['wr_subject']);
         $row['date'] = substr($row['wr_datetime'], 0, 10);
+
+        if ($with_thumbnail && function_exists('get_list_thumbnail')) {
+            $thumb = get_list_thumbnail($board_id, $row['wr_id'], $thumb_width, $thumb_height, false, true);
+            $row['thumb_src'] = isset($thumb['src']) ? $thumb['src'] : '';
+            $row['thumb_alt'] = isset($thumb['alt']) && $thumb['alt'] ? $thumb['alt'] : $row['subject'];
+        }
+
         $posts[] = $row;
     }
 
