@@ -71,6 +71,36 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$mb\['mb_email'\]/);
   });
 
+  it('escapes optional member profile fields before rendering the registration form', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    for (const variable of ['w', 'urlencode', 'agree', 'agree2']) {
+      assert.match(
+        source,
+        new RegExp(`name="${variable === 'urlencode' ? 'url' : variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+        `register form should escape ${variable}`,
+      );
+    }
+
+    assert.match(source, /name="cert_type" value="<\?php echo get_text\(\$member\['mb_certify'\]\); \?>"/);
+    assert.match(source, /name="mb_sex" value="<\?php echo get_text\(\$member\['mb_sex'\]\); \?>"/);
+    assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
+    assert.match(source, /name="old_email" value="<\?php echo get_text\(\$member\['mb_email'\]\); \?>"/);
+    assert.match(source, /name="mb_email" value="<\?php echo isset\(\$member\['mb_email'\]\) \? get_text\(\$member\['mb_email'\]\) : ''; \?>"/);
+    assert.match(source, /get_text\(\$member\['mb_zip1'\]\.\$member\['mb_zip2'\]\)/);
+    assert.match(source, /get_text\(\$member\['mb_signature'\]\)/);
+    assert.match(source, /get_text\(\$member\['mb_profile'\]\)/);
+    assert.match(source, /name="mb_open_default" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
+    assert.match(source, /name="mb_open" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
+    assert.doesNotMatch(source, /echo \$member\['mb_id'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_certify'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_sex'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_email'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_zip1'\]\.\$member\['mb_zip2'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_signature'\]/);
+    assert.doesNotMatch(source, /echo \$member\['mb_profile'\]/);
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',
