@@ -82,13 +82,13 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
         </div>
         <div class="ss-media-grid">
             <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>
-                <a class="ss-media-tile" href="<?php echo $photo_posts[$i]['href']; ?>">
+                <a class="ss-media-tile" href="<?php echo get_text($photo_posts[$i]['href']); ?>">
                     <?php if (!empty($photo_posts[$i]['thumb_src'])) { ?>
                         <img class="ss-media-thumb" src="<?php echo get_text($photo_posts[$i]['thumb_src']); ?>" alt="<?php echo get_text($photo_posts[$i]['thumb_alt']); ?>" loading="lazy">
                     <?php } else { ?>
                         <span class="ss-media-thumb" aria-hidden="true"></span>
                     <?php } ?>
-                    <strong><?php echo $photo_posts[$i]['subject']; ?></strong>
+                    <strong><?php echo get_text($photo_posts[$i]['subject']); ?></strong>
                     <span><?php echo get_text($photo_posts[$i]['date']); ?></span>
                 </a>
             <?php } ?>
@@ -109,8 +109,8 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
     ?>
     <div class="ss-post-list">
         <?php for ($i = 0; $i < count($posts); $i++) { ?>
-            <a class="ss-post-row" href="<?php echo $posts[$i]['href']; ?>">
-                <p class="ss-post-title"><?php echo $posts[$i]['subject']; ?></p>
+            <a class="ss-post-row" href="<?php echo get_text($posts[$i]['href']); ?>">
+                <p class="ss-post-title"><?php echo get_text($posts[$i]['subject']); ?></p>
                 <div class="ss-meta">
                     <?php if ($show_category && !empty($posts[$i]['ca_name'])) { ?>
                         <span class="ss-badge"><?php echo get_text($posts[$i]['ca_name']); ?></span>

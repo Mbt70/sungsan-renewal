@@ -558,6 +558,27 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /object-fit:\s*cover/);
   });
 
+  it('escapes home and latest post links and titles before rendering latest content', () => {
+    const index = read('src/theme/sungsan/index.php');
+    const latest = read('src/skin/latest/sungsan_list/latest.skin.php');
+
+    assert.match(index, /href="<\?php echo get_text\(\$photo_posts\[\$i\]\['href'\]\); \?>"/);
+    assert.match(index, /<strong><\?php echo get_text\(\$photo_posts\[\$i\]\['subject'\]\); \?><\/strong>/);
+    assert.match(index, /href="<\?php echo get_text\(\$posts\[\$i\]\['href'\]\); \?>"/);
+    assert.match(index, /get_text\(\$posts\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
+    assert.doesNotMatch(index, /echo \$photo_posts\[\$i\]\['subject'\]/);
+    assert.doesNotMatch(index, /href="<\?php echo \$posts\[\$i\]\['href'\]/);
+    assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
+
+    assert.match(latest, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
+    assert.match(latest, /get_text\(\$list\[\$i\]\['subject'\]\)/);
+    assert.match(latest, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
+    assert.doesNotMatch(latest, /href="<\?php echo \$list\[\$i\]\['href'\]/);
+    assert.doesNotMatch(latest, /echo \$list\[\$i\]\['subject'\]/);
+    assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
+  });
+
   it('guards news attachment downloads with per-post visibility', () => {
     const file = 'src/skin/board/sungsan_news/download.head.skin.php';
 

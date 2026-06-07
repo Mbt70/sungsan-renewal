@@ -5,13 +5,13 @@ if (!defined('_GNUBOARD_')) {
 ?>
 <div class="ss-post-list">
 <?php for ($i = 0; $i < count($list); $i++) { ?>
-    <a class="ss-post-row" href="<?php echo $list[$i]['href']; ?>">
-        <p class="ss-post-title"><?php echo $list[$i]['subject']; ?></p>
+    <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
+        <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
         <div class="ss-meta">
             <?php if (!empty($list[$i]['ca_name'])) { ?>
                 <span class="ss-badge"><?php echo get_text($list[$i]['ca_name']); ?></span>
             <?php } ?>
-            <span><?php echo $list[$i]['datetime2']; ?></span>
+            <span><?php echo get_text($list[$i]['datetime2']); ?></span>
         </div>
     </a>
 <?php } ?>
@@ -21,4 +21,3 @@ if (!defined('_GNUBOARD_')) {
     </div>
 <?php } ?>
 </div>
-
