@@ -921,6 +921,13 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /!\s*empty\(\$member\['mb_id'\]\)/);
   });
 
+  it('uses raw query separators for server-side news download login redirects', () => {
+    const source = read('src/skin/board/sungsan_news/download.head.skin.php');
+
+    assert.match(source, /login\.php\?wr_id='\.\$wr_id\.'&'\.\$qstr\.'&url='/);
+    assert.doesNotMatch(source, /&amp;/);
+  });
+
   it('preserves migrated news audit metadata when posts are edited', () => {
     const source = read('src/skin/board/sungsan_news/write.skin.php');
 

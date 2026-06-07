@@ -27,7 +27,7 @@ if (!sungsan_can_read_news_post($write)) {
     }
 
     if ($sungsan_show_login_redirect) {
-        alert($message, G5_BBS_URL.'/login.php?wr_id='.$wr_id.'&amp;'.$qstr.'&amp;url='.urlencode(get_pretty_url($bo_table, $wr_id)));
+        alert($message, G5_BBS_URL.'/login.php?wr_id='.$wr_id.'&'.$qstr.'&url='.urlencode(get_pretty_url($bo_table, $wr_id)));
     }
 
     alert($message);
