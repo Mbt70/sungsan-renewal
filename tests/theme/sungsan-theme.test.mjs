@@ -2165,6 +2165,13 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.ss-comment\.depth-5\s*\{[\s\S]*?margin-left:\s*36px/);
   });
 
+  it('does not override hidden comment placeholders before reply or edit actions', () => {
+    const css = read('src/scss/main.scss');
+
+    assert.match(css, /\.ss-comment-placeholder:not\(\[hidden\]\)\s*\{/);
+    assert.doesNotMatch(css, /\.ss-comment-placeholder\s*\{\s*display:\s*block;\s*\}/);
+  });
+
   it('shows a visible label on the free-board comment content field', () => {
     const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
     const css = read('src/scss/main.scss');

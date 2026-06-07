@@ -762,7 +762,7 @@ img {
   color: var(--ss-color-primary-strong);
 }
 
-.ss-comment-placeholder {
+.ss-comment-placeholder:not([hidden]) {
   display: block;
 }
 
