@@ -101,6 +101,21 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$member\['mb_profile'\]/);
   });
 
+  it('escapes public member profile fields before rendering the profile popup', () => {
+    const source = read('src/skin/member/sungsan/profile.skin.php');
+
+    assert.match(source, /get_text\(\$mb_nick\)/);
+    assert.match(source, /get_text\(\$mb_homepage\)/);
+    assert.match(source, /get_text\(set_http\(\$mb_homepage\)\)/);
+    assert.match(source, /get_text\(\$mb_profile\)/);
+    assert.match(source, /\(int\)\s*\$mb\['mb_level'\]/);
+    assert.match(source, /\(int\)\s*\$mb\['mb_point'\]/);
+    assert.doesNotMatch(source, /echo \$mb_nick/);
+    assert.doesNotMatch(source, /echo \$mb_homepage/);
+    assert.doesNotMatch(source, /echo \$mb_profile/);
+    assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',
