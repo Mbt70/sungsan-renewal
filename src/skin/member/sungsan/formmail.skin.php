@@ -38,16 +38,20 @@ $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
                 <label for="subject">제목 <strong>필수</strong></label>
                 <input type="text" name="subject" id="subject" required class="frm_input full_input required"  placeholder="제목">
             </li>
-            <li class="chk_box">
-                <span class="sound_only">형식</span>
-                <input type="radio" name="type" value="0" id="type_text" checked>
-                <label for="type_text"><span></span>TEXT</label>
-                
-                <input type="radio" name="type" value="1" id="type_html">
-                <label for="type_html"><span></span>HTML</label>
-                
-                <input type="radio" name="type" value="2" id="type_both">
-                <label for="type_both"><span></span>TEXT+HTML</label>
+            <li>
+                <fieldset class="ss-choice-group">
+                    <legend>메일 형식</legend>
+                    <div class="ss-choice-options">
+                        <input type="radio" name="type" value="0" id="type_text" checked>
+                        <label for="type_text"><span></span>TEXT</label>
+
+                        <input type="radio" name="type" value="1" id="type_html">
+                        <label for="type_html"><span></span>HTML</label>
+
+                        <input type="radio" name="type" value="2" id="type_both">
+                        <label for="type_both"><span></span>TEXT+HTML</label>
+                    </div>
+                </fieldset>
             </li>
             <li>
                 <label for="content">내용 <strong>필수</strong></label>

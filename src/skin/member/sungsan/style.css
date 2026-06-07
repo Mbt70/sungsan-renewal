@@ -177,6 +177,31 @@
   height: 22px;
 }
 
+.ss-choice-group {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.ss-choice-group legend {
+  margin-bottom: 6px;
+  font-weight: 800;
+}
+
+.ss-choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.ss-choice-options input {
+  width: 22px;
+  height: 22px;
+}
+
 #mb_confirm_id,
 .confirm_id {
   display: inline-flex;

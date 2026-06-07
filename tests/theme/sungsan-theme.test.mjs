@@ -1010,6 +1010,17 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('groups form mail format choices with a visible legend', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+    const css = read('src/skin/member/sungsan/style.css');
+
+    assert.match(source, /<fieldset class="ss-choice-group">[\s\S]*?<legend>메일 형식<\/legend>[\s\S]*?<div class="ss-choice-options">[\s\S]*?id="type_text"[\s\S]*?id="type_html"[\s\S]*?id="type_both"[\s\S]*?<\/div>[\s\S]*?<\/fieldset>/);
+    assert.doesNotMatch(source, /<span class="sound_only">형식<\/span>/);
+    assert.match(css, /\.ss-choice-group\s*\{/);
+    assert.match(css, /\.ss-choice-group\s+legend\s*\{/);
+    assert.match(css, /\.ss-choice-options\s*\{/);
+  });
+
   it('shows plain visible labels for form mail attachment fields', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
 
