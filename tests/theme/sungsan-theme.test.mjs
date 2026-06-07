@@ -892,11 +892,11 @@ describe('sungsan theme static contract', () => {
 
     assert.match(index, /href="<\?php echo get_text\(\$photo_posts\[\$i\]\['href'\]\); \?>"/);
     assert.match(index, /<strong><\?php echo get_text\(\$photo_posts\[\$i\]\['subject'\]\); \?><\/strong>/);
-    assert.match(index, /href="<\?php echo get_text\(\$posts\[\$i\]\['href'\]\); \?>"/);
+    assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
     assert.match(index, /get_text\(\$posts\[\$i\]\['subject'\]\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
     assert.doesNotMatch(index, /echo \$photo_posts\[\$i\]\['subject'\]/);
-    assert.doesNotMatch(index, /href="<\?php echo \$posts\[\$i\]\['href'\]/);
+    assert.doesNotMatch(index, /href="<\?php echo \$sungsan_home_post_href/);
     assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
 
     assert.match(latest, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
@@ -916,6 +916,16 @@ describe('sungsan theme static contract', () => {
     );
     assert.match(index, /function sungsan_render_home_list\(\$posts, \$empty_text, \$show_event_date = false, \$show_category = true, \$access_label = ''\)/);
     assert.match(index, /<\?php if \(\$access_label\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$access_label\); \?><\/span><\?php \} \?>/);
+  });
+
+  it('sends guest home free-board post clicks to login with the post as return target', () => {
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(index, /global \$is_member;/);
+    assert.match(index, /\$sungsan_requires_login = !\$is_member && \$access_label;/);
+    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$posts\[\$i\]\['href'\], ENT_QUOTES\)\) : \$posts\[\$i\]\['href'\];/);
+    assert.match(index, /class="ss-post-row<\?php echo \$sungsan_requires_login \? ' restricted' : ''; \?>"/);
+    assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
   });
 
   it('uses an operational empty state for home media instead of migration placeholders', () => {

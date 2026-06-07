@@ -106,10 +106,16 @@ include_once G5_THEME_PATH.'/tail.php';
 
 function sungsan_render_home_list($posts, $empty_text, $show_event_date = false, $show_category = true, $access_label = '')
 {
+    global $is_member;
+
     ?>
     <div class="ss-post-list">
         <?php for ($i = 0; $i < count($posts); $i++) { ?>
-            <a class="ss-post-row" href="<?php echo get_text($posts[$i]['href']); ?>">
+            <?php
+            $sungsan_requires_login = !$is_member && $access_label;
+            $sungsan_home_post_href = $sungsan_requires_login ? G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($posts[$i]['href'], ENT_QUOTES)) : $posts[$i]['href'];
+            ?>
+            <a class="ss-post-row<?php echo $sungsan_requires_login ? ' restricted' : ''; ?>" href="<?php echo get_text($sungsan_home_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($posts[$i]['subject']); ?></p>
                 <div class="ss-meta">
                     <?php if ($show_category && !empty($posts[$i]['ca_name'])) { ?>
