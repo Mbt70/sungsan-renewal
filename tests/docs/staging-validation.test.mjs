@@ -53,4 +53,25 @@ describe('Cafe24 staging validation handoff', () => {
       expectIncludes(source, checklistPath, path);
     }
   });
+
+  it('documents operator-managed Sungsan group label overrides', () => {
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+    const checklist = readFileSync(checklistPath, 'utf8');
+    const backup = readFileSync('docs/operations/backup-and-restore.md', 'utf8');
+
+    for (const expected of [
+      'data/sungsan.groups.php',
+      '소속',
+      'slug',
+      'return array',
+      checklistPath,
+    ]) {
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
+    }
+
+    for (const expected of ['data/sungsan.groups.php', '소속', 'slug']) {
+      expectIncludes(checklist, expected, checklistPath);
+      expectIncludes(backup, expected, 'docs/operations/backup-and-restore.md');
+    }
+  });
 });

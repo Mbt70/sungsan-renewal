@@ -93,6 +93,20 @@ describe('sungsan theme static contract', () => {
     assert.match(source, />관리 문의<\/a>/);
   });
 
+  it('loads operator-managed Sungsan group labels from the data directory', () => {
+    const source = read('src/extend/sungsan.php');
+
+    assert.match(source, /function sungsan_load_group_overrides\(\$defaults\)/);
+    assert.match(source, /defined\('G5_DATA_PATH'\)/);
+    assert.match(source, /\$override_path = G5_DATA_PATH\.'\/sungsan\.groups\.php';/);
+    assert.match(source, /is_file\(\$override_path\)/);
+    assert.match(source, /\$overrides = include \$override_path;/);
+    assert.match(source, /is_array\(\$overrides\)/);
+    assert.match(source, /preg_match\('\/\^\[a-z0-9-\]\+\$\/',\s*\$slug\)/);
+    assert.match(source, /array_replace\(\$defaults,\s*\$valid_overrides\)/);
+    assert.match(source, /\$sungsan_groups = sungsan_load_group_overrides\(\$sungsan_groups\);/);
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 

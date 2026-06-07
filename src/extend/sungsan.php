@@ -30,6 +30,39 @@ $sungsan_groups = array(
     'etc' => '기타',
 );
 
+function sungsan_load_group_overrides($defaults)
+{
+    if (!defined('G5_DATA_PATH')) {
+        return $defaults;
+    }
+
+    $override_path = G5_DATA_PATH.'/sungsan.groups.php';
+    if (!is_file($override_path)) {
+        return $defaults;
+    }
+
+    $overrides = include $override_path;
+    if (!is_array($overrides)) {
+        return $defaults;
+    }
+
+    $valid_overrides = array();
+    foreach ($overrides as $slug => $label) {
+        $slug = trim((string) $slug);
+        $label = trim((string) $label);
+
+        if ($slug === '' || $label === '' || !preg_match('/^[a-z0-9-]+$/', $slug)) {
+            continue;
+        }
+
+        $valid_overrides[$slug] = $label;
+    }
+
+    return array_replace($defaults, $valid_overrides);
+}
+
+$sungsan_groups = sungsan_load_group_overrides($sungsan_groups);
+
 $sungsan_visibility_labels = array(
     'public' => '누구나',
     'member' => '회원',

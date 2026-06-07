@@ -3,6 +3,7 @@
 ## Backup Targets
 - MySQL/MariaDB DB 전체
 - `/renewal/data`
+- `/renewal/data/sungsan.groups.php`: 운영자가 조정한 소속 slug와 라벨
 - 기존 `/renewal` 소스
 - 새 사이트 운영 전환 직전 `www/data`
 
