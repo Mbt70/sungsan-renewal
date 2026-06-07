@@ -149,10 +149,12 @@ describe('sungsan theme static contract', () => {
 
   it('preserves and escapes the compact header search term', () => {
     const head = read('src/theme/sungsan/head.php');
+    const inputLine = head.split('\n').find((line) => line.includes('id="ss_stx"'));
 
     assert.match(head, /\$ss_header_search_value = isset\(\$stx\) \? stripslashes\(\$stx\) : '';/);
     assert.match(head, /<input id="ss_stx" name="stx" type="search" value="<\?php echo get_text\(\$ss_header_search_value\); \?>"/);
-    assert.doesNotMatch(head, /<input id="ss_stx" name="stx" type="search" maxlength="30" placeholder=/);
+    assert.ok(inputLine, 'header should render the compact search input');
+    assert.doesNotMatch(inputLine, /placeholder=/);
     assert.doesNotMatch(head, /value="<\?php echo \$stx; \?>"/);
   });
 
