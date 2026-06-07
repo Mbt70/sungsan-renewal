@@ -293,6 +293,16 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('URL-encodes news board ids before building category filter links', () => {
+    const source = read('src/skin/board/sungsan_news/list.skin.php');
+
+    assert.match(source, /\$sungsan_news_board_param = urlencode\(\$bo_table\);/);
+    assert.match(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param;/);
+    assert.match(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\);/);
+    assert.doesNotMatch(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table;/);
+    assert.doesNotMatch(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table/);
+  });
+
   it('uses board-managed news categories for home summary queries and filter links', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
@@ -1624,8 +1634,8 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['ca_name'\]\)/);
     assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
     assert.doesNotMatch(newsList, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/);
-    assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table;/);
-    assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table\.'&sca='\.urlencode\(\$category\);/);
+    assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param;/);
+    assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\);/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_list_url\); \?>"/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_category_href\); \?>"/);
     assert.match(newsList, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>">/);
