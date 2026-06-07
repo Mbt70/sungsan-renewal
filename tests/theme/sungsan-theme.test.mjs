@@ -1010,6 +1010,19 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows plain visible labels for form mail attachment fields', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+
+    for (const [field, label] of [
+      ['file1', '첨부 파일 1'],
+      ['file2', '첨부 파일 2'],
+    ]) {
+      assert.match(source, new RegExp(`<label for="${field}">${label}</label>`), `form mail should show ${label} as visible text`);
+      assert.doesNotMatch(source, new RegExp(`<label for="${field}" class="lb_icon"`), `form mail should not use an icon-only label for ${field}`);
+      assert.doesNotMatch(source, new RegExp(`<label for="${field}"[\\s\\S]*?<span class="sound_only">\\s*${label}</span>`), `form mail should not hide ${label}`);
+    }
+  });
+
   it('keeps optional registration address profile and recommender controls out of the visible form', () => {
     const source = read('src/skin/member/sungsan/register_form.skin.php');
 
