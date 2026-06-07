@@ -84,6 +84,10 @@ $sungsan_blocked_upload_extensions = array(
     'xhtml',
     'shtm',
     'shtml',
+    'htaccess',
+    'htpasswd',
+    'user.ini',
+    'ini',
     'js',
     'mjs',
     'svg',
@@ -184,9 +188,18 @@ function sungsan_reject_blocked_uploads($files)
             continue;
         }
 
-        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-        if (in_array($extension, $sungsan_blocked_upload_extensions, true)) {
-            alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
+        $filename_parts = explode('.', strtolower($filename));
+        array_shift($filename_parts);
+
+        foreach ($filename_parts as $extension) {
+            $extension = trim($extension);
+            if ($extension === '') {
+                continue;
+            }
+
+            if (in_array($extension, $sungsan_blocked_upload_extensions, true)) {
+                alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
+            }
         }
     }
 }

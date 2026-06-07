@@ -1623,6 +1623,13 @@ describe('sungsan theme static contract', () => {
     for (const extension of ['php', 'html', 'js', 'svg']) {
       assert.match(extend, new RegExp(`'${extension}'`));
     }
+    for (const extension of ['htaccess', 'htpasswd', 'user.ini']) {
+      assert.match(extend, new RegExp(`'${extension}'`));
+    }
+    assert.match(extend, /\$filename_parts = explode\('\.', strtolower\(\$filename\)\);/);
+    assert.match(extend, /array_shift\(\$filename_parts\);/);
+    assert.match(extend, /foreach \(\$filename_parts as \$extension\)/);
+    assert.doesNotMatch(extend, /pathinfo\(\$filename,\s*PATHINFO_EXTENSION\)/);
 
     for (const file of [
       'src/skin/board/sungsan_news/write_update.head.skin.php',
