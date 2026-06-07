@@ -44,13 +44,13 @@ ON DUPLICATE KEY UPDATE
 -- news wr_1 소속 slug, wr_2 공개 범위, wr_3 행사 시작일, wr_4 행사 종료일
 -- news wr_5 기존 보드 ID, wr_6 기존 글 ID, wr_7 이전 검토 플래그, wr_8 검토 사유
 -- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한
--- news write access: 작성/수정/삭제/첨부 업로드는 임원 이상
+-- news write access: 작성/답글/수정/삭제/첨부 업로드는 임원 이상
 -- news comments: 공식 소식은 댓글 UI를 사용하지 않고 회원 의견은 free 게시판에서 받습니다.
 INSERT INTO `g5_board` SET
     gr_id = 'sungsan',
     bo_device = 'both',
     bo_admin = '',
-    bo_reply_level = '2',
+    bo_reply_level = '6',
     bo_count_modify = '1',
     bo_count_delete = '1',
     bo_read_point = '0',
