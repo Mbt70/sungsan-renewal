@@ -1072,6 +1072,7 @@ describe('sungsan theme static contract', () => {
       'src/skin/board/sungsan_news/write_update.head.skin.php',
       'src/skin/board/sungsan_free/list.skin.php',
       'src/skin/board/sungsan_free/view.skin.php',
+      'src/skin/board/sungsan_free/view_comment.skin.php',
       'src/skin/board/sungsan_free/write.skin.php',
       'src/skin/board/sungsan_free/write_update.head.skin.php',
     ]) {
@@ -1683,6 +1684,36 @@ describe('sungsan theme static contract', () => {
     assert.match(view, /회원 전용 자유게시판 글입니다/);
     assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);
     assert.doesNotMatch(view, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
+  });
+
+  it('renders member comments on free-board detail through the Sungsan skin', () => {
+    const commentFile = 'src/skin/board/sungsan_free/view_comment.skin.php';
+    const view = read('src/skin/board/sungsan_free/view.skin.php');
+    const css = read('src/scss/main.scss');
+
+    assert.equal(existsSync(path.join(repoRoot, commentFile)), true, `${commentFile} should exist`);
+
+    const comment = read(commentFile);
+
+    assert.match(view, /if \(\$is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
+    assert.match(comment, /<section id="bo_vc" class="ss-comment-section"[^>]*>/);
+    assert.match(comment, /for \(\$i = 0; \$i < count\(\$list\); \$i\+\+\)/);
+    assert.match(comment, /\$sungsan_comment_content = isset\(\$list\[\$i\]\['content'\]\) \? \$list\[\$i\]\['content'\] : '';/);
+    assert.match(comment, /echo \$sungsan_comment_content;/);
+    assert.match(comment, /get_text\(\$sungsan_comment_author\)/);
+    assert.match(comment, /\$sungsan_comment_reply_href = \$comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=c#bo_vc_w';/);
+    assert.match(comment, /str_replace\('&amp;', '&', \$sungsan_comment_row\['del_link'\]\)/);
+    assert.doesNotMatch(comment, /\$comment_common_url\.'&amp;c_id='/);
+    assert.match(comment, /<form name="fviewcomment" id="fviewcomment"/);
+    assert.match(comment, /name="token" value=""/);
+    assert.match(comment, /id="wr_content" name="wr_content"/);
+    assert.match(comment, /set_comment_token\(f\)/);
+    assert.match(comment, /function comment_box\(comment_id, work\)/);
+    assert.match(css, /\.ss-comment-section\s*\{/);
+    assert.match(css, /\.ss-comment-list\s*\{/);
+    assert.match(css, /\.ss-comment-form\s*\{/);
+    assert.match(css, /\.ss-comment\.depth-5\s*\{[\s\S]*?margin-left:\s*90px/);
+    assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.ss-comment\.depth-5\s*\{[\s\S]*?margin-left:\s*36px/);
   });
 
   it('blocks direct free-board attachment downloads for guests', () => {

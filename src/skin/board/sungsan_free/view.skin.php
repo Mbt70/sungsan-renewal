@@ -55,6 +55,7 @@ $sungsan_free_login_url = sungsan_login_url($sungsan_free_request_uri);
                 <a class="ss-button" href="<?php echo get_text($sungsan_free_login_url); ?>">로그인</a>
             <?php } ?>
         </div>
+        <?php if ($is_member) { include_once(G5_BBS_PATH.'/view_comment.php'); } ?>
         <div class="ss-action-bar">
             <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">목록</a>
             <?php if ($update_href) { ?><a class="ss-button secondary" href="<?php echo get_text($update_href); ?>">수정</a><?php } ?>
