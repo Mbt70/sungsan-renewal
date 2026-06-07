@@ -1,6 +1,6 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
-$nick = get_sideview($mb['mb_id'], $mb['mb_nick'], $mb['mb_email'], $mb['mb_homepage']);
+$nick = get_sideview(get_text($mb['mb_id']), get_text($mb['mb_nick']), get_text($mb['mb_email']), get_text($mb['mb_homepage']));
 if($kind == "recv") {
     $kind_str = "보낸";
     $kind_date = "받은";

@@ -438,6 +438,7 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo get_text\(\$prev_link\); \?>"/,
           /href="<\?php echo get_text\(\$next_link\); \?>"/,
           /me_recv_mb_id=<\?php echo get_text\(\$mb\['mb_id'\]\); \?>&amp;me_id=<\?php echo \(int\) \$memo\['me_id'\]; \?>/,
+          /\$nick = get_sideview\(get_text\(\$mb\['mb_id'\]\), get_text\(\$mb\['mb_nick'\]\), get_text\(\$mb\['mb_email'\]\), get_text\(\$mb\['mb_homepage'\]\)\);/,
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
@@ -448,6 +449,7 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo \$prev_link/,
           /href="<\?php echo \$next_link/,
           /me_recv_mb_id=<\?php echo \$mb\['mb_id'\]/,
+          /get_sideview\(\$mb\['mb_id'\], \$mb\['mb_nick'\], \$mb\['mb_email'\], \$mb\['mb_homepage'\]\)/,
         ],
       },
       {
