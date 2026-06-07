@@ -5,6 +5,7 @@ if (!defined('_GNUBOARD_')) {
 
 define('SUNGSAN_NEWS_BOARD', 'news');
 define('SUNGSAN_FREE_BOARD', 'free');
+define('SUNGSAN_FORMMAIL_UPLOAD_LIMIT_BYTES', 20971520);
 
 $sungsan_news_categories = array('공지', '행사', '자료', '규정', '활동소식');
 
@@ -296,9 +297,14 @@ function sungsan_reject_blocked_formmail_uploads($files)
 {
     foreach (array('file1', 'file2') as $field) {
         $filename = isset($files[$field]['name']) ? $files[$field]['name'] : '';
+        $size = isset($files[$field]['size']) ? (int) $files[$field]['size'] : 0;
 
         if (sungsan_is_blocked_upload_filename($filename)) {
             alert_close('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 메일에 첨부할 수 없습니다.');
+        }
+
+        if ($size > SUNGSAN_FORMMAIL_UPLOAD_LIMIT_BYTES) {
+            alert_close('메일 첨부 파일은 파일 한 개당 20MB 이하로 첨부해 주세요.');
         }
     }
 }

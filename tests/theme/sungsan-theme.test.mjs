@@ -1440,10 +1440,12 @@ describe('sungsan theme static contract', () => {
   it('limits form mail attachment pickers to common passive files', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
 
+    assert.match(source, /\$formmail_upload_limit_mb = 20;/);
     assert.match(
       source,
       /\$formmail_attachment_accept = '\.jpg,\.jpeg,\.png,\.gif,\.webp,\.pdf,\.hwp,\.hwpx,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx,\.txt';/,
     );
+    assert.match(source, /파일 한 개당 <\?php echo number_format\(\(int\) \$formmail_upload_limit_mb\); \?>MB 이하/);
 
     for (const field of ['file1', 'file2']) {
       assert.match(
@@ -2461,6 +2463,9 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /function sungsan_reject_blocked_formmail_uploads\(\$files\)/);
     assert.match(extend, /foreach \(array\('file1', 'file2'\) as \$field\)/);
     assert.match(extend, /sungsan_is_blocked_upload_filename\(\$filename\)/);
+    assert.match(extend, /SUNGSAN_FORMMAIL_UPLOAD_LIMIT_BYTES/);
+    assert.match(extend, /\$files\[\$field\]\['size'\]/);
+    assert.match(extend, /\$size > SUNGSAN_FORMMAIL_UPLOAD_LIMIT_BYTES/);
     assert.match(extend, /alert_close\(/);
     assert.match(extend, /basename\(\$_SERVER\['SCRIPT_NAME'\]\) === 'formmail_send\.php'/);
     assert.match(extend, /sungsan_reject_blocked_formmail_uploads\(\$_FILES\)/);

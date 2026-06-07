@@ -168,7 +168,7 @@ describe('Cafe24 staging validation handoff', () => {
     ]) {
       const source = readFileSync(path, 'utf8');
 
-      for (const expected of ['formmail_send.php', 'file1/file2', 'shell.php7', 'shell.php8', 'shell.php.jpg']) {
+      for (const expected of ['formmail_send.php', 'file1/file2', '20MB', 'shell.php7', 'shell.php8', 'shell.php.jpg']) {
         expectIncludes(source, expected, path);
       }
     }
