@@ -3,7 +3,7 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-global $sungsan_news_categories;
+global $sungsan_news_categories, $is_admin;
 
 $current_category = isset($sca) ? $sca : '';
 $visible_count = 0;
@@ -39,15 +39,16 @@ $visible_count = 0;
         <div class="ss-post-list">
         <?php for ($i = 0; $i < count($list); $i++) { ?>
             <?php
-            if (!sungsan_can_read_news_post($list[$i])) {
+            if (sungsan_is_review_restricted($list[$i]) && !$is_admin) {
                 continue;
             }
 
             $visible_count++;
+            $can_read_post = sungsan_can_read_news_post($list[$i]);
             $group_label = sungsan_get_group_label(isset($list[$i]['wr_1']) ? $list[$i]['wr_1'] : '');
             $visibility = isset($list[$i]['wr_2']) ? $list[$i]['wr_2'] : 'member';
             ?>
-            <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
+            <a class="ss-post-row<?php echo $can_read_post ? '' : ' restricted'; ?>" href="<?php echo get_text($list[$i]['href']); ?>">
                 <p class="ss-post-title">
                     <?php if ($list[$i]['is_notice']) { ?><span class="ss-badge strong">고정</span><?php } ?>
                     <?php echo get_text($list[$i]['subject']); ?>
@@ -56,6 +57,7 @@ $visible_count = 0;
                     <?php if ($list[$i]['ca_name']) { ?><span class="ss-badge"><?php echo get_text($list[$i]['ca_name']); ?></span><?php } ?>
                     <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
+                    <?php if (!$can_read_post) { ?><span class="ss-access-label">권한 확인 필요</span><?php } ?>
                     <span><?php echo get_text($list[$i]['datetime2']); ?></span>
                     <span>조회 <?php echo number_format((int) $list[$i]['wr_hit']); ?></span>
                 </div>

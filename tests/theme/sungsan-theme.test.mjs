@@ -949,6 +949,27 @@ describe('sungsan theme static contract', () => {
     assert.match(download, /sungsan_can_read_news_post\(\$write\)/);
   });
 
+  it('keeps restricted news visible in lists while marking posts that need permission', () => {
+    const list = read('src/skin/board/sungsan_news/list.skin.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(
+      list,
+      /if \(sungsan_is_review_restricted\(\$list\[\$i\]\) && !\$is_admin\) \{\s*continue;\s*\}/,
+      'news list should only hide operator-review migrated posts',
+    );
+    assert.match(list, /\$can_read_post = sungsan_can_read_news_post\(\$list\[\$i\]\);/);
+    assert.match(
+      list,
+      /<a class="ss-post-row<\?php echo \$can_read_post \? '' : ' restricted'; \?>"/,
+      'news list should visually distinguish posts that need permission',
+    );
+    assert.match(list, /<\?php if \(!\$can_read_post\) \{ \?><span class="ss-access-label">권한 확인 필요<\/span><\?php \} \?>/);
+    assert.doesNotMatch(list, /if \(!sungsan_can_read_news_post\(\$list\[\$i\]\)\) \{\s*continue;\s*\}/);
+    assert.match(css, /\.ss-post-row\.restricted\s*\{/);
+    assert.match(css, /\.ss-access-label\s*\{/);
+  });
+
   it('blocks executable or browser-active board upload extensions before storage', () => {
     const extend = read('src/extend/sungsan.php');
 
