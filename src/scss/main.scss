@@ -478,7 +478,7 @@ img {
 
 .ss-chip {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   border: 1px solid var(--ss-color-border-strong);
   border-radius: 999px;
@@ -746,7 +746,9 @@ img {
 }
 
 .ss-comment-actions a {
-  min-height: 36px;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
   border: 1px solid var(--ss-color-border-strong);
   border-radius: 999px;
   padding: 6px 12px;
@@ -822,8 +824,8 @@ img {
 .ss-pagination strong,
 .ss-pagination span {
   display: inline-flex;
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   margin: 2px;

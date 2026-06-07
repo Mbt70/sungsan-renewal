@@ -1115,6 +1115,22 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps board touch targets at least 44px high', () => {
+    const css = read('src/scss/main.scss');
+    const chipBlock = css.match(/\.ss-chip\s*\{([^}]*)\}/);
+    const commentActionBlock = css.match(/\.ss-comment-actions a\s*\{([^}]*)\}/);
+    const paginationBlock = css.match(/\.ss-pagination a,\s*\n\.ss-pagination strong,\s*\n\.ss-pagination span\s*\{([^}]*)\}/);
+
+    assert.ok(chipBlock, 'category chips should be styled');
+    assert.ok(commentActionBlock, 'comment actions should be styled');
+    assert.ok(paginationBlock, 'pagination controls should be styled');
+    assert.match(chipBlock[1], /min-height:\s*44px;/);
+    assert.match(commentActionBlock[1], /display:\s*inline-flex;/);
+    assert.match(commentActionBlock[1], /min-height:\s*44px;/);
+    assert.match(paginationBlock[1], /min-width:\s*44px;/);
+    assert.match(paginationBlock[1], /min-height:\s*44px;/);
+  });
+
   it('styles board list search labels without changing the compact header search', () => {
     const css = read('src/scss/main.scss');
 
