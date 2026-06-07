@@ -1,6 +1,13 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
-$nick = get_sideview(get_text($mb['mb_id']), get_text($mb['mb_nick']), get_text($mb['mb_email']), get_text($mb['mb_homepage']));
+$memo_sender_id = isset($mb['mb_id']) ? $mb['mb_id'] : '';
+$memo_sender_nick = isset($mb['mb_nick']) ? $mb['mb_nick'] : '';
+$memo_sender_email = isset($mb['mb_email']) ? $mb['mb_email'] : '';
+$memo_sender_homepage = isset($mb['mb_homepage']) ? $mb['mb_homepage'] : '';
+$memo_sent_at = isset($memo['me_send_datetime']) ? $memo['me_send_datetime'] : '';
+$memo_body = isset($memo['me_memo']) ? $memo['me_memo'] : '';
+$memo_id = isset($memo['me_id']) ? (int) $memo['me_id'] : 0;
+$nick = get_sideview(get_text($memo_sender_id), get_text($memo_sender_nick), get_text($memo_sender_email), get_text($memo_sender_homepage));
 if($kind == "recv") {
     $kind_str = "보낸";
     $kind_date = "받은";
@@ -33,11 +40,11 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <div id="memo_view_ul">
                 <div class="memo_view_li memo_view_name">
                 	<ul class="memo_from">
-                		<li class="memo_profile">
-				            <?php echo get_member_profile_img($mb['mb_id']); ?>
+						<li class="memo_profile">
+				            <?php echo get_member_profile_img($memo_sender_id); ?>
 				        </li>
 						<li class="memo_view_nick"><?php echo $nick ?></li>
-						<li class="memo_view_date"><span class="sound_only"><?php echo get_text($kind_date); ?>시간</span><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo['me_send_datetime']); ?></li>
+						<li class="memo_view_date"><span class="sound_only"><?php echo get_text($kind_date); ?>시간</span><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_sent_at); ?></li>
 						<li class="memo_op_btn list_btn"><a href="<?php echo get_text($list_link); ?>" class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"></i><span class="sound_only">목록</span></a></li>
 						<li class="memo_op_btn del_btn"><a href="<?php echo get_text($del_link); ?>" onclick="del(this.href); return false;" class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a></li>
 					</ul>
@@ -52,11 +59,11 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 </div>
             </div>
             <p>
-                <?php echo conv_content($memo['me_memo'], 0) ?>
+                <?php echo conv_content($memo_body, 0) ?>
             </p>
         </article>
 		<div class="win_btn">
-			<?php if ($kind == 'recv') {  ?><a href="./memo_form.php?me_recv_mb_id=<?php echo get_text($mb['mb_id']); ?>&amp;me_id=<?php echo (int) $memo['me_id']; ?>" class="reply_btn">답장</a><?php }  ?>
+			<?php if ($kind == 'recv') {  ?><a href="./memo_form.php?me_recv_mb_id=<?php echo get_text($memo_sender_id); ?>&amp;me_id=<?php echo $memo_id; ?>" class="reply_btn">답장</a><?php }  ?>
 			<button type="button" onclick="window.close();" class="btn_close">창닫기</button>
     	</div>
     </div>
