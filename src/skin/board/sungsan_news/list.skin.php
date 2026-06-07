@@ -56,6 +56,7 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
             $sungsan_news_post_subject = isset($sungsan_news_row['subject']) ? $sungsan_news_row['subject'] : '';
             $sungsan_news_post_category = isset($sungsan_news_row['ca_name']) ? $sungsan_news_row['ca_name'] : '';
             $sungsan_news_post_date = isset($sungsan_news_row['datetime2']) ? $sungsan_news_row['datetime2'] : '';
+            $sungsan_news_post_datetime = isset($sungsan_news_row['datetime']) ? $sungsan_news_row['datetime'] : $sungsan_news_post_date;
             $sungsan_news_post_hits = isset($sungsan_news_row['wr_hit']) ? (int) $sungsan_news_row['wr_hit'] : 0;
             $sungsan_news_is_notice = !empty($sungsan_news_row['is_notice']);
             $group_label = sungsan_get_group_label(isset($sungsan_news_row['wr_1']) ? $sungsan_news_row['wr_1'] : '');
@@ -71,7 +72,7 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
                     <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
                     <?php if (!$can_read_post) { ?><span class="ss-access-label">권한 확인 필요</span><?php } ?>
-                    <span><?php echo get_text($sungsan_news_post_date); ?></span>
+                    <time datetime="<?php echo get_text($sungsan_news_post_datetime); ?>"><?php echo get_text($sungsan_news_post_date); ?></time>
                     <span>조회 <?php echo number_format($sungsan_news_post_hits); ?></span>
                 </div>
             </a>

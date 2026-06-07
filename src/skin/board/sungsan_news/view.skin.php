@@ -34,7 +34,7 @@ if (sungsan_is_review_restricted($view)) {
                 <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                 <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
                 <span><?php echo get_text($sungsan_view_writer); ?></span>
-                <span><?php echo get_text($sungsan_view_date); ?></span>
+                <time datetime="<?php echo get_text($sungsan_view_date); ?>"><?php echo get_text($sungsan_view_date); ?></time>
                 <span>조회 <?php echo number_format($sungsan_view_hits); ?></span>
             </div>
         </header>

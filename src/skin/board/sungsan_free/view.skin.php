@@ -19,7 +19,7 @@ $sungsan_free_login_url = sungsan_login_url($sungsan_free_request_uri);
             <h1 class="ss-section-title"><?php echo get_text($sungsan_view_subject); ?></h1>
             <div class="ss-meta">
                 <span><?php echo get_text($sungsan_view_writer); ?></span>
-                <span><?php echo get_text($sungsan_view_date); ?></span>
+                <time datetime="<?php echo get_text($sungsan_view_date); ?>"><?php echo get_text($sungsan_view_date); ?></time>
                 <span>조회 <?php echo number_format($sungsan_view_hits); ?></span>
             </div>
         </header>

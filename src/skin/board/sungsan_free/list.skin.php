@@ -34,6 +34,7 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             $sungsan_free_post_subject = isset($sungsan_free_row['subject']) ? $sungsan_free_row['subject'] : '';
             $sungsan_free_post_writer = isset($sungsan_free_row['wr_name']) ? $sungsan_free_row['wr_name'] : '';
             $sungsan_free_post_date = isset($sungsan_free_row['datetime2']) ? $sungsan_free_row['datetime2'] : '';
+            $sungsan_free_post_datetime = isset($sungsan_free_row['datetime']) ? $sungsan_free_row['datetime'] : $sungsan_free_post_date;
             $sungsan_free_post_hits = isset($sungsan_free_row['wr_hit']) ? (int) $sungsan_free_row['wr_hit'] : 0;
             $sungsan_post_href = $is_member ? $sungsan_free_post_href : sungsan_login_url($sungsan_free_post_href);
             ?>
@@ -42,7 +43,7 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
                 <div class="ss-meta">
                     <span><?php echo get_text($sungsan_free_post_writer); ?></span>
                     <span class="ss-access-label">회원 열람</span>
-                    <span><?php echo get_text($sungsan_free_post_date); ?></span>
+                    <time datetime="<?php echo get_text($sungsan_free_post_datetime); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>
                     <span>조회 <?php echo number_format($sungsan_free_post_hits); ?></span>
                 </div>
             </a>

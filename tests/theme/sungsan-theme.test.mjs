@@ -1399,6 +1399,29 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(newsView, /get_text\(\$view\['ca_name'\]\)/);
   });
 
+  it('renders board list and detail dates as semantic time elements', () => {
+    const newsList = read('src/skin/board/sungsan_news/list.skin.php');
+    const freeList = read('src/skin/board/sungsan_free/list.skin.php');
+
+    assert.match(newsList, /\$sungsan_news_post_datetime = isset\(\$sungsan_news_row\['datetime'\]\) \? \$sungsan_news_row\['datetime'\] : \$sungsan_news_post_date;/);
+    assert.match(newsList, /<time datetime="<\?php echo get_text\(\$sungsan_news_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/time>/);
+    assert.doesNotMatch(newsList, /<span><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/span>/);
+
+    assert.match(freeList, /\$sungsan_free_post_datetime = isset\(\$sungsan_free_row\['datetime'\]\) \? \$sungsan_free_row\['datetime'\] : \$sungsan_free_post_date;/);
+    assert.match(freeList, /<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/time>/);
+    assert.doesNotMatch(freeList, /<span><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/span>/);
+
+    for (const file of [
+      'src/skin/board/sungsan_news/view.skin.php',
+      'src/skin/board/sungsan_free/view.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /<time datetime="<\?php echo get_text\(\$sungsan_view_date\); \?>"><\?php echo get_text\(\$sungsan_view_date\); \?><\/time>/, `${file} should expose detail date as time`);
+      assert.doesNotMatch(source, /<span><\?php echo get_text\(\$sungsan_view_date\); \?><\/span>/, `${file} should not render detail date as a plain span`);
+    }
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
