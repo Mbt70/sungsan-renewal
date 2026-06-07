@@ -59,10 +59,12 @@ describe('release build script', () => {
       '\\.(sql|dump|bak)$',
       '\\.sql\\.(gz|zip)$',
       '\\.(pem|key|ppk|p12)$',
+      '\\.xlsx$',
     ]) {
       assert.match(source, new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     }
 
+    assert.doesNotMatch(source, /성산회_홈페이지_기획문서/, 'PowerShell release regex patterns should stay ASCII-safe');
     assert.match(source, /releaseDenyFilePatterns/);
     assert.match(source, /foreach \(\$pattern in \$releaseDenyFilePatterns\)/);
     assert.match(source, /if \(\$fileName -match \$pattern\)/);
@@ -70,6 +72,7 @@ describe('release build script', () => {
     assert.match(runbook, /DB dump/);
     assert.match(runbook, /백업/);
     assert.match(runbook, /비밀키/);
+    assert.match(runbook, /기획문서/);
   });
 
   it('documents checksum verification in the Cafe24 runbook', () => {

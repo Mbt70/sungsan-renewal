@@ -84,7 +84,8 @@ $releaseDenyFilePatterns = @(
     'dbconfig\.php$',
     '\.sql\.(gz|zip)$',
     '\.(sql|dump|bak)$',
-    '\.(pem|key|ppk|p12)$'
+    '\.(pem|key|ppk|p12)$',
+    '\.xlsx$'
 )
 
 $wwwRoot = Join-Path $root "www"

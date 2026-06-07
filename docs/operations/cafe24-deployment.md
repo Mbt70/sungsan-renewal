@@ -22,7 +22,7 @@
 1. `npm run verify`를 실행합니다.
 2. `docs/migration/rehearsal-tools.md` 기준으로 회원 SQL, 첨부 복사 계획, `board_file` SQL, redirect 초안, 리허설 요약 JSON을 생성해 검수합니다.
 3. `scripts/build-release.ps1`로 배포 zip과 `.sha256` 체크섬 파일을 만듭니다.
-4. 배포 zip에 `.env`, DB dump, 백업 파일, 배포 비밀키가 들어가지 않았는지 release 제외 규칙과 ZIP 목록을 확인합니다.
+4. 배포 zip에 `.env`, DB dump, 백업 파일, 배포 비밀키, 로컬 기획문서가 들어가지 않았는지 release 제외 규칙과 ZIP 목록을 확인합니다.
 5. SFTP 업로드 전 로컬에서 `Get-FileHash -Algorithm SHA256 release/sungsan-site-*.zip` 값이 `.sha256` 파일과 일치하는지 확인합니다.
 6. Cafe24의 임시 경로에 zip과 `.sha256` 파일을 업로드한 뒤 서버에서 다시 SHA256 값을 대조하고 압축을 풉니다.
 7. 새 DB를 만들거나 스테이징용 테이블 prefix를 사용합니다.
