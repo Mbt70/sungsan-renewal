@@ -1971,6 +1971,25 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /object-fit:\s*cover/);
   });
 
+  it('aggregates home media from activity posts with image or video attachments', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(
+      index,
+      /\$photo_posts = sungsan_latest_board_posts\('news', array\('category' => \$sungsan_home_activity_category, 'mediaOnly' => true, 'thumbnail' => true, 'limit' => 4\)\);/,
+    );
+    assert.doesNotMatch(index, /'groupSlug' => 'photo', 'thumbnail' => true/);
+
+    assert.match(extend, /\$media_only = !empty\(\$args\['mediaOnly'\]\);/);
+    assert.match(extend, /\$media_extensions = array\('jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm'\);/);
+    assert.match(extend, /\$g5\['board_file_table'\]/);
+    assert.match(extend, /sungsan_media_file\.bo_table = '\"\.sql_escape_string\(\$board_id\)\."'/);
+    assert.match(extend, /sungsan_media_file\.wr_id = \{\$write_table\}\.wr_id/);
+    assert.match(extend, /lower\(sungsan_media_file\.bf_source\)/);
+    assert.match(extend, /lower\(sungsan_media_file\.bf_file\)/);
+  });
+
   it('shows a visible home media fallback when thumbnails are unavailable', () => {
     const index = read('src/theme/sungsan/index.php');
     const css = read('src/scss/main.scss');
@@ -2592,13 +2611,16 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help">/);
   });
 
-  it('limits board attachment file pickers to common image and document extensions', () => {
+  it('limits board attachment file pickers to common image, video, and document extensions', () => {
     const expectedExtensions = [
       'jpg',
       'jpeg',
       'png',
       'gif',
       'webp',
+      'mp4',
+      'mov',
+      'webm',
       'pdf',
       'hwp',
       'hwpx',
@@ -2619,9 +2641,11 @@ describe('sungsan theme static contract', () => {
 
       assert.match(
         source,
-        /\$sungsan_attachment_accept = '\.jpg,\.jpeg,\.png,\.gif,\.webp,\.pdf,\.hwp,\.hwpx,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx,\.txt';/,
-        `${file} should define a shared image/document picker filter`,
+        /\$sungsan_attachment_accept = '\.jpg,\.jpeg,\.png,\.gif,\.webp,\.mp4,\.mov,\.webm,\.pdf,\.hwp,\.hwpx,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx,\.txt';/,
+        `${file} should define a shared image/video/document picker filter`,
       );
+      assert.match(source, /사진·영상과 문서 파일/, `${file} should explain video attachments in plain text`);
+      assert.doesNotMatch(source, /사진과 문서 파일/, `${file} should not describe uploads as image-only media`);
       assert.match(
         source,
         /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help(?: ss-free-privacy-help)?">/,

@@ -26,7 +26,7 @@ $notice_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_
 $event_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_event_category, 'upcoming' => true, 'limit' => 3));
 $resource_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_resource_categories, 'limit' => 5));
 $free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
-$photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 'thumbnail' => true, 'limit' => 4));
+$photo_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_activity_category, 'mediaOnly' => true, 'thumbnail' => true, 'limit' => 4));
 ?>
 <section class="ss-hero">
     <div class="ss-container ss-hero-layout">

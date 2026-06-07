@@ -522,9 +522,11 @@ function sungsan_latest_board_posts($bo_table, $args = array())
 
     $limit = isset($args['limit']) ? max(1, min(10, (int) $args['limit'])) : 5;
     $with_thumbnail = !empty($args['thumbnail']);
+    $media_only = !empty($args['mediaOnly']);
     $thumb_width = isset($args['thumbWidth']) ? max(120, (int) $args['thumbWidth']) : 420;
     $thumb_height = isset($args['thumbHeight']) ? max(90, (int) $args['thumbHeight']) : 260;
     $include_notice = !empty($args['includeNotice']);
+    $write_table = $g5['write_prefix'].$board_id;
     $where = array('wr_is_comment = 0');
 
     if ($board_id === SUNGSAN_NEWS_BOARD) {
@@ -552,6 +554,23 @@ function sungsan_latest_board_posts($bo_table, $args = array())
         $where[] = "wr_1 = '".sql_escape_string($args['groupSlug'])."'";
     }
 
+    if ($media_only) {
+        if (empty($g5['board_file_table'])) {
+            return array();
+        }
+
+        $media_extensions = array('jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm');
+        $media_file_conditions = array();
+
+        foreach ($media_extensions as $media_extension) {
+            $media_extension = sql_escape_string('.'.$media_extension);
+            $media_file_conditions[] = "lower(sungsan_media_file.bf_source) like '%".$media_extension."'";
+            $media_file_conditions[] = "lower(sungsan_media_file.bf_file) like '%".$media_extension."'";
+        }
+
+        $where[] = "exists (select 1 from {$g5['board_file_table']} as sungsan_media_file where sungsan_media_file.bo_table = '".sql_escape_string($board_id)."' and sungsan_media_file.wr_id = {$write_table}.wr_id and (".implode(' or ', $media_file_conditions)."))";
+    }
+
     if (!empty($args['upcoming'])) {
         $today = defined('G5_TIME_YMD') ? G5_TIME_YMD : date('Y-m-d');
         $where[] = "wr_3 >= '".sql_escape_string($today)."'";
@@ -560,7 +579,6 @@ function sungsan_latest_board_posts($bo_table, $args = array())
         $order = 'wr_datetime desc, wr_id desc';
     }
 
-    $write_table = $g5['write_prefix'].$board_id;
     $notice_ids = array();
 
     if ($include_notice && isset($g5['board_table']) && function_exists('sql_fetch')) {
