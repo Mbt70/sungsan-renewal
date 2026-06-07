@@ -49,7 +49,10 @@ $ss_is_mypage = isset($sungsan_page) && $sungsan_page === 'mypage';
                 </div>
             </form>
             <?php if ($is_member) { ?>
-                <a class="ss-account-link" href="<?php echo G5_URL; ?>/sungsan/mypage.php"<?php echo $ss_is_mypage ? ' aria-current="page"' : ''; ?>>마이페이지</a>
+                <a class="ss-account-link ss-account-link-member" href="<?php echo G5_URL; ?>/sungsan/mypage.php"<?php echo $ss_is_mypage ? ' aria-current="page"' : ''; ?>>
+                    <span class="ss-account-icon" aria-hidden="true"></span>
+                    <span class="ss-account-text">마이페이지</span>
+                </a>
             <?php } else { ?>
                 <a class="ss-account-link" href="<?php echo G5_BBS_URL; ?>/login.php">로그인</a>
             <?php } ?>

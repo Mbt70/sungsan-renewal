@@ -132,6 +132,20 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-search-form\s+\.ss-search-row\s*\{/);
   });
 
+  it('shows a member account icon for the logged-in mypage entry', () => {
+    const head = read('src/theme/sungsan/head.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(
+      head,
+      /<a class="ss-account-link ss-account-link-member" href="<\?php echo G5_URL; \?>\/sungsan\/mypage\.php"<\?php echo \$ss_is_mypage \? ' aria-current="page"' : ''; \?>>/,
+    );
+    assert.match(head, /<span class="ss-account-icon" aria-hidden="true"><\/span>\s*<span class="ss-account-text">마이페이지<\/span>/);
+    assert.match(css, /\.ss-account-icon\s*\{[\s\S]*?width:\s*24px;[\s\S]*?height:\s*24px;[\s\S]*?border-radius:\s*50%;/);
+    assert.match(css, /\.ss-account-icon::before\s*\{[\s\S]*?border-radius:\s*50%;/);
+    assert.match(css, /\.ss-account-icon::after\s*\{[\s\S]*?border-radius:\s*999px 999px 0 0;/);
+  });
+
   it('loads operator-managed Sungsan group labels from the data directory', () => {
     const source = read('src/extend/sungsan.php');
 

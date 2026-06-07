@@ -135,6 +135,7 @@ img {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
+  gap: var(--ss-space-2);
   border-radius: var(--ss-radius-md);
   padding: var(--ss-space-2) var(--ss-space-3);
   color: var(--ss-color-text);
@@ -155,6 +156,41 @@ img {
   flex-wrap: wrap;
   gap: var(--ss-space-2);
   align-items: center;
+}
+
+.ss-account-icon {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.ss-account-icon::before,
+.ss-account-icon::after {
+  position: absolute;
+  left: 50%;
+  display: block;
+  content: "";
+  transform: translateX(-50%);
+}
+
+.ss-account-icon::before {
+  top: 5px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.ss-account-icon::after {
+  bottom: 4px;
+  width: 12px;
+  height: 7px;
+  border-radius: 999px 999px 0 0;
+  background: currentColor;
 }
 
 .ss-search-form {
