@@ -128,24 +128,31 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
     <div class="ss-post-list">
         <?php for ($i = 0; $i < count($posts); $i++) { ?>
             <?php
+            $sungsan_home_post = $posts[$i];
+            $sungsan_home_post_raw_href = isset($sungsan_home_post['href']) ? $sungsan_home_post['href'] : '#';
+            $sungsan_home_post_subject = isset($sungsan_home_post['subject']) ? $sungsan_home_post['subject'] : '';
+            $sungsan_home_post_category = isset($sungsan_home_post['ca_name']) ? $sungsan_home_post['ca_name'] : '';
+            $sungsan_home_post_group = isset($sungsan_home_post['wr_1']) ? $sungsan_home_post['wr_1'] : '';
+            $sungsan_home_post_event_date = isset($sungsan_home_post['wr_3']) ? $sungsan_home_post['wr_3'] : '';
+            $sungsan_home_post_date = isset($sungsan_home_post['date']) ? $sungsan_home_post['date'] : '';
             $sungsan_requires_login = !$is_member && $access_label;
-            $sungsan_home_post_href = $sungsan_requires_login ? G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($posts[$i]['href'], ENT_QUOTES)) : $posts[$i]['href'];
+            $sungsan_home_post_href = $sungsan_requires_login ? G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($sungsan_home_post_raw_href, ENT_QUOTES)) : $sungsan_home_post_raw_href;
             ?>
             <a class="ss-post-row<?php echo $sungsan_requires_login ? ' restricted' : ''; ?>" href="<?php echo get_text($sungsan_home_post_href); ?>">
-                <p class="ss-post-title"><?php echo get_text($posts[$i]['subject']); ?></p>
+                <p class="ss-post-title"><?php echo get_text($sungsan_home_post_subject); ?></p>
                 <div class="ss-meta">
-                    <?php if ($show_category && !empty($posts[$i]['ca_name'])) { ?>
-                        <span class="ss-badge"><?php echo get_text($posts[$i]['ca_name']); ?></span>
+                    <?php if ($show_category && $sungsan_home_post_category !== '') { ?>
+                        <span class="ss-badge"><?php echo get_text($sungsan_home_post_category); ?></span>
                     <?php } ?>
-                    <?php if (!empty($posts[$i]['wr_1'])) { ?>
-                        <?php $group_label = sungsan_get_group_label($posts[$i]['wr_1']); ?>
+                    <?php if ($sungsan_home_post_group !== '') { ?>
+                        <?php $group_label = sungsan_get_group_label($sungsan_home_post_group); ?>
                         <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <?php } ?>
                     <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
-                    <?php if ($show_event_date && !empty($posts[$i]['wr_3'])) { ?>
-                        <span><?php echo get_text($posts[$i]['wr_3']); ?></span>
+                    <?php if ($show_event_date && $sungsan_home_post_event_date !== '') { ?>
+                        <span><?php echo get_text($sungsan_home_post_event_date); ?></span>
                     <?php } else { ?>
-                        <span><?php echo get_text($posts[$i]['date']); ?></span>
+                        <span><?php echo get_text($sungsan_home_post_date); ?></span>
                     <?php } ?>
                 </div>
             </a>

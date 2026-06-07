@@ -1237,8 +1237,19 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /alt="<\?php echo get_text\(\$sungsan_home_media_alt\); \?>"/);
     assert.match(index, /<strong><\?php echo get_text\(\$sungsan_home_media_subject\); \?><\/strong>/);
     assert.match(index, /<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
+    assert.match(index, /\$sungsan_home_post = \$posts\[\$i\];/);
+    assert.match(index, /\$sungsan_home_post_raw_href = isset\(\$sungsan_home_post\['href'\]\) \? \$sungsan_home_post\['href'\] : '#';/);
+    assert.match(index, /\$sungsan_home_post_subject = isset\(\$sungsan_home_post\['subject'\]\) \? \$sungsan_home_post\['subject'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_category = isset\(\$sungsan_home_post\['ca_name'\]\) \? \$sungsan_home_post\['ca_name'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_group = isset\(\$sungsan_home_post\['wr_1'\]\) \? \$sungsan_home_post\['wr_1'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_event_date = isset\(\$sungsan_home_post\['wr_3'\]\) \? \$sungsan_home_post\['wr_3'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_date = isset\(\$sungsan_home_post\['date'\]\) \? \$sungsan_home_post\['date'\] : '';/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
-    assert.match(index, /get_text\(\$posts\[\$i\]\['subject'\]\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_subject\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_category\)/);
+    assert.match(index, /sungsan_get_group_label\(\$sungsan_home_post_group\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_event_date\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_date\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['href'\]\)/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['thumb_src'\]\)/);
@@ -1246,6 +1257,12 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['subject'\]\)/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['date'\]\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$sungsan_home_post_href/);
+    assert.doesNotMatch(index, /htmlspecialchars_decode\(\$posts\[\$i\]\['href'\]/);
+    assert.doesNotMatch(index, /get_text\(\$posts\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$posts\[\$i\]\['ca_name'\]\)/);
+    assert.doesNotMatch(index, /sungsan_get_group_label\(\$posts\[\$i\]\['wr_1'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$posts\[\$i\]\['wr_3'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$posts\[\$i\]\['date'\]\)/);
     assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
 
     assert.match(latest, /\$sungsan_latest_row = \$list\[\$i\];/);
@@ -1304,7 +1321,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(index, /global \$is_member;/);
     assert.match(index, /\$sungsan_requires_login = !\$is_member && \$access_label;/);
-    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$posts\[\$i\]\['href'\], ENT_QUOTES\)\) : \$posts\[\$i\]\['href'\];/);
+    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_home_post_raw_href, ENT_QUOTES\)\) : \$sungsan_home_post_raw_href;/);
     assert.match(index, /class="ss-post-row<\?php echo \$sungsan_requires_login \? ' restricted' : ''; \?>"/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
   });
