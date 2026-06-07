@@ -29,6 +29,7 @@ describe('sungsan theme static contract', () => {
       'src/skin/board/sungsan_news/list.skin.php',
       'src/skin/board/sungsan_news/view.skin.php',
       'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_news/download.head.skin.php',
       'src/skin/board/sungsan_free/list.skin.php',
       'src/skin/board/sungsan_free/view.skin.php',
       'src/skin/board/sungsan_free/write.skin.php',
@@ -66,5 +67,20 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /<img class="ss-media-thumb"/);
     assert.match(index, /loading="lazy"/);
     assert.match(css, /object-fit:\s*cover/);
+  });
+
+  it('guards news attachment downloads with per-post visibility', () => {
+    const file = 'src/skin/board/sungsan_news/download.head.skin.php';
+
+    assert.equal(existsSync(path.join(repoRoot, file)), true, `${file} should exist`);
+
+    const source = read(file);
+
+    assert.match(source, /\$write\['wr_2'\]/);
+    assert.match(source, /sungsan_can_read_visibility\(\$visibility\)/);
+    assert.match(source, /sungsan_get_visibility_label\(\$visibility\)/);
+    assert.match(source, /login\.php/);
+    assert.match(source, /get_pretty_url\(\$bo_table,\s*\$wr_id\)/);
+    assert.match(source, /alert\(/);
   });
 });
