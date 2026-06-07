@@ -146,6 +146,14 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-account-icon::after\s*\{[\s\S]*?border-radius:\s*999px 999px 0 0;/);
   });
 
+  it('returns guests to the current page after header login', () => {
+    const head = read('src/theme/sungsan/head.php');
+
+    assert.match(head, /\$ss_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$_SERVER\['REQUEST_URI'\]\);/);
+    assert.match(head, /<a class="ss-account-link" href="<\?php echo get_text\(\$ss_login_url\); \?>">로그인<\/a>/);
+    assert.doesNotMatch(head, /href="<\?php echo G5_BBS_URL; \?>\/login\.php">로그인<\/a>/);
+  });
+
   it('loads operator-managed Sungsan group labels from the data directory', () => {
     const source = read('src/extend/sungsan.php');
 
