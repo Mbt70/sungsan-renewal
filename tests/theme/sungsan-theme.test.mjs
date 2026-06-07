@@ -42,6 +42,15 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps theme-applied member skins on the Sungsan skin for pc and mobile', () => {
+    const source = read('src/theme/sungsan/theme.config.php');
+
+    assert.match(source, /'cf_member_skin'\s*=>\s*'sungsan'/);
+    assert.match(source, /'cf_mobile_member_skin'\s*=>\s*'sungsan'/);
+    assert.doesNotMatch(source, /'cf_member_skin'\s*=>\s*'basic'/);
+    assert.doesNotMatch(source, /'cf_mobile_member_skin'\s*=>\s*'basic'/);
+  });
+
   it('escapes mypage action links before rendering member navigation', () => {
     const source = read('src/pages/mypage.php');
 
