@@ -147,6 +147,15 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-search-form\s+\.ss-search-row\s*\{/);
   });
 
+  it('preserves and escapes the compact header search term', () => {
+    const head = read('src/theme/sungsan/head.php');
+
+    assert.match(head, /\$ss_header_search_value = isset\(\$stx\) \? stripslashes\(\$stx\) : '';/);
+    assert.match(head, /<input id="ss_stx" name="stx" type="search" value="<\?php echo get_text\(\$ss_header_search_value\); \?>"/);
+    assert.doesNotMatch(head, /<input id="ss_stx" name="stx" type="search" maxlength="30" placeholder=/);
+    assert.doesNotMatch(head, /value="<\?php echo \$stx; \?>"/);
+  });
+
   it('escapes shared header navigation and search URLs before rendering attributes', () => {
     const head = read('src/theme/sungsan/head.php');
 

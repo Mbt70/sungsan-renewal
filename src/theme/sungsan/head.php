@@ -28,6 +28,7 @@ $ss_free_url = G5_BBS_URL.'/board.php?bo_table=free';
 $ss_search_action_url = G5_BBS_URL.'/board.php';
 $ss_mypage_url = G5_URL.'/sungsan/mypage.php';
 $ss_login_url = G5_BBS_URL.'/login.php?url='.urlencode($_SERVER['REQUEST_URI']);
+$ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
 ?>
 <a href="#container" class="ss-skip-link">본문 바로가기</a>
 <header class="ss-site-header">
@@ -51,7 +52,7 @@ $ss_login_url = G5_BBS_URL.'/login.php?url='.urlencode($_SERVER['REQUEST_URI']);
                 <input type="hidden" name="sop" value="and">
                 <label class="ss-search-label" for="ss_stx">소식 검색</label>
                 <div class="ss-search-row">
-                    <input id="ss_stx" name="stx" type="search" maxlength="30" placeholder="검색어">
+                    <input id="ss_stx" name="stx" type="search" value="<?php echo get_text($ss_header_search_value); ?>" maxlength="30" placeholder="검색어">
                     <button type="submit">검색</button>
                 </div>
             </form>
