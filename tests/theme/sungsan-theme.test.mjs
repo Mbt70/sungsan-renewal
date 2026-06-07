@@ -220,6 +220,17 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /flogin_submit/);
   });
 
+  it('escapes login account utility links before rendering attributes', () => {
+    const source = read('src/skin/member/sungsan/login.skin.php');
+
+    assert.match(source, /\$password_lost_url = G5_BBS_URL\.'\/password_lost\.php';/);
+    assert.match(source, /\$register_url = G5_BBS_URL\.'\/register\.php';/);
+    assert.match(source, /href="<\?php echo get_text\(\$password_lost_url\); \?>"/);
+    assert.match(source, /href="<\?php echo get_text\(\$register_url\); \?>"/);
+    assert.doesNotMatch(source, /href="<\?php echo G5_BBS_URL; \?>\/password_lost\.php"/);
+    assert.doesNotMatch(source, /href="<\?php echo G5_BBS_URL; \?>\/register\.php"/);
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),

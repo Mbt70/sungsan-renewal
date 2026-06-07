@@ -4,6 +4,9 @@ if (!defined('_GNUBOARD_')) {
 }
 
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$password_lost_url = G5_BBS_URL.'/password_lost.php';
+$register_url = G5_BBS_URL.'/register.php';
 ?>
 
 <div id="mb_login" class="mbskin ss-login">
@@ -33,7 +36,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                         <label for="login_auto_login"><span></span> 자동로그인</label>
                     </div>
                     <div class="login_if_lpl">
-                        <a href="<?php echo G5_BBS_URL; ?>/password_lost.php">아이디/비밀번호 찾기</a>
+                        <a href="<?php echo get_text($password_lost_url); ?>">아이디/비밀번호 찾기</a>
                     </div>
                 </div>
             </fieldset>
@@ -41,7 +44,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
         <div class="ss-login-links">
             <p>아직 성산회 홈페이지 계정이 없다면 가입 신청 후 운영자 승인을 받아 이용합니다.</p>
-            <a href="<?php echo G5_BBS_URL; ?>/register.php" class="join">회원가입</a>
+            <a href="<?php echo get_text($register_url); ?>" class="join">회원가입</a>
         </div>
 
         <?php @include_once(get_social_skin_path().'/social_login.skin.php'); ?>
