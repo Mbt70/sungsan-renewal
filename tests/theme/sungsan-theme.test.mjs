@@ -1259,6 +1259,16 @@ describe('sungsan theme static contract', () => {
     assert.match(list, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
   });
 
+  it('keeps free-board detail body and attachments behind member login guidance', () => {
+    const view = read('src/skin/board/sungsan_free/view.skin.php');
+
+    assert.match(view, /global \$is_member;/);
+    assert.match(view, /\$sungsan_free_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$_SERVER\['REQUEST_URI'\]\);/);
+    assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$view\['content'\]\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
+    assert.match(view, /회원 전용 자유게시판 글입니다/);
+    assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);
+  });
+
   it('blocks executable or browser-active board upload extensions before storage', () => {
     const extend = read('src/extend/sungsan.php');
 
