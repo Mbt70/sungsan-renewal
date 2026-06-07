@@ -53,7 +53,7 @@ $ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
                 <input type="hidden" name="sop" value="and">
                 <label class="ss-search-label" for="ss_stx">소식 검색</label>
                 <div class="ss-search-row">
-                    <input id="ss_stx" name="stx" type="search" value="<?php echo get_text($ss_header_search_value); ?>" maxlength="30" placeholder="검색어">
+                    <input id="ss_stx" name="stx" type="search" value="<?php echo get_text($ss_header_search_value); ?>" maxlength="30" enterkeyhint="search" placeholder="검색어">
                     <button type="submit">검색</button>
                 </div>
             </form>

@@ -156,6 +156,16 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(head, /value="<\?php echo \$stx; \?>"/);
   });
 
+  it('requests the search action on mobile keyboards for compact header search', () => {
+    const head = read('src/theme/sungsan/head.php');
+    const inputLine = head.split('\n').find((line) => line.includes('id="ss_stx"'));
+
+    assert.ok(inputLine, 'header should render the compact search input');
+    assert.match(inputLine, /name="stx"/);
+    assert.match(inputLine, /type="search"/);
+    assert.match(inputLine, /enterkeyhint="search"/);
+  });
+
   it('escapes shared header navigation and search URLs before rendering attributes', () => {
     const head = read('src/theme/sungsan/head.php');
 
