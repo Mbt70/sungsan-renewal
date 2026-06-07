@@ -10,7 +10,7 @@ include_once G5_THEME_PATH.'/head.php';
         <div>
             <p class="ss-eyebrow">소개</p>
             <h1>성산회 소개</h1>
-            <p>성산회는 회원의 교류와 활동을 이어가며 공지, 자료, 행사 정보를 안정적으로 공유하는 회원 공동체입니다.</p>
+            <p>성산회는 회원의 교류와 활동을 이어가며 공지, 자료, 행사 정보를 안정적으로 공유하는 회원 공동체입니다. 단체가 어떤 곳인지 한 페이지에서 이해할 수 있도록 핵심 소개를 모았습니다.</p>
         </div>
         <nav class="ss-hero-summary" aria-label="소개 바로가기">
             <strong>바로가기</strong>
@@ -30,12 +30,12 @@ include_once G5_THEME_PATH.'/head.php';
         <article id="message" class="ss-panel">
             <h2>인사말</h2>
             <p>성산회 홈페이지는 회원 여러분이 필요한 소식과 자료를 쉽고 안전하게 확인하는 공간입니다. 새 홈페이지는 모바일에서도 읽기 편한 글자와 단순한 메뉴를 중심으로 구성했습니다.</p>
-            <p class="ss-review-note">기존 회장·명예회장 인사말 원문은 이전 리허설 후 운영자 검수를 거쳐 이 영역에 반영합니다.</p>
+            <p class="ss-review-note">회장단 인사말과 주요 안내는 운영자가 확인한 최신 내용을 기준으로 관리합니다. 확정된 안내는 소개와 소식의 관련 분류에서 함께 확인할 수 있습니다.</p>
         </article>
         <article id="charter" class="ss-panel">
             <h2>성산헌장</h2>
             <p>성산헌장은 성산회의 목적과 회원 활동의 기준을 담은 핵심 자료입니다. 현행본은 회원이 언제든 찾을 수 있도록 소개 화면과 소식의 규정 분류에서 함께 안내합니다.</p>
-            <p class="ss-review-note">기존 `z2_1` 성산헌장 원문을 검수한 뒤 최종 문안으로 교체합니다.</p>
+            <p class="ss-review-note">성산회의 목적과 회원 활동의 기준은 최신 확인본을 기준으로 안내합니다. 운영자는 규정 분류의 현행본을 함께 관리합니다.</p>
         </article>
         <article id="history" class="ss-panel">
             <h2>연혁</h2>
@@ -57,7 +57,7 @@ include_once G5_THEME_PATH.'/head.php';
         </article>
         <article id="song" class="ss-panel">
             <h2>성산회가</h2>
-            <p>성산회가는 기존 자료의 저작·공개 범위를 확인한 뒤 전문을 게시합니다. 운영 검수 전까지는 자료 이전 대상임을 명확히 표시합니다.</p>
+            <p>성산회가는 공개 범위 확인이 필요한 자료입니다. 소개 화면에서는 자료의 존재와 관리 기준을 안내하고, 공개 가능한 확인본은 소식의 자료 분류에서 찾을 수 있도록 운영합니다.</p>
         </article>
     </div>
 </section>

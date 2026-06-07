@@ -600,6 +600,22 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
   });
 
+  it('keeps the intro page usable without future replacement placeholders', () => {
+    const intro = read('src/theme/sungsan/page/intro.php');
+
+    for (const heading of ['인사말', '성산헌장', '연혁', '조직', '성산회가']) {
+      assert.match(intro, new RegExp(`<h2>${heading}</h2>`));
+    }
+
+    assert.match(intro, /단체가 어떤 곳인지 한 페이지에서 이해/);
+    assert.match(intro, /성산회의 목적과 회원 활동의 기준/);
+    assert.match(intro, /공개 범위 확인이 필요한 자료/);
+    assert.doesNotMatch(intro, /원문은 이전 리허설 후/);
+    assert.doesNotMatch(intro, /최종 문안으로 교체/);
+    assert.doesNotMatch(intro, /전문을 게시합니다/);
+    assert.doesNotMatch(intro, /자료 이전 대상임/);
+  });
+
   it('guards news attachment downloads with per-post visibility', () => {
     const file = 'src/skin/board/sungsan_news/download.head.skin.php';
 
