@@ -218,6 +218,26 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$sungsan_groups = sungsan_load_group_overrides\(\$sungsan_groups\);/);
   });
 
+  it('uses operator-managed news categories from board settings in list and write screens', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /function sungsan_get_news_categories\(\$board\)/);
+    assert.match(extend, /isset\(\$board\['bo_category_list'\]\)/);
+    assert.match(extend, /explode\('\|', \$category_list\)/);
+    assert.match(extend, /array_unique\(\$categories\)/);
+
+    for (const file of [
+      'src/skin/board/sungsan_news/list.skin.php',
+      'src/skin/board/sungsan_news/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /\$sungsan_news_category_options = sungsan_get_news_categories\(isset\(\$board\) \? \$board : array\(\)\);/);
+      assert.match(source, /foreach \(\$sungsan_news_category_options as \$category\)/);
+      assert.doesNotMatch(source, /foreach \(\$sungsan_news_categories as \$category\)/);
+    }
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 

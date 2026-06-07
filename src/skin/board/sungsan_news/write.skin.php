@@ -3,7 +3,7 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-global $sungsan_news_categories, $sungsan_groups;
+global $sungsan_groups;
 
 $visibility = isset($write['wr_2']) && $write['wr_2'] ? $write['wr_2'] : 'member';
 $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
@@ -15,6 +15,7 @@ $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
 $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
+$sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $board : array());
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -48,7 +49,7 @@ $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((
                     <label for="ca_name">종류 <span class="ss-required">필수</span></label>
                     <select id="ca_name" name="ca_name" required aria-describedby="ss-write-required-help">
                         <option value="">종류 선택</option>
-                        <?php foreach ($sungsan_news_categories as $category) { ?>
+                        <?php foreach ($sungsan_news_category_options as $category) { ?>
                             <option value="<?php echo get_text($category); ?>"<?php echo sungsan_selected($ca_name, $category); ?>><?php echo get_text($category); ?></option>
                         <?php } ?>
                     </select>

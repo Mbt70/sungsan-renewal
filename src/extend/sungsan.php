@@ -63,6 +63,30 @@ function sungsan_load_group_overrides($defaults)
 
 $sungsan_groups = sungsan_load_group_overrides($sungsan_groups);
 
+function sungsan_get_news_categories($board)
+{
+    global $sungsan_news_categories;
+
+    $category_list = isset($board['bo_category_list']) ? trim((string) $board['bo_category_list']) : '';
+    if ($category_list === '') {
+        return $sungsan_news_categories;
+    }
+
+    $categories = array();
+    foreach (explode('|', $category_list) as $category) {
+        $category = trim((string) $category);
+        if ($category === '') {
+            continue;
+        }
+
+        $categories[] = $category;
+    }
+
+    $categories = array_values(array_unique($categories));
+
+    return !empty($categories) ? $categories : $sungsan_news_categories;
+}
+
 $sungsan_visibility_labels = array(
     'public' => '누구나',
     'member' => '회원',

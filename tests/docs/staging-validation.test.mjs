@@ -74,4 +74,19 @@ describe('Cafe24 staging validation handoff', () => {
       expectIncludes(backup, expected, 'docs/operations/backup-and-restore.md');
     }
   });
+
+  it('documents operator-managed news category labels from board settings', () => {
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+    const checklist = readFileSync(checklistPath, 'utf8');
+
+    for (const expected of [
+      'bo_category_list',
+      '공지|행사|자료|규정|활동소식',
+      '소식 종류',
+      '작성/목록',
+    ]) {
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
+      expectIncludes(checklist, expected, checklistPath);
+    }
+  });
 });
