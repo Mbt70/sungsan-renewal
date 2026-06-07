@@ -340,6 +340,15 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /flogin_submit/);
   });
 
+  it('shows visible required markers on login fields', () => {
+    const source = read('src/skin/member/sungsan/login.skin.php');
+
+    assert.match(source, /<label for="login_id">아이디 <strong>필수<\/strong><\/label>/);
+    assert.match(source, /<label for="login_pw">비밀번호 <strong>필수<\/strong><\/label>/);
+    assert.doesNotMatch(source, /<label for="login_id">아이디 <strong class="sound_only">필수<\/strong><\/label>/);
+    assert.doesNotMatch(source, /<label for="login_pw">비밀번호 <strong class="sound_only">필수<\/strong><\/label>/);
+  });
+
   it('escapes login account utility links before rendering attributes', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 

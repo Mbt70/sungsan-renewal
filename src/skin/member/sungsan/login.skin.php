@@ -22,10 +22,10 @@ $register_url = G5_BBS_URL.'/register.php';
             <fieldset id="login_fs">
                 <legend>회원 로그인</legend>
 
-                <label for="login_id">아이디 <strong class="sound_only">필수</strong></label>
+                <label for="login_id">아이디 <strong>필수</strong></label>
                 <input type="text" name="mb_id" id="login_id" required class="frm_input required" size="20" maxlength="20" placeholder="아이디" autocomplete="username">
 
-                <label for="login_pw">비밀번호 <strong class="sound_only">필수</strong></label>
+                <label for="login_pw">비밀번호 <strong>필수</strong></label>
                 <input type="password" name="mb_password" id="login_pw" required class="frm_input required" size="20" maxlength="20" placeholder="비밀번호" autocomplete="current-password">
 
                 <button type="submit" class="btn_submit">로그인</button>
