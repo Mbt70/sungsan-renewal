@@ -78,7 +78,7 @@ export const SUNGSAN_BOARD_CONFIGS = Object.freeze([
     ...DEFAULT_BOARD_SETTINGS,
     bo_table: 'free',
     bo_subject: '자유게시판',
-    bo_list_level: 2,
+    bo_list_level: 1,
     bo_read_level: 2,
     bo_write_level: 2,
     bo_comment_level: 2,

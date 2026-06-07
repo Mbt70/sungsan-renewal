@@ -189,7 +189,7 @@ INSERT INTO `g5_board` SET
     bo_order = '20',
     bo_table = 'free',
     bo_subject = '자유게시판',
-    bo_list_level = '2',
+    bo_list_level = '1',
     bo_read_level = '2',
     bo_write_level = '2',
     bo_comment_level = '2',

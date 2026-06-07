@@ -37,7 +37,7 @@ describe('sungsan gnuboard setup config', () => {
 
     assert.equal(free.bo_subject, '자유게시판');
     assert.equal(free.bo_skin, 'sungsan_free');
-    assert.equal(free.bo_list_level, 2);
+    assert.equal(free.bo_list_level, 1);
     assert.equal(free.bo_read_level, 2);
     assert.equal(free.bo_write_level, 2);
   });
