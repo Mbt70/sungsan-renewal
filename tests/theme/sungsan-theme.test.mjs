@@ -986,8 +986,13 @@ describe('sungsan theme static contract', () => {
 
     assert.match(newsList, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
     assert.doesNotMatch(newsList, /href="<\?php echo \$list\[\$i\]\['href'\]/);
-    assert.match(newsList, /bo_table=<\?php echo get_text\(\$bo_table\); \?>/);
+    assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table;/);
+    assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table\.'&sca='\.urlencode\(\$category\);/);
+    assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_list_url\); \?>"/);
+    assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_category_href\); \?>"/);
+    assert.match(newsList, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>">/);
     assert.match(newsList, /<\?php echo get_text\(\$category\); \?><\/a>/);
+    assert.doesNotMatch(newsList, /href="<\?php echo G5_BBS_URL; \?>\/board\.php\?bo_table=/);
     assert.doesNotMatch(newsList, /bo_table=<\?php echo \$bo_table; \?>/);
     assert.doesNotMatch(newsList, /><\?php echo \$category; \?><\/a>/);
 

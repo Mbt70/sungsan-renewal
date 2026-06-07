@@ -7,6 +7,7 @@ global $sungsan_news_categories, $is_admin;
 
 $current_category = isset($sca) ? $sca : '';
 $visible_count = 0;
+$sungsan_news_list_url = G5_BBS_URL.'/board.php?bo_table='.$bo_table;
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -18,9 +19,10 @@ $visible_count = 0;
         </div>
 
         <div class="ss-filter-bar" aria-label="소식 종류">
-            <a class="ss-chip<?php echo sungsan_active_class($current_category, ''); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo get_text($bo_table); ?>">전체</a>
+            <a class="ss-chip<?php echo sungsan_active_class($current_category, ''); ?>" href="<?php echo get_text($sungsan_news_list_url); ?>">전체</a>
             <?php foreach ($sungsan_news_categories as $category) { ?>
-                <a class="ss-chip<?php echo sungsan_active_class($current_category, $category); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo get_text($bo_table); ?>&amp;sca=<?php echo urlencode($category); ?>"><?php echo get_text($category); ?></a>
+                <?php $sungsan_category_href = G5_BBS_URL.'/board.php?bo_table='.$bo_table.'&sca='.urlencode($category); ?>
+                <a class="ss-chip<?php echo sungsan_active_class($current_category, $category); ?>" href="<?php echo get_text($sungsan_category_href); ?>"><?php echo get_text($category); ?></a>
             <?php } ?>
         </div>
 
