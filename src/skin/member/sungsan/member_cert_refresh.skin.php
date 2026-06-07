@@ -48,7 +48,7 @@ $cert_refresh_requires_phone = empty($cert_refresh_member_dupinfo);
 
             <fieldset class="member_cert_refresh_agree">
                 <input type="checkbox" name="agree2" value="1" id="agree21" class="selec_chk">
-                <label for="agree21"><span></span><b class="sound_only">추가 개인정보처리방침에 동의합니다.</b></label>
+                <label for="agree21"><span></span>추가 개인정보처리방침에 동의합니다.</label>
             </fieldset>
         </section>
 

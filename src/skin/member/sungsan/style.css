@@ -165,6 +165,7 @@
 
 .chk_box,
 .fregister_agree,
+.member_cert_refresh_agree,
 .login_if_auto {
   display: flex;
   gap: 8px;
@@ -172,7 +173,8 @@
 }
 
 .chk_box input,
-.fregister_agree input {
+.fregister_agree input,
+.member_cert_refresh_agree input {
   width: 22px;
   height: 22px;
 }

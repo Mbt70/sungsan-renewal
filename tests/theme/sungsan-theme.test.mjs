@@ -378,6 +378,26 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows visible text on required registration consent checkboxes', () => {
+    const register = read('src/skin/member/sungsan/register.skin.php');
+    const certRefresh = read('src/skin/member/sungsan/member_cert_refresh.skin.php');
+    const css = read('src/skin/member/sungsan/style.css');
+
+    for (const [id, label] of [
+      ['agree11', '회원가입약관의 내용에 동의합니다.'],
+      ['agree21', '개인정보 수집 및 이용의 내용에 동의합니다.'],
+      ['chk_all', '회원가입 약관에 모두 동의합니다'],
+    ]) {
+      assert.match(register, new RegExp(`<label for="${id}"><span></span>${label}</label>`), `register should show the ${id} consent label`);
+      assert.doesNotMatch(register, new RegExp(`<label for="${id}"><span></span><b class="sound_only">`), `register should not hide the ${id} consent label`);
+    }
+
+    assert.match(certRefresh, /<label for="agree21"><span><\/span>추가 개인정보처리방침에 동의합니다\.<\/label>/);
+    assert.doesNotMatch(certRefresh, /<label for="agree21"><span><\/span><b class="sound_only">/);
+    assert.match(css, /\.member_cert_refresh_agree/);
+    assert.match(css, /\.member_cert_refresh_agree input/);
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),
