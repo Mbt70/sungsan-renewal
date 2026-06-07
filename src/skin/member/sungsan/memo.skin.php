@@ -31,7 +31,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 	            		<?php if (! $readed){ ?><span class="no_read">안 읽은 쪽지</span><?php } ?>
 	            	</div>
 	                <div class="memo_li memo_name">
-                        <?php echo $list[$i]['name']; ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['send_datetime']); ?></span>
+                        <?php echo get_text(strip_tags($list[$i]['name'])); ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['send_datetime']); ?></span>
 						<div class="memo_preview">
 						    <a href="<?php echo get_text($list[$i]['view_href']); ?>"><?php echo get_text($memo_preview); ?></a>
                         </div>
@@ -46,7 +46,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <!-- 페이지 -->
         <?php echo $write_pages; ?>
 
-        <p class="win_desc"><i class="fa fa-info-circle" aria-hidden="true"></i> 쪽지 보관일수는 최장 <strong><?php echo $config['cf_memo_del'] ?></strong>일 입니다.
+        <p class="win_desc"><i class="fa fa-info-circle" aria-hidden="true"></i> 쪽지 보관일수는 최장 <strong><?php echo number_format((int) $config['cf_memo_del']); ?></strong>일 입니다.
         </p>
 
         <div class="win_btn">
