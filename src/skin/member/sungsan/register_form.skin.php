@@ -154,14 +154,14 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 					</label>
 
 	                <input type="hidden" name="old_email" value="<?php echo $sungsan_member_value('mb_email'); ?>">
-	                <input type="text" name="mb_email" value="<?php echo $sungsan_member_value('mb_email'); ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" placeholder="E-mail">
+	                <input type="email" name="mb_email" value="<?php echo $sungsan_member_value('mb_email'); ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" autocomplete="email" placeholder="E-mail">
 	            </li>
 	
 				<li>
 	            <?php if ($config['cf_use_hp'] || ($config["cf_cert_use"] && ($config['cf_cert_hp'] || $config['cf_cert_simple']))) {  ?>
 	                <label for="reg_mb_hp">휴대폰번호<?php if (!empty($hp_required)) { ?> (필수)<?php } ?><?php echo $desc_phone ?></label>
 	                
-	                <input type="text" name="mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" placeholder="휴대폰번호">
+	                <input type="tel" name="mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="휴대폰번호">
 	                <?php if ($config['cf_cert_use'] && ($config['cf_cert_hp'] || $config['cf_cert_simple'])) { ?>
 	                <input type="hidden" name="old_mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>">
 	                <?php } ?>

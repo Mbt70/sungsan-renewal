@@ -1045,6 +1045,53 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('uses semantic input types for member email and phone fields', () => {
+    const cases = [
+      {
+        file: 'src/skin/member/sungsan/formmail.skin.php',
+        id: 'fmail',
+        type: 'email',
+        autocomplete: 'email',
+      },
+      {
+        file: 'src/skin/member/sungsan/password_lost.skin.php',
+        id: 'mb_email',
+        type: 'email',
+        autocomplete: 'email',
+      },
+      {
+        file: 'src/skin/member/sungsan/register_form.skin.php',
+        id: 'reg_mb_email',
+        type: 'email',
+        autocomplete: 'email',
+      },
+      {
+        file: 'src/skin/member/sungsan/register_form.skin.php',
+        id: 'reg_mb_hp',
+        type: 'tel',
+        inputmode: 'tel',
+        autocomplete: 'tel',
+      },
+    ];
+
+    for (const { file, id, type, inputmode, autocomplete } of cases) {
+      const source = read(file);
+      const inputLine = source.split('\n').find((line) => line.includes(`id="${id}"`));
+
+      assert.ok(inputLine, `${file} should render ${id}`);
+      assert.match(inputLine, new RegExp(`type="${type}"`), `${file} should use ${type} for ${id}`);
+      assert.doesNotMatch(inputLine, /type="text"/, `${file} should not leave ${id} as a text input`);
+
+      if (inputmode) {
+        assert.match(inputLine, new RegExp(`inputmode="${inputmode}"`), `${file} should set inputmode on ${id}`);
+      }
+
+      if (autocomplete) {
+        assert.match(inputLine, new RegExp(`autocomplete="${autocomplete}"`), `${file} should set autocomplete on ${id}`);
+      }
+    }
+  });
+
   it('groups form mail format choices with a visible legend', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
     const css = read('src/skin/member/sungsan/style.css');

@@ -31,7 +31,7 @@ $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
             </li>
             <li>
                 <label for="fmail">E-mail <strong>필수</strong></label>
-                <input type="text" name="fmail"  id="fmail" required class="frm_input full_input required" placeholder="E-mail">
+                <input type="email" name="fmail"  id="fmail" required class="frm_input full_input required" autocomplete="email" placeholder="E-mail">
             </li>
             <?php }  ?>
             <li>
