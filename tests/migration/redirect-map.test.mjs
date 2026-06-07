@@ -48,7 +48,7 @@ describe('legacy redirect map export', () => {
     );
   });
 
-  it('exports Apache redirect rules for Cafe24 handoff', () => {
+  it('exports Apache rewrite rules that match legacy board query strings', () => {
     const rules = formatApacheRedirects([
       {
         legacyPath: '/renewal/bbs/board.php?bo_table=z1_1&wr_id=579',
@@ -58,7 +58,12 @@ describe('legacy redirect map export', () => {
 
     assert.equal(
       rules,
-      'RedirectMatch 301 ^/renewal/bbs/board\\.php\\?bo_table=z1_1&wr_id=579$ /bbs/board.php?bo_table=news&wr_id=42',
+      [
+        'RewriteEngine On',
+        'RewriteCond %{QUERY_STRING} (^|&)bo_table=z1_1(&|$)',
+        'RewriteCond %{QUERY_STRING} (^|&)wr_id=579(&|$)',
+        'RewriteRule ^renewal/bbs/board\\.php$ /bbs/board.php?bo_table=news&wr_id=42 [R=301,L,NE]',
+      ].join('\n'),
     );
   });
 });

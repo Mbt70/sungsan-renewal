@@ -51,14 +51,45 @@ export function formatRedirectCsv(records) {
   return rows.map((row) => row.map(csvEscape).join(',')).join('\n');
 }
 
-function escapeRedirectMatchPath(path) {
+function escapeRewritePattern(path) {
   return String(path).replace(/[.+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function splitRedirectPath(path) {
+  const [pathname, query = ''] = String(path).split('?', 2);
+  return { pathname, query };
+}
+
+function toHtaccessRulePath(pathname) {
+  return String(pathname).replace(/^\/+/, '');
+}
+
+function formatRewriteConditions(query) {
+  return [...new URLSearchParams(query).entries()]
+    .map(([key, value]) => {
+      const escapedKey = escapeRewritePattern(key);
+      const escapedValue = escapeRewritePattern(value);
+      return `RewriteCond %{QUERY_STRING} (^|&)${escapedKey}=${escapedValue}(&|$)`;
+    });
+}
+
 export function formatApacheRedirects(records) {
-  return records
-    .map((record) => `RedirectMatch 301 ^${escapeRedirectMatchPath(record.legacyPath)}$ ${record.targetPath}`)
-    .join('\n');
+  if (records.length === 0) {
+    return '';
+  }
+
+  return [
+    'RewriteEngine On',
+    ...records.flatMap((record) => {
+      const { pathname, query } = splitRedirectPath(record.legacyPath);
+      const rulePath = escapeRewritePattern(toHtaccessRulePath(pathname));
+
+      return [
+        ...formatRewriteConditions(query),
+        `RewriteRule ^${rulePath}$ ${record.targetPath} [R=301,L,NE]`,
+      ];
+    }),
+  ].join('\n');
 }
 
 function parseInputRows(text) {
