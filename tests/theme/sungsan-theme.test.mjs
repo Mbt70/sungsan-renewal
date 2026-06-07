@@ -908,6 +908,19 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /sungsan_can_read_visibility\(\$visibility\)/);
   });
 
+  it('separates login redirects from insufficient-permission alerts for news downloads', () => {
+    const source = read('src/skin/board/sungsan_news/download.head.skin.php');
+
+    assert.match(source, /global \$is_member;/);
+    assert.match(source, /\$is_review_restricted = function_exists\('sungsan_is_review_restricted'\) && sungsan_is_review_restricted\(\$write\);/);
+    assert.match(source, /\$sungsan_show_login_redirect = !\$is_member && !\$is_review_restricted;/);
+    assert.match(source, /권한이 있는 계정으로 로그인하면 첨부를 내려받을 수 있습니다\./);
+    assert.match(source, /현재 계정으로는 이 첨부 파일을 내려받을 수 없습니다\./);
+    assert.match(source, /if \(\$sungsan_show_login_redirect\) \{[\s\S]*?login\.php[\s\S]*?\}[\s\S]*?alert\(\$message\);/);
+    assert.doesNotMatch(source, /로그인 후 권한을 확인해 주세요/);
+    assert.doesNotMatch(source, /!\s*empty\(\$member\['mb_id'\]\)/);
+  });
+
   it('preserves migrated news audit metadata when posts are edited', () => {
     const source = read('src/skin/board/sungsan_news/write.skin.php');
 
