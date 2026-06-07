@@ -13,7 +13,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <p class="ss-login-note">회원 전용 소식과 자유게시판은 로그인 후 이용할 수 있습니다.</p>
         </header>
 
-        <form name="flogin" action="<?php echo $login_action_url; ?>" onsubmit="return flogin_submit(this);" method="post">
+        <form name="flogin" action="<?php echo get_text($login_action_url); ?>" onsubmit="return flogin_submit(this);" method="post">
             <input type="hidden" name="url" value="<?php echo get_text($login_url); ?>">
 
             <fieldset id="login_fs">

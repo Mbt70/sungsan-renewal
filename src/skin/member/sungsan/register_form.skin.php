@@ -11,7 +11,7 @@ if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipi
 <!-- 회원정보 입력/수정 시작 { -->
 
 <div class="register">
-	<form id="fregisterform" name="fregisterform" action="<?php echo $register_action_url ?>" onsubmit="return fregisterform_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off">
+	<form id="fregisterform" name="fregisterform" action="<?php echo get_text($register_action_url); ?>" onsubmit="return fregisterform_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off">
 	<input type="hidden" name="w" value="<?php echo get_text($w); ?>">
 	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
 	<input type="hidden" name="agree" value="<?php echo get_text($agree); ?>">

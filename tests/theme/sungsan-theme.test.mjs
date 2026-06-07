@@ -165,6 +165,77 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /name="url" value="<\?php echo \$urlencode/);
   });
 
+  it('escapes member input form actions and values before rendering account utility screens', () => {
+    const cases = [
+      {
+        file: 'src/skin/member/sungsan/login.skin.php',
+        expected: [/action="<\?php echo get_text\(\$login_action_url\); \?>"/],
+        forbidden: [/action="<\?php echo \$login_action_url/],
+      },
+      {
+        file: 'src/skin/member/sungsan/register.skin.php',
+        expected: [/action="<\?php echo get_text\(\$register_action_url\); \?>"/],
+        forbidden: [/action="<\?php echo \$register_action_url/],
+      },
+      {
+        file: 'src/skin/member/sungsan/register_form.skin.php',
+        expected: [/action="<\?php echo get_text\(\$register_action_url\); \?>"/],
+        forbidden: [/action="<\?php echo \$register_action_url/],
+      },
+      {
+        file: 'src/skin/member/sungsan/password_lost.skin.php',
+        expected: [/action="<\?php echo get_text\(\$action_url\); \?>"/],
+        forbidden: [/action="<\?php echo \$action_url/],
+      },
+      {
+        file: 'src/skin/member/sungsan/password_reset.skin.php',
+        expected: [/action="<\?php echo get_text\(\$action_url\); \?>"/],
+        forbidden: [/action="<\?php echo \$action_url/],
+      },
+      {
+        file: 'src/skin/member/sungsan/password.skin.php',
+        expected: [
+          /<h1><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
+          /action="<\?php echo get_text\(\$action\); \?>"/,
+        ],
+        forbidden: [/<h1><\?php echo \$g5\['title'\]/, /action="<\?php echo \$action/],
+      },
+      {
+        file: 'src/skin/member/sungsan/memo_form.skin.php',
+        expected: [
+          /action="<\?php echo get_text\(\$memo_action_url\); \?>"/,
+          /name="me_recv_mb_id" value="<\?php echo get_text\(\$me_recv_mb_id\); \?>"/,
+          /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo get_text\(\$content\); \?><\/textarea>/,
+        ],
+        forbidden: [
+          /action="<\?php echo \$memo_action_url/,
+          /name="me_recv_mb_id" value="<\?php echo \$me_recv_mb_id/,
+          /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo \$content/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/scrap_popin.skin.php',
+        expected: [
+          /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/,
+          /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/,
+        ],
+        forbidden: [/name="bo_table" value="<\?php echo \$bo_table/, /name="wr_id" value="<\?php echo \$wr_id/],
+      },
+    ];
+
+    for (const { file, expected, forbidden } of cases) {
+      const source = read(file);
+
+      for (const pattern of expected) {
+        assert.match(source, pattern, `${file} should render escaped form values`);
+      }
+
+      for (const pattern of forbidden) {
+        assert.doesNotMatch(source, pattern, `${file} should not render raw form values`);
+      }
+    }
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',

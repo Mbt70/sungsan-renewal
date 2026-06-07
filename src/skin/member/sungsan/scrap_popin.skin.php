@@ -9,8 +9,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <div id="scrap_do" class="new_win">
     <h1 id="win_title">스크랩하기</h1>
     <form name="f_scrap_popin" action="./scrap_popin_update.php" method="post">
-    <input type="hidden" name="bo_table" value="<?php echo $bo_table ?>">
-    <input type="hidden" name="wr_id" value="<?php echo $wr_id ?>">
+    <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
+    <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
     <div class="new_win_con">
 	    <h2 class="sound_only">제목 확인 및 댓글 쓰기</h2>
 	    <ul>
