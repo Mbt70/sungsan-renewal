@@ -38,10 +38,11 @@ $ss_is_mypage = isset($sungsan_page) && $sungsan_page === 'mypage';
         </nav>
 
         <div class="ss-header-actions">
-            <form class="ss-search-form" method="get" action="<?php echo G5_BBS_URL; ?>/search.php">
+            <form class="ss-search-form" method="get" action="<?php echo G5_BBS_URL; ?>/board.php">
+                <input type="hidden" name="bo_table" value="news">
                 <input type="hidden" name="sfl" value="wr_subject||wr_content">
                 <input type="hidden" name="sop" value="and">
-                <label class="ss-search-label" for="ss_stx">통합검색</label>
+                <label class="ss-search-label" for="ss_stx">소식 검색</label>
                 <div class="ss-search-row">
                     <input id="ss_stx" name="stx" type="search" maxlength="30" placeholder="검색어">
                     <button type="submit">검색</button>

@@ -97,8 +97,10 @@ describe('sungsan theme static contract', () => {
     const head = read('src/theme/sungsan/head.php');
     const css = read('src/scss/main.scss');
 
-    assert.match(head, /<form class="ss-search-form" method="get" action="<\?php echo G5_BBS_URL; \?>\/search\.php">/);
-    assert.match(head, /<label class="ss-search-label" for="ss_stx">통합검색<\/label>/);
+    assert.match(head, /<form class="ss-search-form" method="get" action="<\?php echo G5_BBS_URL; \?>\/board\.php">/);
+    assert.match(head, /<input type="hidden" name="bo_table" value="news">/);
+    assert.doesNotMatch(head, /\/search\.php/);
+    assert.match(head, /<label class="ss-search-label" for="ss_stx">소식 검색<\/label>/);
     assert.doesNotMatch(head, /<label class="sound_only" for="ss_stx">/);
     assert.match(head, /<div class="ss-search-row">[\s\S]*?<input id="ss_stx" name="stx" type="search"/);
     assert.match(css, /\.ss-search-label\s*\{/);
