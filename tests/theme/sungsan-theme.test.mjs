@@ -398,6 +398,21 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.member_cert_refresh_agree input/);
   });
 
+  it('starts registration membership screens with visible page headings', () => {
+    const register = read('src/skin/member/sungsan/register.skin.php');
+    const registerForm = read('src/skin/member/sungsan/register_form.skin.php');
+    const certRefresh = read('src/skin/member/sungsan/member_cert_refresh.skin.php');
+    const css = read('src/skin/member/sungsan/style.css');
+
+    assert.match(register, /<h1>회원가입 약관 동의<\/h1>/);
+    assert.match(registerForm, /\$sungsan_form_title = \$w == 'u' \? '내 정보 수정' : '가입 정보 입력';/);
+    assert.match(registerForm, /<h1><\?php echo get_text\(\$sungsan_form_title\); \?><\/h1>/);
+    assert.match(certRefresh, /<h1>본인인증 정보 갱신<\/h1>/);
+    assert.match(css, /\.member_cert_refresh,\s*\n\.mbskin,\s*\n\.register,\s*\n\.new_win_con/);
+    assert.match(css, /\.member_cert_refresh h1,\s*\n\.member_cert_refresh h2/);
+    assert.match(css, /\.member_cert_refresh form/);
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),

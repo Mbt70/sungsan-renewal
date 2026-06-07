@@ -15,6 +15,7 @@ $cert_refresh_requires_phone = empty($cert_refresh_member_dupinfo);
 <!-- 기존 회원 본인인증 시작 { -->
 <div class="member_cert_refresh">
     <form name="fcertrefreshform" id="member_cert_refresh" action="<?php echo get_text($action_url); ?>" onsubmit="return fcertrefreshform_submit(this);" method="POST" autocomplete="off">
+    <h1>본인인증 정보 갱신</h1>
     <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
 	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
 	<input type="hidden" name="cert_type" value="<?php echo $cert_refresh_member_value('mb_certify'); ?>">

@@ -14,6 +14,7 @@ $sungsan_register_cert_enabled = !empty($config['cf_cert_use']);
 
     <form  name="fregister" id="fregister" action="<?php echo get_text($register_action_url); ?>" onsubmit="return fregister_submit(this);" method="POST" autocomplete="off">
 
+    <h1>회원가입 약관 동의</h1>
     <p><i class="fa fa-check-circle" aria-hidden="true"></i> 회원가입약관 및 개인정보 수집 및 이용의 내용에 동의하셔야 회원가입 하실 수 있습니다.</p>
     
     <?php

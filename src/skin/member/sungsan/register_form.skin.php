@@ -18,12 +18,14 @@ $sungsan_member_certify = $sungsan_member_raw('mb_certify');
 $sungsan_member_adult = (int) $sungsan_member_raw('mb_adult', 0);
 $sungsan_cancel_url = $w == 'u' ? G5_URL.'/sungsan/mypage.php' : G5_URL;
 $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
+$sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 ?>
 
 <!-- 회원정보 입력/수정 시작 { -->
 
 <div class="register">
 	<form id="fregisterform" name="fregisterform" action="<?php echo get_text($register_action_url); ?>" onsubmit="return fregisterform_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off">
+	<h1><?php echo get_text($sungsan_form_title); ?></h1>
 	<input type="hidden" name="w" value="<?php echo get_text($w); ?>">
 	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
 	<input type="hidden" name="agree" value="<?php echo get_text($agree); ?>">

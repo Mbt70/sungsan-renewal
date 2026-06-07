@@ -1,3 +1,4 @@
+.member_cert_refresh,
 .mbskin,
 .register,
 .new_win_con {
@@ -9,6 +10,8 @@
   line-height: 1.65;
 }
 
+.member_cert_refresh h1,
+.member_cert_refresh h2,
 .mbskin h1,
 .register h1,
 .new_win_con h3,
@@ -23,6 +26,7 @@
 .mbskin_box,
 .mbskin > form,
 .register form,
+.member_cert_refresh form,
 .new_win_con {
   border: 1px solid var(--ss-color-border, #d9dee8);
   border-radius: var(--ss-radius-md, 8px);
@@ -62,6 +66,7 @@
 
 #login_fs,
 #info_fs,
+.member_cert_refresh section,
 .register section {
   display: grid;
   gap: 12px;
@@ -227,6 +232,7 @@
 }
 
 @media (max-width: 430px) {
+  .member_cert_refresh,
   .mbskin,
   .register,
   .new_win_con {
@@ -237,6 +243,7 @@
   .mbskin_box,
   .mbskin > form,
   .register form,
+  .member_cert_refresh form,
   .new_win_con {
     padding: 18px;
   }
