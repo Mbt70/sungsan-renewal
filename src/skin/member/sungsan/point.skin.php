@@ -3,6 +3,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$member_point = (int) $member['mb_point'];
 ?>
 
 <div id="point" class="new_win">
@@ -12,7 +14,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <ul class="point_all">
         	<li class="full_li">
         		보유포인트
-        		<span><?php echo number_format($member['mb_point']); ?></span>
+        		<span><?php echo number_format($member_point); ?></span>
         	</li>
 		</ul>
         <ul class="point_list">
@@ -23,14 +25,16 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             foreach((array) $list as $row){
                 $point1 = $point2 = 0;
                 $point_use_class = '';
-                if ($row['po_point'] > 0) {
-                    $point1 = '+' .number_format($row['po_point']);
-                    $sum_point1 += $row['po_point'];
+                $row_point = (int) $row['po_point'];
+                if ($row_point > 0) {
+                    $point1 = '+' .number_format($row_point);
+                    $sum_point1 += $row_point;
                 } else {
-                    $point2 = number_format($row['po_point']);
-                    $sum_point2 += $row['po_point'];
+                    $point2 = number_format($row_point);
+                    $sum_point2 += $row_point;
                     $point_use_class = 'point_use';
                 }
+                $point_value = $point1 ?: $point2;
 
                 $po_content = $row['po_content'];
 
@@ -41,7 +45,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <li class="<?php echo $point_use_class; ?>">
                 <div class="point_top">
                     <span class="point_tit"><?php echo get_text($po_content); ?></span>
-                    <span class="point_num"><?php if ($point1) echo $point1; else echo $point2; ?></span>
+                    <span class="point_num"><?php echo get_text($point_value); ?></span>
                 </div>
                 <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row['po_datetime']); ?></span>
                 <span class="point_date<?php echo $expr; ?>">
@@ -65,8 +69,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
             <li class="point_status">
                 소계
-                <span><?php echo $sum_point1; ?></span>
-                <span><?php echo $sum_point2; ?></span>
+                <span><?php echo get_text($sum_point1); ?></span>
+                <span><?php echo get_text($sum_point2); ?></span>
             </li>
         </ul>
     </div>

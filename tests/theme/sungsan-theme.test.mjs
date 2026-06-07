@@ -584,6 +584,27 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('normalizes point values before rendering the point popup', () => {
+    const source = read('src/skin/member/sungsan/point.skin.php');
+
+    assert.match(source, /\$member_point = \(int\) \$member\['mb_point'\];/);
+    assert.match(source, /number_format\(\$member_point\)/);
+    assert.match(source, /\$row_point = \(int\) \$row\['po_point'\];/);
+    assert.match(source, /if \(\$row_point > 0\)/);
+    assert.match(source, /\$point1 = '\+' \.number_format\(\$row_point\);/);
+    assert.match(source, /\$sum_point1 \+= \$row_point;/);
+    assert.match(source, /\$point2 = number_format\(\$row_point\);/);
+    assert.match(source, /\$sum_point2 \+= \$row_point;/);
+    assert.match(source, /\$point_value = \$point1 \?: \$point2;/);
+    assert.match(source, /<span class="point_num"><\?php echo get_text\(\$point_value\); \?><\/span>/);
+    assert.match(source, /<span><\?php echo get_text\(\$sum_point1\); \?><\/span>/);
+    assert.match(source, /<span><\?php echo get_text\(\$sum_point2\); \?><\/span>/);
+    assert.doesNotMatch(source, /number_format\(\$member\['mb_point'\]\)/);
+    assert.doesNotMatch(source, /\$row\['po_point'\] > 0/);
+    assert.doesNotMatch(source, /echo \$sum_point1/);
+    assert.doesNotMatch(source, /echo \$sum_point2/);
+  });
+
   it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
     const visibleLabelCases = [
       {
