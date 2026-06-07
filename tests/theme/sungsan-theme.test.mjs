@@ -1887,6 +1887,17 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /object-fit:\s*cover/);
   });
 
+  it('shows a visible home media fallback when thumbnails are unavailable', () => {
+    const index = read('src/theme/sungsan/index.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(index, /<span class="ss-media-thumb ss-media-thumb-fallback">사진·영상<\/span>/);
+    assert.doesNotMatch(index, /<span class="ss-media-thumb" aria-hidden="true"><\/span>/);
+    assert.match(css, /\.ss-media-thumb-fallback\s*\{/);
+    assert.match(css, /place-items:\s*center/);
+    assert.match(css, /font-weight:\s*800/);
+  });
+
   it('puts pinned home notices before ordinary latest notices', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');

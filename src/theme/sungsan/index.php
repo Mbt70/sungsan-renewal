@@ -109,7 +109,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
                     <?php if ($sungsan_home_media_thumb !== '') { ?>
                         <img class="ss-media-thumb" src="<?php echo get_text($sungsan_home_media_thumb); ?>" alt="<?php echo get_text($sungsan_home_media_alt); ?>" loading="lazy">
                     <?php } else { ?>
-                        <span class="ss-media-thumb" aria-hidden="true"></span>
+                        <span class="ss-media-thumb ss-media-thumb-fallback">사진·영상</span>
                     <?php } ?>
                     <strong><?php echo get_text($sungsan_home_media_subject); ?></strong>
                     <time datetime="<?php echo get_text($sungsan_home_media_datetime); ?>"><?php echo get_text($sungsan_home_media_date); ?></time>

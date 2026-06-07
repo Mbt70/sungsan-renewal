@@ -871,6 +871,13 @@ img {
   object-fit: cover;
 }
 
+.ss-media-thumb-fallback {
+  display: grid;
+  place-items: center;
+  color: var(--ss-color-primary-strong);
+  font-weight: 800;
+}
+
 .ss-empty-state {
   grid-column: 1 / -1;
 }
