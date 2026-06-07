@@ -85,10 +85,10 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 `scripts/build-release.ps1`는 `release/sungsan-site-YYYYMMDD-HHMMSS.zip`과 같은 이름의 `.sha256` 체크섬 파일을 만듭니다. Cafe24 SFTP 업로드 전후에 ZIP의 SHA256 값이 `.sha256` 파일과 일치하는지 확인합니다. 자세한 절차는 `docs/operations/cafe24-deployment.md`를 확인합니다.
 
 ## 운영 전환 개요
-1. 기존 DB와 `/renewal/data`를 백업합니다.
+1. 기존 DB와 `/renewal/data`를 백업하고 `docs/operations/backup-and-restore.md` 기준으로 무결성 값을 남깁니다.
 2. 백업을 로컬로 복원해 EUC-KR에서 UTF-8 변환을 리허설합니다.
 3. 새 사이트를 Cafe24 스테이징 경로에 업로드합니다.
 4. 관리자와 함께 권한, 첨부, 검색, 모바일 화면을 검수하고 `docs/operations/staging-validation-checklist.md`에 결과를 남깁니다.
 5. 최종 백업 후 루트 전환합니다.
 
-자세한 절차는 `docs/operations`와 `docs/migration`을 확인합니다.
+자세한 절차는 `docs/operations/backup-and-restore.md`, `docs/operations/cafe24-deployment.md`, `docs/migration`을 확인합니다.

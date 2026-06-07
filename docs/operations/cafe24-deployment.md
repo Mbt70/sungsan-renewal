@@ -7,6 +7,8 @@
 - 기존 사이트 관리자, DB, SFTP 접근 권한을 확보합니다.
 
 ## 2. 백업
+백업과 복구 리허설 기록은 `docs/operations/backup-and-restore.md` 기준으로 남깁니다.
+
 ```text
 1. DB 전체 덤프 생성
 2. /renewal/data 전체 다운로드
