@@ -3,11 +3,6 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-if (G5_IS_MOBILE && defined('G5_THEME_MOBILE_PATH') && is_file(G5_THEME_MOBILE_PATH.'/head.php')) {
-    include_once G5_THEME_MOBILE_PATH.'/head.php';
-    return;
-}
-
 if (function_exists('add_stylesheet')) {
     add_stylesheet('<link rel="stylesheet" href="'.G5_THEME_URL.'/css/sungsan.css">', 0);
 }

@@ -168,6 +168,15 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-skip-link:focus,\s*\n\.ss-skip-link:focus-visible\s*\{/);
   });
 
+  it('uses the shared responsive Sungsan header on mobile', () => {
+    const head = read('src/theme/sungsan/head.php');
+
+    assert.doesNotMatch(head, /G5_THEME_MOBILE_PATH/);
+    assert.doesNotMatch(head, /G5_IS_MOBILE[\s\S]*?return;/);
+    assert.match(head, /<header class="ss-site-header">/);
+    assert.match(head, /<main id="container" tabindex="-1">/);
+  });
+
   it('preserves and escapes the compact header search term', () => {
     const head = read('src/theme/sungsan/head.php');
     const inputLine = head.split('\n').find((line) => line.includes('id="ss_stx"'));
