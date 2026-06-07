@@ -400,6 +400,14 @@ describe('sungsan theme static contract', () => {
         ],
       },
       {
+        file: 'src/skin/member/sungsan/formmail.skin.php',
+        expected: [
+          /\$formmail_action_url = '\.\/formmail_send\.php';/,
+          /action="<\?php echo get_text\(\$formmail_action_url\); \?>"/,
+        ],
+        forbidden: [/action="\.\/formmail_send\.php"/],
+      },
+      {
         file: 'src/skin/member/sungsan/scrap_popin.skin.php',
         expected: [
           /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/,

@@ -3,13 +3,15 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$formmail_action_url = './formmail_send.php';
 ?>
 
 <!-- 폼메일 시작 { -->
 <div id="formmail" class="new_win">
     <h1 id="win_title"><?php echo get_text($name); ?>님께 메일보내기</h1>
 
-    <form name="fformmail" action="./formmail_send.php" onsubmit="return fformmail_submit(this);" method="post" enctype="multipart/form-data">
+    <form name="fformmail" action="<?php echo get_text($formmail_action_url); ?>" onsubmit="return fformmail_submit(this);" method="post" enctype="multipart/form-data">
     <input type="hidden" name="to" value="<?php echo get_text($email); ?>">
     <input type="hidden" name="attach" value="2">
     <?php if ($is_member) { // 회원이면  ?>
