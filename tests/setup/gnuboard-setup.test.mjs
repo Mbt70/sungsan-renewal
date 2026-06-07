@@ -34,6 +34,15 @@ describe('sungsan gnuboard setup config', () => {
     assert.equal(news.bo_list_level, 1);
     assert.equal(news.bo_write_level, 6);
     assert.equal(news.bo_upload_level, 6);
+    assert.equal(news.bo_download_level, 1);
+    assert.equal(news.bo_1_subj, '소속 slug');
+    assert.equal(news.bo_2_subj, '공개 범위');
+    assert.equal(news.bo_3_subj, '행사 시작일');
+    assert.equal(news.bo_4_subj, '행사 종료일');
+    assert.equal(news.bo_5_subj, '기존 보드 ID');
+    assert.equal(news.bo_6_subj, '기존 글 ID');
+    assert.equal(news.bo_7_subj, '이전 검토 플래그');
+    assert.equal(news.bo_8_subj, '검토 사유');
 
     assert.equal(free.bo_subject, '자유게시판');
     assert.equal(free.bo_skin, 'sungsan_free');
@@ -52,9 +61,13 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /INSERT INTO `g5_board`/);
     assert.match(sql, /bo_table = 'news'/);
     assert.match(sql, /bo_skin = 'sungsan_news'/);
+    assert.match(sql, /bo_download_level = '1'/);
+    assert.match(sql, /bo_1_subj = '소속 slug'/);
+    assert.match(sql, /bo_8_subj = '검토 사유'/);
     assert.match(sql, /bo_category_list = '공지\|행사\|자료\|규정\|활동소식'/);
     assert.match(sql, /ON DUPLICATE KEY UPDATE/);
     assert.match(sql, /bo_subject = VALUES\(bo_subject\)/);
+    assert.match(sql, /bo_8_subj = VALUES\(bo_8_subj\)/);
   });
 
   it('normalizes write table DDL to the requested table and utf8mb4', () => {

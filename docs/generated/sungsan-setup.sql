@@ -87,11 +87,19 @@ INSERT INTO `g5_board` SET
     bo_html_level = '6',
     bo_link_level = '6',
     bo_upload_level = '6',
-    bo_download_level = '2',
+    bo_download_level = '1',
     bo_use_category = '1',
     bo_category_list = '공지|행사|자료|규정|활동소식',
     bo_skin = 'sungsan_news',
-    bo_mobile_skin = 'sungsan_news'
+    bo_mobile_skin = 'sungsan_news',
+    bo_1_subj = '소속 slug',
+    bo_2_subj = '공개 범위',
+    bo_3_subj = '행사 시작일',
+    bo_4_subj = '행사 종료일',
+    bo_5_subj = '기존 보드 ID',
+    bo_6_subj = '기존 글 ID',
+    bo_7_subj = '이전 검토 플래그',
+    bo_8_subj = '검토 사유'
 ON DUPLICATE KEY UPDATE
     gr_id = VALUES(gr_id),
     bo_device = VALUES(bo_device),
@@ -153,7 +161,15 @@ ON DUPLICATE KEY UPDATE
     bo_use_category = VALUES(bo_use_category),
     bo_category_list = VALUES(bo_category_list),
     bo_skin = VALUES(bo_skin),
-    bo_mobile_skin = VALUES(bo_mobile_skin);
+    bo_mobile_skin = VALUES(bo_mobile_skin),
+    bo_1_subj = VALUES(bo_1_subj),
+    bo_2_subj = VALUES(bo_2_subj),
+    bo_3_subj = VALUES(bo_3_subj),
+    bo_4_subj = VALUES(bo_4_subj),
+    bo_5_subj = VALUES(bo_5_subj),
+    bo_6_subj = VALUES(bo_6_subj),
+    bo_7_subj = VALUES(bo_7_subj),
+    bo_8_subj = VALUES(bo_8_subj);
 
 INSERT INTO `g5_board` SET
     gr_id = 'sungsan',
