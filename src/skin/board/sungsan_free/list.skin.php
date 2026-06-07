@@ -2,6 +2,8 @@
 if (!defined('_GNUBOARD_')) {
     exit;
 }
+
+global $is_member;
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -23,7 +25,10 @@ if (!defined('_GNUBOARD_')) {
 
         <div class="ss-post-list">
         <?php for ($i = 0; $i < count($list); $i++) { ?>
-            <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
+            <?php
+            $sungsan_post_href = $is_member ? $list[$i]['href'] : G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($list[$i]['href'], ENT_QUOTES));
+            ?>
+            <a class="ss-post-row<?php echo $is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
                 <div class="ss-meta">
                     <span><?php echo get_text($list[$i]['wr_name']); ?></span>
