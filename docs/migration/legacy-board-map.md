@@ -51,7 +51,7 @@
 - `tools/migration/rehearsal-summary.mjs`는 글, 회원, 첨부, redirect, 수동 검토 플래그 수를 JSON으로 요약해 운영자 검수표와 대조합니다.
 - 기존 글 ID와 보드 ID는 항상 보존합니다.
 - 첨부파일은 기존 `/renewal/data/file/{bo_table}`에서 새 `data/file/{target_board}`로 복사합니다.
-- 회원 비밀번호는 그대로 이전하지 않습니다. 기본 정보와 권한만 이전하고 재설정 절차를 사용합니다.
+- 회원 비밀번호와 게시글 비밀번호는 그대로 이전하지 않습니다. 기본 정보와 권한만 이전하고 재설정 절차를 사용합니다.
 - `z6_2`, `z6_3`은 운영자 검수 전까지 새 공개 화면으로 이전하지 않습니다.
 - 모든 이전 대상 게시글은 제목·본문에 `회원명부`, `회원명단`, `주소록`, `연락처` 성격의 표현이 있으면 `wr_7`, `wr_8`에 검토 플래그를 남깁니다.
 - 기존 URL redirect는 실제로 `news/free`에 이전된 글만 생성합니다. `tools/migration/redirect-map.mjs`는 JSON/JSONL 변환 결과를 받아 CSV 또는 Cafe24 전달용 Apache `RewriteCond`/`RewriteRule` 초안을 만듭니다. 기존 그누보드4 글 URL은 bo_table/wr_id 쿼리스트링으로 글을 식별하므로 Apache 산출물은 query string 조건을 함께 확인합니다.

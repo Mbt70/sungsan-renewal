@@ -92,6 +92,17 @@ describe('legacy post transform', () => {
     assert.equal(mapped.fields.wr_8, 'possible-member-directory');
   });
 
+  it('drops legacy post passwords from transformed posts and SQL', () => {
+    const mapped = mapLegacyPostRow('z1_1', {
+      ...legacyRow,
+      wr_password: 'legacy-post-secret-hash',
+    });
+    const sql = buildPostInsertSql(mapped, { tablePrefix: 'g5_' });
+
+    assert.equal(mapped.fields.wr_password, '');
+    assert.doesNotMatch(sql, /legacy-post-secret-hash/);
+  });
+
   it('builds SQL insert for transformed posts', () => {
     const mapped = mapLegacyPostRow('z1_1', legacyRow);
     const sql = buildPostInsertSql(mapped, { tablePrefix: 'g5_' });

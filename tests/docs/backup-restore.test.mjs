@@ -23,6 +23,7 @@ describe('backup restore operating handoff', () => {
       'members.byLevel',
       'members.passwordResetMissing',
       'password_reset_required',
+      '게시글 비밀번호',
       'blockedByReason',
       'blockedByLegacyBoard',
       'blockedRecords',

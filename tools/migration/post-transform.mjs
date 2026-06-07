@@ -123,7 +123,7 @@ export function mapLegacyPostRow(legacyBoard, row) {
     wr_good: readField(row, 'wr_good', '0'),
     wr_nogood: readField(row, 'wr_nogood', '0'),
     mb_id: readField(row, 'mb_id'),
-    wr_password: readField(row, 'wr_password'),
+    wr_password: '',
     wr_name: readField(row, 'wr_name'),
     wr_email: readField(row, 'wr_email'),
     wr_homepage: readField(row, 'wr_homepage'),
