@@ -2178,11 +2178,20 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should group attachment guidance before file fields`);
       assert.match(source, /<p id="ss-attachment-help" class="ss-form-help ss-attachment-help">/, `${file} should expose attachment guidance once`);
       assert.match(source, /파일 한 개당 <\?php echo number_format\(\(int\) \$sungsan_upload_limit_mb\); \?>MB 이하/, `${file} should show the per-file upload size limit`);
-      assert.match(source, /id="bf_file_<\?php echo \$i \+ 1; \?>"[\s\S]*?aria-describedby="ss-attachment-help"/, `${file} should connect attachment help`);
+      assert.match(source, /id="bf_file_<\?php echo \$i \+ 1; \?>"[\s\S]*?aria-describedby="ss-attachment-help(?: ss-free-privacy-help)?"/, `${file} should connect attachment help`);
     }
 
     const news = read('src/skin/board/sungsan_news/write.skin.php');
     assert.match(news, /id="ca_name"[\s\S]*?aria-describedby="ss-write-required-help"/, 'news write should connect category help');
+  });
+
+  it('connects free-board attachment inputs to privacy guidance', () => {
+    const source = read('src/skin/board/sungsan_free/write.skin.php');
+
+    assert.match(source, /<p id="ss-free-privacy-help" class="ss-form-help">/);
+    assert.match(source, /개인정보/);
+    assert.match(source, /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help ss-free-privacy-help">/);
+    assert.doesNotMatch(source, /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help">/);
   });
 
   it('limits board attachment file pickers to common image and document extensions', () => {
@@ -2217,7 +2226,7 @@ describe('sungsan theme static contract', () => {
       );
       assert.match(
         source,
-        /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help">/,
+        /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help(?: ss-free-privacy-help)?">/,
         `${file} should apply the picker filter to each attachment input`,
       );
 

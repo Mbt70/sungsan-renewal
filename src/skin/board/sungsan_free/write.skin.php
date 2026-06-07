@@ -11,6 +11,7 @@ $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.d
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
         <p id="ss-write-required-help" class="ss-form-help ss-form-summary">제목과 본문은 필수입니다. 회원끼리 나누는 글이므로 개인정보가 포함된 자료는 올리기 전에 한 번 더 확인해 주세요.</p>
+        <p id="ss-free-privacy-help" class="ss-form-help">자유게시판은 회원 전용 공간이지만 개인정보나 민감한 자료는 본문과 첨부에 올리기 전 다시 확인해 주세요.</p>
         <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
@@ -44,7 +45,7 @@ $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.d
                     ?>
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
-                        <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" accept="<?php echo get_text($sungsan_attachment_accept); ?>" aria-describedby="ss-attachment-help">
+                        <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" accept="<?php echo get_text($sungsan_attachment_accept); ?>" aria-describedby="ss-attachment-help ss-free-privacy-help">
                         <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
                             <div class="ss-existing-file">
                                 <p>
