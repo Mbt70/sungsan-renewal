@@ -1226,12 +1226,25 @@ describe('sungsan theme static contract', () => {
     const index = read('src/theme/sungsan/index.php');
     const latest = read('src/skin/latest/sungsan_list/latest.skin.php');
 
-    assert.match(index, /href="<\?php echo get_text\(\$photo_posts\[\$i\]\['href'\]\); \?>"/);
-    assert.match(index, /<strong><\?php echo get_text\(\$photo_posts\[\$i\]\['subject'\]\); \?><\/strong>/);
+    assert.match(index, /\$sungsan_home_media_post = \$photo_posts\[\$i\];/);
+    assert.match(index, /\$sungsan_home_media_href = isset\(\$sungsan_home_media_post\['href'\]\) \? \$sungsan_home_media_post\['href'\] : '#';/);
+    assert.match(index, /\$sungsan_home_media_thumb = isset\(\$sungsan_home_media_post\['thumb_src'\]\) \? \$sungsan_home_media_post\['thumb_src'\] : '';/);
+    assert.match(index, /\$sungsan_home_media_alt = isset\(\$sungsan_home_media_post\['thumb_alt'\]\) \? \$sungsan_home_media_post\['thumb_alt'\] : '';/);
+    assert.match(index, /\$sungsan_home_media_subject = isset\(\$sungsan_home_media_post\['subject'\]\) \? \$sungsan_home_media_post\['subject'\] : '';/);
+    assert.match(index, /\$sungsan_home_media_date = isset\(\$sungsan_home_media_post\['date'\]\) \? \$sungsan_home_media_post\['date'\] : '';/);
+    assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_media_href\); \?>"/);
+    assert.match(index, /src="<\?php echo get_text\(\$sungsan_home_media_thumb\); \?>"/);
+    assert.match(index, /alt="<\?php echo get_text\(\$sungsan_home_media_alt\); \?>"/);
+    assert.match(index, /<strong><\?php echo get_text\(\$sungsan_home_media_subject\); \?><\/strong>/);
+    assert.match(index, /<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
     assert.match(index, /get_text\(\$posts\[\$i\]\['subject'\]\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
-    assert.doesNotMatch(index, /echo \$photo_posts\[\$i\]\['subject'\]/);
+    assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['href'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['thumb_src'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['thumb_alt'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['date'\]\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$sungsan_home_post_href/);
     assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
 

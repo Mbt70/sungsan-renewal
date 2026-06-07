@@ -90,14 +90,22 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
         </div>
         <div class="ss-media-grid">
             <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>
-                <a class="ss-media-tile" href="<?php echo get_text($photo_posts[$i]['href']); ?>">
-                    <?php if (!empty($photo_posts[$i]['thumb_src'])) { ?>
-                        <img class="ss-media-thumb" src="<?php echo get_text($photo_posts[$i]['thumb_src']); ?>" alt="<?php echo get_text($photo_posts[$i]['thumb_alt']); ?>" loading="lazy">
+                <?php
+                $sungsan_home_media_post = $photo_posts[$i];
+                $sungsan_home_media_href = isset($sungsan_home_media_post['href']) ? $sungsan_home_media_post['href'] : '#';
+                $sungsan_home_media_thumb = isset($sungsan_home_media_post['thumb_src']) ? $sungsan_home_media_post['thumb_src'] : '';
+                $sungsan_home_media_alt = isset($sungsan_home_media_post['thumb_alt']) ? $sungsan_home_media_post['thumb_alt'] : '';
+                $sungsan_home_media_subject = isset($sungsan_home_media_post['subject']) ? $sungsan_home_media_post['subject'] : '';
+                $sungsan_home_media_date = isset($sungsan_home_media_post['date']) ? $sungsan_home_media_post['date'] : '';
+                ?>
+                <a class="ss-media-tile" href="<?php echo get_text($sungsan_home_media_href); ?>">
+                    <?php if ($sungsan_home_media_thumb !== '') { ?>
+                        <img class="ss-media-thumb" src="<?php echo get_text($sungsan_home_media_thumb); ?>" alt="<?php echo get_text($sungsan_home_media_alt); ?>" loading="lazy">
                     <?php } else { ?>
                         <span class="ss-media-thumb" aria-hidden="true"></span>
                     <?php } ?>
-                    <strong><?php echo get_text($photo_posts[$i]['subject']); ?></strong>
-                    <span><?php echo get_text($photo_posts[$i]['date']); ?></span>
+                    <strong><?php echo get_text($sungsan_home_media_subject); ?></strong>
+                    <span><?php echo get_text($sungsan_home_media_date); ?></span>
                 </a>
             <?php } ?>
             <?php if (count($photo_posts) === 0) { ?>
