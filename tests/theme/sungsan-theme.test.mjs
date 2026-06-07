@@ -82,6 +82,17 @@ describe('sungsan theme static contract', () => {
     assert.match(mypage, /아직 작성한 글이 없습니다\./);
   });
 
+  it('keeps footer notices reachable from shared navigation', () => {
+    const source = read('src/theme/sungsan/tail.php');
+
+    assert.match(source, /<footer class="ss-site-footer">/);
+    assert.match(source, /href="#email-collection-refusal"/);
+    assert.match(source, /id="email-collection-refusal"/);
+    assert.match(source, /이메일 주소 무단수집을 거부합니다/);
+    assert.match(source, /href="<\?php echo G5_BBS_URL; \?>\/qalist\.php"/);
+    assert.match(source, />관리 문의<\/a>/);
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 
