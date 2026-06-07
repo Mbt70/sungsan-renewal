@@ -2504,6 +2504,23 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(coreSend, /sungsan_validate_formmail_required_fields/);
   });
 
+  it('validates guest form mail sender identity before the core send handler', () => {
+    const extend = read('src/extend/sungsan.php');
+    const coreSend = read('www/bbs/formmail_send.php');
+
+    assert.match(extend, /global \$is_member, \$fnick, \$fmail;/);
+    assert.match(extend, /if \(!\$is_member\) \{/);
+    assert.match(extend, /\$formmail_sender_name = isset\(\$fnick\) \? trim\(strip_tags\(\(string\) \$fnick\)\) : '';/);
+    assert.match(extend, /\$formmail_sender_email = isset\(\$fmail\) \? get_email_address\(trim\(\(string\) \$fmail\)\) : '';/);
+    assert.match(extend, /if \(\$formmail_sender_name === '' \|\| \$formmail_sender_email === ''\) \{/);
+    assert.match(extend, /alert_close\('보내는 분 이름과 이메일을 입력해 주세요\.'\);/);
+    assert.match(
+      extend,
+      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
+    );
+    assert.doesNotMatch(coreSend, /sungsan_validate_formmail_required_fields/);
+  });
+
   it('connects board write required and attachment guidance to form controls', () => {
     for (const file of [
       'src/skin/board/sungsan_news/write.skin.php',

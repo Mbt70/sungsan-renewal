@@ -319,12 +319,22 @@ function sungsan_normalize_formmail_attach_count()
 function sungsan_validate_formmail_required_fields()
 {
     global $subject, $content;
+    global $is_member, $fnick, $fmail;
 
     $formmail_subject = isset($subject) ? trim((string) $subject) : '';
     $formmail_content = isset($content) ? trim((string) $content) : '';
 
     if ($formmail_subject === '' || $formmail_content === '') {
         alert_close('메일 제목과 내용을 입력해 주세요.');
+    }
+
+    if (!$is_member) {
+        $formmail_sender_name = isset($fnick) ? trim(strip_tags((string) $fnick)) : '';
+        $formmail_sender_email = isset($fmail) ? get_email_address(trim((string) $fmail)) : '';
+
+        if ($formmail_sender_name === '' || $formmail_sender_email === '') {
+            alert_close('보내는 분 이름과 이메일을 입력해 주세요.');
+        }
     }
 }
 
