@@ -9,6 +9,8 @@ if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipi
 $cert_refresh_member_value = function ($field, $default = '') use ($member) {
     return get_text(isset($member[$field]) ? $member[$field] : $default);
 };
+$cert_refresh_member_dupinfo = isset($member['mb_dupinfo']) ? $member['mb_dupinfo'] : '';
+$cert_refresh_requires_phone = empty($cert_refresh_member_dupinfo);
 ?>
 <!-- 기존 회원 본인인증 시작 { -->
 <div class="member_cert_refresh">
@@ -36,7 +38,7 @@ $cert_refresh_member_value = function ($field, $default = '') use ($member) {
                         <tbody>
                             <tr>
                                 <td>이용자 식별 및 본인여부 확인</td>
-                                <td>생년월일<?php echo (empty($member['mb_dupinfo']))? ", 휴대폰 번호(아이핀 제외)" : ""; ?>, 암호화된 개인식별부호(CI)</td>
+                                <td>생년월일<?php echo $cert_refresh_requires_phone ? ", 휴대폰 번호(아이핀 제외)" : ""; ?>, 암호화된 개인식별부호(CI)</td>
                                 <td>회원 탈퇴 시까지</td>
                             </tr>
                         </tbody>

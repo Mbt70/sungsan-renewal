@@ -472,6 +472,9 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /name="url" value="<\?php echo get_text\(\$urlencode\); \?>"/);
     assert.match(source, /\$cert_refresh_member_value = function \(\$field, \$default = ''\) use \(\$member\)/);
     assert.match(source, /isset\(\$member\[\$field\]\) \? \$member\[\$field\] : \$default/);
+    assert.match(source, /\$cert_refresh_member_dupinfo = isset\(\$member\['mb_dupinfo'\]\) \? \$member\['mb_dupinfo'\] : '';/);
+    assert.match(source, /\$cert_refresh_requires_phone = empty\(\$cert_refresh_member_dupinfo\);/);
+    assert.match(source, /<\?php echo \$cert_refresh_requires_phone \? ", [^"]+" : ""; \?>/);
 
     for (const field of ['mb_certify', 'mb_id', 'mb_hp', 'mb_name']) {
       assert.match(
@@ -489,6 +492,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
     assert.doesNotMatch(source, /name="w" value="<\?php echo \$w/);
     assert.doesNotMatch(source, /name="url" value="<\?php echo \$urlencode/);
+    assert.doesNotMatch(source, /empty\(\$member\['mb_dupinfo'\]\)/);
   });
 
   it('renders certification refresh popup parameters as JSON string literals', () => {
