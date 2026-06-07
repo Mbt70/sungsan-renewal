@@ -881,6 +881,17 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
   });
 
+  it('marks home free-board posts as member-readable before visitors open them', () => {
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(
+      index,
+      /sungsan_render_home_list\(\$free_posts, '등록된 자유게시판 글이 없습니다\.', false, false, '회원 열람'\)/,
+    );
+    assert.match(index, /function sungsan_render_home_list\(\$posts, \$empty_text, \$show_event_date = false, \$show_category = true, \$access_label = ''\)/);
+    assert.match(index, /<\?php if \(\$access_label\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$access_label\); \?><\/span><\?php \} \?>/);
+  });
+
   it('uses an operational empty state for home media instead of migration placeholders', () => {
     const index = read('src/theme/sungsan/index.php');
 

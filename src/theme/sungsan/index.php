@@ -69,7 +69,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
                 <h2 class="ss-section-title">자유게시판</h2>
                 <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=free">더보기</a>
             </div>
-            <?php sungsan_render_home_list($free_posts, '등록된 자유게시판 글이 없습니다.', false, false); ?>
+            <?php sungsan_render_home_list($free_posts, '등록된 자유게시판 글이 없습니다.', false, false, '회원 열람'); ?>
         </div>
     </div>
 </section>
@@ -104,7 +104,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
 <?php
 include_once G5_THEME_PATH.'/tail.php';
 
-function sungsan_render_home_list($posts, $empty_text, $show_event_date = false, $show_category = true)
+function sungsan_render_home_list($posts, $empty_text, $show_event_date = false, $show_category = true, $access_label = '')
 {
     ?>
     <div class="ss-post-list">
@@ -119,6 +119,7 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
                         <?php $group_label = sungsan_get_group_label($posts[$i]['wr_1']); ?>
                         <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <?php } ?>
+                    <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
                     <?php if ($show_event_date && !empty($posts[$i]['wr_3'])) { ?>
                         <span><?php echo get_text($posts[$i]['wr_3']); ?></span>
                     <?php } else { ?>
