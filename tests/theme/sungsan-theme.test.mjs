@@ -1109,27 +1109,27 @@ describe('sungsan theme static contract', () => {
   });
 
   it('escapes board list and view links and text metadata before rendering posts', () => {
-    for (const file of [
-      'src/skin/board/sungsan_free/list.skin.php',
-    ]) {
-      const source = read(file);
-
-      assert.match(source, /href="<\?php echo get_text\(\$write_href\); \?>"/, `${file} should escape write_href`);
-      assert.match(source, /get_text\(\$list\[\$i\]\['subject'\]\)/, `${file} should escape subject`);
-      assert.match(source, /get_text\(\$list\[\$i\]\['datetime2'\]\)/, `${file} should escape datetime`);
-      assert.match(source, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/, `${file} should cast hit count`);
-
-      assert.doesNotMatch(source, /href="<\?php echo \$write_href/);
-      assert.doesNotMatch(source, /echo \$list\[\$i\]\['subject'\]/);
-      assert.doesNotMatch(source, /echo \$list\[\$i\]\['datetime2'\]/);
-      assert.doesNotMatch(source, /number_format\(\$list\[\$i\]\['wr_hit'\]\)/);
-    }
-
     const freeList = read('src/skin/board/sungsan_free/list.skin.php');
 
+    assert.match(freeList, /href="<\?php echo get_text\(\$write_href\); \?>"/);
+    assert.match(freeList, /\$sungsan_free_row = \$list\[\$i\];/);
+    assert.match(freeList, /\$sungsan_free_post_href = isset\(\$sungsan_free_row\['href'\]\) \? \$sungsan_free_row\['href'\] : '#';/);
+    assert.match(freeList, /\$sungsan_free_post_subject = isset\(\$sungsan_free_row\['subject'\]\) \? \$sungsan_free_row\['subject'\] : '';/);
+    assert.match(freeList, /\$sungsan_free_post_writer = isset\(\$sungsan_free_row\['wr_name'\]\) \? \$sungsan_free_row\['wr_name'\] : '';/);
+    assert.match(freeList, /\$sungsan_free_post_date = isset\(\$sungsan_free_row\['datetime2'\]\) \? \$sungsan_free_row\['datetime2'\] : '';/);
+    assert.match(freeList, /\$sungsan_free_post_hits = isset\(\$sungsan_free_row\['wr_hit'\]\) \? \(int\) \$sungsan_free_row\['wr_hit'\] : 0;/);
+    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_free_post_href, ENT_QUOTES\)\);/);
     assert.match(freeList, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
+    assert.match(freeList, /get_text\(\$sungsan_free_post_subject\)/);
+    assert.match(freeList, /get_text\(\$sungsan_free_post_writer\)/);
+    assert.match(freeList, /get_text\(\$sungsan_free_post_date\)/);
+    assert.match(freeList, /number_format\(\$sungsan_free_post_hits\)/);
+    assert.doesNotMatch(freeList, /href="<\?php echo \$write_href/);
     assert.doesNotMatch(freeList, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
-    assert.match(freeList, /get_text\(\$list\[\$i\]\['wr_name'\]\)/);
+    assert.doesNotMatch(freeList, /get_text\(\$list\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(freeList, /get_text\(\$list\[\$i\]\['wr_name'\]\)/);
+    assert.doesNotMatch(freeList, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
+    assert.doesNotMatch(freeList, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/);
     assert.doesNotMatch(freeList, /echo \$list\[\$i\]\['name'\]/);
 
     const newsList = read('src/skin/board/sungsan_news/list.skin.php');
@@ -1402,14 +1402,14 @@ describe('sungsan theme static contract', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 
     assert.match(list, /<span class="ss-access-label">회원 열람<\/span>/);
-    assert.match(list, /get_text\(\$list\[\$i\]\['wr_name'\]\)[\s\S]*?<span class="ss-access-label">회원 열람<\/span>/);
+    assert.match(list, /get_text\(\$sungsan_free_post_writer\)[\s\S]*?<span class="ss-access-label">회원 열람<\/span>/);
   });
 
   it('sends guest free-board row clicks to login with the post as return target', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 
     assert.match(list, /global \$is_member;/);
-    assert.match(list, /\$sungsan_post_href = \$is_member \? \$list\[\$i\]\['href'\] : G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$list\[\$i\]\['href'\], ENT_QUOTES\)\);/);
+    assert.match(list, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_free_post_href, ENT_QUOTES\)\);/);
     assert.match(list, /class="ss-post-row<\?php echo \$is_member \? '' : ' restricted'; \?>"/);
     assert.match(list, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
   });

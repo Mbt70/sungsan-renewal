@@ -26,15 +26,21 @@ global $is_member;
         <div class="ss-post-list">
         <?php for ($i = 0; $i < count($list); $i++) { ?>
             <?php
-            $sungsan_post_href = $is_member ? $list[$i]['href'] : G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($list[$i]['href'], ENT_QUOTES));
+            $sungsan_free_row = $list[$i];
+            $sungsan_free_post_href = isset($sungsan_free_row['href']) ? $sungsan_free_row['href'] : '#';
+            $sungsan_free_post_subject = isset($sungsan_free_row['subject']) ? $sungsan_free_row['subject'] : '';
+            $sungsan_free_post_writer = isset($sungsan_free_row['wr_name']) ? $sungsan_free_row['wr_name'] : '';
+            $sungsan_free_post_date = isset($sungsan_free_row['datetime2']) ? $sungsan_free_row['datetime2'] : '';
+            $sungsan_free_post_hits = isset($sungsan_free_row['wr_hit']) ? (int) $sungsan_free_row['wr_hit'] : 0;
+            $sungsan_post_href = $is_member ? $sungsan_free_post_href : G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($sungsan_free_post_href, ENT_QUOTES));
             ?>
             <a class="ss-post-row<?php echo $is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
-                <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
+                <p class="ss-post-title"><?php echo get_text($sungsan_free_post_subject); ?></p>
                 <div class="ss-meta">
-                    <span><?php echo get_text($list[$i]['wr_name']); ?></span>
+                    <span><?php echo get_text($sungsan_free_post_writer); ?></span>
                     <span class="ss-access-label">회원 열람</span>
-                    <span><?php echo get_text($list[$i]['datetime2']); ?></span>
-                    <span>조회 <?php echo number_format((int) $list[$i]['wr_hit']); ?></span>
+                    <span><?php echo get_text($sungsan_free_post_date); ?></span>
+                    <span>조회 <?php echo number_format($sungsan_free_post_hits); ?></span>
                 </div>
             </a>
         <?php } ?>
