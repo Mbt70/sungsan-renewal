@@ -252,6 +252,17 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(result, /href="<\?php echo G5_URL/);
   });
 
+  it('normalizes registration agreement values before rendering consent text', () => {
+    const source = read('src/skin/member/sungsan/register.skin.php');
+
+    assert.match(source, /\$sungsan_register_stipulation = isset\(\$config\['cf_stipulation'\]\) \? \$config\['cf_stipulation'\] : '';/);
+    assert.match(source, /\$sungsan_register_cert_enabled = !empty\(\$config\['cf_cert_use'\]\);/);
+    assert.match(source, /<textarea readonly><\?php echo get_text\(\$sungsan_register_stipulation\); \?><\/textarea>/);
+    assert.match(source, /\$sungsan_register_cert_enabled\) \? ", 생년월일, 휴대폰 번호/);
+    assert.doesNotMatch(source, /get_text\(\$config\['cf_stipulation'\]\)/);
+    assert.doesNotMatch(source, /\(\$config\['cf_cert_use'\]\)\?/);
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),

@@ -5,6 +5,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $sungsan_register_cancel_url = G5_URL;
+$sungsan_register_stipulation = isset($config['cf_stipulation']) ? $config['cf_stipulation'] : '';
+$sungsan_register_cert_enabled = !empty($config['cf_cert_use']);
 ?>
 
 <!-- 회원가입약관 동의 시작 { -->
@@ -20,7 +22,7 @@ $sungsan_register_cancel_url = G5_URL;
     ?>
     <section id="fregister_term">
         <h2>(필수) 회원가입약관</h2>
-        <textarea readonly><?php echo get_text($config['cf_stipulation']) ?></textarea>
+        <textarea readonly><?php echo get_text($sungsan_register_stipulation); ?></textarea>
         <fieldset class="fregister_agree">
             <input type="checkbox" name="agree" value="1" id="agree11" class="selec_chk">
             <label for="agree11"><span></span><b class="sound_only">회원가입약관의 내용에 동의합니다.</b></label>
@@ -42,7 +44,7 @@ $sungsan_register_cancel_url = G5_URL;
                 <tbody>
                 <tr>
                     <td>이용자 식별 및 본인여부 확인</td>
-                    <td>아이디, 이름, 비밀번호<?php echo ($config['cf_cert_use'])? ", 생년월일, 휴대폰 번호(본인인증 할 때만, 아이핀 제외), 암호화된 개인식별부호(CI)" : ""; ?></td>
+                    <td>아이디, 이름, 비밀번호<?php echo ($sungsan_register_cert_enabled) ? ", 생년월일, 휴대폰 번호(본인인증 할 때만, 아이핀 제외), 암호화된 개인식별부호(CI)" : ""; ?></td>
                     <td>회원 탈퇴 시까지</td>
                 </tr>
                 <tr>
