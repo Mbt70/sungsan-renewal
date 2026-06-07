@@ -291,6 +291,11 @@ function sungsan_active_class($current, $value)
     return $current === $value ? ' active' : '';
 }
 
+function sungsan_aria_current($current, $value)
+{
+    return $current === $value ? ' aria-current="page"' : '';
+}
+
 function sungsan_url_origin($url)
 {
     $parts = parse_url($url);

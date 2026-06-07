@@ -307,6 +307,16 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(index, /'category' => '공지'/);
   });
 
+  it('marks active news category filters for assistive technology', () => {
+    const extend = read('src/extend/sungsan.php');
+    const list = read('src/skin/board/sungsan_news/list.skin.php');
+
+    assert.match(extend, /function sungsan_aria_current\(\$current, \$value\)/);
+    assert.match(extend, /return \$current === \$value \? ' aria-current="page"' : '';/);
+    assert.match(list, /class="ss-chip<\?php echo sungsan_active_class\(\$current_category, ''\); \?>"<\?php echo sungsan_aria_current\(\$current_category, ''\); \?>/);
+    assert.match(list, /class="ss-chip<\?php echo sungsan_active_class\(\$current_category, \$category\); \?>"<\?php echo sungsan_aria_current\(\$current_category, \$category\); \?>/);
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 
