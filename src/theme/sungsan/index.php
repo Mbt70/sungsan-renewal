@@ -143,7 +143,7 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
             $sungsan_home_post_date = isset($sungsan_home_post['date']) ? $sungsan_home_post['date'] : '';
             $sungsan_home_post_is_notice = !empty($sungsan_home_post['is_notice']);
             $sungsan_requires_login = !$is_member && $access_label;
-            $sungsan_home_post_href = $sungsan_requires_login ? G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($sungsan_home_post_raw_href, ENT_QUOTES)) : $sungsan_home_post_raw_href;
+            $sungsan_home_post_href = $sungsan_requires_login ? sungsan_login_url($sungsan_home_post_raw_href) : $sungsan_home_post_raw_href;
             ?>
             <a class="ss-post-row<?php echo $sungsan_requires_login ? ' restricted' : ''; ?>" href="<?php echo get_text($sungsan_home_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_home_post_subject); ?></p>

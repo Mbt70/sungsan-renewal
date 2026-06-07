@@ -35,7 +35,7 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             $sungsan_free_post_writer = isset($sungsan_free_row['wr_name']) ? $sungsan_free_row['wr_name'] : '';
             $sungsan_free_post_date = isset($sungsan_free_row['datetime2']) ? $sungsan_free_row['datetime2'] : '';
             $sungsan_free_post_hits = isset($sungsan_free_row['wr_hit']) ? (int) $sungsan_free_row['wr_hit'] : 0;
-            $sungsan_post_href = $is_member ? $sungsan_free_post_href : G5_BBS_URL.'/login.php?url='.urlencode(htmlspecialchars_decode($sungsan_free_post_href, ENT_QUOTES));
+            $sungsan_post_href = $is_member ? $sungsan_free_post_href : sungsan_login_url($sungsan_free_post_href);
             ?>
             <a class="ss-post-row<?php echo $is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_free_post_subject); ?></p>

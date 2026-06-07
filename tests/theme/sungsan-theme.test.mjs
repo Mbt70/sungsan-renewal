@@ -198,10 +198,33 @@ describe('sungsan theme static contract', () => {
     const head = read('src/theme/sungsan/head.php');
 
     assert.match(head, /\$ss_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
-    assert.match(head, /\$ss_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$ss_request_uri\);/);
+    assert.match(head, /\$ss_login_url = sungsan_login_url\(\$ss_request_uri\);/);
     assert.match(head, /<a class="ss-account-link" href="<\?php echo get_text\(\$ss_login_url\); \?>">로그인<\/a>/);
     assert.doesNotMatch(head, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
     assert.doesNotMatch(head, /href="<\?php echo G5_BBS_URL; \?>\/login\.php">로그인<\/a>/);
+  });
+
+  it('centralizes member login return URLs through the Sungsan helper', () => {
+    const extend = read('src/extend/sungsan.php');
+    const head = read('src/theme/sungsan/head.php');
+    const index = read('src/theme/sungsan/index.php');
+    const newsView = read('src/skin/board/sungsan_news/view.skin.php');
+    const freeList = read('src/skin/board/sungsan_free/list.skin.php');
+    const freeView = read('src/skin/board/sungsan_free/view.skin.php');
+
+    assert.match(extend, /function sungsan_login_url\(\$return_url = ''\)/);
+    assert.match(extend, /htmlspecialchars_decode\(\$return_url, ENT_QUOTES\)/);
+    assert.match(extend, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$return_url\)/);
+
+    assert.match(head, /\$ss_login_url = sungsan_login_url\(\$ss_request_uri\);/);
+    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? sungsan_login_url\(\$sungsan_home_post_raw_href\) : \$sungsan_home_post_raw_href;/);
+    assert.match(newsView, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
+    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
+    assert.match(freeView, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
+
+    for (const source of [head, index, newsView, freeList, freeView]) {
+      assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode/);
+    }
   });
 
   it('loads operator-managed Sungsan group labels from the data directory', () => {
@@ -1252,7 +1275,7 @@ describe('sungsan theme static contract', () => {
     assert.match(freeList, /\$sungsan_free_post_writer = isset\(\$sungsan_free_row\['wr_name'\]\) \? \$sungsan_free_row\['wr_name'\] : '';/);
     assert.match(freeList, /\$sungsan_free_post_date = isset\(\$sungsan_free_row\['datetime2'\]\) \? \$sungsan_free_row\['datetime2'\] : '';/);
     assert.match(freeList, /\$sungsan_free_post_hits = isset\(\$sungsan_free_row\['wr_hit'\]\) \? \(int\) \$sungsan_free_row\['wr_hit'\] : 0;/);
-    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_free_post_href, ENT_QUOTES\)\);/);
+    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(freeList, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
     assert.match(freeList, /get_text\(\$sungsan_free_post_subject\)/);
     assert.match(freeList, /get_text\(\$sungsan_free_post_writer\)/);
@@ -1475,7 +1498,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(index, /global \$is_member;/);
     assert.match(index, /\$sungsan_requires_login = !\$is_member && \$access_label;/);
-    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_home_post_raw_href, ENT_QUOTES\)\) : \$sungsan_home_post_raw_href;/);
+    assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? sungsan_login_url\(\$sungsan_home_post_raw_href\) : \$sungsan_home_post_raw_href;/);
     assert.match(index, /class="ss-post-row<\?php echo \$sungsan_requires_login \? ' restricted' : ''; \?>"/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
   });
@@ -1590,7 +1613,7 @@ describe('sungsan theme static contract', () => {
     assert.match(view, /global \$is_member;/);
     assert.match(view, /\$sungsan_show_login_cta = !\$is_member && !sungsan_is_review_restricted\(\$view\);/);
     assert.match(view, /\$sungsan_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
-    assert.match(view, /\$sungsan_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$sungsan_request_uri\);/);
+    assert.match(view, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
     assert.match(view, /권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다\./);
     assert.match(view, /현재 계정으로는 이 글을 열람할 수 없습니다\./);
     assert.match(view, /<\?php if \(\$sungsan_show_login_cta\) \{ \?>[\s\S]*?로그인[\s\S]*?<\?php \} else \{ \?>[\s\S]*?목록으로 돌아가기/);
@@ -1629,7 +1652,7 @@ describe('sungsan theme static contract', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 
     assert.match(list, /global \$is_member;/);
-    assert.match(list, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(htmlspecialchars_decode\(\$sungsan_free_post_href, ENT_QUOTES\)\);/);
+    assert.match(list, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(list, /class="ss-post-row<\?php echo \$is_member \? '' : ' restricted'; \?>"/);
     assert.match(list, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
   });
@@ -1639,7 +1662,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(view, /global \$is_member;/);
     assert.match(view, /\$sungsan_free_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
-    assert.match(view, /\$sungsan_free_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$sungsan_free_request_uri\);/);
+    assert.match(view, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
     assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$sungsan_view_content\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
     assert.match(view, /회원 전용 자유게시판 글입니다/);
     assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);

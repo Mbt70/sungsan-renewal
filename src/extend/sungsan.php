@@ -291,6 +291,14 @@ function sungsan_active_class($current, $value)
     return $current === $value ? ' active' : '';
 }
 
+function sungsan_login_url($return_url = '')
+{
+    $return_url = trim((string) $return_url);
+    $return_url = htmlspecialchars_decode($return_url, ENT_QUOTES);
+
+    return G5_BBS_URL.'/login.php?url='.urlencode($return_url);
+}
+
 function sungsan_get_member_role_label($level)
 {
     $level = (int) $level;
