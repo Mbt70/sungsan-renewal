@@ -90,6 +90,35 @@ describe('legacy attachment migration plan', () => {
     );
   });
 
+  it('blocks multi-extension and server config attachment filenames for review', () => {
+    const plan = buildAttachmentCopyPlan({
+      legacyBoard: 'z5_4',
+      legacyPostId: '89',
+      targetBoard: 'news',
+      targetPostId: '100',
+      files: [
+        { bf_no: '0', bf_file: 'archive.zip' },
+        { bf_no: '1', bf_file: 'shell.php.jpg' },
+        { bf_no: '2', bf_file: '.htaccess' },
+        { bf_no: '3', bf_file: '.user.ini' },
+      ],
+    });
+
+    assert.deepEqual(plan.copyRecords.map((record) => record.sourceFile), ['archive.zip']);
+    assert.deepEqual(
+      plan.blockedRecords.map((record) => ({
+        sourceFile: record.sourceFile,
+        extension: record.extension,
+        reason: record.reason,
+      })),
+      [
+        { sourceFile: 'shell.php.jpg', extension: 'php', reason: 'blocked-extension' },
+        { sourceFile: '.htaccess', extension: 'htaccess', reason: 'blocked-extension' },
+        { sourceFile: '.user.ini', extension: 'user.ini', reason: 'blocked-extension' },
+      ],
+    );
+  });
+
   it('builds SQL insert rows for the GnuBoard board file table', () => {
     const plan = buildAttachmentCopyPlan({
       legacyBoard: 'z1_1',

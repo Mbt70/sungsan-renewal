@@ -89,7 +89,7 @@ $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((
             </div>
 
             <?php if ($is_file) { ?>
-                <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG처럼 브라우저에서 실행될 수 있는 파일은 업로드할 수 없습니다.</p>
+                <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG, .htaccess, .user.ini처럼 브라우저나 서버에서 실행될 수 있는 파일은 업로드할 수 없습니다. shell.php.jpg처럼 여러 확장자를 붙인 파일도 차단됩니다.</p>
                 <?php for ($i = 0; $i < $file_count; $i++) { ?>
                     <?php
                     $sungsan_write_file = isset($file[$i]) ? $file[$i] : array();

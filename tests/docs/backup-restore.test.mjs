@@ -50,6 +50,9 @@ describe('backup restore operating handoff', () => {
       'blockedByLegacyBoard',
       'possible-member-directory',
       'blocked-extension',
+      'shell.php.jpg',
+      '.htaccess',
+      '.user.ini',
     ]) {
       expectIncludes(source, expected, 'docs/migration/rehearsal-tools.md');
     }

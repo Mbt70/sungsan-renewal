@@ -32,7 +32,7 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 ## Rehearsal Evidence
 리허설이 끝나면 `rehearsal-summary.json`을 생성해 아래 항목을 검수표와 대조합니다.
 
-- `blockedRecords`에 남은 PHP, HTML, JS, SVG 계열 첨부 수
+- `blockedRecords`에 남은 PHP, HTML, JS, SVG 계열 첨부, `shell.php.jpg` 같은 다중 확장자 파일, `.htaccess`, `.user.ini` 서버 설정 파일 수
 - `blockedByReason`, `blockedByLegacyBoard`로 나뉜 차단 첨부 사유와 원본 보드별 수
 - `wr_7=review_required` 글 수, `reviewReasons`, 운영자 검토 대상 목록
 - `excludedByLegacyBoard`에서 `z6_2`, `z6_3` 원본 글과 첨부가 공개 이전 산출물에 들어가지 않았다는 확인

@@ -24,17 +24,37 @@ const BLOCKED_ATTACHMENT_EXTENSIONS = Object.freeze([
   'php3',
   'php4',
   'php5',
+  'pht',
+  'phtm',
   'phtml',
   'phar',
   'html',
   'htm',
   'xhtml',
+  'shtm',
   'shtml',
+  'htaccess',
+  'htpasswd',
+  'user.ini',
+  'ini',
   'js',
   'mjs',
   'cjs',
   'svg',
   'svgz',
+  'cgi',
+  'pl',
+  'exe',
+  'jsp',
+  'asp',
+  'inc',
+]);
+
+const BLOCKED_ATTACHMENT_FILENAMES = Object.freeze([
+  '.htaccess',
+  '.htpasswd',
+  '.user.ini',
+  'user.ini',
 ]);
 
 function escapeSqlString(value) {
@@ -68,13 +88,29 @@ function buildTargetFileName({ legacyBoard, legacyPostId, sourceFile }) {
   return `${safeBoard}_${legacyPostId}_${sourceFile}`;
 }
 
-function getFileExtension(fileName) {
-  const match = String(fileName).match(/\.([^.]+)$/);
-  return match ? match[1].toLowerCase() : '';
+function getFileExtensions(fileName) {
+  return String(fileName)
+    .toLowerCase()
+    .split('.')
+    .slice(1)
+    .map((extension) => extension.trim())
+    .filter(Boolean);
 }
 
-function isBlockedAttachment(fileName) {
-  return BLOCKED_ATTACHMENT_EXTENSIONS.includes(getFileExtension(fileName));
+function getBlockedAttachmentExtension(fileName) {
+  const normalizedFileName = String(fileName).toLowerCase();
+
+  if (BLOCKED_ATTACHMENT_FILENAMES.includes(normalizedFileName)) {
+    return normalizedFileName.replace(/^\./, '');
+  }
+
+  for (const extension of getFileExtensions(normalizedFileName)) {
+    if (BLOCKED_ATTACHMENT_EXTENSIONS.includes(extension)) {
+      return extension;
+    }
+  }
+
+  return '';
 }
 
 export function buildAttachmentCopyPlan({
@@ -108,7 +144,9 @@ export function buildAttachmentCopyPlan({
       continue;
     }
 
-    if (isBlockedAttachment(sourceFile)) {
+    const blockedExtension = getBlockedAttachmentExtension(sourceFile);
+
+    if (blockedExtension) {
       blockedRecords.push({
         sourcePath: `${legacyDataRoot}/${legacyBoard}/${sourceFile}`,
         legacyBoard,
@@ -116,7 +154,7 @@ export function buildAttachmentCopyPlan({
         targetBoard,
         targetPostId: normalizedTargetPostId,
         sourceFile,
-        extension: getFileExtension(sourceFile),
+        extension: blockedExtension,
         reason: 'blocked-extension',
       });
       continue;
