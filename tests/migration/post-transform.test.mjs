@@ -79,6 +79,19 @@ describe('legacy post transform', () => {
     assert.equal(mapped.fields.wr_8, 'possible-member-directory');
   });
 
+  it('marks member directory posts for review across imported public boards', () => {
+    const mapped = mapLegacyPostRow('z1_2', {
+      ...legacyRow,
+      wr_subject: '부서별 연락처 주소록',
+      wr_content: '<p>회원명단 확인용 자료입니다.</p>',
+    });
+
+    assert.equal(mapped.targetBoard, 'news');
+    assert.equal(mapped.fields.wr_1, 'faq');
+    assert.equal(mapped.fields.wr_7, 'review_required');
+    assert.equal(mapped.fields.wr_8, 'possible-member-directory');
+  });
+
   it('builds SQL insert for transformed posts', () => {
     const mapped = mapLegacyPostRow('z1_1', legacyRow);
     const sql = buildPostInsertSql(mapped, { tablePrefix: 'g5_' });

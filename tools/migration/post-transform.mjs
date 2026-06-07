@@ -64,7 +64,7 @@ function detectManualReviewReason(mapping, row) {
   const content = readField(row, 'wr_content');
   const combined = `${subject}\n${content}`;
 
-  if (mapping.legacyBoard === 'z5_4' && /회원\s*(명부|명단|정보|주소록|연락처)|주소록|명부/.test(combined)) {
+  if (/회원\s*(명부|명단|정보|주소록|연락처)|주소록|명부/.test(combined)) {
     return 'possible-member-directory';
   }
 

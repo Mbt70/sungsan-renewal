@@ -52,6 +52,7 @@ describe('backup restore operating handoff', () => {
       'blockedByReason',
       'blockedByLegacyBoard',
       'possible-member-directory',
+      '모든 이전 대상 게시글',
       'blocked-extension',
       'shell.php.jpg',
       '.htaccess',
