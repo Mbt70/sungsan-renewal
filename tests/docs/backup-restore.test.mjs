@@ -18,6 +18,10 @@ describe('backup restore operating handoff', () => {
       'Get-FileHash -Algorithm SHA256',
       '.sha256',
       'rehearsal-summary.json',
+      'excludedByLegacyBoard',
+      'reviewReasons',
+      'blockedByReason',
+      'blockedByLegacyBoard',
       'blockedRecords',
       'wr_7=review_required',
       'z6_2',
@@ -33,6 +37,21 @@ describe('backup restore operating handoff', () => {
       'www/data',
     ]) {
       expectIncludes(source, expected, 'docs/operations/backup-and-restore.md');
+    }
+  });
+
+  it('documents detailed migration summary fields for operator reconciliation', () => {
+    const source = readFileSync('docs/migration/rehearsal-tools.md', 'utf8');
+
+    for (const expected of [
+      'excludedByLegacyBoard',
+      'reviewReasons',
+      'blockedByReason',
+      'blockedByLegacyBoard',
+      'possible-member-directory',
+      'blocked-extension',
+    ]) {
+      expectIncludes(source, expected, 'docs/migration/rehearsal-tools.md');
     }
   });
 

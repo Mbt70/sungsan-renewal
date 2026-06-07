@@ -15,26 +15,37 @@ describe('migration rehearsal summary', () => {
     const summary = buildRehearsalSummary({
       posts: [
         { targetBoard: 'news', fields: { wr_7: '' } },
-        { targetBoard: 'news', fields: { wr_7: 'review_required' } },
+        { legacyBoard: 'z5_4', targetBoard: 'news', fields: { wr_7: 'review_required', wr_8: 'possible-member-directory' } },
         { targetBoard: 'free', fields: { wr_7: '' } },
-        { targetBoard: 'exclude', fields: null },
+        { legacyBoard: 'z6_2', targetBoard: 'exclude', fields: null },
+        { legacyBoard: 'z6_3', targetBoard: 'exclude', fields: null },
       ],
       members: [{ fields: { mb_id: 'a' } }, { fields: { mb_id: 'b' } }],
       attachmentPlan: {
         copyRecords: [{}, {}],
         fileRows: [{}, {}],
-        blockedRecords: [{}],
+        blockedRecords: [
+          { legacyBoard: 'z5_4', reason: 'blocked-extension' },
+          { legacyBoard: 'z6_2', reason: 'excluded-target' },
+        ],
       },
       redirectRecords: [{}, {}, {}],
     });
 
     assert.deepEqual(summary, {
       posts: {
-        total: 4,
+        total: 5,
         news: 2,
         free: 1,
-        excluded: 1,
+        excluded: 2,
+        excludedByLegacyBoard: {
+          z6_2: 1,
+          z6_3: 1,
+        },
         reviewRequired: 1,
+        reviewReasons: {
+          'possible-member-directory': 1,
+        },
       },
       members: {
         total: 2,
@@ -43,7 +54,15 @@ describe('migration rehearsal summary', () => {
       attachments: {
         copyRecords: 2,
         fileRows: 2,
-        blockedRecords: 1,
+        blockedRecords: 2,
+        blockedByReason: {
+          'blocked-extension': 1,
+          'excluded-target': 1,
+        },
+        blockedByLegacyBoard: {
+          z5_4: 1,
+          z6_2: 1,
+        },
       },
       redirects: {
         total: 3,

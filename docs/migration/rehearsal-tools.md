@@ -10,7 +10,7 @@
 | `tools/migration/member-transform.mjs` | 기존 회원 행 JSON/JSONL | `g5_member` INSERT SQL | 레거시 비밀번호 해시는 버리고 `mb_3=password_reset_required` 표시 |
 | `tools/migration/file-plan.mjs` | 이전된 글과 첨부 묶음 JSON/JSONL | 첨부 계획 JSON, `g5_board_file` INSERT SQL | `news/free` 대상만 생성, `exclude/intro` 대상과 차단 확장자는 복사 제외 |
 | `tools/migration/redirect-map.mjs` | 이전 결과 JSON/JSONL | redirect CSV 또는 Apache 초안 | 실제 이전된 `news/free` 글만 포함 |
-| `tools/migration/rehearsal-summary.mjs` | posts, members, attachmentPlan, redirectRecords 묶음 JSON | 리허설 요약 JSON | 글/회원/첨부/redirect/검토 플래그 수 대조 |
+| `tools/migration/rehearsal-summary.mjs` | posts, members, attachmentPlan, redirectRecords 묶음 JSON | 리허설 요약 JSON | 글/회원/첨부/redirect/검토 플래그 수와 사유별 하위 카운트 대조 |
 
 ## Commands
 
@@ -25,6 +25,13 @@ node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-s
 `attachments.jsonl`의 각 행은 `legacyBoard`, `legacyPostId`, `targetBoard`, `targetPostId`, `files`를 포함합니다. `files`는 기존 `board_file` 행 배열입니다. 도구는 `../danger.pdf` 같은 경로 조작 문자열에서 파일명만 남기고, 새 파일명은 `{legacyBoard}_{legacyPostId}_{sourceFile}` 형식으로 만듭니다.
 
 `attachment-copy-plan.json`은 `copyRecords`, `fileRows`, `blockedRecords`를 포함합니다. `blockedRecords`에는 PHP, HTML, JS, SVG 계열 파일이 `blocked-extension` 사유로 기록됩니다.
+
+`rehearsal-summary.json`은 운영자 검수표에 바로 옮길 수 있도록 다음 하위 카운트를 포함합니다.
+
+- `posts.excludedByLegacyBoard`: `z6_2`, `z6_3`처럼 공개 이전 금지 보드에서 제외된 글 수
+- `posts.reviewReasons`: `possible-member-directory`처럼 `wr_7=review_required`로 남긴 검토 사유별 글 수
+- `attachments.blockedByReason`: `blocked-extension` 등 첨부 복사 차단 사유별 수
+- `attachments.blockedByLegacyBoard`: 차단 첨부가 나온 원본 보드별 수
 
 ## Review Rules
 

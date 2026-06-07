@@ -5,6 +5,19 @@ function countBy(items, predicate) {
   return items.filter(predicate).length;
 }
 
+function countsBy(items, keySelector) {
+  return items.reduce((counts, item) => {
+    const key = keySelector(item);
+
+    if (!key) {
+      return counts;
+    }
+
+    counts[key] = (counts[key] ?? 0) + 1;
+    return counts;
+  }, {});
+}
+
 function parseBundleText(text) {
   return JSON.parse(String(text).replace(/^\uFEFF/, '').trim());
 }
@@ -21,7 +34,15 @@ export function buildRehearsalSummary({
       news: countBy(posts, (post) => post.targetBoard === 'news'),
       free: countBy(posts, (post) => post.targetBoard === 'free'),
       excluded: countBy(posts, (post) => post.targetBoard === 'exclude'),
+      excludedByLegacyBoard: countsBy(
+        posts.filter((post) => post.targetBoard === 'exclude'),
+        (post) => post.legacyBoard || post.fields?.wr_5,
+      ),
       reviewRequired: countBy(posts, (post) => post.fields?.wr_7 === 'review_required'),
+      reviewReasons: countsBy(
+        posts.filter((post) => post.fields?.wr_7 === 'review_required'),
+        (post) => post.fields?.wr_8,
+      ),
     },
     members: {
       total: members.length,
@@ -34,6 +55,8 @@ export function buildRehearsalSummary({
       copyRecords: attachmentPlan.copyRecords?.length ?? 0,
       fileRows: attachmentPlan.fileRows?.length ?? 0,
       blockedRecords: attachmentPlan.blockedRecords?.length ?? 0,
+      blockedByReason: countsBy(attachmentPlan.blockedRecords ?? [], (record) => record.reason),
+      blockedByLegacyBoard: countsBy(attachmentPlan.blockedRecords ?? [], (record) => record.legacyBoard),
     },
     redirects: {
       total: redirectRecords.length,
