@@ -1,0 +1,50 @@
+# Legacy Board Migration Map
+
+기존 사이트는 그누보드4 계열이며 공개 화면에서 다음 보드 ID가 확인되었습니다. 새 사이트에서는 상단 메뉴를 단순화하고 기존 보드명은 `news`의 종류와 소속으로 보존합니다.
+
+| 기존 보드 | 기존 이름 | 새 대상 | 종류 | 소속 slug | 공개 범위 | 비고 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `z1_1` | 공지사항 | `news` | 공지 | `notice` | public | 홈 최신 공지 |
+| `z1_2` | 묻고 답하기 | `news` | 자료 | `faq` | member | 운영자 검수 |
+| `z1_3` | 홈페이지 개선 제안 | `news` | 자료 | `website` | member | 보존성 검토 |
+| `schedule` | 성산회 일정 | `news` | 행사 | `event` | public | `wr_3`, `wr_4`에 일정일 저장 |
+| `z2_1` | 성산헌장 | intro | - | - | public | 소개 섹션 |
+| `z2_2` | 성산회가 | intro | - | - | public | 소개 섹션 |
+| `z2_3` | 명예회장 인사말 | intro | - | - | public | 소개 섹션 |
+| `z2_4` | 회장 인사말 | intro | - | - | public | 소개 섹션 |
+| `z2_5` | 조직도 | intro | - | - | public | 소개 섹션 |
+| `z3_1` | 임원회 | `news` | 활동소식 | `executive` | member | 임원 전용 여부 재검토 |
+| `z3_2` | 경제부 | `news` | 활동소식 | `economy` | member |  |
+| `z3_3` | 사회복지부 | `news` | 활동소식 | `welfare` | member |  |
+| `z3_4` | 인재양성부 | `news` | 활동소식 | `talent` | member |  |
+| `z3_5` | 문화부 | `news` | 활동소식 | `culture` | member |  |
+| `z3_6` | 기금관리위원회 | `news` | 활동소식 | `fund` | officer | 민감 가능성 |
+| `z3_7` | 운영위원회 | `news` | 활동소식 | `operations` | officer | 민감 가능성 |
+| `z3_9` | 성우회 | `news` | 활동소식 | `sungwoo` | member |  |
+| `z4_1` | 문화클럽 | `news` | 활동소식 | `culture-club` | member |  |
+| `z4_2` | 리더스클럽 | `news` | 활동소식 | `leaders-club` | member |  |
+| `z4_3` | 산악회 | `news` | 활동소식 | `mountain-club` | member |  |
+| `z5_1` | 성산회보 | `news` | 자료 | `newsletter` | member | 첨부 중심 |
+| `z5_2` | 사진자료 | `news` | 활동소식 | `photo` | member | 미디어 갤러리 후보 |
+| `z5_3` | 좋은글 모음 | `news` | 자료 | `essay` | member | 보존성 검토 |
+| `z5_4` | 총회 및 마짐회자료 | `news` | 자료 | `general-meeting` | member | 첨부 중심 |
+| `z5_5` | 업무규정 및 절차 | `news` | 규정 | `policy` | member | 중요 글 고정 |
+| `z5_6` | 기타자료 | `news` | 자료 | `etc` | member |  |
+| `z6_1` | 자유게시판 | `free` | - | - | member | 자유게시판 |
+| `z6_2` | 회원정보 | exclude | - | - | admin | 공개 이전 금지 |
+| `z6_3` | 회원이력 | exclude | - | - | admin | 공개 이전 금지 |
+
+## Field Policy
+- `ca_name`: `공지`, `행사`, `자료`, `규정`, `활동소식`
+- `wr_1`: 소속 slug
+- `wr_2`: 공개 범위, `public`, `member`, `officer`
+- `wr_3`: 행사 시작일
+- `wr_4`: 행사 종료일
+- `wr_5`: 기존 보드 ID
+- `wr_6`: 기존 글 ID
+
+## Migration Rule
+- 기존 글 ID와 보드 ID는 항상 보존합니다.
+- 첨부파일은 기존 `/renewal/data/file/{bo_table}`에서 새 `data/file/{target_board}`로 복사합니다.
+- 회원 비밀번호는 그대로 이전하지 않습니다. 기본 정보와 권한만 이전하고 재설정 절차를 사용합니다.
+- `z6_2`, `z6_3`은 운영자 검수 전까지 새 공개 화면으로 이전하지 않습니다.
