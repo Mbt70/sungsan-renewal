@@ -36,9 +36,9 @@ $sungsan_register_cert_enabled = !empty($config['cf_cert_use']);
                 <caption>개인정보 수집 및 이용</caption>
                 <thead>
                 <tr>
-                    <th>목적</th>
-                    <th>항목</th>
-                    <th>보유기간</th>
+                    <th scope="col">목적</th>
+                    <th scope="col">항목</th>
+                    <th scope="col">보유기간</th>
                 </tr>
                 </thead>
                 <tbody>

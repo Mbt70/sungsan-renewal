@@ -30,9 +30,9 @@ $cert_refresh_requires_phone = empty($cert_refresh_member_dupinfo);
                         <caption>추가 개인정보처리방침 안내</caption>
                         <thead>
                             <tr>
-                                <th>목적</th>
-                                <th>항목</th>
-                                <th>보유기간</th>
+                                <th scope="col">목적</th>
+                                <th scope="col">항목</th>
+                                <th scope="col">보유기간</th>
                             </tr>
                         </thead>
                         <tbody>

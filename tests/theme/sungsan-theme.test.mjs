@@ -364,6 +364,20 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\(\$config\['cf_cert_use'\]\)\?/);
   });
 
+  it('uses scoped column headers on member privacy consent tables', () => {
+    for (const file of [
+      'src/skin/member/sungsan/register.skin.php',
+      'src/skin/member/sungsan/member_cert_refresh.skin.php',
+    ]) {
+      const source = read(file);
+
+      for (const heading of ['목적', '항목', '보유기간']) {
+        assert.match(source, new RegExp(`<th scope="col">${heading}</th>`), `${file} should scope the ${heading} column header`);
+        assert.doesNotMatch(source, new RegExp(`<th>${heading}</th>`), `${file} should not leave the ${heading} header unscoped`);
+      }
+    }
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),
