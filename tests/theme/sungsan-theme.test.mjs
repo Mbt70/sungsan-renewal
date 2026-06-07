@@ -2454,6 +2454,19 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('blocks executable form mail attachments before the core send handler stores them', () => {
+    const extend = read('src/extend/sungsan.php');
+    const coreSend = read('www/bbs/formmail_send.php');
+
+    assert.match(extend, /function sungsan_reject_blocked_formmail_uploads\(\$files\)/);
+    assert.match(extend, /foreach \(array\('file1', 'file2'\) as \$field\)/);
+    assert.match(extend, /sungsan_is_blocked_upload_filename\(\$filename\)/);
+    assert.match(extend, /alert_close\(/);
+    assert.match(extend, /basename\(\$_SERVER\['SCRIPT_NAME'\]\) === 'formmail_send\.php'/);
+    assert.match(extend, /sungsan_reject_blocked_formmail_uploads\(\$_FILES\)/);
+    assert.doesNotMatch(coreSend, /sungsan_reject_blocked_formmail_uploads/);
+  });
+
   it('connects board write required and attachment guidance to form controls', () => {
     for (const file of [
       'src/skin/board/sungsan_news/write.skin.php',

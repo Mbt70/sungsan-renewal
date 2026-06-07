@@ -160,4 +160,17 @@ describe('Cafe24 staging validation handoff', () => {
       }
     }
   });
+
+  it('documents form mail attachment checks for operators', () => {
+    for (const path of [
+      checklistPath,
+      'docs/operations/security-checklist.md',
+    ]) {
+      const source = readFileSync(path, 'utf8');
+
+      for (const expected of ['formmail_send.php', 'file1/file2', 'shell.php7', 'shell.php8', 'shell.php.jpg']) {
+        expectIncludes(source, expected, path);
+      }
+    }
+  });
 });

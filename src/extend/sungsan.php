@@ -253,34 +253,58 @@ function sungsan_preserve_news_migration_fields()
     }
 }
 
-function sungsan_reject_blocked_uploads($files)
+function sungsan_is_blocked_upload_filename($filename)
 {
     global $sungsan_blocked_upload_extensions;
 
+    $filename = trim((string) $filename);
+    if ($filename === '') {
+        return false;
+    }
+
+    $filename_parts = explode('.', strtolower($filename));
+    array_shift($filename_parts);
+
+    foreach ($filename_parts as $extension) {
+        $extension = trim($extension);
+        if ($extension === '') {
+            continue;
+        }
+
+        if (in_array($extension, $sungsan_blocked_upload_extensions, true)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function sungsan_reject_blocked_uploads($files)
+{
     if (empty($files['bf_file']['name']) || !is_array($files['bf_file']['name'])) {
         return;
     }
 
     foreach ($files['bf_file']['name'] as $filename) {
-        $filename = trim((string) $filename);
-        if ($filename === '') {
-            continue;
-        }
-
-        $filename_parts = explode('.', strtolower($filename));
-        array_shift($filename_parts);
-
-        foreach ($filename_parts as $extension) {
-            $extension = trim($extension);
-            if ($extension === '') {
-                continue;
-            }
-
-            if (in_array($extension, $sungsan_blocked_upload_extensions, true)) {
-                alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
-            }
+        if (sungsan_is_blocked_upload_filename($filename)) {
+            alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
         }
     }
+}
+
+function sungsan_reject_blocked_formmail_uploads($files)
+{
+    foreach (array('file1', 'file2') as $field) {
+        $filename = isset($files[$field]['name']) ? $files[$field]['name'] : '';
+
+        if (sungsan_is_blocked_upload_filename($filename)) {
+            alert_close('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 메일에 첨부할 수 없습니다.');
+        }
+    }
+}
+
+if (isset($_SERVER['SCRIPT_NAME']) && basename($_SERVER['SCRIPT_NAME']) === 'formmail_send.php') {
+    sungsan_reject_blocked_formmail_uploads($_FILES);
 }
 
 function sungsan_selected($current, $value)
