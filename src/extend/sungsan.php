@@ -318,8 +318,9 @@ function sungsan_sanitize_return_url($return_url)
 {
     $return_url = trim((string) $return_url);
     $return_url = htmlspecialchars_decode($return_url, ENT_QUOTES);
+    $decoded_return_url = rawurldecode($return_url);
 
-    if ($return_url === '' || strpos($return_url, '//') === 0) {
+    if ($return_url === '' || strpos($decoded_return_url, '//') === 0 || strpos($decoded_return_url, '\\') !== false) {
         return G5_URL;
     }
 

@@ -263,13 +263,22 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /parse_url\(\$url\)/);
     assert.match(extend, /function sungsan_sanitize_return_url\(\$return_url\)/);
     assert.match(extend, /htmlspecialchars_decode\(\$return_url, ENT_QUOTES\)/);
-    assert.match(extend, /strpos\(\$return_url, '\/\/'\) === 0/);
+    assert.match(extend, /strpos\(\$decoded_return_url, '\/\/'\) === 0/);
     assert.match(extend, /preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$return_url\)/);
     assert.match(extend, /\$allowed_origins = array_filter\(array\(sungsan_url_origin\(G5_URL\), sungsan_url_origin\(G5_BBS_URL\)\)\);/);
     assert.match(extend, /in_array\(\$return_origin, \$allowed_origins, true\)/);
     assert.match(extend, /return G5_URL;/);
     assert.match(extend, /\$return_url = sungsan_sanitize_return_url\(\$return_url\);/);
     assert.match(extend, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$return_url\)/);
+  });
+
+  it('rejects encoded or backslash-prefixed login return URLs before redirecting', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /\$decoded_return_url = rawurldecode\(\$return_url\);/);
+    assert.match(extend, /strpos\(\$decoded_return_url, '\\\\'\) !== false/);
+    assert.match(extend, /strpos\(\$decoded_return_url, '\/\/'\) === 0/);
+    assert.doesNotMatch(extend, /strpos\(\$return_url, '\/\/'\) === 0/);
   });
 
   it('keeps board detail URLs raw until the render layer escapes them', () => {
