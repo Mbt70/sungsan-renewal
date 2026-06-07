@@ -46,6 +46,8 @@ $sungsan_visibility_options = array('public', 'member', 'officer');
                 <input id="wr_subject" name="wr_subject" value="<?php echo get_text($subject); ?>" required aria-describedby="ss-write-required-help">
             </div>
 
+            <p id="ss-news-meta-help" class="ss-form-help">소속, 공개 범위, 행사일은 소식 목록에서 함께 보입니다. 해당 사항이 없으면 소속 없음과 기본 공개 범위를 그대로 두어도 됩니다.</p>
+
             <div class="ss-card-grid">
                 <div class="ss-field">
                     <label for="ca_name">종류 <span class="ss-required">필수</span></label>
@@ -58,7 +60,7 @@ $sungsan_visibility_options = array('public', 'member', 'officer');
                 </div>
                 <div class="ss-field">
                     <label for="wr_1">소속</label>
-                    <select id="wr_1" name="wr_1">
+                    <select id="wr_1" name="wr_1" aria-describedby="ss-news-meta-help">
                         <option value="">소속 없음</option>
                         <?php foreach ($sungsan_groups as $slug => $label) { ?>
                             <option value="<?php echo get_text($slug); ?>"<?php echo sungsan_selected($group_slug, $slug); ?>><?php echo get_text($label); ?></option>
@@ -70,7 +72,7 @@ $sungsan_visibility_options = array('public', 'member', 'officer');
             <div class="ss-card-grid">
                 <div class="ss-field">
                     <label for="wr_2">공개 범위</label>
-                    <select id="wr_2" name="wr_2">
+                    <select id="wr_2" name="wr_2" aria-describedby="ss-news-meta-help">
                         <?php foreach ($sungsan_visibility_options as $sungsan_visibility) { ?>
                             <option value="<?php echo get_text($sungsan_visibility); ?>"<?php echo sungsan_selected($visibility, $sungsan_visibility); ?>><?php echo get_text(sungsan_get_visibility_label($sungsan_visibility)); ?></option>
                         <?php } ?>
@@ -78,11 +80,11 @@ $sungsan_visibility_options = array('public', 'member', 'officer');
                 </div>
                 <div class="ss-field">
                     <label for="wr_3">행사 시작일</label>
-                    <input id="wr_3" name="wr_3" type="date" value="<?php echo get_text($sungsan_event_start_date); ?>">
+                    <input id="wr_3" name="wr_3" type="date" value="<?php echo get_text($sungsan_event_start_date); ?>" aria-describedby="ss-news-meta-help">
                 </div>
                 <div class="ss-field">
                     <label for="wr_4">행사 종료일</label>
-                    <input id="wr_4" name="wr_4" type="date" value="<?php echo get_text($sungsan_event_end_date); ?>">
+                    <input id="wr_4" name="wr_4" type="date" value="<?php echo get_text($sungsan_event_end_date); ?>" aria-describedby="ss-news-meta-help">
                 </div>
             </div>
 

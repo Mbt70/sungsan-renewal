@@ -304,6 +304,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<option value="officer"<\?php echo sungsan_selected\(\$visibility, 'officer'\); \?>>/);
   });
 
+  it('connects news write metadata fields to concise guidance', () => {
+    const source = read('src/skin/board/sungsan_news/write.skin.php');
+
+    assert.match(source, /<p id="ss-news-meta-help" class="ss-form-help">/);
+    for (const field of ['wr_1', 'wr_2', 'wr_3', 'wr_4']) {
+      assert.match(source, new RegExp(`id="${field}"[\\s\\S]*?aria-describedby="ss-news-meta-help"`), `news write should connect ${field} to metadata guidance`);
+    }
+  });
+
   it('URL-encodes news board ids before building category filter links', () => {
     const source = read('src/skin/board/sungsan_news/list.skin.php');
 
