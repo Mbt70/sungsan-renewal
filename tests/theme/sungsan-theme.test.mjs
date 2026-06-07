@@ -1761,6 +1761,17 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.ss-comment\.depth-5\s*\{[\s\S]*?margin-left:\s*36px/);
   });
 
+  it('shows a visible label on the free-board comment content field', () => {
+    const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(comment, /<label class="ss-comment-content-label" for="wr_content">댓글 내용 <span class="ss-required">필수<\/span><\/label>/);
+    assert.match(comment, /<textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help"/);
+    assert.doesNotMatch(comment, /<label class="sound_only" for="wr_content">댓글 내용<\/label>/);
+    assert.doesNotMatch(comment, /<textarea[^>]+placeholder="댓글 내용을 입력해 주세요."/);
+    assert.match(css, /\.ss-comment-content-label\s*\{[\s\S]*?font-weight:\s*800;/);
+  });
+
   it('blocks direct free-board attachment downloads for guests', () => {
     const file = 'src/skin/board/sungsan_free/download.head.skin.php';
 

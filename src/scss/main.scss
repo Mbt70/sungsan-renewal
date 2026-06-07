@@ -781,6 +781,11 @@ img {
   gap: var(--ss-space-3);
 }
 
+.ss-comment-content-label {
+  display: block;
+  font-weight: 800;
+}
+
 .ss-comment-form textarea {
   width: 100%;
   min-height: 140px;
