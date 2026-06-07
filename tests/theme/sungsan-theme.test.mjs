@@ -1,12 +1,30 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
 
 function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), 'utf8');
+}
+
+function phpFilesUnder(relativePath) {
+  const root = path.join(repoRoot, relativePath);
+  const files = [];
+
+  for (const entry of readdirSync(root)) {
+    const absolute = path.join(root, entry);
+    const relative = path.join(relativePath, entry).replace(/\\/g, '/');
+
+    if (statSync(absolute).isDirectory()) {
+      files.push(...phpFilesUnder(relative));
+    } else if (relative.endsWith('.php')) {
+      files.push(relative);
+    }
+  }
+
+  return files;
 }
 
 describe('sungsan theme static contract', () => {
@@ -434,6 +452,17 @@ describe('sungsan theme static contract', () => {
         assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible label for ${field}`);
         assert.doesNotMatch(source, new RegExp(`<label for="${field}"[^>]*class="sound_only"`), `${file} should not hide the ${field} label`);
       }
+    }
+  });
+
+  it('keeps static label targets connected to fields in custom PHP templates', () => {
+    for (const file of phpFilesUnder('src')) {
+      const source = read(file);
+      const ids = new Set([...source.matchAll(/\bid="([A-Za-z][A-Za-z0-9_-]*)"/g)].map((match) => match[1]));
+      const labels = [...source.matchAll(/<label\b[^>]*\bfor="([A-Za-z][A-Za-z0-9_-]*)"[^>]*>/g)].map((match) => match[1]);
+      const missingTargets = [...new Set(labels.filter((target) => !ids.has(target)))];
+
+      assert.deepEqual(missingTargets, [], `${file} has labels whose for target is missing`);
     }
   });
 

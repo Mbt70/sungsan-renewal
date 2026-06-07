@@ -11,7 +11,7 @@ add_stylesheet('<link rel="stylesheet" href="' . $member_skin_url . '/style.css"
         <form name="fpasswordreset" action="<?php echo get_text($action_url); ?>" onsubmit="return fpasswordreset_submit(this);" method="post" autocomplete="off">
             <fieldset id="info_fs">
                 <p>새로운 비밀번호를 입력해주세요.</p>
-                <label for="mb_id" class="sound_only">아이디</label>
+                <span class="sound_only">아이디</span>
                 <br>
                 <b>회원 아이디 : <?php echo get_text($_POST['mb_id']); ?></b>
                 <label for="mb_pw">새 비밀번호 <strong>필수</strong></label>
