@@ -1110,7 +1110,6 @@ describe('sungsan theme static contract', () => {
 
   it('escapes board list and view links and text metadata before rendering posts', () => {
     for (const file of [
-      'src/skin/board/sungsan_news/list.skin.php',
       'src/skin/board/sungsan_free/list.skin.php',
     ]) {
       const source = read(file);
@@ -1135,8 +1134,22 @@ describe('sungsan theme static contract', () => {
 
     const newsList = read('src/skin/board/sungsan_news/list.skin.php');
 
-    assert.match(newsList, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
+    assert.match(newsList, /\$sungsan_news_row = \$list\[\$i\];/);
+    assert.match(newsList, /\$sungsan_news_post_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
+    assert.match(newsList, /\$sungsan_news_post_subject = isset\(\$sungsan_news_row\['subject'\]\) \? \$sungsan_news_row\['subject'\] : '';/);
+    assert.match(newsList, /\$sungsan_news_post_category = isset\(\$sungsan_news_row\['ca_name'\]\) \? \$sungsan_news_row\['ca_name'\] : '';/);
+    assert.match(newsList, /\$sungsan_news_post_date = isset\(\$sungsan_news_row\['datetime2'\]\) \? \$sungsan_news_row\['datetime2'\] : '';/);
+    assert.match(newsList, /\$sungsan_news_post_hits = isset\(\$sungsan_news_row\['wr_hit'\]\) \? \(int\) \$sungsan_news_row\['wr_hit'\] : 0;/);
+    assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_post_href\); \?>"/);
+    assert.match(newsList, /get_text\(\$sungsan_news_post_subject\)/);
+    assert.match(newsList, /get_text\(\$sungsan_news_post_category\)/);
+    assert.match(newsList, /get_text\(\$sungsan_news_post_date\)/);
+    assert.match(newsList, /number_format\(\$sungsan_news_post_hits\)/);
     assert.doesNotMatch(newsList, /href="<\?php echo \$list\[\$i\]\['href'\]/);
+    assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['ca_name'\]\)/);
+    assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
+    assert.doesNotMatch(newsList, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/);
     assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table;/);
     assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$bo_table\.'&sca='\.urlencode\(\$category\);/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_list_url\); \?>"/);
@@ -1349,7 +1362,7 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /review_required/);
     assert.match(extend, /wr_7 <> 'review_required'/);
 
-    assert.match(list, /sungsan_can_read_news_post\(\$list\[\$i\]\)/);
+    assert.match(list, /sungsan_can_read_news_post\(\$sungsan_news_row\)/);
     assert.match(view, /sungsan_can_read_news_post\(\$view\)/);
     assert.match(download, /sungsan_can_read_news_post\(\$write\)/);
   });
@@ -1370,10 +1383,10 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       list,
-      /if \(sungsan_is_review_restricted\(\$list\[\$i\]\) && !\$is_admin\) \{\s*continue;\s*\}/,
+      /\$sungsan_news_row = \$list\[\$i\];[\s\S]*?if \(sungsan_is_review_restricted\(\$sungsan_news_row\) && !\$is_admin\) \{\s*continue;\s*\}/,
       'news list should only hide operator-review migrated posts',
     );
-    assert.match(list, /\$can_read_post = sungsan_can_read_news_post\(\$list\[\$i\]\);/);
+    assert.match(list, /\$can_read_post = sungsan_can_read_news_post\(\$sungsan_news_row\);/);
     assert.match(
       list,
       /<a class="ss-post-row<\?php echo \$can_read_post \? '' : ' restricted'; \?>"/,
