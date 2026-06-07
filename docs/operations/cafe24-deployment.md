@@ -43,7 +43,7 @@ return array(
 13. 변환 결과로 redirect CSV와 Apache 초안을 생성하고 운영 전환 전에 샘플 URL을 확인합니다.
 
 ## 4. 검수
-검수 결과는 `docs/operations/staging-validation-checklist.md`에 담당자, 검수일, `대기/통과/보류` 상태로 남깁니다.
+검수 결과는 `docs/operations/staging-validation-checklist.md`에 담당자, 검수일, `대기/통과/보류` 상태와 증거로 남깁니다. 화면 캡처, 명령 출력, 테스트 계정 역할, 확인 URL처럼 재검수자가 같은 결과를 확인할 수 있는 자료를 함께 기록합니다.
 
 - 모바일 375px, 태블릿, 데스크톱에서 홈/소개/소식/자유게시판 확인
 - 비회원, 회원, 임원, 운영자 권한 확인

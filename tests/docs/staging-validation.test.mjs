@@ -70,6 +70,19 @@ describe('Cafe24 staging validation handoff', () => {
     }
   });
 
+  it('tells Cafe24 operators to record staging evidence with checklist results', () => {
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+
+    for (const expected of [
+      '증거',
+      '화면 캡처',
+      '명령 출력',
+      checklistPath,
+    ]) {
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
+    }
+  });
+
   it('documents operator-managed Sungsan group label overrides', () => {
     const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
     const checklist = readFileSync(checklistPath, 'utf8');
