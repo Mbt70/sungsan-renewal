@@ -113,7 +113,22 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /href="#email-collection-refusal"/);
     assert.match(source, /id="email-collection-refusal"/);
     assert.match(source, /이메일 주소 무단수집을 거부합니다/);
-    assert.match(source, /href="<\?php echo G5_BBS_URL; \?>\/qalist\.php"/);
+    for (const variable of [
+      'ss_footer_home_url',
+      'ss_footer_intro_url',
+      'ss_footer_news_url',
+      'ss_footer_free_url',
+      'ss_footer_qalist_url',
+    ]) {
+      assert.match(source, new RegExp(`\\$${variable} = `), `footer should define ${variable}`);
+      assert.match(
+        source,
+        new RegExp(`href="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+        `footer should escape ${variable}`,
+      );
+    }
+    assert.doesNotMatch(source, /href="<\?php echo G5_URL; \?>/);
+    assert.doesNotMatch(source, /href="<\?php echo G5_BBS_URL; \?>/);
     assert.match(source, />관리 문의<\/a>/);
   });
 
