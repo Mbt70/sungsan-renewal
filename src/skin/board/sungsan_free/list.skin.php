@@ -27,6 +27,7 @@ if (!defined('_GNUBOARD_')) {
                 <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
                 <div class="ss-meta">
                     <span><?php echo get_text($list[$i]['wr_name']); ?></span>
+                    <span class="ss-access-label">회원 열람</span>
                     <span><?php echo get_text($list[$i]['datetime2']); ?></span>
                     <span>조회 <?php echo number_format((int) $list[$i]['wr_hit']); ?></span>
                 </div>

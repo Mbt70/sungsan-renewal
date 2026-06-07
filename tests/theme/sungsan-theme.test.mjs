@@ -970,6 +970,13 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-access-label\s*\{/);
   });
 
+  it('marks free board list posts as member-readable before visitors open them', () => {
+    const list = read('src/skin/board/sungsan_free/list.skin.php');
+
+    assert.match(list, /<span class="ss-access-label">회원 열람<\/span>/);
+    assert.match(list, /get_text\(\$list\[\$i\]\['wr_name'\]\)[\s\S]*?<span class="ss-access-label">회원 열람<\/span>/);
+  });
+
   it('blocks executable or browser-active board upload extensions before storage', () => {
     const extend = read('src/extend/sungsan.php');
 
