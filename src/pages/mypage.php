@@ -61,13 +61,16 @@ $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_
             </div>
             <div class="ss-post-list">
                 <?php for ($i = 0; $i < count($recent_posts); $i++) { ?>
+                    <?php
+                    $sungsan_recent_post_datetime = isset($recent_posts[$i]['datetime']) ? $recent_posts[$i]['datetime'] : $recent_posts[$i]['date'];
+                    ?>
                     <a class="ss-post-row" href="<?php echo get_text($recent_posts[$i]['href']); ?>">
                         <p class="ss-post-title">
                             <span class="ss-badge"><?php echo get_text($recent_posts[$i]['board_label']); ?></span>
                             <?php echo get_text($recent_posts[$i]['subject']); ?>
                         </p>
                         <div class="ss-meta">
-                            <span><?php echo get_text($recent_posts[$i]['date']); ?></span>
+                            <time datetime="<?php echo get_text($sungsan_recent_post_datetime); ?>"><?php echo get_text($recent_posts[$i]['date']); ?></time>
                         </div>
                     </a>
                 <?php } ?>

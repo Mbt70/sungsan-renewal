@@ -103,6 +103,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
                 $sungsan_home_media_alt = isset($sungsan_home_media_post['thumb_alt']) ? $sungsan_home_media_post['thumb_alt'] : '';
                 $sungsan_home_media_subject = isset($sungsan_home_media_post['subject']) ? $sungsan_home_media_post['subject'] : '';
                 $sungsan_home_media_date = isset($sungsan_home_media_post['date']) ? $sungsan_home_media_post['date'] : '';
+                $sungsan_home_media_datetime = isset($sungsan_home_media_post['datetime']) ? $sungsan_home_media_post['datetime'] : $sungsan_home_media_date;
                 ?>
                 <a class="ss-media-tile" href="<?php echo get_text($sungsan_home_media_href); ?>">
                     <?php if ($sungsan_home_media_thumb !== '') { ?>
@@ -111,7 +112,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
                         <span class="ss-media-thumb" aria-hidden="true"></span>
                     <?php } ?>
                     <strong><?php echo get_text($sungsan_home_media_subject); ?></strong>
-                    <span><?php echo get_text($sungsan_home_media_date); ?></span>
+                    <time datetime="<?php echo get_text($sungsan_home_media_datetime); ?>"><?php echo get_text($sungsan_home_media_date); ?></time>
                 </a>
             <?php } ?>
             <?php if (count($photo_posts) === 0) { ?>
@@ -141,6 +142,8 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
             $sungsan_home_post_group = isset($sungsan_home_post['wr_1']) ? $sungsan_home_post['wr_1'] : '';
             $sungsan_home_post_event_date = isset($sungsan_home_post['wr_3']) ? $sungsan_home_post['wr_3'] : '';
             $sungsan_home_post_date = isset($sungsan_home_post['date']) ? $sungsan_home_post['date'] : '';
+            $sungsan_home_post_datetime = $show_event_date && $sungsan_home_post_event_date !== '' ? $sungsan_home_post_event_date : (isset($sungsan_home_post['datetime']) ? $sungsan_home_post['datetime'] : $sungsan_home_post_date);
+            $sungsan_home_post_display_date = $show_event_date && $sungsan_home_post_event_date !== '' ? $sungsan_home_post_event_date : $sungsan_home_post_date;
             $sungsan_home_post_is_notice = !empty($sungsan_home_post['is_notice']);
             $sungsan_requires_login = !$is_member && $access_label;
             $sungsan_home_post_href = $sungsan_requires_login ? sungsan_login_url($sungsan_home_post_raw_href) : $sungsan_home_post_raw_href;
@@ -157,11 +160,7 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
                         <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <?php } ?>
                     <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
-                    <?php if ($show_event_date && $sungsan_home_post_event_date !== '') { ?>
-                        <span><?php echo get_text($sungsan_home_post_event_date); ?></span>
-                    <?php } else { ?>
-                        <span><?php echo get_text($sungsan_home_post_date); ?></span>
-                    <?php } ?>
+                    <time datetime="<?php echo get_text($sungsan_home_post_datetime); ?>"><?php echo get_text($sungsan_home_post_display_date); ?></time>
                 </div>
             </a>
         <?php } ?>

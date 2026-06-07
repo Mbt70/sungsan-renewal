@@ -1798,6 +1798,27 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('renders home and mypage summary dates as semantic time elements', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+    const mypage = read('src/pages/mypage.php');
+
+    assert.match(extend, /\$row\['datetime'\] = \$row\['wr_datetime'\];/);
+    assert.match(extend, /'datetime'\s*=>\s*\$row\['wr_datetime'\]/);
+
+    assert.match(index, /\$sungsan_home_media_datetime = isset\(\$sungsan_home_media_post\['datetime'\]\) \? \$sungsan_home_media_post\['datetime'\] : \$sungsan_home_media_date;/);
+    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
+    assert.match(index, /\$sungsan_home_post_datetime = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \(isset\(\$sungsan_home_post\['datetime'\]\) \? \$sungsan_home_post\['datetime'\] : \$sungsan_home_post_date\);/);
+    assert.match(index, /\$sungsan_home_post_display_date = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \$sungsan_home_post_date;/);
+    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_post_display_date\); \?><\/time>/);
+    assert.doesNotMatch(index, /<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
+    assert.doesNotMatch(index, /<span><\?php echo get_text\(\$sungsan_home_post_date\); \?><\/span>/);
+
+    assert.match(mypage, /\$sungsan_recent_post_datetime = isset\(\$recent_posts\[\$i\]\['datetime'\]\) \? \$recent_posts\[\$i\]\['datetime'\] : \$recent_posts\[\$i\]\['date'\];/);
+    assert.match(mypage, /<time datetime="<\?php echo get_text\(\$sungsan_recent_post_datetime\); \?>"><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/time>/);
+    assert.doesNotMatch(mypage, /<span><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/span>/);
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
@@ -1841,11 +1862,12 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /\$sungsan_home_media_alt = isset\(\$sungsan_home_media_post\['thumb_alt'\]\) \? \$sungsan_home_media_post\['thumb_alt'\] : '';/);
     assert.match(index, /\$sungsan_home_media_subject = isset\(\$sungsan_home_media_post\['subject'\]\) \? \$sungsan_home_media_post\['subject'\] : '';/);
     assert.match(index, /\$sungsan_home_media_date = isset\(\$sungsan_home_media_post\['date'\]\) \? \$sungsan_home_media_post\['date'\] : '';/);
+    assert.match(index, /\$sungsan_home_media_datetime = isset\(\$sungsan_home_media_post\['datetime'\]\) \? \$sungsan_home_media_post\['datetime'\] : \$sungsan_home_media_date;/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_media_href\); \?>"/);
     assert.match(index, /src="<\?php echo get_text\(\$sungsan_home_media_thumb\); \?>"/);
     assert.match(index, /alt="<\?php echo get_text\(\$sungsan_home_media_alt\); \?>"/);
     assert.match(index, /<strong><\?php echo get_text\(\$sungsan_home_media_subject\); \?><\/strong>/);
-    assert.match(index, /<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
+    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
     assert.match(index, /\$sungsan_home_post = \$posts\[\$i\];/);
     assert.match(index, /\$sungsan_home_post_raw_href = isset\(\$sungsan_home_post\['href'\]\) \? \$sungsan_home_post\['href'\] : '#';/);
     assert.match(index, /\$sungsan_home_post_subject = isset\(\$sungsan_home_post\['subject'\]\) \? \$sungsan_home_post\['subject'\] : '';/);
@@ -1853,12 +1875,14 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /\$sungsan_home_post_group = isset\(\$sungsan_home_post\['wr_1'\]\) \? \$sungsan_home_post\['wr_1'\] : '';/);
     assert.match(index, /\$sungsan_home_post_event_date = isset\(\$sungsan_home_post\['wr_3'\]\) \? \$sungsan_home_post\['wr_3'\] : '';/);
     assert.match(index, /\$sungsan_home_post_date = isset\(\$sungsan_home_post\['date'\]\) \? \$sungsan_home_post\['date'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_datetime = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \(isset\(\$sungsan_home_post\['datetime'\]\) \? \$sungsan_home_post\['datetime'\] : \$sungsan_home_post_date\);/);
+    assert.match(index, /\$sungsan_home_post_display_date = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \$sungsan_home_post_date;/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
     assert.match(index, /get_text\(\$sungsan_home_post_subject\)/);
     assert.match(index, /get_text\(\$sungsan_home_post_category\)/);
     assert.match(index, /sungsan_get_group_label\(\$sungsan_home_post_group\)/);
-    assert.match(index, /get_text\(\$sungsan_home_post_event_date\)/);
-    assert.match(index, /get_text\(\$sungsan_home_post_date\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_datetime\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_display_date\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['href'\]\)/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['thumb_src'\]\)/);

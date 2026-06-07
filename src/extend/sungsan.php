@@ -384,6 +384,7 @@ function sungsan_prepare_latest_post($row, $board_id, $with_thumbnail, $thumb_wi
     $row['href'] = sungsan_board_href($board_id, $row['wr_id']);
     $row['subject'] = get_text($row['wr_subject']);
     $row['date'] = substr($row['wr_datetime'], 0, 10);
+    $row['datetime'] = $row['wr_datetime'];
     $row['is_notice'] = $is_notice;
 
     if ($with_thumbnail && function_exists('get_list_thumbnail')) {
@@ -586,6 +587,7 @@ function sungsan_member_recent_posts($member_id, $limit = 5)
                 'href' => sungsan_board_href($board_id, $row['wr_id']),
                 'subject' => get_text($row['wr_subject']),
                 'date' => substr($row['wr_datetime'], 0, 10),
+                'datetime' => $row['wr_datetime'],
                 'sort_key' => $row['wr_datetime'].'-'.str_pad((string) $row['wr_id'], 10, '0', STR_PAD_LEFT),
             );
         }
