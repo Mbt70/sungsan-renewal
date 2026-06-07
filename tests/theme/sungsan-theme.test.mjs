@@ -41,6 +41,29 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows a recent own-post list on mypage using news and free boards', () => {
+    const mypage = read('src/pages/mypage.php');
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /function sungsan_member_recent_posts\(\$member_id,\s*\$limit = 5\)/);
+    assert.match(extend, /SUNGSAN_NEWS_BOARD\s*=>\s*'소식'/);
+    assert.match(extend, /SUNGSAN_FREE_BOARD\s*=>\s*'자유게시판'/);
+    assert.match(extend, /mb_id/);
+    assert.match(extend, /sql_escape_string\(\$member_id\)/);
+    assert.match(extend, /usort\(\$posts,/);
+    assert.match(extend, /array_slice\(\$posts,\s*0,\s*\$limit\)/);
+
+    assert.match(mypage, /\$recent_posts = function_exists\('sungsan_member_recent_posts'\) \? sungsan_member_recent_posts\(\$member\['mb_id'\],\s*5\) : array\(\);/);
+    assert.match(mypage, /<section class="ss-panel ss-member-posts">/);
+    assert.match(mypage, /<h2>내가 쓴 글<\/h2>/);
+    assert.match(mypage, /for \(\$i = 0; \$i < count\(\$recent_posts\); \$i\+\+\)/);
+    assert.match(mypage, /href="<\?php echo get_text\(\$recent_posts\[\$i\]\['href'\]\); \?>"/);
+    assert.match(mypage, /get_text\(\$recent_posts\[\$i\]\['board_label'\]\)/);
+    assert.match(mypage, /get_text\(\$recent_posts\[\$i\]\['subject'\]\)/);
+    assert.match(mypage, /get_text\(\$recent_posts\[\$i\]\['date'\]\)/);
+    assert.match(mypage, /아직 작성한 글이 없습니다\./);
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 

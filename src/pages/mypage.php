@@ -14,6 +14,7 @@ $role_label = function_exists('sungsan_get_member_role_label') ? sungsan_get_mem
 $my_posts_url = G5_BBS_URL.'/new.php?mb_id='.urlencode($member['mb_id']);
 $edit_url = G5_BBS_URL.'/member_confirm.php?url=register_form.php';
 $logout_url = G5_BBS_URL.'/logout.php';
+$recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_recent_posts($member['mb_id'], 5) : array();
 ?>
 <section class="ss-page-header">
     <div class="ss-container">
@@ -48,6 +49,31 @@ $logout_url = G5_BBS_URL.'/logout.php';
             <a class="ss-button secondary" href="<?php echo get_text($my_posts_url); ?>">내가 쓴 글</a>
             <a class="ss-button secondary" href="<?php echo get_text($logout_url); ?>">로그아웃</a>
         </nav>
+
+        <section class="ss-panel ss-member-posts">
+            <div class="ss-section-header">
+                <h2>내가 쓴 글</h2>
+                <a class="ss-button secondary" href="<?php echo get_text($my_posts_url); ?>">전체 보기</a>
+            </div>
+            <div class="ss-post-list">
+                <?php for ($i = 0; $i < count($recent_posts); $i++) { ?>
+                    <a class="ss-post-row" href="<?php echo get_text($recent_posts[$i]['href']); ?>">
+                        <p class="ss-post-title">
+                            <span class="ss-badge"><?php echo get_text($recent_posts[$i]['board_label']); ?></span>
+                            <?php echo get_text($recent_posts[$i]['subject']); ?>
+                        </p>
+                        <div class="ss-meta">
+                            <span><?php echo get_text($recent_posts[$i]['date']); ?></span>
+                        </div>
+                    </a>
+                <?php } ?>
+                <?php if (count($recent_posts) === 0) { ?>
+                    <div class="ss-post-row">
+                        <p class="ss-post-title">아직 작성한 글이 없습니다.</p>
+                    </div>
+                <?php } ?>
+            </div>
+        </section>
 
         <section class="ss-panel ss-review-note">
             <h2>회원 이용 안내</h2>

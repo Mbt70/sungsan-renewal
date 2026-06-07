@@ -291,3 +291,73 @@ function sungsan_latest_board_posts($bo_table, $args = array())
 
     return $posts;
 }
+
+function sungsan_member_recent_posts($member_id, $limit = 5)
+{
+    global $g5, $is_admin, $member;
+
+    $member_id = trim((string) $member_id);
+    if ($member_id === '' || !isset($g5['write_prefix']) || !function_exists('sql_query')) {
+        return array();
+    }
+
+    $limit = max(1, min(10, (int) $limit));
+    $boards = array(
+        SUNGSAN_NEWS_BOARD => '소식',
+        SUNGSAN_FREE_BOARD => '자유게시판',
+    );
+    $posts = array();
+
+    foreach ($boards as $board_id => $board_label) {
+        $board_id = sungsan_clean_board_id($board_id);
+        if (!$board_id) {
+            continue;
+        }
+
+        $where = array(
+            'wr_is_comment = 0',
+            "mb_id = '".sql_escape_string($member_id)."'",
+        );
+
+        if ($board_id === SUNGSAN_NEWS_BOARD) {
+            if (!$is_admin) {
+                $where[] = "(wr_7 <> 'review_required' or wr_7 is null)";
+            }
+
+            $level = isset($member['mb_level']) ? (int) $member['mb_level'] : 0;
+            if (!$is_admin && $level < 2) {
+                $where[] = "(wr_2 = 'public' or wr_2 = '')";
+            } elseif (!$is_admin && $level < 6) {
+                $where[] = "(wr_2 in ('public', 'member') or wr_2 = '')";
+            }
+        }
+
+        $write_table = $g5['write_prefix'].$board_id;
+        $sql = " select wr_id, wr_subject, wr_datetime
+                 from {$write_table}
+                 where ".implode(' and ', $where)."
+                 order by wr_datetime desc, wr_id desc
+                 limit {$limit} ";
+        $result = sql_query($sql, false);
+        if (!$result) {
+            continue;
+        }
+
+        while ($row = sql_fetch_array($result)) {
+            $posts[] = array(
+                'board_id' => $board_id,
+                'board_label' => $board_label,
+                'href' => sungsan_board_href($board_id, $row['wr_id']),
+                'subject' => get_text($row['wr_subject']),
+                'date' => substr($row['wr_datetime'], 0, 10),
+                'sort_key' => $row['wr_datetime'].'-'.str_pad((string) $row['wr_id'], 10, '0', STR_PAD_LEFT),
+            );
+        }
+    }
+
+    usort($posts, function ($a, $b) {
+        return strcmp($b['sort_key'], $a['sort_key']);
+    });
+
+    return array_slice($posts, 0, $limit);
+}
