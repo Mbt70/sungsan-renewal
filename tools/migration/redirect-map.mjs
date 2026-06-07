@@ -8,6 +8,10 @@ function toPositiveNumber(value) {
   return Number.isFinite(number) && number > 0 ? number : null;
 }
 
+function requiresOperatorReview(row) {
+  return (row.wr_7 ?? row.fields?.wr_7) === 'review_required';
+}
+
 export function buildRedirectRecords(rows) {
   return rows
     .map((row) => {
@@ -15,6 +19,10 @@ export function buildRedirectRecords(rows) {
       const targetPostId = toPositiveNumber(row.targetPostId ?? row.newWrId ?? row.new_wr_id);
       const legacyBoard = row.legacyBoard ?? row.boTable ?? row.wr_5;
       const targetBoard = row.targetBoard ?? row.newBoard;
+
+      if (requiresOperatorReview(row)) {
+        return null;
+      }
 
       if (!legacyBoard || !targetBoard || !legacyPostId || !targetPostId) {
         return null;

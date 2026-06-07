@@ -16,4 +16,11 @@ describe('README release handoff instructions', () => {
       assert.match(source, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     }
   });
+
+  it('documents redirect exclusions for review-required migration records', () => {
+    const source = readFileSync('README.md', 'utf8');
+
+    assert.match(source, /wr_7=review_required/);
+    assert.match(source, /redirect CSV\/Apache output/);
+  });
 });

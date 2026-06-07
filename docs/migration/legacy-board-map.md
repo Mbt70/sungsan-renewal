@@ -55,3 +55,4 @@
 - `z6_2`, `z6_3`은 운영자 검수 전까지 새 공개 화면으로 이전하지 않습니다.
 - 모든 이전 대상 게시글은 제목·본문에 `회원명부`, `회원명단`, `주소록`, `연락처` 성격의 표현이 있으면 `wr_7`, `wr_8`에 검토 플래그를 남깁니다.
 - 기존 URL redirect는 실제로 `news/free`에 이전된 글만 생성합니다. `tools/migration/redirect-map.mjs`는 JSON/JSONL 변환 결과를 받아 CSV 또는 Cafe24 전달용 Apache `RewriteCond`/`RewriteRule` 초안을 만듭니다. 기존 그누보드4 글 URL은 bo_table/wr_id 쿼리스트링으로 글을 식별하므로 Apache 산출물은 query string 조건을 함께 확인합니다.
+- Rows with `wr_7=review_required` stay out of redirect CSV/Apache output until operator review clears them.

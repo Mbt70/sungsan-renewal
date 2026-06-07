@@ -27,6 +27,38 @@ describe('legacy redirect map export', () => {
     ]);
   });
 
+  it('excludes migrated posts that still require operator review from redirects', () => {
+    const records = buildRedirectRecords([
+      { legacyBoard: 'z5_4', legacyPostId: '77', targetBoard: 'news', targetPostId: '177', wr_7: 'review_required' },
+      { legacyBoard: 'z1_1', legacyPostId: '579', targetBoard: 'news', targetPostId: '42', wr_7: '' },
+    ]);
+
+    assert.deepEqual(records, [
+      {
+        legacyPath: '/renewal/bbs/board.php?bo_table=z1_1&wr_id=579',
+        targetPath: '/bbs/board.php?bo_table=news&wr_id=42',
+        legacyBoard: 'z1_1',
+        legacyPostId: 579,
+        targetBoard: 'news',
+        targetPostId: 42,
+      },
+    ]);
+  });
+
+  it('excludes review-required posts when the flag is nested in transformed fields', () => {
+    const records = buildRedirectRecords([
+      {
+        legacyBoard: 'z5_4',
+        legacyPostId: '77',
+        targetBoard: 'news',
+        targetPostId: '177',
+        fields: { wr_7: 'review_required' },
+      },
+    ]);
+
+    assert.deepEqual(records, []);
+  });
+
   it('exports redirect records as auditable CSV', () => {
     const csv = formatRedirectCsv([
       {
