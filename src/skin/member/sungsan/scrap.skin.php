@@ -9,12 +9,20 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <div id="scrap" class="new_win">
     <h1 id="win_title"><?php echo get_text($g5['title']); ?></h1>
     <ul>
-        <?php for ($i=0; $i<count($list); $i++) {  ?>
+        <?php for ($i=0; $i<count($list); $i++) {
+            $scrap_row = isset($list[$i]) ? $list[$i] : array();
+            $scrap_post_href = isset($scrap_row['opener_href_wr_id']) ? $scrap_row['opener_href_wr_id'] : '';
+            $scrap_subject = isset($scrap_row['subject']) ? $scrap_row['subject'] : '';
+            $scrap_board_href = isset($scrap_row['opener_href']) ? $scrap_row['opener_href'] : '';
+            $scrap_board_subject = isset($scrap_row['bo_subject']) ? $scrap_row['bo_subject'] : '';
+            $scrap_datetime = isset($scrap_row['ms_datetime']) ? $scrap_row['ms_datetime'] : '';
+            $scrap_del_href = isset($scrap_row['del_href']) ? $scrap_row['del_href'] : '';
+        ?>
         <li>
-            <a href="<?php echo get_text($list[$i]['opener_href_wr_id']); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['subject']); ?></a>
-            <a href="<?php echo get_text($list[$i]['opener_href']); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['bo_subject']); ?></a>
-            <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['ms_datetime']); ?></span>
-            <a href="<?php echo get_text($list[$i]['del_href']); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i><span class="sound_only">삭제</span></a>
+            <a href="<?php echo get_text($scrap_post_href); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($scrap_subject); ?></a>
+            <a href="<?php echo get_text($scrap_board_href); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($scrap_board_subject); ?></a>
+            <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($scrap_datetime); ?></span>
+            <a href="<?php echo get_text($scrap_del_href); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i><span class="sound_only">삭제</span></a>
         </li>
         <?php }  ?>
 
