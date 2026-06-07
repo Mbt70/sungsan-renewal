@@ -59,6 +59,18 @@ function normalizeDateToken(token) {
   return `${token.slice(0, 4)}-${token.slice(4, 6)}-${token.slice(6, 8)}`;
 }
 
+function detectManualReviewReason(mapping, row) {
+  const subject = readField(row, 'wr_subject');
+  const content = readField(row, 'wr_content');
+  const combined = `${subject}\n${content}`;
+
+  if (mapping.legacyBoard === 'z5_4' && /회원\s*(명부|명단|정보|주소록|연락처)|주소록|명부/.test(combined)) {
+    return 'possible-member-directory';
+  }
+
+  return '';
+}
+
 export function extractScheduleDates(subject) {
   const match = String(subject ?? '').match(/\[(\d{8})(?:\s*~\s*(\d{8}))?\]/);
 
@@ -89,6 +101,7 @@ export function mapLegacyPostRow(legacyBoard, row) {
   const { startDate, endDate } = mapping.target === 'news' && mapping.category === '행사'
     ? extractScheduleDates(readField(row, 'wr_subject'))
     : { startDate: '', endDate: '' };
+  const reviewReason = detectManualReviewReason(mapping, row);
 
   const fields = {
     wr_num: readField(row, 'wr_num', legacyPostId ? `-${legacyPostId}` : '0'),
@@ -126,8 +139,8 @@ export function mapLegacyPostRow(legacyBoard, row) {
     wr_4: endDate,
     wr_5: legacyBoard,
     wr_6: legacyPostId,
-    wr_7: '',
-    wr_8: '',
+    wr_7: reviewReason ? 'review_required' : '',
+    wr_8: reviewReason,
     wr_9: '',
     wr_10: '',
   };

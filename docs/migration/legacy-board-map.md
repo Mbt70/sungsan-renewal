@@ -42,9 +42,13 @@
 - `wr_4`: 행사 종료일
 - `wr_5`: 기존 보드 ID
 - `wr_6`: 기존 글 ID
+- `wr_7`: 이전 리허설 검토 플래그. 수동 검토가 필요하면 `review_required`
+- `wr_8`: 검토 사유. 예: `possible-member-directory`
 
 ## Migration Rule
 - 기존 글 ID와 보드 ID는 항상 보존합니다.
 - 첨부파일은 기존 `/renewal/data/file/{bo_table}`에서 새 `data/file/{target_board}`로 복사합니다.
 - 회원 비밀번호는 그대로 이전하지 않습니다. 기본 정보와 권한만 이전하고 재설정 절차를 사용합니다.
 - `z6_2`, `z6_3`은 운영자 검수 전까지 새 공개 화면으로 이전하지 않습니다.
+- `z5_4`처럼 회원 명부성 게시글이 섞일 수 있는 보드는 제목·본문에 `회원명부`, `회원명단`, `주소록`, `연락처` 성격의 표현이 있으면 `wr_7`, `wr_8`에 검토 플래그를 남깁니다.
+- 기존 URL redirect는 실제로 `news/free`에 이전된 글만 생성합니다. `tools/migration/redirect-map.mjs`는 JSON/JSONL 변환 결과를 받아 CSV 또는 Cafe24 전달용 Apache `RedirectMatch` 초안을 만듭니다.

@@ -2,7 +2,7 @@
 
 -- Review on staging before applying to production.
 
-UPDATE `g5_config` SET cf_theme = 'sungsan', cf_title = '성산회';
+UPDATE `g5_config` SET cf_theme = 'sungsan', cf_title = '성산회', cf_member_skin = 'sungsan', cf_mobile_member_skin = 'sungsan', cf_register_level = '1';
 
 INSERT INTO `g5_group` SET
     gr_id = 'sungsan',

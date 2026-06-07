@@ -1,0 +1,168 @@
+.mbskin,
+.register,
+.new_win_con {
+  width: min(100% - 32px, 760px);
+  margin: 48px auto;
+  color: var(--ss-color-text, #1e2124);
+  font-family: var(--ss-font-sans, "Noto Sans KR", "Malgun Gothic", sans-serif);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.mbskin h1,
+.register h1,
+.new_win_con h3,
+.register h2 {
+  margin: 0 0 16px;
+  color: var(--ss-color-text, #1e2124);
+  font-size: 1.6rem;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.mbskin_box,
+.mbskin > form,
+.register form,
+.new_win_con {
+  border: 1px solid var(--ss-color-border, #d9dee8);
+  border-radius: var(--ss-radius-md, 8px);
+  padding: 24px;
+  background: #fff;
+}
+
+.mb_log_cate,
+.btn_confirm,
+.win_btn,
+#login_info,
+.login_if_lpl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#login_fs,
+#info_fs,
+.register section {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 20px;
+  border: 0;
+  padding: 0;
+}
+
+.frm_input,
+.full_input,
+.mbskin input[type="text"],
+.mbskin input[type="password"],
+.register input[type="text"],
+.register input[type="password"],
+.register input[type="email"],
+.register select,
+.register textarea {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--ss-color-border-strong, #c7cedb);
+  border-radius: var(--ss-radius-md, 8px);
+  padding: 12px;
+  font: inherit;
+}
+
+.register textarea {
+  min-height: 180px;
+}
+
+.btn_submit,
+.btn_close,
+.join,
+.login_if_lpl a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ss-color-primary, #1e5aa8);
+  border-radius: var(--ss-radius-md, 8px);
+  padding: 8px 16px;
+  background: var(--ss-color-primary, #1e5aa8);
+  color: #fff !important;
+  font: inherit;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn_close,
+.join,
+.login_if_lpl a {
+  background: #fff;
+  color: var(--ss-color-primary, #1e5aa8) !important;
+}
+
+.btn_submit:hover,
+.btn_close:hover,
+.join:hover,
+.login_if_lpl a:hover {
+  border-color: var(--ss-color-primary-strong, #153f78);
+  background: var(--ss-color-primary-soft, #edf4ff);
+  color: var(--ss-color-primary-strong, #153f78) !important;
+}
+
+.chk_box,
+.fregister_agree,
+.login_if_auto {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.chk_box input,
+.fregister_agree input {
+  width: 22px;
+  height: 22px;
+}
+
+#mb_confirm_id,
+.confirm_id {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-weight: 800;
+}
+
+.tbl_head01,
+.register table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.register th,
+.register td {
+  border: 1px solid var(--ss-color-border, #d9dee8);
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+}
+
+@media (max-width: 430px) {
+  .mbskin,
+  .register,
+  .new_win_con {
+    width: min(100% - 24px, 760px);
+    margin: 32px auto;
+  }
+
+  .mbskin_box,
+  .mbskin > form,
+  .register form,
+  .new_win_con {
+    padding: 18px;
+  }
+
+  .btn_submit,
+  .btn_close,
+  .join,
+  .login_if_lpl a {
+    width: 100%;
+  }
+}

@@ -142,7 +142,7 @@ ON DUPLICATE KEY UPDATE
 }
 
 export function buildThemeUpdateSql({ tablePrefix = DEFAULT_TABLE_PREFIX } = {}) {
-  return `UPDATE ${prefixedTable('config', tablePrefix)} SET cf_theme = 'sungsan', cf_title = '성산회';`;
+  return `UPDATE ${prefixedTable('config', tablePrefix)} SET cf_theme = 'sungsan', cf_title = '성산회', cf_member_skin = 'sungsan', cf_mobile_member_skin = 'sungsan', cf_register_level = '1';`;
 }
 
 export function buildSetupSql({

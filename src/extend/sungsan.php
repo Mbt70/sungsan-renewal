@@ -86,3 +86,99 @@ function sungsan_active_class($current, $value)
     return $current === $value ? ' active' : '';
 }
 
+function sungsan_get_member_role_label($level)
+{
+    $level = (int) $level;
+
+    if ($level >= 10) {
+        return '운영자';
+    }
+
+    if ($level >= 6) {
+        return '임원';
+    }
+
+    if ($level >= 2) {
+        return '일반 회원';
+    }
+
+    return '승인 대기';
+}
+
+function sungsan_clean_board_id($bo_table)
+{
+    return preg_replace('/[^a-z0-9_]/i', '', (string) $bo_table);
+}
+
+function sungsan_board_href($bo_table, $wr_id = 0)
+{
+    $href = G5_BBS_URL.'/board.php?bo_table='.urlencode($bo_table);
+
+    if ($wr_id) {
+        $href .= '&amp;wr_id='.(int) $wr_id;
+    }
+
+    return $href;
+}
+
+function sungsan_latest_board_posts($bo_table, $args = array())
+{
+    global $g5;
+
+    if (!isset($g5['write_prefix']) || !function_exists('sql_query')) {
+        return array();
+    }
+
+    $board_id = sungsan_clean_board_id($bo_table);
+    if (!$board_id) {
+        return array();
+    }
+
+    $limit = isset($args['limit']) ? max(1, min(10, (int) $args['limit'])) : 5;
+    $where = array('wr_is_comment = 0');
+
+    if (!empty($args['category'])) {
+        $categories = is_array($args['category']) ? $args['category'] : array($args['category']);
+        $escaped = array();
+
+        foreach ($categories as $category) {
+            $escaped[] = "'".sql_escape_string($category)."'";
+        }
+
+        $where[] = 'ca_name in ('.implode(',', $escaped).')';
+    }
+
+    if (!empty($args['groupSlug'])) {
+        $where[] = "wr_1 = '".sql_escape_string($args['groupSlug'])."'";
+    }
+
+    if (!empty($args['upcoming'])) {
+        $today = defined('G5_TIME_YMD') ? G5_TIME_YMD : date('Y-m-d');
+        $where[] = "wr_3 >= '".sql_escape_string($today)."'";
+        $order = 'wr_3 asc, wr_datetime desc';
+    } else {
+        $order = 'wr_datetime desc, wr_id desc';
+    }
+
+    $write_table = $g5['write_prefix'].$board_id;
+    $sql = " select wr_id, wr_subject, ca_name, wr_datetime, wr_hit, wr_1, wr_2, wr_3, wr_4
+             from {$write_table}
+             where ".implode(' and ', $where)."
+             order by {$order}
+             limit {$limit} ";
+    $result = sql_query($sql, false);
+    $posts = array();
+
+    if (!$result) {
+        return $posts;
+    }
+
+    while ($row = sql_fetch_array($result)) {
+        $row['href'] = sungsan_board_href($board_id, $row['wr_id']);
+        $row['subject'] = get_text($row['wr_subject']);
+        $row['date'] = substr($row['wr_datetime'], 0, 10);
+        $posts[] = $row;
+    }
+
+    return $posts;
+}

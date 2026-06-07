@@ -6,7 +6,8 @@ if (!defined('_GNUBOARD_')) {
 <section class="ss-section">
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
-        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid" style="margin-top:24px">
+        <p class="ss-form-help">회원끼리 나누는 글입니다. 개인정보가 포함된 자료는 올리기 전에 한 번 더 확인해 주세요.</p>
+        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo $w; ?>">
             <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
@@ -20,17 +21,18 @@ if (!defined('_GNUBOARD_')) {
             <input type="hidden" name="page" value="<?php echo $page; ?>">
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
             <div class="ss-field">
-                <label for="wr_subject">제목</label>
+                <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
                 <input id="wr_subject" name="wr_subject" value="<?php echo $subject; ?>" required>
             </div>
             <div class="ss-field">
-                <label for="wr_content">본문</label>
+                <label for="wr_content">본문 <span class="ss-required">필수</span></label>
                 <textarea id="wr_content" name="wr_content" required><?php echo $content; ?></textarea>
             </div>
             <?php for ($i = 0; $is_file && $i < $file_count; $i++) { ?>
                 <div class="ss-field">
                     <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                     <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>">
+                    <p class="ss-form-help">사진과 문서 파일을 첨부할 수 있습니다. 실행 파일은 업로드하지 않습니다.</p>
                     <?php if ($w === 'u' && isset($file[$i]['file']) && $file[$i]['file']) { ?>
                         <label class="ss-checkline">
                             <input type="checkbox" name="bf_file_del[<?php echo $i; ?>]" value="1">
@@ -44,7 +46,7 @@ if (!defined('_GNUBOARD_')) {
                     <?php echo $captcha_html; ?>
                 </div>
             <?php } ?>
-            <div class="ss-filter-bar">
+            <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
                 <a class="ss-button secondary" href="<?php echo $list_href; ?>">취소</a>
             </div>

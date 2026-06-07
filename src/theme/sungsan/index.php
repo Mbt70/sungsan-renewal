@@ -7,11 +7,32 @@ if (!defined('_INDEX_')) {
     define('_INDEX_', true);
 }
 include_once G5_THEME_PATH.'/head.php';
+
+$notice_posts = sungsan_latest_board_posts('news', array('category' => '공지', 'limit' => 5));
+$event_posts = sungsan_latest_board_posts('news', array('category' => '행사', 'upcoming' => true, 'limit' => 3));
+$resource_posts = sungsan_latest_board_posts('news', array('category' => array('자료', '규정'), 'limit' => 5));
+$free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
+$photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 'limit' => 4));
 ?>
 <section class="ss-hero">
-    <div class="ss-container">
-        <h1>성산회의 소식과 자료를 한눈에 확인하세요</h1>
-        <p>공지, 일정, 자료, 활동 소식을 찾기 쉽게 정리하고 회원들이 편하게 소통할 수 있도록 새롭게 준비한 성산회 홈페이지입니다.</p>
+    <div class="ss-container ss-hero-layout">
+        <div>
+            <p class="ss-eyebrow">성산회 공식 홈페이지</p>
+            <h1>중요한 공지와 자료를 더 빠르고 또렷하게 확인하세요</h1>
+            <p>성산회의 공지, 일정, 자료, 활동 소식을 한곳에 모아 회원 누구나 편하게 찾고 읽을 수 있도록 새롭게 정리했습니다.</p>
+            <div class="ss-action-bar">
+                <a class="ss-button" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news">소식 보기</a>
+                <a class="ss-button secondary" href="<?php echo G5_URL; ?>/theme/sungsan/page/intro.php">성산회 소개</a>
+            </div>
+        </div>
+        <aside class="ss-hero-summary" aria-label="홈페이지 주요 기능">
+            <strong>홈페이지 이용</strong>
+            <ul>
+                <li>공지와 행사를 먼저 확인합니다.</li>
+                <li>자료와 규정은 소식에서 종류별로 찾습니다.</li>
+                <li>자유게시판은 로그인한 회원이 이용합니다.</li>
+            </ul>
+        </aside>
     </div>
 </section>
 
@@ -22,14 +43,14 @@ include_once G5_THEME_PATH.'/head.php';
                 <h2 class="ss-section-title">최근 공지</h2>
                 <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=공지">더보기</a>
             </div>
-            <?php echo function_exists('latest') ? latest('theme/sungsan_list', 'news', 5, 40) : ''; ?>
+            <?php sungsan_render_home_list($notice_posts, '등록된 공지가 없습니다.'); ?>
         </div>
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">다가오는 일정</h2>
                 <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=행사">더보기</a>
             </div>
-            <?php echo function_exists('latest') ? latest('theme/sungsan_list', 'news', 5, 40) : ''; ?>
+            <?php sungsan_render_home_list($event_posts, '예정된 일정이 없습니다.', true); ?>
         </div>
     </div>
 </section>
@@ -41,16 +62,72 @@ include_once G5_THEME_PATH.'/head.php';
                 <h2 class="ss-section-title">자료와 규정</h2>
                 <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=자료">더보기</a>
             </div>
-            <?php echo function_exists('latest') ? latest('theme/sungsan_list', 'news', 5, 40) : ''; ?>
+            <?php sungsan_render_home_list($resource_posts, '등록된 자료가 없습니다.'); ?>
         </div>
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">자유게시판</h2>
                 <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=free">더보기</a>
             </div>
-            <?php echo function_exists('latest') ? latest('theme/sungsan_list', 'free', 5, 40) : ''; ?>
+            <?php sungsan_render_home_list($free_posts, '등록된 자유게시판 글이 없습니다.', false, false); ?>
+        </div>
+    </div>
+</section>
+
+<section class="ss-section ss-section-muted">
+    <div class="ss-container">
+        <div class="ss-section-header">
+            <h2 class="ss-section-title">사진·영상 자료</h2>
+            <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=활동소식">활동소식 보기</a>
+        </div>
+        <div class="ss-media-grid">
+            <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>
+                <a class="ss-media-tile" href="<?php echo $photo_posts[$i]['href']; ?>">
+                    <span class="ss-media-thumb" aria-hidden="true"></span>
+                    <strong><?php echo $photo_posts[$i]['subject']; ?></strong>
+                    <span><?php echo get_text($photo_posts[$i]['date']); ?></span>
+                </a>
+            <?php } ?>
+            <?php if (count($photo_posts) === 0) { ?>
+                <div class="ss-panel ss-empty-state">
+                    <strong>사진자료 이전 준비 중</strong>
+                    <p>기존 사진자료 게시판의 첨부를 검수한 뒤 이 영역에서 최신 활동 사진과 영상을 확인할 수 있습니다.</p>
+                </div>
+            <?php } ?>
         </div>
     </div>
 </section>
 <?php
 include_once G5_THEME_PATH.'/tail.php';
+
+function sungsan_render_home_list($posts, $empty_text, $show_event_date = false, $show_category = true)
+{
+    ?>
+    <div class="ss-post-list">
+        <?php for ($i = 0; $i < count($posts); $i++) { ?>
+            <a class="ss-post-row" href="<?php echo $posts[$i]['href']; ?>">
+                <p class="ss-post-title"><?php echo $posts[$i]['subject']; ?></p>
+                <div class="ss-meta">
+                    <?php if ($show_category && !empty($posts[$i]['ca_name'])) { ?>
+                        <span class="ss-badge"><?php echo get_text($posts[$i]['ca_name']); ?></span>
+                    <?php } ?>
+                    <?php if (!empty($posts[$i]['wr_1'])) { ?>
+                        <?php $group_label = sungsan_get_group_label($posts[$i]['wr_1']); ?>
+                        <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
+                    <?php } ?>
+                    <?php if ($show_event_date && !empty($posts[$i]['wr_3'])) { ?>
+                        <span><?php echo get_text($posts[$i]['wr_3']); ?></span>
+                    <?php } else { ?>
+                        <span><?php echo get_text($posts[$i]['date']); ?></span>
+                    <?php } ?>
+                </div>
+            </a>
+        <?php } ?>
+        <?php if (count($posts) === 0) { ?>
+            <div class="ss-post-row">
+                <p class="ss-post-title"><?php echo get_text($empty_text); ?></p>
+            </div>
+        <?php } ?>
+    </div>
+    <?php
+}

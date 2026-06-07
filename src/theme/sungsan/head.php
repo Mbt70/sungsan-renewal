@@ -20,6 +20,7 @@ if (defined('G5_LIB_PATH') && is_file(G5_LIB_PATH.'/latest.lib.php')) {
 
 $ss_current = isset($bo_table) ? $bo_table : '';
 $ss_is_intro = isset($sungsan_page) && $sungsan_page === 'intro';
+$ss_is_mypage = isset($sungsan_page) && $sungsan_page === 'mypage';
 ?>
 <a href="#container" class="ss-skip-link">본문 바로가기</a>
 <header class="ss-site-header">
@@ -45,7 +46,7 @@ $ss_is_intro = isset($sungsan_page) && $sungsan_page === 'intro';
                 <button type="submit">검색</button>
             </form>
             <?php if ($is_member) { ?>
-                <a class="ss-account-link" href="<?php echo G5_BBS_URL; ?>/member_confirm.php?url=register_form.php">마이페이지</a>
+                <a class="ss-account-link" href="<?php echo G5_URL; ?>/sungsan/mypage.php"<?php echo $ss_is_mypage ? ' aria-current="page"' : ''; ?>>마이페이지</a>
             <?php } else { ?>
                 <a class="ss-account-link" href="<?php echo G5_BBS_URL; ?>/login.php">로그인</a>
             <?php } ?>

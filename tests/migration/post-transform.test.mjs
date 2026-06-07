@@ -67,6 +67,18 @@ describe('legacy post transform', () => {
     assert.equal(mapped.reason, 'member-personal-data');
   });
 
+  it('marks possible member directory posts for manual visibility review', () => {
+    const mapped = mapLegacyPostRow('z5_4', {
+      ...legacyRow,
+      wr_subject: '2024년 총회 참석 회원명부',
+    });
+
+    assert.equal(mapped.targetBoard, 'news');
+    assert.equal(mapped.fields.wr_1, 'general-meeting');
+    assert.equal(mapped.fields.wr_7, 'review_required');
+    assert.equal(mapped.fields.wr_8, 'possible-member-directory');
+  });
+
   it('builds SQL insert for transformed posts', () => {
     const mapped = mapLegacyPostRow('z1_1', legacyRow);
     const sql = buildPostInsertSql(mapped, { tablePrefix: 'g5_' });

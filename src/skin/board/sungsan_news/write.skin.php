@@ -11,7 +11,8 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
 <section class="ss-section">
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '소식 수정' : '소식 글쓰기'; ?></h1>
-        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid" style="margin-top:24px">
+        <p class="ss-form-help">종류는 필수입니다. 소속과 공개 범위는 글의 성격에 맞게 선택해 주세요.</p>
+        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo $w; ?>">
             <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
@@ -26,13 +27,13 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
 
             <div class="ss-field">
-                <label for="wr_subject">제목</label>
+                <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
                 <input id="wr_subject" name="wr_subject" value="<?php echo $subject; ?>" required>
             </div>
 
             <div class="ss-card-grid">
                 <div class="ss-field">
-                    <label for="ca_name">종류</label>
+                    <label for="ca_name">종류 <span class="ss-required">필수</span></label>
                     <select id="ca_name" name="ca_name" required>
                         <option value="">종류 선택</option>
                         <?php foreach ($sungsan_news_categories as $category) { ?>
@@ -71,7 +72,7 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
             </div>
 
             <div class="ss-field">
-                <label for="wr_content">본문</label>
+                <label for="wr_content">본문 <span class="ss-required">필수</span></label>
                 <textarea id="wr_content" name="wr_content" required><?php echo $content; ?></textarea>
             </div>
 
@@ -79,6 +80,7 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
                 <div class="ss-field">
                     <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                     <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>">
+                    <p class="ss-form-help">사진과 문서 파일을 첨부할 수 있습니다. 실행 파일은 업로드하지 않습니다.</p>
                     <?php if ($w === 'u' && isset($file[$i]['file']) && $file[$i]['file']) { ?>
                         <label class="ss-checkline">
                             <input type="checkbox" name="bf_file_del[<?php echo $i; ?>]" value="1">
@@ -94,7 +96,7 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
                 </div>
             <?php } ?>
 
-            <div class="ss-filter-bar">
+            <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
                 <a class="ss-button secondary" href="<?php echo $list_href; ?>">취소</a>
             </div>

@@ -23,7 +23,7 @@ $current_category = isset($sca) ? $sca : '';
             <?php } ?>
         </div>
 
-        <form class="ss-search-form" method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>" style="margin-bottom:24px">
+        <form class="ss-search-form ss-board-search" method="get" action="<?php echo $_SERVER['SCRIPT_NAME']; ?>">
             <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
             <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
             <input type="hidden" name="sop" value="and">
@@ -41,7 +41,7 @@ $current_category = isset($sca) ? $sca : '';
             ?>
             <a class="ss-post-row" href="<?php echo $list[$i]['href']; ?>">
                 <p class="ss-post-title">
-                    <?php if ($list[$i]['is_notice']) { ?>📌 <?php } ?>
+                    <?php if ($list[$i]['is_notice']) { ?><span class="ss-badge strong">고정</span><?php } ?>
                     <?php echo $list[$i]['subject']; ?>
                 </p>
                 <div class="ss-meta">
@@ -59,8 +59,7 @@ $current_category = isset($sca) ? $sca : '';
         </div>
 
         <?php if ($write_pages) { ?>
-            <nav class="ss-section" aria-label="페이지 이동"><?php echo $write_pages; ?></nav>
+            <nav class="ss-pagination" aria-label="페이지 이동"><?php echo $write_pages; ?></nav>
         <?php } ?>
     </div>
 </section>
-

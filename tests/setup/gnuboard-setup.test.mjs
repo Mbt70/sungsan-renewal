@@ -69,6 +69,9 @@ describe('sungsan gnuboard setup config', () => {
     const sql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate });
 
     assert.match(sql, /UPDATE `g5_config` SET cf_theme = 'sungsan'/);
+    assert.match(sql, /cf_member_skin = 'sungsan'/);
+    assert.match(sql, /cf_mobile_member_skin = 'sungsan'/);
+    assert.match(sql, /cf_register_level = '1'/);
     assert.match(sql, /INSERT INTO `g5_group`/);
     assert.match(sql, /gr_id = 'sungsan'/);
     assert.match(sql, /bo_table = 'news'/);
