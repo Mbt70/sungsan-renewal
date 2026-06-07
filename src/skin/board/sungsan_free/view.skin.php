@@ -8,9 +8,9 @@ if (!defined('_GNUBOARD_')) {
         <header class="ss-panel ss-post-header">
             <h1 class="ss-section-title"><?php echo get_text($view['wr_subject']); ?></h1>
             <div class="ss-meta">
-                <span><?php echo $view['name']; ?></span>
-                <span><?php echo $view['datetime']; ?></span>
-                <span>조회 <?php echo number_format($view['wr_hit']); ?></span>
+                <span><?php echo get_text($view['wr_name']); ?></span>
+                <span><?php echo get_text($view['datetime']); ?></span>
+                <span>조회 <?php echo number_format((int) $view['wr_hit']); ?></span>
             </div>
         </header>
         <div class="ss-panel ss-content-panel">
@@ -24,7 +24,7 @@ if (!defined('_GNUBOARD_')) {
                     <div class="ss-attachment-list">
                     <?php for ($i = 0; $i < $view['file']['count']; $i++) { ?>
                         <?php if (!empty($view['file'][$i]['source'])) { ?>
-                            <a class="ss-attachment-row" href="<?php echo $view['file'][$i]['href']; ?>">
+                            <a class="ss-attachment-row" href="<?php echo get_text($view['file'][$i]['href']); ?>">
                                 <span class="ss-file-icon" aria-hidden="true"></span>
                                 <span><?php echo get_text($view['file'][$i]['source']); ?></span>
                                 <strong>내려받기</strong>
@@ -36,9 +36,9 @@ if (!defined('_GNUBOARD_')) {
             <?php } ?>
         </div>
         <div class="ss-action-bar">
-            <a class="ss-button secondary" href="<?php echo $list_href; ?>">목록</a>
-            <?php if ($update_href) { ?><a class="ss-button secondary" href="<?php echo $update_href; ?>">수정</a><?php } ?>
-            <?php if ($delete_href) { ?><a class="ss-button secondary" href="<?php echo $delete_href; ?>" onclick="del(this.href); return false;">삭제</a><?php } ?>
+            <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">목록</a>
+            <?php if ($update_href) { ?><a class="ss-button secondary" href="<?php echo get_text($update_href); ?>">수정</a><?php } ?>
+            <?php if ($delete_href) { ?><a class="ss-button secondary" href="<?php echo get_text($delete_href); ?>" onclick="del(this.href); return false;">삭제</a><?php } ?>
         </div>
     </div>
 </article>

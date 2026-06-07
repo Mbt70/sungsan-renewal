@@ -13,14 +13,14 @@ $visible_count = 0;
         <div class="ss-section-header">
             <h1 class="ss-section-title"><?php echo get_text($board['bo_subject']); ?></h1>
             <?php if ($write_href) { ?>
-                <a class="ss-button" href="<?php echo $write_href; ?>">글쓰기</a>
+                <a class="ss-button" href="<?php echo get_text($write_href); ?>">글쓰기</a>
             <?php } ?>
         </div>
 
         <div class="ss-filter-bar" aria-label="소식 종류">
-            <a class="ss-chip<?php echo sungsan_active_class($current_category, ''); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo $bo_table; ?>">전체</a>
+            <a class="ss-chip<?php echo sungsan_active_class($current_category, ''); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo get_text($bo_table); ?>">전체</a>
             <?php foreach ($sungsan_news_categories as $category) { ?>
-                <a class="ss-chip<?php echo sungsan_active_class($current_category, $category); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo $bo_table; ?>&amp;sca=<?php echo urlencode($category); ?>"><?php echo $category; ?></a>
+                <a class="ss-chip<?php echo sungsan_active_class($current_category, $category); ?>" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=<?php echo get_text($bo_table); ?>&amp;sca=<?php echo urlencode($category); ?>"><?php echo get_text($category); ?></a>
             <?php } ?>
         </div>
 
@@ -45,17 +45,17 @@ $visible_count = 0;
             $group_label = sungsan_get_group_label(isset($list[$i]['wr_1']) ? $list[$i]['wr_1'] : '');
             $visibility = isset($list[$i]['wr_2']) ? $list[$i]['wr_2'] : 'member';
             ?>
-            <a class="ss-post-row" href="<?php echo $list[$i]['href']; ?>">
+            <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
                 <p class="ss-post-title">
                     <?php if ($list[$i]['is_notice']) { ?><span class="ss-badge strong">고정</span><?php } ?>
-                    <?php echo $list[$i]['subject']; ?>
+                    <?php echo get_text($list[$i]['subject']); ?>
                 </p>
                 <div class="ss-meta">
                     <?php if ($list[$i]['ca_name']) { ?><span class="ss-badge"><?php echo get_text($list[$i]['ca_name']); ?></span><?php } ?>
                     <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                     <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
-                    <span><?php echo $list[$i]['datetime2']; ?></span>
-                    <span>조회 <?php echo number_format($list[$i]['wr_hit']); ?></span>
+                    <span><?php echo get_text($list[$i]['datetime2']); ?></span>
+                    <span>조회 <?php echo number_format((int) $list[$i]['wr_hit']); ?></span>
                 </div>
             </a>
         <?php } ?>

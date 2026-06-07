@@ -7,7 +7,7 @@ if (!defined('_GNUBOARD_')) {
     <div class="ss-container">
         <div class="ss-section-header">
             <h1 class="ss-section-title"><?php echo get_text($board['bo_subject']); ?></h1>
-            <?php if ($write_href) { ?><a class="ss-button" href="<?php echo $write_href; ?>">글쓰기</a><?php } ?>
+            <?php if ($write_href) { ?><a class="ss-button" href="<?php echo get_text($write_href); ?>">글쓰기</a><?php } ?>
         </div>
 
         <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($_SERVER['SCRIPT_NAME']); ?>">
@@ -21,12 +21,12 @@ if (!defined('_GNUBOARD_')) {
 
         <div class="ss-post-list">
         <?php for ($i = 0; $i < count($list); $i++) { ?>
-            <a class="ss-post-row" href="<?php echo $list[$i]['href']; ?>">
-                <p class="ss-post-title"><?php echo $list[$i]['subject']; ?></p>
+            <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
+                <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
                 <div class="ss-meta">
-                    <span><?php echo $list[$i]['name']; ?></span>
-                    <span><?php echo $list[$i]['datetime2']; ?></span>
-                    <span>조회 <?php echo number_format($list[$i]['wr_hit']); ?></span>
+                    <span><?php echo get_text($list[$i]['wr_name']); ?></span>
+                    <span><?php echo get_text($list[$i]['datetime2']); ?></span>
+                    <span>조회 <?php echo number_format((int) $list[$i]['wr_hit']); ?></span>
                 </div>
             </a>
         <?php } ?>

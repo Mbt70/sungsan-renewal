@@ -489,6 +489,62 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(news, /><\?php echo \$label; \?><\/option>/);
   });
 
+  it('escapes board list and view links and text metadata before rendering posts', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/list.skin.php',
+      'src/skin/board/sungsan_free/list.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /href="<\?php echo get_text\(\$write_href\); \?>"/, `${file} should escape write_href`);
+      assert.match(source, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/, `${file} should escape post href`);
+      assert.match(source, /get_text\(\$list\[\$i\]\['subject'\]\)/, `${file} should escape subject`);
+      assert.match(source, /get_text\(\$list\[\$i\]\['datetime2'\]\)/, `${file} should escape datetime`);
+      assert.match(source, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/, `${file} should cast hit count`);
+
+      assert.doesNotMatch(source, /href="<\?php echo \$write_href/);
+      assert.doesNotMatch(source, /href="<\?php echo \$list\[\$i\]\['href'\]/);
+      assert.doesNotMatch(source, /echo \$list\[\$i\]\['subject'\]/);
+      assert.doesNotMatch(source, /echo \$list\[\$i\]\['datetime2'\]/);
+      assert.doesNotMatch(source, /number_format\(\$list\[\$i\]\['wr_hit'\]\)/);
+    }
+
+    const freeList = read('src/skin/board/sungsan_free/list.skin.php');
+
+    assert.match(freeList, /get_text\(\$list\[\$i\]\['wr_name'\]\)/);
+    assert.doesNotMatch(freeList, /echo \$list\[\$i\]\['name'\]/);
+
+    const newsList = read('src/skin/board/sungsan_news/list.skin.php');
+
+    assert.match(newsList, /bo_table=<\?php echo get_text\(\$bo_table\); \?>/);
+    assert.match(newsList, /<\?php echo get_text\(\$category\); \?><\/a>/);
+    assert.doesNotMatch(newsList, /bo_table=<\?php echo \$bo_table; \?>/);
+    assert.doesNotMatch(newsList, /><\?php echo \$category; \?><\/a>/);
+
+    for (const file of [
+      'src/skin/board/sungsan_news/view.skin.php',
+      'src/skin/board/sungsan_free/view.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /get_text\(\$view\['datetime'\]\)/, `${file} should escape view datetime`);
+      assert.match(source, /get_text\(\$view\['wr_name'\]\)/, `${file} should escape view author name`);
+      assert.match(source, /number_format\(\(int\) \$view\['wr_hit'\]\)/, `${file} should cast view hit count`);
+      assert.match(source, /href="<\?php echo get_text\(\$view\['file'\]\[\$i\]\['href'\]\); \?>"/, `${file} should escape attachment href`);
+      assert.match(source, /href="<\?php echo get_text\(\$list_href\); \?>"/, `${file} should escape list_href`);
+      assert.match(source, /href="<\?php echo get_text\(\$update_href\); \?>"/, `${file} should escape update_href`);
+      assert.match(source, /href="<\?php echo get_text\(\$delete_href\); \?>"/, `${file} should escape delete_href`);
+
+      assert.doesNotMatch(source, /echo \$view\['datetime'\]/);
+      assert.doesNotMatch(source, /echo \$view\['name'\]/);
+      assert.doesNotMatch(source, /number_format\(\$view\['wr_hit'\]\)/);
+      assert.doesNotMatch(source, /href="<\?php echo \$view\['file'\]\[\$i\]\['href'\]/);
+      assert.doesNotMatch(source, /href="<\?php echo \$list_href/);
+      assert.doesNotMatch(source, /href="<\?php echo \$update_href/);
+      assert.doesNotMatch(source, /href="<\?php echo \$delete_href/);
+    }
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
