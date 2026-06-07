@@ -47,6 +47,22 @@ describe('Cafe24 staging validation handoff', () => {
     }
   });
 
+  it('requires evidence notes for external-only staging checks', () => {
+    const checklist = readFileSync(checklistPath, 'utf8');
+
+    for (const expected of [
+      '증거',
+      '화면 캡처',
+      '명령 출력',
+      '테스트 계정',
+      '보류 사유',
+      '재검수 담당자',
+      '재검수일',
+    ]) {
+      expectIncludes(checklist, expected, checklistPath);
+    }
+  });
+
   it('links the staging checklist from operator-facing docs', () => {
     for (const path of ['README.md', 'docs/operations/cafe24-deployment.md']) {
       const source = readFileSync(path, 'utf8');
