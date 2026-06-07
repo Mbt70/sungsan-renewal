@@ -75,7 +75,7 @@ const DEFAULT_BOARD_SETTINGS = Object.freeze({
   bo_mobile_gallery_width: 125,
   bo_mobile_gallery_height: 100,
   bo_upload_count: 5,
-  bo_upload_size: 10485760,
+  bo_upload_size: 20971520,
   bo_reply_order: 1,
   bo_use_search: 1,
   bo_order: 0,

@@ -34,6 +34,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.equal(news.bo_list_level, 1);
     assert.equal(news.bo_write_level, 6);
     assert.equal(news.bo_upload_level, 6);
+    assert.equal(news.bo_upload_size, 20971520);
     assert.equal(news.bo_download_level, 1);
     assert.equal(news.bo_1_subj, '소속 slug');
     assert.equal(news.bo_2_subj, '공개 범위');
@@ -49,6 +50,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.equal(free.bo_list_level, 1);
     assert.equal(free.bo_read_level, 2);
     assert.equal(free.bo_write_level, 2);
+    assert.equal(free.bo_upload_size, 20971520);
   });
 
   it('escapes SQL strings without changing Korean text', () => {
@@ -62,6 +64,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /bo_table = 'news'/);
     assert.match(sql, /bo_skin = 'sungsan_news'/);
     assert.match(sql, /bo_download_level = '1'/);
+    assert.match(sql, /bo_upload_size = '20971520'/);
     assert.match(sql, /bo_1_subj = '소속 slug'/);
     assert.match(sql, /bo_8_subj = '검토 사유'/);
     assert.match(sql, /bo_category_list = '공지\|행사\|자료\|규정\|활동소식'/);
@@ -107,6 +110,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /gr_id = 'sungsan'/);
     assert.match(sql, /bo_table = 'news'/);
     assert.match(sql, /bo_table = 'free'/);
+    assert.match(sql, /bo_upload_size = '20971520'/);
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_free`/);
   });
