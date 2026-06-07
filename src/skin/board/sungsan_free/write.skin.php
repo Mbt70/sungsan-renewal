@@ -2,6 +2,8 @@
 if (!defined('_GNUBOARD_')) {
     exit;
 }
+
+$sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -50,7 +52,7 @@ if (!defined('_GNUBOARD_')) {
             <?php } ?>
             <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
-                <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">취소</a>
+                <a class="ss-button secondary" href="<?php echo get_text($sungsan_cancel_url); ?>">취소</a>
             </div>
         </form>
     </div>

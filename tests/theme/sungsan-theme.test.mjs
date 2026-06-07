@@ -727,12 +727,12 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/, `${file} should escape action_url`);
       assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
       assert.match(source, /<textarea id="wr_content" name="wr_content" required[^>]*><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
-      assert.match(source, /href="<\?php echo get_text\(\$list_href\); \?>"/, `${file} should escape list_href`);
+      assert.match(source, /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>"/, `${file} should escape cancel url`);
 
       assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
       assert.doesNotMatch(source, /value="<\?php echo \$subject/);
       assert.doesNotMatch(source, /<textarea id="wr_content" name="wr_content" required><\?php echo \$content/);
-      assert.doesNotMatch(source, /href="<\?php echo \$list_href/);
+      assert.doesNotMatch(source, /href="<\?php echo \$sungsan_cancel_url/);
     }
 
     const news = read('src/skin/board/sungsan_news/write.skin.php');
@@ -748,6 +748,31 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(news, /<option value="<\?php echo \$slug; \?>"/);
     assert.doesNotMatch(news, /><\?php echo \$category; \?><\/option>/);
     assert.doesNotMatch(news, /><\?php echo \$label; \?><\/option>/);
+  });
+
+  it('routes board write cancel links to list for new posts and view for edits', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(
+        source,
+        /\$sungsan_cancel_url = \(\$w === 'u' && !empty\(\$wr_id\)\) \? get_pretty_url\(\$bo_table, \$wr_id\) : \$list_href;/,
+        `${file} should return edit cancellations to the current post`,
+      );
+      assert.match(
+        source,
+        /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>">취소<\/a>/,
+        `${file} should render the escaped cancel target`,
+      );
+      assert.doesNotMatch(
+        source,
+        /href="<\?php echo get_text\(\$list_href\); \?>">취소<\/a>/,
+        `${file} should not send every cancellation to the list`,
+      );
+    }
   });
 
   it('escapes board list and view links and text metadata before rendering posts', () => {

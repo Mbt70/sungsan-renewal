@@ -11,6 +11,7 @@ $legacy_board_id = isset($write['wr_5']) ? get_text($write['wr_5']) : '';
 $legacy_post_id = isset($write['wr_6']) ? get_text($write['wr_6']) : '';
 $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
 $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
+$sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -108,7 +109,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 
             <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
-                <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">취소</a>
+                <a class="ss-button secondary" href="<?php echo get_text($sungsan_cancel_url); ?>">취소</a>
             </div>
         </form>
     </div>
