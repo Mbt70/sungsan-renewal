@@ -259,6 +259,21 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$return_url\)/);
   });
 
+  it('keeps board detail URLs raw until the render layer escapes them', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+    const mypage = read('src/pages/mypage.php');
+
+    assert.match(extend, /function sungsan_board_href\(\$bo_table, \$wr_id = 0\)/);
+    assert.match(extend, /\$href = G5_BBS_URL\.'\/board\.php\?bo_table='\.urlencode\(\$bo_table\);/);
+    assert.match(extend, /\$href \.= '&wr_id='\.\(int\) \$wr_id;/);
+    assert.doesNotMatch(extend, /\$href \.= '&amp;wr_id='/);
+
+    assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
+    assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_media_href\); \?>"/);
+    assert.match(mypage, /href="<\?php echo get_text\(\$recent_posts\[\$i\]\['href'\]\); \?>"/);
+  });
+
   it('loads operator-managed Sungsan group labels from the data directory', () => {
     const source = read('src/extend/sungsan.php');
 

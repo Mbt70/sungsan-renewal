@@ -373,7 +373,7 @@ function sungsan_board_href($bo_table, $wr_id = 0)
     $href = G5_BBS_URL.'/board.php?bo_table='.urlencode($bo_table);
 
     if ($wr_id) {
-        $href .= '&amp;wr_id='.(int) $wr_id;
+        $href .= '&wr_id='.(int) $wr_id;
     }
 
     return $href;
