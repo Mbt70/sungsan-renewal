@@ -197,8 +197,10 @@ describe('sungsan theme static contract', () => {
   it('returns guests to the current page after header login', () => {
     const head = read('src/theme/sungsan/head.php');
 
-    assert.match(head, /\$ss_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$_SERVER\['REQUEST_URI'\]\);/);
+    assert.match(head, /\$ss_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
+    assert.match(head, /\$ss_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$ss_request_uri\);/);
     assert.match(head, /<a class="ss-account-link" href="<\?php echo get_text\(\$ss_login_url\); \?>">로그인<\/a>/);
+    assert.doesNotMatch(head, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
     assert.doesNotMatch(head, /href="<\?php echo G5_BBS_URL; \?>\/login\.php">로그인<\/a>/);
   });
 
@@ -1515,9 +1517,12 @@ describe('sungsan theme static contract', () => {
 
     assert.match(view, /global \$is_member;/);
     assert.match(view, /\$sungsan_show_login_cta = !\$is_member && !sungsan_is_review_restricted\(\$view\);/);
+    assert.match(view, /\$sungsan_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
+    assert.match(view, /\$sungsan_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$sungsan_request_uri\);/);
     assert.match(view, /권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다\./);
     assert.match(view, /현재 계정으로는 이 글을 열람할 수 없습니다\./);
     assert.match(view, /<\?php if \(\$sungsan_show_login_cta\) \{ \?>[\s\S]*?로그인[\s\S]*?<\?php \} else \{ \?>[\s\S]*?목록으로 돌아가기/);
+    assert.doesNotMatch(view, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
   });
 
   it('keeps restricted news visible in lists while marking posts that need permission', () => {
@@ -1561,10 +1566,12 @@ describe('sungsan theme static contract', () => {
     const view = read('src/skin/board/sungsan_free/view.skin.php');
 
     assert.match(view, /global \$is_member;/);
-    assert.match(view, /\$sungsan_free_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$_SERVER\['REQUEST_URI'\]\);/);
+    assert.match(view, /\$sungsan_free_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
+    assert.match(view, /\$sungsan_free_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$sungsan_free_request_uri\);/);
     assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$sungsan_view_content\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
     assert.match(view, /회원 전용 자유게시판 글입니다/);
     assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);
+    assert.doesNotMatch(view, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
   });
 
   it('blocks direct free-board attachment downloads for guests', () => {

@@ -15,7 +15,8 @@ $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
 $can_read = sungsan_can_read_news_post($view);
 $sungsan_show_login_cta = !$is_member && !sungsan_is_review_restricted($view);
-$sungsan_login_url = G5_BBS_URL.'/login.php?url='.urlencode($_SERVER['REQUEST_URI']);
+$sungsan_request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$sungsan_login_url = G5_BBS_URL.'/login.php?url='.urlencode($sungsan_request_uri);
 if (sungsan_is_review_restricted($view)) {
     $access_message = '운영자 검토 전 비공개 글입니다.';
 } elseif ($sungsan_show_login_cta) {

@@ -27,7 +27,8 @@ $ss_news_url = G5_BBS_URL.'/board.php?bo_table=news';
 $ss_free_url = G5_BBS_URL.'/board.php?bo_table=free';
 $ss_search_action_url = G5_BBS_URL.'/board.php';
 $ss_mypage_url = G5_URL.'/sungsan/mypage.php';
-$ss_login_url = G5_BBS_URL.'/login.php?url='.urlencode($_SERVER['REQUEST_URI']);
+$ss_request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$ss_login_url = G5_BBS_URL.'/login.php?url='.urlencode($ss_request_uri);
 $ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
 ?>
 <a href="#container" class="ss-skip-link">본문 바로가기</a>

@@ -10,7 +10,8 @@ $sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
 $sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
 $sungsan_view_hits = isset($view['wr_hit']) ? (int) $view['wr_hit'] : 0;
 $sungsan_view_content = isset($view['content']) ? $view['content'] : '';
-$sungsan_free_login_url = G5_BBS_URL.'/login.php?url='.urlencode($_SERVER['REQUEST_URI']);
+$sungsan_free_request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+$sungsan_free_login_url = G5_BBS_URL.'/login.php?url='.urlencode($sungsan_free_request_uri);
 ?>
 <article class="ss-section">
     <div class="ss-container">
