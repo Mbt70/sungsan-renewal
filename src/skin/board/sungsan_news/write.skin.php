@@ -88,7 +88,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
                 <div class="ss-field">
                     <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                     <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>">
-                    <p class="ss-form-help">사진과 문서 파일을 첨부할 수 있습니다. 실행 파일은 업로드하지 않습니다.</p>
+                    <p class="ss-form-help">사진과 문서 파일을 첨부할 수 있습니다. PHP, HTML, JS, SVG처럼 브라우저에서 실행될 수 있는 파일은 업로드할 수 없습니다.</p>
                     <?php if ($w === 'u' && isset($file[$i]['file']) && $file[$i]['file']) { ?>
                         <label class="ss-checkline">
                             <input type="checkbox" name="bf_file_del[<?php echo $i; ?>]" value="1">

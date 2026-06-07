@@ -714,4 +714,17 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /alert\(/);
     }
   });
+
+  it('shows blocked upload extension guidance on board write forms', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /PHP, HTML, JS, SVG/, `${file} should name blocked active file types`);
+      assert.match(source, /업로드할 수 없습니다/, `${file} should explain blocked files cannot be uploaded`);
+      assert.doesNotMatch(source, /실행 파일은 업로드하지 않습니다\./, `${file} should avoid vague upload guidance`);
+    }
+  });
 });
