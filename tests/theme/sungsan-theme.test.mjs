@@ -1426,9 +1426,12 @@ describe('sungsan theme static contract', () => {
 
     for (const [file, field] of cases) {
       const source = read(file);
+      const fieldLine = source.split('\n').find((line) => line.includes(`id="${field}"`));
 
       assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible search label`);
       assert.doesNotMatch(source, new RegExp(`<label[^>]*class="sound_only"[^>]*for="${field}"`), `${file} should not hide the search label`);
+      assert.ok(fieldLine, `${file} should render ${field}`);
+      assert.doesNotMatch(fieldLine, /placeholder=/, `${file} should not duplicate the search label as placeholder`);
       assert.match(source, /<div class="ss-search-row">/, `${file} should keep search input and button grouped`);
     }
   });

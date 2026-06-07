@@ -21,7 +21,7 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label for="free_board_stx">검색어</label>
             <div class="ss-search-row">
-                <input id="free_board_stx" name="stx" type="search" value="<?php echo get_text($sungsan_free_search_term); ?>" enterkeyhint="search" placeholder="제목과 내용을 검색">
+                <input id="free_board_stx" name="stx" type="search" value="<?php echo get_text($sungsan_free_search_term); ?>" enterkeyhint="search">
                 <button type="submit">검색</button>
             </div>
         </form>
