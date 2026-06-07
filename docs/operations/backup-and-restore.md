@@ -7,6 +7,8 @@
 - 새 사이트 운영 전환 직전 `www/data`
 
 ## Local Restore Drill
+리허설 산출물은 `docs/migration/rehearsal-tools.md`의 도구로 생성합니다. 회원 SQL은 비밀번호 재설정 플래그를 포함해야 하고, 첨부 복사 계획은 `news/free` 대상만 포함해야 합니다.
+
 1. DB 덤프를 로컬 `backups/`에 둡니다.
 2. EUC-KR 덤프는 UTF-8 변환 후 별도 파일로 저장합니다.
 3. Docker DB에 복원합니다.

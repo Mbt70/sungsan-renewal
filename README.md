@@ -53,6 +53,15 @@ npm run verify
 node tools/migration/redirect-map.mjs .\migration-output.json .\redirects.csv csv
 node tools/migration/redirect-map.mjs .\migration-output.json .\redirects-apache.txt apache
 ```
+
+회원, 첨부, 리허설 요약 산출물은 다음 도구로 분리해 만듭니다.
+```powershell
+node tools/migration/member-transform.mjs .\members.jsonl .\members-import.sql
+node tools/migration/file-plan.mjs .\attachments.jsonl .\attachment-copy-plan.json .\board-file-import.sql
+node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-summary.json
+```
+
+회원 비밀번호 해시는 이전하지 않으며, 첨부 계획은 `news/free`로 실제 이전된 글만 대상으로 합니다. 자세한 기준은 `docs/migration/rehearsal-tools.md`를 확인합니다.
 `z6_2`, `z6_3`, 소개 페이지 대상 글은 redirect에서 제외되고 `news/free`로 실제 이전된 글만 포함됩니다.
 
 그누보드5 코어를 내려받은 뒤 설정 SQL을 갱신하려면 다음을 실행합니다.

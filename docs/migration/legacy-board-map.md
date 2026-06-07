@@ -46,6 +46,9 @@
 - `wr_8`: 검토 사유. 예: `possible-member-directory`
 
 ## Migration Rule
+- `tools/migration/member-transform.mjs`는 기존 회원 기본 정보와 권한만 `g5_member`로 옮기는 SQL을 만들고, 레거시 비밀번호 해시는 버립니다. 모든 이전 회원은 `mb_3=password_reset_required`로 표시합니다.
+- `tools/migration/file-plan.mjs`는 `news/free`로 실제 이전된 글의 첨부만 `data/file/{target_board}` 복사 계획과 `g5_board_file` SQL로 만듭니다. `z6_2`, `z6_3`, `intro`, `exclude` 대상 첨부는 산출물에서 제외합니다.
+- `tools/migration/rehearsal-summary.mjs`는 글, 회원, 첨부, redirect, 수동 검토 플래그 수를 JSON으로 요약해 운영자 검수표와 대조합니다.
 - 기존 글 ID와 보드 ID는 항상 보존합니다.
 - 첨부파일은 기존 `/renewal/data/file/{bo_table}`에서 새 `data/file/{target_board}`로 복사합니다.
 - 회원 비밀번호는 그대로 이전하지 않습니다. 기본 정보와 권한만 이전하고 재설정 절차를 사용합니다.
