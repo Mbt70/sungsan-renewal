@@ -314,6 +314,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\sstyle=/);
   });
 
+  it('focuses the guest sender name field before subject in the form mail popup', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+
+    assert.match(source, /if \(typeof fnick != "undefined"\)\s*fnick\.focus\(\);/);
+    assert.match(source, /else if \(typeof subject != "undefined"\)\s*subject\.focus\(\);/);
+    assert.doesNotMatch(source, /typeof fname/);
+    assert.doesNotMatch(source, /fname\.focus/);
+  });
+
   it('escapes member confirmation form values before rendering the password confirmation screen', () => {
     const source = read('src/skin/member/sungsan/member_confirm.skin.php');
 

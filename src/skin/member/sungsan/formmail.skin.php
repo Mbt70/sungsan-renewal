@@ -81,8 +81,8 @@ $formmail_action_url = './formmail_send.php';
 
 <script>
 with (document.fformmail) {
-    if (typeof fname != "undefined")
-        fname.focus();
+    if (typeof fnick != "undefined")
+        fnick.focus();
     else if (typeof subject != "undefined")
         subject.focus();
 }
