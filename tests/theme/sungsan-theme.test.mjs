@@ -455,6 +455,18 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('styles visible account utility labels and textareas for scan-friendly forms', () => {
+    const css = read('src/skin/member/sungsan/style.css');
+
+    assert.match(css, /#info_fs\s*>\s*label:not\(\.sound_only\)/);
+    assert.match(css, /\.form_01\s+li\s*>\s*label:not\(\.sound_only\)/);
+    assert.match(css, /display:\s*block/);
+    assert.match(css, /margin-bottom:\s*6px/);
+    assert.match(css, /font-weight:\s*800/);
+    assert.match(css, /\.form_01\s+textarea/);
+    assert.match(css, /min-height:\s*180px/);
+  });
+
   it('keeps static label targets connected to fields in custom PHP templates', () => {
     for (const file of phpFilesUnder('src')) {
       const source = read(file);

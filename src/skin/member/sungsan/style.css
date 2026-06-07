@@ -70,6 +70,27 @@
   padding: 0;
 }
 
+#info_fs > label:not(.sound_only),
+.form_01 li > label:not(.sound_only) {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 800;
+}
+
+#info_fs > label:not(.sound_only) strong,
+.form_01 li > label:not(.sound_only) strong {
+  color: var(--ss-color-danger, #b42318);
+  font-size: 0.95em;
+}
+
+.form_01 ul {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .frm_input,
 .full_input,
 .mbskin input[type="text"],
@@ -85,6 +106,16 @@
   border-radius: var(--ss-radius-md, 8px);
   padding: 12px;
   font: inherit;
+}
+
+.form_01 textarea {
+  width: 100%;
+  min-height: 180px;
+  border: 1px solid var(--ss-color-border-strong, #c7cedb);
+  border-radius: var(--ss-radius-md, 8px);
+  padding: 12px;
+  font: inherit;
+  resize: vertical;
 }
 
 .register textarea {
