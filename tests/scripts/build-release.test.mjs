@@ -45,6 +45,33 @@ describe('release build script', () => {
     assert.match(source, /Release checksum created/);
   });
 
+  it('keeps accidental secrets dumps backups and deployment keys out of the release zip', () => {
+    const source = readFileSync(path.join(process.cwd(), 'scripts', 'build-release.ps1'), 'utf8');
+    const runbook = readFileSync(path.join(process.cwd(), 'docs', 'operations', 'cafe24-deployment.md'), 'utf8');
+
+    for (const directory of ['backup', 'backups', 'dumps', 'secrets', 'release']) {
+      assert.match(source, new RegExp(`"${directory}"`));
+    }
+
+    for (const pattern of [
+      '^\\.env($|\\.)',
+      'dbconfig\\.php$',
+      '\\.(sql|dump|bak)$',
+      '\\.sql\\.(gz|zip)$',
+      '\\.(pem|key|ppk|p12)$',
+    ]) {
+      assert.match(source, new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    }
+
+    assert.match(source, /releaseDenyFilePatterns/);
+    assert.match(source, /foreach \(\$pattern in \$releaseDenyFilePatterns\)/);
+    assert.match(source, /if \(\$fileName -match \$pattern\)/);
+    assert.match(runbook, /\.env/);
+    assert.match(runbook, /DB dump/);
+    assert.match(runbook, /백업/);
+    assert.match(runbook, /비밀키/);
+  });
+
   it('documents checksum verification in the Cafe24 runbook', () => {
     const source = readFileSync(path.join(process.cwd(), 'docs', 'operations', 'cafe24-deployment.md'), 'utf8');
 

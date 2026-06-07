@@ -37,14 +37,23 @@ function Test-ReleaseFileAllowed {
     )
 
     $normalizedPath = $RelativePath.Replace("/", "\")
-    $topLevelDirectory = ($normalizedPath -split "\\")[0]
+    $pathSegments = $normalizedPath -split "\\"
+    $fileName = [System.IO.Path]::GetFileName($normalizedPath)
 
-    if ($excludeDirectories -contains $topLevelDirectory) {
-        return $false
+    foreach ($excludedDirectory in $excludeDirectories) {
+        if ($pathSegments -contains $excludedDirectory) {
+            return $false
+        }
     }
 
     foreach ($deniedPath in $releaseDenyPaths) {
         if ($normalizedPath.Equals($deniedPath, [System.StringComparison]::OrdinalIgnoreCase)) {
+            return $false
+        }
+    }
+
+    foreach ($pattern in $releaseDenyFilePatterns) {
+        if ($fileName -match $pattern) {
             return $false
         }
     }
@@ -60,7 +69,7 @@ if (Test-Path -LiteralPath $zipPath) {
     Remove-Item -LiteralPath $zipPath -Force
 }
 
-$excludeDirectories = @("data", "install", "shop")
+$excludeDirectories = @("data", "install", "shop", "backup", "backups", "dumps", "secrets", "release")
 $releaseDenyPaths = @(
     "g4_import.php",
     "g4_import_run.php",
@@ -69,6 +78,13 @@ $releaseDenyPaths = @(
     "orderupgrade.php",
     "shop.config.php",
     "adm\phpinfo.php"
+)
+$releaseDenyFilePatterns = @(
+    '^\.env($|\.)',
+    'dbconfig\.php$',
+    '\.sql\.(gz|zip)$',
+    '\.(sql|dump|bak)$',
+    '\.(pem|key|ppk|p12)$'
 )
 
 $wwwRoot = Join-Path $root "www"
