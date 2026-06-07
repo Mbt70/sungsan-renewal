@@ -22,6 +22,12 @@ const SUNGSAN_CONFIG_SETTINGS = Object.freeze({
   cf_req_profile: 0,
   cf_use_recommend: 0,
   cf_use_member_icon: 0,
+  cf_member_icon_size: 0,
+  cf_member_icon_width: 0,
+  cf_member_icon_height: 0,
+  cf_member_img_size: 0,
+  cf_member_img_width: 0,
+  cf_member_img_height: 0,
 });
 
 const DEFAULT_BOARD_SETTINGS = Object.freeze({

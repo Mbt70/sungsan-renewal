@@ -19,7 +19,13 @@ UPDATE `g5_config` SET
     cf_use_profile = '0',
     cf_req_profile = '0',
     cf_use_recommend = '0',
-    cf_use_member_icon = '0';
+    cf_use_member_icon = '0',
+    cf_member_icon_size = '0',
+    cf_member_icon_width = '0',
+    cf_member_icon_height = '0',
+    cf_member_img_size = '0',
+    cf_member_img_width = '0',
+    cf_member_img_height = '0';
 
 INSERT INTO `g5_group` SET
     gr_id = 'sungsan',

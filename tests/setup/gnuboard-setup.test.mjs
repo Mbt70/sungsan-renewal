@@ -94,6 +94,12 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /cf_use_profile = '0'/);
     assert.match(sql, /cf_use_recommend = '0'/);
     assert.match(sql, /cf_use_member_icon = '0'/);
+    assert.match(sql, /cf_member_icon_size = '0'/);
+    assert.match(sql, /cf_member_icon_width = '0'/);
+    assert.match(sql, /cf_member_icon_height = '0'/);
+    assert.match(sql, /cf_member_img_size = '0'/);
+    assert.match(sql, /cf_member_img_width = '0'/);
+    assert.match(sql, /cf_member_img_height = '0'/);
     assert.match(sql, /INSERT INTO `g5_group`/);
     assert.match(sql, /gr_id = 'sungsan'/);
     assert.match(sql, /bo_table = 'news'/);
