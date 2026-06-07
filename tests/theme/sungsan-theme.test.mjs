@@ -314,11 +314,14 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\sstyle=/);
   });
 
-  it('focuses the guest sender name field before subject in the form mail popup', () => {
+  it('focuses the visible guest sender name field before falling back to subject in the form mail popup', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
 
-    assert.match(source, /if \(typeof fnick != "undefined"\)\s*fnick\.focus\(\);/);
-    assert.match(source, /else if \(typeof subject != "undefined"\)\s*subject\.focus\(\);/);
+    assert.match(source, /const senderNameField = document\.getElementById\('fnick'\);/);
+    assert.match(source, /const subjectField = document\.fformmail\.subject;/);
+    assert.match(source, /if \(senderNameField\) \{\s*senderNameField\.focus\(\);/);
+    assert.match(source, /\} else if \(subjectField\) \{\s*subjectField\.focus\(\);/);
+    assert.doesNotMatch(source, /with \(document\.fformmail\)/);
     assert.doesNotMatch(source, /typeof fname/);
     assert.doesNotMatch(source, /fname\.focus/);
   });

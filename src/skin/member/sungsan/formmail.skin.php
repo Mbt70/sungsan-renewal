@@ -80,11 +80,13 @@ $formmail_action_url = './formmail_send.php';
 </div>
 
 <script>
-with (document.fformmail) {
-    if (typeof fnick != "undefined")
-        fnick.focus();
-    else if (typeof subject != "undefined")
-        subject.focus();
+const senderNameField = document.getElementById('fnick');
+const subjectField = document.fformmail.subject;
+
+if (senderNameField) {
+    senderNameField.focus();
+} else if (subjectField) {
+    subjectField.focus();
 }
 
 function fformmail_submit(f)
