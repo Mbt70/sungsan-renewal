@@ -5,6 +5,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $formmail_action_url = './formmail_send.php';
+$formmail_member_nick = isset($member['mb_nick']) ? $member['mb_nick'] : '';
+$formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
 ?>
 
 <!-- 폼메일 시작 { -->
@@ -15,8 +17,8 @@ $formmail_action_url = './formmail_send.php';
     <input type="hidden" name="to" value="<?php echo get_text($email); ?>">
     <input type="hidden" name="attach" value="2">
     <?php if ($is_member) { // 회원이면  ?>
-    <input type="hidden" name="fnick" value="<?php echo get_text($member['mb_nick']) ?>">
-    <input type="hidden" name="fmail" value="<?php echo get_text($member['mb_email']); ?>">
+    <input type="hidden" name="fnick" value="<?php echo get_text($formmail_member_nick); ?>">
+    <input type="hidden" name="fmail" value="<?php echo get_text($formmail_member_email); ?>">
     <?php }  ?>
 
     <div class="form_01 new_win_con">
