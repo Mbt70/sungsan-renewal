@@ -47,7 +47,7 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
                     <header class="ss-comment-header">
                         <strong><?php echo get_text($sungsan_comment_author); ?></strong>
                         <?php if ($sungsan_comment_secret) { ?><span class="ss-badge">비밀댓글</span><?php } ?>
-                        <time><?php echo get_text($sungsan_comment_datetime); ?></time>
+                        <time datetime="<?php echo get_text($sungsan_comment_datetime); ?>"><?php echo get_text($sungsan_comment_datetime); ?></time>
                     </header>
                     <div class="ss-comment-content">
                         <?php echo $sungsan_comment_content; ?>

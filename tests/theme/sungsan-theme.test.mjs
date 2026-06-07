@@ -1788,6 +1788,14 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-comment-content-label\s*\{[\s\S]*?font-weight:\s*800;/);
   });
 
+  it('renders free-board comment dates as semantic time elements', () => {
+    const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
+
+    assert.match(comment, /\$sungsan_comment_datetime = isset\(\$sungsan_comment_row\['datetime'\]\) \? \$sungsan_comment_row\['datetime'\] : '';/);
+    assert.match(comment, /<time datetime="<\?php echo get_text\(\$sungsan_comment_datetime\); \?>"><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>/);
+    assert.doesNotMatch(comment, /<time><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>/);
+  });
+
   it('blocks direct free-board attachment downloads for guests', () => {
     const file = 'src/skin/board/sungsan_free/download.head.skin.php';
 
