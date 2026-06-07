@@ -328,9 +328,11 @@ describe('sungsan theme static contract', () => {
         expected: [
           /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href_wr_id'\]\); \?>"/,
+          /class="scrap_tit" target="_blank" rel="noopener noreferrer"/,
           /onclick="opener\.document\.location\.href=this\.href; return false;"/,
           /<\?php echo get_text\(\$list\[\$i\]\['subject'\]\); \?>/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href'\]\); \?>"/,
+          /class="scrap_cate" target="_blank" rel="noopener noreferrer"/,
           /<\?php echo get_text\(\$list\[\$i\]\['bo_subject'\]\); \?>/,
           /<\?php echo get_text\(\$list\[\$i\]\['ms_datetime'\]\); \?>/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,

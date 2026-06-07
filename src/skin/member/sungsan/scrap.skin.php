@@ -11,8 +11,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     <ul>
         <?php for ($i=0; $i<count($list); $i++) {  ?>
         <li>
-            <a href="<?php echo get_text($list[$i]['opener_href_wr_id']); ?>" class="scrap_tit" target="_blank" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['subject']); ?></a>
-            <a href="<?php echo get_text($list[$i]['opener_href']); ?>" class="scrap_cate" target="_blank" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['bo_subject']); ?></a>
+            <a href="<?php echo get_text($list[$i]['opener_href_wr_id']); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['subject']); ?></a>
+            <a href="<?php echo get_text($list[$i]['opener_href']); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['bo_subject']); ?></a>
             <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['ms_datetime']); ?></span>
             <a href="<?php echo get_text($list[$i]['del_href']); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i><span class="sound_only">삭제</span></a>
         </li>
