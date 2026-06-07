@@ -33,4 +33,24 @@ describe('release build script', () => {
     assert.match(source, /if \(-not \(Test-ReleaseFileAllowed -RelativePath \$relativePath\)\)/);
     assert.doesNotMatch(source, /stagingPath/);
   });
+
+  it('creates a SHA256 checksum beside the deployment zip', () => {
+    const source = readFileSync(path.join(process.cwd(), 'scripts', 'build-release.ps1'), 'utf8');
+
+    assert.match(source, /Get-FileHash/);
+    assert.match(source, /-Algorithm SHA256/);
+    assert.match(source, /\$checksumPath/);
+    assert.match(source, /\.sha256/);
+    assert.match(source, /Set-Content/);
+    assert.match(source, /Release checksum created/);
+  });
+
+  it('documents checksum verification in the Cafe24 runbook', () => {
+    const source = readFileSync(path.join(process.cwd(), 'docs', 'operations', 'cafe24-deployment.md'), 'utf8');
+
+    assert.match(source, /SHA256/);
+    assert.match(source, /Get-FileHash/);
+    assert.match(source, /\.sha256/);
+    assert.match(source, /SFTP/);
+  });
 });

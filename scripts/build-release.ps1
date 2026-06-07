@@ -96,4 +96,10 @@ try {
     $zipArchive.Dispose()
 }
 
+$zipHash = Get-FileHash -LiteralPath $zipPath -Algorithm SHA256
+$checksumPath = "$zipPath.sha256"
+$checksumLine = "$($zipHash.Hash)  $(Split-Path -Leaf $zipPath)"
+Set-Content -LiteralPath $checksumPath -Value $checksumLine -Encoding UTF8
+
 Write-Host "Release artifact created: $zipPath"
+Write-Host "Release checksum created: $checksumPath"

@@ -19,14 +19,15 @@
 ## 3. 스테이징 배포
 1. `npm run verify`를 실행합니다.
 2. `docs/migration/rehearsal-tools.md` 기준으로 회원 SQL, 첨부 복사 계획, `board_file` SQL, redirect 초안, 리허설 요약 JSON을 생성해 검수합니다.
-3. `scripts/build-release.ps1`로 배포 zip을 만듭니다.
-4. Cafe24의 임시 경로에 압축을 풉니다.
-5. 새 DB를 만들거나 스테이징용 테이블 prefix를 사용합니다.
-6. 그누보드 설치 후 `npm run export:setup-sql`로 생성한 `docs/generated/sungsan-setup.sql`을 검토해 적용합니다.
-7. `docs/operations/data-htaccess-template.txt` 내용을 그누보드 설치 경로의 `data/.htaccess`로 복사합니다. 배포 zip은 `/data`를 제외하므로 스테이징과 운영 전환 때 모두 직접 적용합니다.
-8. 관리자에서 테마 `sungsan`, 회원 스킨 `sungsan`, 게시판 스킨 `sungsan_news/sungsan_free`, 권한, 분류, 업로드 제한이 의도대로 잡혔는지 확인합니다.
-9. 이전 리허설 데이터를 반영합니다. `wr_7=review_required` 글은 운영자 검토 전 공개하지 않습니다.
-10. 변환 결과로 redirect CSV와 Apache 초안을 생성하고 운영 전환 전에 샘플 URL을 확인합니다.
+3. `scripts/build-release.ps1`로 배포 zip과 `.sha256` 체크섬 파일을 만듭니다.
+4. SFTP 업로드 전 로컬에서 `Get-FileHash -Algorithm SHA256 release/sungsan-site-*.zip` 값이 `.sha256` 파일과 일치하는지 확인합니다.
+5. Cafe24의 임시 경로에 zip과 `.sha256` 파일을 업로드한 뒤 서버에서 다시 SHA256 값을 대조하고 압축을 풉니다.
+6. 새 DB를 만들거나 스테이징용 테이블 prefix를 사용합니다.
+7. 그누보드 설치 후 `npm run export:setup-sql`로 생성한 `docs/generated/sungsan-setup.sql`을 검토해 적용합니다.
+8. `docs/operations/data-htaccess-template.txt` 내용을 그누보드 설치 경로의 `data/.htaccess`로 복사합니다. 배포 zip은 `/data`를 제외하므로 스테이징과 운영 전환 때 모두 직접 적용합니다.
+9. 관리자에서 테마 `sungsan`, 회원 스킨 `sungsan`, 게시판 스킨 `sungsan_news/sungsan_free`, 권한, 분류, 업로드 제한이 의도대로 잡혔는지 확인합니다.
+10. 이전 리허설 데이터를 반영합니다. `wr_7=review_required` 글은 운영자 검토 전 공개하지 않습니다.
+11. 변환 결과로 redirect CSV와 Apache 초안을 생성하고 운영 전환 전에 샘플 URL을 확인합니다.
 
 ## 4. 검수
 - 모바일 375px, 태블릿, 데스크톱에서 홈/소개/소식/자유게시판 확인
