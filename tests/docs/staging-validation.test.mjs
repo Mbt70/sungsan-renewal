@@ -145,4 +145,19 @@ describe('Cafe24 staging validation handoff', () => {
       expectIncludes(checklist, expected, checklistPath);
     }
   });
+
+  it('documents numeric PHP attachment extension checks for operators', () => {
+    for (const path of [
+      checklistPath,
+      'docs/operations/security-checklist.md',
+      'docs/operations/backup-and-restore.md',
+      'docs/migration/rehearsal-tools.md',
+    ]) {
+      const source = readFileSync(path, 'utf8');
+
+      for (const expected of ['shell.php7', 'shell.php8']) {
+        expectIncludes(source, expected, path);
+      }
+    }
+  });
 });
