@@ -3,6 +3,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$member_confirm_mb_id = isset($member['mb_id']) ? $member['mb_id'] : '';
 ?>
 
 <!-- 회원 비밀번호 확인 시작 { -->
@@ -19,12 +21,12 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     </p>
 
     <form name="fmemberconfirm" action="<?php echo get_text($url); ?>" onsubmit="return fmemberconfirm_submit(this);" method="post">
-    <input type="hidden" name="mb_id" value="<?php echo get_text($member['mb_id']); ?>">
+    <input type="hidden" name="mb_id" value="<?php echo get_text($member_confirm_mb_id); ?>">
     <input type="hidden" name="w" value="u">
 
     <fieldset>
         <span class="confirm_id">회원아이디</span>
-        <span id="mb_confirm_id"><?php echo get_text($member['mb_id']); ?></span>
+        <span id="mb_confirm_id"><?php echo get_text($member_confirm_mb_id); ?></span>
         <label for="confirm_mb_password">비밀번호 <strong>필수</strong></label>
         <input type="password" name="mb_password" id="confirm_mb_password" required class="required frm_input" size="15" maxLength="20" placeholder="비밀번호">
         <input type="submit" value="확인" id="btn_submit" class="btn_submit">

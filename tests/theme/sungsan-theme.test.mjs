@@ -424,11 +424,12 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /<h1><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/);
     assert.match(source, /action="<\?php echo get_text\(\$url\); \?>"/);
-    assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
-    assert.match(source, /id="mb_confirm_id"><\?php echo get_text\(\$member\['mb_id'\]\); \?><\/span>/);
+    assert.match(source, /\$member_confirm_mb_id = isset\(\$member\['mb_id'\]\) \? \$member\['mb_id'\] : '';/);
+    assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member_confirm_mb_id\); \?>"/);
+    assert.match(source, /id="mb_confirm_id"><\?php echo get_text\(\$member_confirm_mb_id\); \?><\/span>/);
     assert.doesNotMatch(source, /echo\s+\$g5\['title'\]/);
     assert.doesNotMatch(source, /echo\s+\$url(?:\s|\?>)/);
-    assert.doesNotMatch(source, /echo\s+\$member\['mb_id'\]/);
+    assert.doesNotMatch(source, /get_text\(\$member\['mb_id'\]\)/);
   });
 
   it('escapes certification refresh hidden member values before rendering the form', () => {
