@@ -86,6 +86,9 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /cf_member_skin = 'sungsan'/);
     assert.match(sql, /cf_mobile_member_skin = 'sungsan'/);
     assert.match(sql, /cf_register_level = '1'/);
+    assert.match(sql, /-- account policy: 신규 가입은 cf_register_level=1로 대기 상태이며 운영자 승인 후 권한을 부여합니다\./);
+    assert.match(sql, /-- account policy: 기본 admin ID를 사용하지 않고 실명 운영자 계정만 유지합니다\./);
+    assert.match(sql, /-- account policy: 임원은 mb_level >= 6, 운영자는 mb_level = 10으로 분리합니다\./);
     assert.match(sql, /cf_use_homepage = '0'/);
     assert.match(sql, /cf_req_homepage = '0'/);
     assert.match(sql, /cf_use_addr = '0'/);
@@ -130,6 +133,9 @@ describe('sungsan gnuboard setup config', () => {
     const expectedSql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate: writeTableTemplate });
 
     assert.equal(generatedSql, expectedSql);
+    assert.match(generatedSql, /-- account policy: 신규 가입은 cf_register_level=1로 대기 상태이며 운영자 승인 후 권한을 부여합니다\./);
+    assert.match(generatedSql, /-- account policy: 기본 admin ID를 사용하지 않고 실명 운영자 계정만 유지합니다\./);
+    assert.match(generatedSql, /-- account policy: 임원은 mb_level >= 6, 운영자는 mb_level = 10으로 분리합니다\./);
     assert.match(generatedSql, /-- news: 통합 소식 게시판/);
     assert.match(generatedSql, /-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
     assert.match(generatedSql, /-- news write access: 작성\/수정\/삭제\/첨부 업로드는 임원 이상/);

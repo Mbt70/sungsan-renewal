@@ -2,6 +2,10 @@
 
 -- Review on staging before applying to production.
 
+-- account policy: 신규 가입은 cf_register_level=1로 대기 상태이며 운영자 승인 후 권한을 부여합니다.
+-- account policy: 기본 admin ID를 사용하지 않고 실명 운영자 계정만 유지합니다.
+-- account policy: 임원은 mb_level >= 6, 운영자는 mb_level = 10으로 분리합니다.
+
 UPDATE `g5_config` SET
     cf_theme = 'sungsan',
     cf_title = '성산회',

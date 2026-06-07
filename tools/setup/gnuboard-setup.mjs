@@ -201,6 +201,14 @@ export function buildThemeUpdateSql({ tablePrefix = DEFAULT_TABLE_PREFIX } = {})
   return `UPDATE ${prefixedTable('config', tablePrefix)} SET\n${buildSetClause(SUNGSAN_CONFIG_SETTINGS)};`;
 }
 
+export function buildAccountPolicyComment() {
+  return [
+    '-- account policy: 신규 가입은 cf_register_level=1로 대기 상태이며 운영자 승인 후 권한을 부여합니다.',
+    '-- account policy: 기본 admin ID를 사용하지 않고 실명 운영자 계정만 유지합니다.',
+    '-- account policy: 임원은 mb_level >= 6, 운영자는 mb_level = 10으로 분리합니다.',
+  ].join('\n');
+}
+
 export function buildSetupSql({
   tablePrefix = DEFAULT_TABLE_PREFIX,
   writeSqlTemplate,
@@ -213,6 +221,7 @@ export function buildSetupSql({
   return [
     '-- Sungsan GnuBoard5 setup SQL',
     '-- Review on staging before applying to production.',
+    buildAccountPolicyComment(),
     buildThemeUpdateSql({ tablePrefix }),
     buildGroupUpsertSql({ tablePrefix }),
     ...boards.map((board) => `${buildBoardPolicyComment(board)}\n${buildBoardUpsertSql(board, { tablePrefix })}`),
