@@ -76,6 +76,14 @@ docker compose build
 docker compose up -d
 ```
 
+## 배포 산출물
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/build-release.ps1
+Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
+```
+
+`scripts/build-release.ps1`는 `release/sungsan-site-YYYYMMDD-HHMMSS.zip`과 같은 이름의 `.sha256` 체크섬 파일을 만듭니다. Cafe24 SFTP 업로드 전후에 ZIP의 SHA256 값이 `.sha256` 파일과 일치하는지 확인합니다. 자세한 절차는 `docs/operations/cafe24-deployment.md`를 확인합니다.
+
 ## 운영 전환 개요
 1. 기존 DB와 `/renewal/data`를 백업합니다.
 2. 백업을 로컬로 복원해 EUC-KR에서 UTF-8 변환을 리허설합니다.
