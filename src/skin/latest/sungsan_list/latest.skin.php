@@ -5,13 +5,20 @@ if (!defined('_GNUBOARD_')) {
 ?>
 <div class="ss-post-list">
 <?php for ($i = 0; $i < count($list); $i++) { ?>
-    <a class="ss-post-row" href="<?php echo get_text($list[$i]['href']); ?>">
-        <p class="ss-post-title"><?php echo get_text($list[$i]['subject']); ?></p>
+    <?php
+    $sungsan_latest_row = $list[$i];
+    $sungsan_latest_href = isset($sungsan_latest_row['href']) ? $sungsan_latest_row['href'] : '#';
+    $sungsan_latest_subject = isset($sungsan_latest_row['subject']) ? $sungsan_latest_row['subject'] : '';
+    $sungsan_latest_category = isset($sungsan_latest_row['ca_name']) ? $sungsan_latest_row['ca_name'] : '';
+    $sungsan_latest_date = isset($sungsan_latest_row['datetime2']) ? $sungsan_latest_row['datetime2'] : '';
+    ?>
+    <a class="ss-post-row" href="<?php echo get_text($sungsan_latest_href); ?>">
+        <p class="ss-post-title"><?php echo get_text($sungsan_latest_subject); ?></p>
         <div class="ss-meta">
-            <?php if (!empty($list[$i]['ca_name'])) { ?>
-                <span class="ss-badge"><?php echo get_text($list[$i]['ca_name']); ?></span>
+            <?php if ($sungsan_latest_category !== '') { ?>
+                <span class="ss-badge"><?php echo get_text($sungsan_latest_category); ?></span>
             <?php } ?>
-            <span><?php echo get_text($list[$i]['datetime2']); ?></span>
+            <span><?php echo get_text($sungsan_latest_date); ?></span>
         </div>
     </a>
 <?php } ?>

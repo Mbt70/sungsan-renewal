@@ -1235,12 +1235,20 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(index, /href="<\?php echo \$sungsan_home_post_href/);
     assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
 
-    assert.match(latest, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
-    assert.match(latest, /get_text\(\$list\[\$i\]\['subject'\]\)/);
-    assert.match(latest, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
+    assert.match(latest, /\$sungsan_latest_row = \$list\[\$i\];/);
+    assert.match(latest, /\$sungsan_latest_href = isset\(\$sungsan_latest_row\['href'\]\) \? \$sungsan_latest_row\['href'\] : '#';/);
+    assert.match(latest, /\$sungsan_latest_subject = isset\(\$sungsan_latest_row\['subject'\]\) \? \$sungsan_latest_row\['subject'\] : '';/);
+    assert.match(latest, /\$sungsan_latest_category = isset\(\$sungsan_latest_row\['ca_name'\]\) \? \$sungsan_latest_row\['ca_name'\] : '';/);
+    assert.match(latest, /\$sungsan_latest_date = isset\(\$sungsan_latest_row\['datetime2'\]\) \? \$sungsan_latest_row\['datetime2'\] : '';/);
+    assert.match(latest, /href="<\?php echo get_text\(\$sungsan_latest_href\); \?>"/);
+    assert.match(latest, /get_text\(\$sungsan_latest_subject\)/);
+    assert.match(latest, /get_text\(\$sungsan_latest_category\)/);
+    assert.match(latest, /get_text\(\$sungsan_latest_date\)/);
     assert.doesNotMatch(latest, /href="<\?php echo \$list\[\$i\]\['href'\]/);
-    assert.doesNotMatch(latest, /echo \$list\[\$i\]\['subject'\]/);
-    assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
+    assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['href'\]\)/);
+    assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['subject'\]\)/);
+    assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['ca_name'\]\)/);
+    assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
   });
 
   it('escapes home page static action and section URLs before rendering attributes', () => {
