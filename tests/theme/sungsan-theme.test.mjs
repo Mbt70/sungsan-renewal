@@ -86,6 +86,18 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('escapes board search terms before rendering them in form attributes', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/list.skin.php',
+      'src/skin/board/sungsan_free/list.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should escape stx`);
+      assert.doesNotMatch(source, /echo\s+stripslashes\(\$stx\)/, `${file} should not echo raw stx`);
+    }
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');

@@ -30,7 +30,7 @@ $visible_count = 0;
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label class="sound_only" for="board_stx">게시판 검색어</label>
-            <input id="board_stx" name="stx" value="<?php echo stripslashes($stx); ?>" placeholder="제목과 내용을 검색">
+            <input id="board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
             <button type="submit">검색</button>
         </form>
 
