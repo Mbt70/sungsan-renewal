@@ -281,19 +281,19 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 				<li class="chk_box">
 				<div class="consent-line">
 					<input type="checkbox" name="mb_marketing_agree" value="1" id="reg_mb_marketing_agree" aria-describedby="desc_marketing" <?php echo $member['mb_marketing_agree'] ? 'checked' : ''; ?> class="selec_chk marketing-sync">
-					<label for="reg_mb_marketing_agree"><span></span><b class="sound_only">(선택) 마케팅 목적의 개인정보 수집 및 이용</b></label>
-					<span class="chk_li">(선택) 마케팅 목적의 개인정보 수집 및 이용</span>
-					<button type="button" class="js-open-consent" data-title="마케팅 목적의 개인정보 수집 및 이용" data-template="#tpl_marketing" data-check="#reg_mb_marketing_agree" aria-controls="consentDialog">자세히보기</button>
+					<label for="reg_mb_marketing_agree"><span></span><b class="sound_only">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</b></label>
+					<span class="chk_li">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</span>
+					<button type="button" class="js-open-consent" data-title="성산회 소식 수신을 위한 개인정보 수집 및 이용" data-template="#tpl_marketing" data-check="#reg_mb_marketing_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
 				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo $member['mb_marketing_agree'] ?>">
-				<div id="desc_marketing" class="sound_only">마케팅 목적의 개인정보 수집·이용에 대한 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
+				<div id="desc_marketing" class="sound_only">성산회 소식 수신을 위한 개인정보 수집·이용 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
 				<div class="consent-date"><?php if ($member['mb_marketing_agree'] == 1 && $member['mb_marketing_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_marketing_date'].")"; ?></div>
 
 				<template id="tpl_marketing">
-					* 목적: 서비스 마케팅 및 프로모션<br>
+					* 목적: 성산회 소식과 행사 안내<br>
 					* 항목: 이름, 이메일<?php echo ($config['cf_use_hp'] || ($config["cf_cert_use"] && ($config['cf_cert_hp'] || $config['cf_cert_simple']))) ? ", 휴대폰 번호" : "";?><br>
 					* 보유기간: 회원 탈퇴 시까지<br>
-					동의를 거부하셔도 서비스 기본 이용은 가능하나, 맞춤형 혜택 제공은 제한될 수 있습니다.
+					동의를 거부하셔도 홈페이지 기본 이용에는 제한이 없습니다.
 				</template>
 				</li>
 
@@ -362,10 +362,10 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 				<div class="consent-date"><?php if ($member['mb_thirdparty_agree'] == 1 && $member['mb_thirdparty_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_thirdparty_date'].")"; ?></div>
 
 				<template id="tpl_thirdparty">
-					* 목적: 상품/서비스, 사은/판촉행사, 이벤트 등의 마케팅 안내(카카오톡 등)<br>
+					* 목적: 성산회 운영 안내와 행사 알림 발송 대행<br>
 					* 항목: 이름, 휴대폰 번호<br>
 					* 제공받는 자: <?php echo implode(', ', $usedCompanies);?><br>
-					* 보유기간: 제공 목적 서비스 기간 또는 동의 철회 시까지
+					* 보유기간: 발송 대행 기간 또는 동의 철회 시까지
 				</template>
 				</li>
 				<?php } ?>
