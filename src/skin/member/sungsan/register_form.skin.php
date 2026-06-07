@@ -345,9 +345,11 @@ $(function() {
                 echo 'return false;';
                 break;
         }
+        $cert_type_json = json_encode($cert_type, JSON_UNESCAPED_SLASHES);
+        $cert_url_json = json_encode($cert_url, JSON_UNESCAPED_SLASHES);
         ?>
         
-        certify_win_open("<?php echo $cert_type; ?>", "<?php echo $cert_url; ?>"+params);
+        certify_win_open(<?php echo $cert_type_json; ?>, <?php echo $cert_url_json; ?> + params);
         return;
     });
     <?php } ?>
