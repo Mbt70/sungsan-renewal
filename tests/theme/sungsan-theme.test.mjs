@@ -1084,6 +1084,15 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('lets users close the scrap confirmation popup without submitting', () => {
+    const source = read('src/skin/member/sungsan/scrap_popin.skin.php');
+
+    assert.match(
+      source,
+      /<div class="win_btn">[\s\S]*?<button type="submit" class="btn_submit">스크랩 확인<\/button>[\s\S]*?<button type="button" onclick="window\.close\(\);" class="btn_close">창닫기<\/button>[\s\S]*?<\/div>/,
+    );
+  });
+
   it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
     const visibleLabelCases = [
       {

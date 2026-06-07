@@ -30,6 +30,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
     <div class="win_btn">
         <button type="submit" class="btn_submit">스크랩 확인</button>
+        <button type="button" onclick="window.close();" class="btn_close">창닫기</button>
     </div>
     </form>
 </div>
