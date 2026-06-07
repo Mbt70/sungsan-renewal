@@ -596,12 +596,17 @@ describe('sungsan theme static contract', () => {
         file: 'src/skin/member/sungsan/memo_form.skin.php',
         expected: [
           /action="<\?php echo get_text\(\$memo_action_url\); \?>"/,
+          /\$memo_send_point = isset\(\$config\['cf_memo_send_point'\]\) \? \(int\) \$config\['cf_memo_send_point'\] : 0;/,
           /name="me_recv_mb_id" value="<\?php echo get_text\(\$me_recv_mb_id\); \?>"/,
+          /if \(\$memo_send_point > 0\)/,
+          /number_format\(\$memo_send_point\)/,
           /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo get_text\(\$content\); \?><\/textarea>/,
         ],
         forbidden: [
           /action="<\?php echo \$memo_action_url/,
+          /if \(\$config\['cf_memo_send_point'\]\)/,
           /name="me_recv_mb_id" value="<\?php echo \$me_recv_mb_id/,
+          /number_format\(\$config\['cf_memo_send_point'\]\)/,
           /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo \$content/,
         ],
       },
@@ -672,7 +677,8 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo get_text\(\$memo_view_href\); \?>"/,
           /<\?php echo get_text\(\$memo_preview\); \?>/,
           /href="<\?php echo get_text\(\$memo_del_href\); \?>"/,
-          /number_format\(\(int\) \$config\['cf_memo_del'\]\)/,
+          /\$memo_retention_days = isset\(\$config\['cf_memo_del'\]\) \? \(int\) \$config\['cf_memo_del'\] : 0;/,
+          /number_format\(\$memo_retention_days\)/,
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
@@ -691,6 +697,7 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo \$list\[\$i\]\['del_href'\]/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
           /echo \$config\['cf_memo_del'\]/,
+          /number_format\(\(int\) \$config\['cf_memo_del'\]\)/,
         ],
       },
       {

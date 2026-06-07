@@ -1,6 +1,8 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
+$memo_retention_days = isset($config['cf_memo_del']) ? (int) $config['cf_memo_del'] : 0;
+
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 ?>
@@ -54,7 +56,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <!-- 페이지 -->
         <?php echo $write_pages; ?>
 
-        <p class="win_desc"><i class="fa fa-info-circle" aria-hidden="true"></i> 쪽지 보관일수는 최장 <strong><?php echo number_format((int) $config['cf_memo_del']); ?></strong>일 입니다.
+        <p class="win_desc"><i class="fa fa-info-circle" aria-hidden="true"></i> 쪽지 보관일수는 최장 <strong><?php echo number_format($memo_retention_days); ?></strong>일 입니다.
         </p>
 
         <div class="win_btn">
