@@ -76,6 +76,7 @@
   padding: 0;
 }
 
+#login_fs > label:not(.sound_only),
 #info_fs > label:not(.sound_only),
 #mb_confirm fieldset > label:not(.sound_only),
 #pw_confirm fieldset > label:not(.sound_only),
@@ -86,6 +87,7 @@
   font-weight: 800;
 }
 
+#login_fs > label:not(.sound_only) strong,
 #info_fs > label:not(.sound_only) strong,
 #mb_confirm fieldset > label:not(.sound_only) strong,
 #pw_confirm fieldset > label:not(.sound_only) strong,

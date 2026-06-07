@@ -390,6 +390,8 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /<label for="login_id">아이디 <strong>필수<\/strong><\/label>/);
     assert.match(source, /<label for="login_pw">비밀번호 <strong>필수<\/strong><\/label>/);
+    assert.doesNotMatch(source, /id="login_id"[^>]*placeholder=/);
+    assert.doesNotMatch(source, /id="login_pw"[^>]*placeholder=/);
     assert.doesNotMatch(source, /<label for="login_id">아이디 <strong class="sound_only">필수<\/strong><\/label>/);
     assert.doesNotMatch(source, /<label for="login_pw">비밀번호 <strong class="sound_only">필수<\/strong><\/label>/);
   });
@@ -1411,6 +1413,7 @@ describe('sungsan theme static contract', () => {
   it('styles visible account utility labels and textareas for scan-friendly forms', () => {
     const css = read('src/skin/member/sungsan/style.css');
 
+    assert.match(css, /#login_fs\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /#info_fs\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /#mb_confirm\s+fieldset\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /#pw_confirm\s+fieldset\s*>\s*label:not\(\.sound_only\)/);
