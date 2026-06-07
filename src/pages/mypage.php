@@ -45,9 +45,12 @@ $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_
         </article>
 
         <nav class="ss-panel ss-member-actions" aria-label="회원 메뉴">
-            <a class="ss-button" href="<?php echo get_text($edit_url); ?>">내 정보 수정</a>
-            <a class="ss-button secondary" href="<?php echo get_text($my_posts_url); ?>">내가 쓴 글</a>
-            <a class="ss-button secondary" href="<?php echo get_text($logout_url); ?>">로그아웃</a>
+            <div class="ss-member-action-buttons">
+                <a class="ss-button" href="<?php echo get_text($edit_url); ?>">내 정보·비밀번호 수정</a>
+                <a class="ss-button secondary" href="<?php echo get_text($my_posts_url); ?>">내가 쓴 글</a>
+                <a class="ss-button secondary" href="<?php echo get_text($logout_url); ?>">로그아웃</a>
+            </div>
+            <p class="ss-action-help">비밀번호 변경은 본인 확인 후 내 정보 수정 화면에서 함께 할 수 있습니다.</p>
         </nav>
 
         <section class="ss-panel ss-member-posts">
