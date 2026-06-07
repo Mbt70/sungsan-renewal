@@ -41,9 +41,11 @@ $ss_is_mypage = isset($sungsan_page) && $sungsan_page === 'mypage';
             <form class="ss-search-form" method="get" action="<?php echo G5_BBS_URL; ?>/search.php">
                 <input type="hidden" name="sfl" value="wr_subject||wr_content">
                 <input type="hidden" name="sop" value="and">
-                <label class="sound_only" for="ss_stx">검색어</label>
-                <input id="ss_stx" name="stx" type="search" maxlength="30" placeholder="검색어">
-                <button type="submit">검색</button>
+                <label class="ss-search-label" for="ss_stx">통합검색</label>
+                <div class="ss-search-row">
+                    <input id="ss_stx" name="stx" type="search" maxlength="30" placeholder="검색어">
+                    <button type="submit">검색</button>
+                </div>
             </form>
             <?php if ($is_member) { ?>
                 <a class="ss-account-link" href="<?php echo G5_URL; ?>/sungsan/mypage.php"<?php echo $ss_is_mypage ? ' aria-current="page"' : ''; ?>>마이페이지</a>
