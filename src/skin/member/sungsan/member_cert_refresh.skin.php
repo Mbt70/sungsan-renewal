@@ -5,16 +5,20 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="' . $member_skin_url . '/style.css">', 0);
 if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipin'] || $config['cf_cert_hp']))
     add_javascript('<script src="'.G5_JS_URL.'/certify.js?v='.G5_JS_VER.'"></script>', 0);
+
+$cert_refresh_member_value = function ($field, $default = '') use ($member) {
+    return get_text(isset($member[$field]) ? $member[$field] : $default);
+};
 ?>
 <!-- 기존 회원 본인인증 시작 { -->
 <div class="member_cert_refresh">
     <form name="fcertrefreshform" id="member_cert_refresh" action="<?php echo get_text($action_url); ?>" onsubmit="return fcertrefreshform_submit(this);" method="POST" autocomplete="off">
     <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
 	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
-	<input type="hidden" name="cert_type" value="<?php echo get_text($member['mb_certify']); ?>">
-    <input type="hidden" name="mb_id" value="<?php echo get_text($member['mb_id']); ?>">
-    <input type="hidden" name="mb_hp" value="<?php echo get_text($member['mb_hp']); ?>">
-    <input type="hidden" name="mb_name" value="<?php echo get_text($member['mb_name']); ?>">
+	<input type="hidden" name="cert_type" value="<?php echo $cert_refresh_member_value('mb_certify'); ?>">
+    <input type="hidden" name="mb_id" value="<?php echo $cert_refresh_member_value('mb_id'); ?>">
+    <input type="hidden" name="mb_hp" value="<?php echo $cert_refresh_member_value('mb_hp'); ?>">
+    <input type="hidden" name="mb_name" value="<?php echo $cert_refresh_member_value('mb_name'); ?>">
 	<input type="hidden" name="cert_no" value="">
         <section id="member_cert_refresh_private">
             <h2>(필수) 추가 개인정보처리방침 안내</h2>

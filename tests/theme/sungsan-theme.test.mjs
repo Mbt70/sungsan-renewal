@@ -437,17 +437,19 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/);
     assert.match(source, /name="w" value="<\?php echo get_text\(\$w\); \?>"/);
     assert.match(source, /name="url" value="<\?php echo get_text\(\$urlencode\); \?>"/);
+    assert.match(source, /\$cert_refresh_member_value = function \(\$field, \$default = ''\) use \(\$member\)/);
+    assert.match(source, /isset\(\$member\[\$field\]\) \? \$member\[\$field\] : \$default/);
 
     for (const field of ['mb_certify', 'mb_id', 'mb_hp', 'mb_name']) {
       assert.match(
         source,
-        new RegExp(`name="${field === 'mb_certify' ? 'cert_type' : field}" value="<\\?php echo get_text\\(\\$member\\['${field}'\\]\\); \\?>"`),
+        new RegExp(`name="${field === 'mb_certify' ? 'cert_type' : field}" value="<\\?php echo \\$cert_refresh_member_value\\('${field}'\\); \\?>"`),
         `certification refresh should escape ${field}`,
       );
       assert.doesNotMatch(
         source,
-        new RegExp(`name="${field === 'mb_certify' ? 'cert_type' : field}" value="<\\?php echo \\$member\\['${field}'\\]`),
-        `certification refresh should not echo raw ${field}`,
+        new RegExp(`get_text\\(\\$member\\['${field}'\\]\\)`),
+        `certification refresh should not read ${field} directly while rendering`,
       );
     }
 
