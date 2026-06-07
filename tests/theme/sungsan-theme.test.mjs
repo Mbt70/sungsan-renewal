@@ -1122,6 +1122,13 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows a visible required marker on memo content', () => {
+    const source = read('src/skin/member/sungsan/memo_form.skin.php');
+
+    assert.match(source, /<label for="me_memo">\uB0B4\uC6A9 <strong>\uD544\uC218<\/strong><\/label>/);
+    assert.doesNotMatch(source, /<label for="me_memo">\uB0B4\uC6A9<\/label>/);
+  });
+
   it('starts password reset with a visible popup heading before form fields', () => {
     const source = read('src/skin/member/sungsan/password_reset.skin.php');
     const headingIndex = source.indexOf('<h1 id="win_title">비밀번호 재설정</h1>');

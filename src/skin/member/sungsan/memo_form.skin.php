@@ -31,7 +31,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                     <?php } ?>
                 </li>
                 <li>
-                    <label for="me_memo">내용</label>
+                    <label for="me_memo">내용 <strong>필수</strong></label>
                     <textarea name="me_memo" id="me_memo" required class="required"><?php echo get_text($content); ?></textarea>
                 </li>
                 <li>
