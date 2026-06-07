@@ -861,6 +861,10 @@ img {
   border-color: var(--ss-color-primary);
 }
 
+.ss-media-tile.restricted {
+  background: var(--ss-color-surface-muted);
+}
+
 .ss-media-thumb {
   display: block;
   width: 100%;

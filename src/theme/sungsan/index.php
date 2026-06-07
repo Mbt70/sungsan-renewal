@@ -98,20 +98,26 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
             <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>
                 <?php
                 $sungsan_home_media_post = $photo_posts[$i];
-                $sungsan_home_media_href = isset($sungsan_home_media_post['href']) ? $sungsan_home_media_post['href'] : '#';
+                $sungsan_home_media_raw_href = isset($sungsan_home_media_post['href']) ? $sungsan_home_media_post['href'] : '#';
                 $sungsan_home_media_thumb = isset($sungsan_home_media_post['thumb_src']) ? $sungsan_home_media_post['thumb_src'] : '';
                 $sungsan_home_media_alt = isset($sungsan_home_media_post['thumb_alt']) ? $sungsan_home_media_post['thumb_alt'] : '';
                 $sungsan_home_media_subject = isset($sungsan_home_media_post['subject']) ? $sungsan_home_media_post['subject'] : '';
                 $sungsan_home_media_date = isset($sungsan_home_media_post['date']) ? $sungsan_home_media_post['date'] : '';
                 $sungsan_home_media_datetime = isset($sungsan_home_media_post['datetime']) ? $sungsan_home_media_post['datetime'] : $sungsan_home_media_date;
+                $sungsan_home_media_visibility = isset($sungsan_home_media_post['wr_2']) ? $sungsan_home_media_post['wr_2'] : '';
+                $sungsan_home_media_visibility_label = $sungsan_home_media_visibility !== '' ? sungsan_get_visibility_label($sungsan_home_media_visibility) : '';
+                $sungsan_home_media_can_read = $sungsan_home_media_visibility === '' || sungsan_can_read_visibility($sungsan_home_media_visibility);
+                $sungsan_home_media_requires_login = !$is_member && !$sungsan_home_media_can_read;
+                $sungsan_home_media_href = $sungsan_home_media_requires_login ? sungsan_login_url($sungsan_home_media_raw_href) : $sungsan_home_media_raw_href;
                 ?>
-                <a class="ss-media-tile" href="<?php echo get_text($sungsan_home_media_href); ?>">
+                <a class="ss-media-tile<?php echo $sungsan_home_media_can_read ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_home_media_href); ?>">
                     <?php if ($sungsan_home_media_thumb !== '') { ?>
                         <img class="ss-media-thumb" src="<?php echo get_text($sungsan_home_media_thumb); ?>" alt="<?php echo get_text($sungsan_home_media_alt); ?>" loading="lazy">
                     <?php } else { ?>
                         <span class="ss-media-thumb ss-media-thumb-fallback">사진·영상</span>
                     <?php } ?>
                     <strong><?php echo get_text($sungsan_home_media_subject); ?></strong>
+                    <?php if ($sungsan_home_media_visibility_label !== '') { ?><span class="ss-access-label"><?php echo get_text($sungsan_home_media_visibility_label); ?></span><?php } ?>
                     <time datetime="<?php echo get_text($sungsan_home_media_datetime); ?>"><?php echo get_text($sungsan_home_media_date); ?></time>
                 </a>
             <?php } ?>

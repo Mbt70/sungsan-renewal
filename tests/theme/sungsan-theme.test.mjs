@@ -1909,6 +1909,21 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /font-weight:\s*800/);
   });
 
+  it('marks restricted home media posts with visibility and login return targets', () => {
+    const index = read('src/theme/sungsan/index.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(index, /\$sungsan_home_media_raw_href = isset\(\$sungsan_home_media_post\['href'\]\) \? \$sungsan_home_media_post\['href'\] : '#';/);
+    assert.match(index, /\$sungsan_home_media_visibility = isset\(\$sungsan_home_media_post\['wr_2'\]\) \? \$sungsan_home_media_post\['wr_2'\] : '';/);
+    assert.match(index, /\$sungsan_home_media_visibility_label = \$sungsan_home_media_visibility !== '' \? sungsan_get_visibility_label\(\$sungsan_home_media_visibility\) : '';/);
+    assert.match(index, /\$sungsan_home_media_can_read = \$sungsan_home_media_visibility === '' \|\| sungsan_can_read_visibility\(\$sungsan_home_media_visibility\);/);
+    assert.match(index, /\$sungsan_home_media_requires_login = !\$is_member && !\$sungsan_home_media_can_read;/);
+    assert.match(index, /\$sungsan_home_media_href = \$sungsan_home_media_requires_login \? sungsan_login_url\(\$sungsan_home_media_raw_href\) : \$sungsan_home_media_raw_href;/);
+    assert.match(index, /<a class="ss-media-tile<\?php echo \$sungsan_home_media_can_read \? '' : ' restricted'; \?>" href="<\?php echo get_text\(\$sungsan_home_media_href\); \?>">/);
+    assert.match(index, /<\?php if \(\$sungsan_home_media_visibility_label !== ''\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$sungsan_home_media_visibility_label\); \?><\/span><\?php \} \?>/);
+    assert.match(css, /\.ss-media-tile\.restricted\s*\{/);
+  });
+
   it('puts pinned home notices before ordinary latest notices', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
@@ -1934,7 +1949,7 @@ describe('sungsan theme static contract', () => {
     const latest = read('src/skin/latest/sungsan_list/latest.skin.php');
 
     assert.match(index, /\$sungsan_home_media_post = \$photo_posts\[\$i\];/);
-    assert.match(index, /\$sungsan_home_media_href = isset\(\$sungsan_home_media_post\['href'\]\) \? \$sungsan_home_media_post\['href'\] : '#';/);
+    assert.match(index, /\$sungsan_home_media_raw_href = isset\(\$sungsan_home_media_post\['href'\]\) \? \$sungsan_home_media_post\['href'\] : '#';/);
     assert.match(index, /\$sungsan_home_media_thumb = isset\(\$sungsan_home_media_post\['thumb_src'\]\) \? \$sungsan_home_media_post\['thumb_src'\] : '';/);
     assert.match(index, /\$sungsan_home_media_alt = isset\(\$sungsan_home_media_post\['thumb_alt'\]\) \? \$sungsan_home_media_post\['thumb_alt'\] : '';/);
     assert.match(index, /\$sungsan_home_media_subject = isset\(\$sungsan_home_media_post\['subject'\]\) \? \$sungsan_home_media_post\['subject'\] : '';/);
