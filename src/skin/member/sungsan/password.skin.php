@@ -13,7 +13,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <!-- 비밀번호 확인 시작 { -->
 <div id="pw_confirm" class="mbskin">
     <h1><?php echo get_text($g5['title']); ?></h1>
-    <p>
+    <p id="board_password_help">
         <?php if ($w == 'u') { ?>
         <strong>작성자만 글을 수정할 수 있습니다.</strong>
         작성자 본인이라면, 글 작성시 입력한 비밀번호를 입력하여 글을 수정할 수 있습니다.
@@ -37,7 +37,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
     <fieldset>
         <label for="password_wr_password">비밀번호 <strong>필수</strong></label>
-        <input type="password" name="wr_password" id="password_wr_password" required class="frm_input required" size="15" maxLength="20" placeholder="비밀번호">
+        <input type="password" name="wr_password" id="password_wr_password" required class="frm_input required" size="15" maxLength="20" aria-describedby="board_password_help" placeholder="비밀번호">
         <input type="submit" value="확인" class="btn_submit">
     </fieldset>
     </form>

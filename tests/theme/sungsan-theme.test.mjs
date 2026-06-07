@@ -1213,6 +1213,14 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<p>\s*<strong>비밀번호를 한번 더 입력해주세요\.<\/strong>/);
   });
 
+  it('connects board password guidance to the password field', () => {
+    const source = read('src/skin/member/sungsan/password.skin.php');
+
+    assert.match(source, /<p id="board_password_help">[\s\S]*작성자만 글을 수정할 수 있습니다\./);
+    assert.match(source, /id="password_wr_password"[^>]+aria-describedby="board_password_help"/);
+    assert.doesNotMatch(source, /<p>\s*<\?php if \(\$w == 'u'\) \{ \?>/);
+  });
+
   it('uses semantic input types for member email and phone fields', () => {
     const cases = [
       {
