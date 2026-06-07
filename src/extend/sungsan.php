@@ -319,17 +319,26 @@ function sungsan_sanitize_return_url($return_url)
     $return_url = trim((string) $return_url);
     $return_url = htmlspecialchars_decode($return_url, ENT_QUOTES);
     $decoded_return_url = rawurldecode($return_url);
+    for ($i = 0; $i < 2; $i++) {
+        $next_decoded_return_url = rawurldecode($decoded_return_url);
+        if ($next_decoded_return_url === $decoded_return_url) {
+            break;
+        }
+
+        $decoded_return_url = $next_decoded_return_url;
+    }
 
     if ($return_url === '' || strpos($decoded_return_url, '//') === 0 || strpos($decoded_return_url, '\\') !== false) {
         return G5_URL;
     }
 
-    if (preg_match('/^[a-z][a-z0-9+.-]*:/i', $return_url)) {
-        $return_origin = sungsan_url_origin($return_url);
+    $return_url_to_check = preg_match('/^[a-z][a-z0-9+.-]*:/i', $decoded_return_url) ? $decoded_return_url : $return_url;
+    if (preg_match('/^[a-z][a-z0-9+.-]*:/i', $return_url_to_check)) {
+        $return_origin = sungsan_url_origin($return_url_to_check);
         $allowed_origins = array_filter(array(sungsan_url_origin(G5_URL), sungsan_url_origin(G5_BBS_URL)));
 
         if ($return_origin !== '' && in_array($return_origin, $allowed_origins, true)) {
-            return $return_url;
+            return $return_url_to_check;
         }
 
         return G5_URL;

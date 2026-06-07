@@ -274,7 +274,7 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /function sungsan_sanitize_return_url\(\$return_url\)/);
     assert.match(extend, /htmlspecialchars_decode\(\$return_url, ENT_QUOTES\)/);
     assert.match(extend, /strpos\(\$decoded_return_url, '\/\/'\) === 0/);
-    assert.match(extend, /preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$return_url\)/);
+    assert.match(extend, /preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$return_url_to_check\)/);
     assert.match(extend, /\$allowed_origins = array_filter\(array\(sungsan_url_origin\(G5_URL\), sungsan_url_origin\(G5_BBS_URL\)\)\);/);
     assert.match(extend, /in_array\(\$return_origin, \$allowed_origins, true\)/);
     assert.match(extend, /return G5_URL;/);
@@ -289,6 +289,18 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /strpos\(\$decoded_return_url, '\\\\'\) !== false/);
     assert.match(extend, /strpos\(\$decoded_return_url, '\/\/'\) === 0/);
     assert.doesNotMatch(extend, /strpos\(\$return_url, '\/\/'\) === 0/);
+  });
+
+  it('checks decoded login return URLs for external schemes and nested encoding', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /for \(\$i = 0; \$i < 2; \$i\+\+\) \{/);
+    assert.match(extend, /\$next_decoded_return_url = rawurldecode\(\$decoded_return_url\);/);
+    assert.match(extend, /\$return_url_to_check = preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$decoded_return_url\) \? \$decoded_return_url : \$return_url;/);
+    assert.match(extend, /if \(preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$return_url_to_check\)\) \{/);
+    assert.match(extend, /\$return_origin = sungsan_url_origin\(\$return_url_to_check\);/);
+    assert.match(extend, /return \$return_url_to_check;/);
+    assert.doesNotMatch(extend, /if \(preg_match\('\/\^\[a-z\]\[a-z0-9\+\.\-\]\*:\/i', \$return_url\)\) \{/);
   });
 
   it('keeps board detail URLs raw until the render layer escapes them', () => {
