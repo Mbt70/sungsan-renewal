@@ -32,12 +32,11 @@ docker compose up -d
 로컬 DB 기본값은 `.env.example`을 기준으로 합니다. 실제 운영 비밀번호는 `.env`에만 두고 Git에 올리지 않습니다.
 
 ## 그누보드 설치 후 관리자 설정
-1. 환경설정에서 테마를 `sungsan`으로 변경합니다.
-2. 게시판 `news`, `free`를 만듭니다.
-3. `news` 게시판 스킨을 `sungsan_news`로 설정합니다.
-4. `free` 게시판 스킨을 `sungsan_free`로 설정합니다.
-5. `news` 분류는 `공지|행사|자료|규정|활동소식`으로 설정합니다.
-6. 회원가입은 운영자 승인제로 설정합니다.
+1. 그누보드 설치를 완료합니다.
+2. `npm run export:setup-sql`로 `docs/generated/sungsan-setup.sql`을 갱신합니다.
+3. 스테이징 DB에서 SQL 내용을 검토 후 적용합니다.
+4. 관리자에서 테마가 `sungsan`, 게시판 `news/free`와 스킨 `sungsan_news/sungsan_free`로 잡혔는지 확인합니다.
+5. 회원가입은 운영자 승인제로 설정합니다.
 
 ## 검증
 ```powershell
@@ -45,6 +44,12 @@ npm run verify
 ```
 
 `npm run verify`는 마이그레이션 매핑 테스트와 SCSS 빌드를 실행합니다.
+
+그누보드5 코어를 내려받은 뒤 설정 SQL을 갱신하려면 다음을 실행합니다.
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/bootstrap-gnuboard.ps1
+npm run export:setup-sql
+```
 
 PHP와 Docker가 설치된 환경에서는 추가로 다음을 실행합니다.
 ```powershell

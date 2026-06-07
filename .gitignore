@@ -12,6 +12,8 @@ data/
 db/
 backups/
 *.sql
+!docs/generated/
+!docs/generated/sungsan-setup.sql
 *.sql.gz
 *.dump
 *.bak
@@ -22,4 +24,3 @@ Thumbs.db
 .superpowers/
 .worktrees/
 worktrees/
-

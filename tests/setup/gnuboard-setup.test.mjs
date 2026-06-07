@@ -1,0 +1,95 @@
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+
+import {
+  SUNGSAN_BOARD_CONFIGS,
+  buildBoardUpsertSql,
+  buildSetupSql,
+  buildWriteTableSql,
+  escapeSqlString,
+  writeSetupSqlFile,
+} from '../../tools/setup/gnuboard-setup.mjs';
+
+const writeSqlTemplate = `CREATE TABLE \`__TABLE_NAME__\` (
+  \`wr_id\` int(11) NOT NULL AUTO_INCREMENT,
+  \`wr_subject\` varchar(255) NOT NULL,
+  \`wr_content\` text NOT NULL,
+  PRIMARY KEY (\`wr_id\`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;`;
+
+describe('sungsan gnuboard setup config', () => {
+  it('defines the planned news and free boards', () => {
+    assert.equal(SUNGSAN_BOARD_CONFIGS.length, 2);
+
+    const news = SUNGSAN_BOARD_CONFIGS.find((board) => board.bo_table === 'news');
+    const free = SUNGSAN_BOARD_CONFIGS.find((board) => board.bo_table === 'free');
+
+    assert.equal(news.bo_subject, '소식');
+    assert.equal(news.bo_skin, 'sungsan_news');
+    assert.equal(news.bo_use_category, 1);
+    assert.equal(news.bo_category_list, '공지|행사|자료|규정|활동소식');
+    assert.equal(news.bo_list_level, 1);
+    assert.equal(news.bo_write_level, 6);
+    assert.equal(news.bo_upload_level, 6);
+
+    assert.equal(free.bo_subject, '자유게시판');
+    assert.equal(free.bo_skin, 'sungsan_free');
+    assert.equal(free.bo_list_level, 2);
+    assert.equal(free.bo_read_level, 2);
+    assert.equal(free.bo_write_level, 2);
+  });
+
+  it('escapes SQL strings without changing Korean text', () => {
+    assert.equal(escapeSqlString("성산회's 자료"), "성산회''s 자료");
+  });
+
+  it('builds an idempotent board upsert statement', () => {
+    const sql = buildBoardUpsertSql(SUNGSAN_BOARD_CONFIGS[0], { tablePrefix: 'g5_' });
+
+    assert.match(sql, /INSERT INTO `g5_board`/);
+    assert.match(sql, /bo_table = 'news'/);
+    assert.match(sql, /bo_skin = 'sungsan_news'/);
+    assert.match(sql, /bo_category_list = '공지\|행사\|자료\|규정\|활동소식'/);
+    assert.match(sql, /ON DUPLICATE KEY UPDATE/);
+    assert.match(sql, /bo_subject = VALUES\(bo_subject\)/);
+  });
+
+  it('normalizes write table DDL to the requested table and utf8mb4', () => {
+    const sql = buildWriteTableSql('news', writeSqlTemplate, { tablePrefix: 'g5_' });
+
+    assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
+    assert.match(sql, /DEFAULT CHARSET=utf8mb4/);
+    assert.doesNotMatch(sql, /__TABLE_NAME__/);
+  });
+
+  it('builds complete setup SQL with theme, group, boards, and write tables', () => {
+    const sql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate });
+
+    assert.match(sql, /UPDATE `g5_config` SET cf_theme = 'sungsan'/);
+    assert.match(sql, /INSERT INTO `g5_group`/);
+    assert.match(sql, /gr_id = 'sungsan'/);
+    assert.match(sql, /bo_table = 'news'/);
+    assert.match(sql, /bo_table = 'free'/);
+    assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
+    assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_free`/);
+  });
+
+  it('writes setup SQL to a file and creates parent directories', async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), 'sungsan-setup-'));
+    const outputPath = path.join(dir, 'nested', 'sungsan-setup.sql');
+
+    try {
+      const result = await writeSetupSqlFile({ outputPath, writeSqlTemplate });
+      const content = await readFile(outputPath, 'utf8');
+
+      assert.equal(result.outputPath, outputPath);
+      assert.match(content, /Sungsan GnuBoard5 setup SQL/);
+      assert.match(content, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});
