@@ -723,7 +723,7 @@ describe('sungsan theme static contract', () => {
   it('normalizes point values before rendering the point popup', () => {
     const source = read('src/skin/member/sungsan/point.skin.php');
 
-    assert.match(source, /\$member_point = \(int\) \$member\['mb_point'\];/);
+    assert.match(source, /\$member_point = isset\(\$member\['mb_point'\]\) \? \(int\) \$member\['mb_point'\] : 0;/);
     assert.match(source, /number_format\(\$member_point\)/);
     assert.match(source, /\$row_point = \(int\) \$row\['po_point'\];/);
     assert.match(source, /if \(\$row_point > 0\)/);
@@ -736,6 +736,7 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /<span><\?php echo get_text\(\$sum_point1\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point2\); \?><\/span>/);
     assert.doesNotMatch(source, /number_format\(\$member\['mb_point'\]\)/);
+    assert.doesNotMatch(source, /\$member_point = \(int\) \$member\['mb_point'\];/);
     assert.doesNotMatch(source, /\$row\['po_point'\] > 0/);
     assert.doesNotMatch(source, /echo \$sum_point1/);
     assert.doesNotMatch(source, /echo \$sum_point2/);
