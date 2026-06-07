@@ -1429,6 +1429,7 @@ describe('sungsan theme static contract', () => {
       const fieldLine = source.split('\n').find((line) => line.includes(`id="${field}"`));
 
       assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible search label`);
+      assert.match(source, new RegExp(`<label for="${field}">제목과 내용 검색어</label>`), `${file} should describe the board search scope in the visible label`);
       assert.doesNotMatch(source, new RegExp(`<label[^>]*class="sound_only"[^>]*for="${field}"`), `${file} should not hide the search label`);
       assert.ok(fieldLine, `${file} should render ${field}`);
       assert.doesNotMatch(fieldLine, /placeholder=/, `${file} should not duplicate the search label as placeholder`);
