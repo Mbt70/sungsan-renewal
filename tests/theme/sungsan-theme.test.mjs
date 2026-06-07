@@ -184,7 +184,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$mb\['mb_email'\]/);
   });
 
-  it('escapes optional member profile fields before rendering the registration form', () => {
+  it('preserves hidden member compatibility fields before rendering the registration form', () => {
     const source = read('src/skin/member/sungsan/register_form.skin.php');
 
     for (const variable of ['w', 'urlencode', 'agree', 'agree2']) {
@@ -197,14 +197,25 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /name="cert_type" value="<\?php echo get_text\(\$member\['mb_certify'\]\); \?>"/);
     assert.match(source, /name="mb_sex" value="<\?php echo get_text\(\$member\['mb_sex'\]\); \?>"/);
+    assert.match(source, /<div class="ss-register-compat-fields" hidden>/);
+    assert.match(source, /\$sungsan_member_value = function \(\$field, \$default = ''\) use \(\$member\)/);
+    assert.match(source, /isset\(\$member\[\$field\]\) \? \$member\[\$field\] : \$default/);
+    assert.match(source, /\$sungsan_member_zip = \$sungsan_member_value\('mb_zip1'\)\.\$sungsan_member_value\('mb_zip2'\);/);
     assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
     assert.match(source, /name="old_email" value="<\?php echo get_text\(\$member\['mb_email'\]\); \?>"/);
     assert.match(source, /name="mb_email" value="<\?php echo isset\(\$member\['mb_email'\]\) \? get_text\(\$member\['mb_email'\]\) : ''; \?>"/);
-    assert.match(source, /get_text\(\$member\['mb_zip1'\]\.\$member\['mb_zip2'\]\)/);
-    assert.match(source, /get_text\(\$member\['mb_signature'\]\)/);
-    assert.match(source, /get_text\(\$member\['mb_profile'\]\)/);
-    assert.match(source, /name="mb_open_default" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
-    assert.match(source, /name="mb_open" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
+    assert.match(source, /name="mb_homepage" value="<\?php echo \$sungsan_member_value\('mb_homepage'\); \?>"/);
+    assert.match(source, /name="mb_tel" value="<\?php echo \$sungsan_member_value\('mb_tel'\); \?>"/);
+    assert.match(source, /name="mb_zip" value="<\?php echo \$sungsan_member_zip; \?>"/);
+    assert.match(source, /name="mb_addr1" value="<\?php echo \$sungsan_member_value\('mb_addr1'\); \?>"/);
+    assert.match(source, /name="mb_addr2" value="<\?php echo \$sungsan_member_value\('mb_addr2'\); \?>"/);
+    assert.match(source, /name="mb_addr3" value="<\?php echo \$sungsan_member_value\('mb_addr3'\); \?>"/);
+    assert.match(source, /name="mb_addr_jibeon" value="<\?php echo \$sungsan_member_value\('mb_addr_jibeon'\); \?>"/);
+    assert.match(source, /\$sungsan_member_value\('mb_signature'\)/);
+    assert.match(source, /\$sungsan_member_value\('mb_profile'\)/);
+    assert.match(source, /name="mb_open_default" value="<\?php echo \$sungsan_member_value\('mb_open'\); \?>"/);
+    assert.match(source, /name="mb_open" value="<\?php echo \$sungsan_member_value\('mb_open'\); \?>"/);
+    assert.match(source, /name="mb_recommend" value=""/);
     for (const field of ['mb_marketing_agree', 'mb_mailling', 'mb_sms', 'mb_thirdparty_agree']) {
       assert.match(
         source,
@@ -518,12 +529,34 @@ describe('sungsan theme static contract', () => {
     }
   });
 
-  it('shows visible labels for optional registration address and recommender fields', () => {
+  it('keeps optional registration address profile and recommender controls out of the visible form', () => {
     const source = read('src/skin/member/sungsan/register_form.skin.php');
 
-    for (const field of ['reg_mb_zip', 'reg_mb_addr1', 'reg_mb_addr2', 'reg_mb_addr3', 'reg_mb_recommend']) {
-      assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `registration form should show a visible label for ${field}`);
-      assert.doesNotMatch(source, new RegExp(`<label for="${field}"[^>]*class="sound_only"`), `registration form should not hide the ${field} label`);
+    assert.doesNotMatch(source, /<h2>기타 개인설정<\/h2>/);
+    assert.doesNotMatch(source, /cf_use_homepage/);
+    assert.doesNotMatch(source, /cf_use_addr/);
+    assert.doesNotMatch(source, /cf_use_signature/);
+    assert.doesNotMatch(source, /cf_use_profile/);
+    assert.doesNotMatch(source, /cf_use_member_icon/);
+    assert.doesNotMatch(source, /cf_member_img_/);
+    assert.doesNotMatch(source, /cf_use_recommend/);
+
+    for (const field of [
+      'reg_mb_homepage',
+      'reg_mb_tel',
+      'reg_mb_zip',
+      'reg_mb_addr1',
+      'reg_mb_addr2',
+      'reg_mb_addr3',
+      'reg_mb_signature',
+      'reg_mb_profile',
+      'reg_mb_icon',
+      'reg_mb_img',
+      'reg_mb_open',
+      'reg_mb_recommend',
+    ]) {
+      assert.doesNotMatch(source, new RegExp(`id="${field}"`), `registration form should not show ${field}`);
+      assert.doesNotMatch(source, new RegExp(`<label for="${field}"`), `registration form should not label ${field}`);
     }
   });
 
