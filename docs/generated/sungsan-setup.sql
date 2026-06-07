@@ -39,7 +39,8 @@ ON DUPLICATE KEY UPDATE
 -- news ca_name: 공지|행사|자료|규정|활동소식
 -- news wr_1 소속 slug, wr_2 공개 범위, wr_3 행사 시작일, wr_4 행사 종료일
 -- news wr_5 기존 보드 ID, wr_6 기존 글 ID, wr_7 이전 검토 플래그, wr_8 검토 사유
--- news access: 목록/본문은 공개, 작성/수정/삭제/첨부는 임원 이상
+-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한
+-- news write access: 작성/수정/삭제/첨부 업로드는 임원 이상
 INSERT INTO `g5_board` SET
     gr_id = 'sungsan',
     bo_device = 'both',

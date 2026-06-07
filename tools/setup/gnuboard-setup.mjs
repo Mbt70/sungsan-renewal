@@ -157,7 +157,8 @@ export function buildBoardPolicyComment(boardConfig) {
       `-- news ca_name: ${boardConfig.bo_category_list}`,
       `-- news wr_1 ${boardConfig.bo_1_subj}, wr_2 ${boardConfig.bo_2_subj}, wr_3 ${boardConfig.bo_3_subj}, wr_4 ${boardConfig.bo_4_subj}`,
       `-- news wr_5 ${boardConfig.bo_5_subj}, wr_6 ${boardConfig.bo_6_subj}, wr_7 ${boardConfig.bo_7_subj}, wr_8 ${boardConfig.bo_8_subj}`,
-      '-- news access: 목록/본문은 공개, 작성/수정/삭제/첨부는 임원 이상',
+      '-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한',
+      '-- news write access: 작성/수정/삭제/첨부 업로드는 임원 이상',
     ].join('\n');
   }
 
