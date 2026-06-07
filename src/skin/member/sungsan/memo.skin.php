@@ -46,7 +46,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 						    <a href="<?php echo get_text($memo_view_href); ?>"><?php echo get_text($memo_preview); ?></a>
                         </div>
 					</div>	
-					<a href="<?php echo get_text($memo_del_href); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a>
+					<a href="<?php echo get_text($memo_del_href); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 	            </li>
 	            <?php } ?>
 	            <?php if ($i==0) { echo '<li class="empty_table">자료가 없습니다.</li>'; }  ?>

@@ -1007,6 +1007,52 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_paging\(G5_IS_MOBILE \? \$config\['cf_mobile_pages'\] : \$config\['cf_write_pages'\], \$page, \$total_page, \$_SERVER\['SCRIPT_NAME'\]\.'\?'\.\$qstr\.'&amp;page='\)/);
   });
 
+  it('shows visible text on popup icon action links', () => {
+    const cases = [
+      {
+        file: 'src/skin/member/sungsan/memo.skin.php',
+        expected: [
+          /class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"><\/i> 삭제<\/a>/,
+        ],
+        forbidden: [
+          /class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"><\/i> <span class="sound_only">삭제<\/span><\/a>/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/memo_view.skin.php',
+        expected: [
+          /class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"><\/i> 목록<\/a>/,
+          /class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"><\/i> 삭제<\/a>/,
+        ],
+        forbidden: [
+          /class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"><\/i><span class="sound_only">목록<\/span><\/a>/,
+          /class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"><\/i> <span class="sound_only">삭제<\/span><\/a>/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/scrap.skin.php',
+        expected: [
+          /class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"><\/i> 삭제<\/a>/,
+        ],
+        forbidden: [
+          /class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"><\/i><span class="sound_only">삭제<\/span><\/a>/,
+        ],
+      },
+    ];
+
+    for (const { file, expected, forbidden } of cases) {
+      const source = read(file);
+
+      for (const pattern of expected) {
+        assert.match(source, pattern, `${file} should show visible action text`);
+      }
+
+      for (const pattern of forbidden) {
+        assert.doesNotMatch(source, pattern, `${file} should not hide action text behind sound_only`);
+      }
+    }
+  });
+
   it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
     const visibleLabelCases = [
       {
