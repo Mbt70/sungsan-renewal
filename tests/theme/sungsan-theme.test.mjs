@@ -2487,6 +2487,27 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(coreSend, /sungsan_normalize_formmail_attach_count/);
   });
 
+  it('normalizes form mail type before the core send handler chooses html mode', () => {
+    const extend = read('src/extend/sungsan.php');
+    const skin = read('src/skin/member/sungsan/formmail.skin.php');
+    const coreSend = read('www/bbs/formmail_send.php');
+
+    for (const value of ['0', '1', '2']) {
+      assert.match(skin, new RegExp(`name="type" value="${value}"`), `form mail skin should only offer type ${value}`);
+    }
+    assert.match(extend, /function sungsan_normalize_formmail_type\(\)/);
+    assert.match(extend, /global \$type;/);
+    assert.match(extend, /\$type = isset\(\$type\) \? \(int\) \$type : 0;/);
+    assert.match(extend, /if \(!in_array\(\$type, array\(0, 1, 2\), true\)\) \{/);
+    assert.match(extend, /\$type = 0;/);
+    assert.match(
+      extend,
+      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_type\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
+    );
+    assert.match(coreSend, /if \(\$type == 2\) \{/);
+    assert.doesNotMatch(coreSend, /sungsan_normalize_formmail_type/);
+  });
+
   it('validates required form mail message fields before the core send handler', () => {
     const extend = read('src/extend/sungsan.php');
     const coreSend = read('www/bbs/formmail_send.php');
@@ -2499,7 +2520,7 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /alert_close\('메일 제목과 내용을 입력해 주세요\.'\);/);
     assert.match(
       extend,
-      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
+      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_type\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
     );
     assert.doesNotMatch(coreSend, /sungsan_validate_formmail_required_fields/);
   });
@@ -2516,7 +2537,7 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /alert_close\('보내는 분 이름과 이메일을 입력해 주세요\.'\);/);
     assert.match(
       extend,
-      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
+      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_type\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
     );
     assert.doesNotMatch(coreSend, /sungsan_validate_formmail_required_fields/);
   });

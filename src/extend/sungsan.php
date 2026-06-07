@@ -316,6 +316,16 @@ function sungsan_normalize_formmail_attach_count()
     $attach = isset($attach) ? max(0, min(2, (int) $attach)) : 0;
 }
 
+function sungsan_normalize_formmail_type()
+{
+    global $type;
+
+    $type = isset($type) ? (int) $type : 0;
+    if (!in_array($type, array(0, 1, 2), true)) {
+        $type = 0;
+    }
+}
+
 function sungsan_validate_formmail_required_fields()
 {
     global $subject, $content;
@@ -340,6 +350,7 @@ function sungsan_validate_formmail_required_fields()
 
 if (isset($_SERVER['SCRIPT_NAME']) && basename($_SERVER['SCRIPT_NAME']) === 'formmail_send.php') {
     sungsan_validate_formmail_required_fields();
+    sungsan_normalize_formmail_type();
     sungsan_normalize_formmail_attach_count();
     sungsan_reject_blocked_formmail_uploads($_FILES);
 }
