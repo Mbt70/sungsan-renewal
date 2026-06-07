@@ -108,6 +108,8 @@ if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipi
                     if (!fcertrefreshform_submit(f)) return false;
                     params = "?" + pageTypeParam;
                     <?php
+                    $cert_type = '';
+                    $cert_url = '';
                     switch ($config['cf_cert_hp']) {
                         case 'kcb':
                             $cert_url = G5_OKNAME_URL.'/hpcert1.php';

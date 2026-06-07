@@ -83,6 +83,8 @@ $(function() {
     $("#win_hp_cert").click(function() {
         params = "?" + pageTypeParam;
         <?php     
+        $cert_type = '';
+        $cert_url = '';
         switch($config['cf_cert_hp']) {
             case 'kcb':                
                 $cert_url = G5_OKNAME_URL.'/hpcert1.php';

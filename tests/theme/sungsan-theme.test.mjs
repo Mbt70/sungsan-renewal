@@ -435,6 +435,24 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('initializes certification popup parameters before provider switches', () => {
+    const files = [
+      'src/skin/member/sungsan/member_cert_refresh.skin.php',
+      'src/skin/member/sungsan/password_lost.skin.php',
+      'src/skin/member/sungsan/register_form.skin.php',
+    ];
+
+    for (const file of files) {
+      const source = read(file);
+
+      assert.match(
+        source,
+        /\$cert_type = '';\s*\$cert_url = '';\s*switch\s*\(\$config\['cf_cert_hp'\]\)/,
+        `${file} should define cert parameters before switch`,
+      );
+    }
+  });
+
   it('escapes member input form actions and values before rendering account utility screens', () => {
     const cases = [
       {

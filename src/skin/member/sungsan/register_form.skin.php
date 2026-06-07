@@ -323,6 +323,8 @@ $(function() {
 		if(!cert_confirm()) return false;
         params = "?" + pageTypeParam;
         <?php     
+        $cert_type = '';
+        $cert_url = '';
         switch($config['cf_cert_hp']) {
             case 'kcb':                
                 $cert_url = G5_OKNAME_URL.'/hpcert1.php';
