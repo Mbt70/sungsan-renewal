@@ -3,6 +3,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="' . $member_skin_url . '/style.css">', 0);
+
+$password_reset_mb_id = isset($_POST['mb_id']) ? $_POST['mb_id'] : '';
 ?>
 
 <!-- 비밀번호 재설정 시작 { -->
@@ -13,7 +15,7 @@ add_stylesheet('<link rel="stylesheet" href="' . $member_skin_url . '/style.css"
                 <p>새로운 비밀번호를 입력해주세요.</p>
                 <span class="sound_only">아이디</span>
                 <br>
-                <b>회원 아이디 : <?php echo get_text($_POST['mb_id']); ?></b>
+                <b>회원 아이디 : <?php echo get_text($password_reset_mb_id); ?></b>
                 <label for="mb_pw">새 비밀번호 <strong>필수</strong></label>
                 <input type="password" name="mb_password" id="mb_pw" required class="required frm_input full_input" size="30" placeholder="새 비밀번호">
                 <label for="mb_pw2">새 비밀번호 확인 <strong>필수</strong></label>

@@ -564,6 +564,14 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('normalizes password reset account identifiers before rendering the reset form', () => {
+    const source = read('src/skin/member/sungsan/password_reset.skin.php');
+
+    assert.match(source, /\$password_reset_mb_id = isset\(\$_POST\['mb_id'\]\) \? \$_POST\['mb_id'\] : '';/);
+    assert.match(source, /회원 아이디 : <\?php echo get_text\(\$password_reset_mb_id\); \?>/);
+    assert.doesNotMatch(source, /get_text\(\$_POST\['mb_id'\]\)/);
+  });
+
   it('escapes member popup list and detail values before rendering community utilities', () => {
     const cases = [
       {
