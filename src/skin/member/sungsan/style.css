@@ -30,6 +30,24 @@
   background: #fff;
 }
 
+.ss-login-header,
+.ss-login-links {
+  display: grid;
+  gap: 10px;
+}
+
+.ss-login-note,
+.ss-login-links p {
+  margin: 0;
+  color: var(--ss-color-muted, #58616f);
+}
+
+.ss-login-links {
+  margin-top: 20px;
+  border-top: 1px solid var(--ss-color-border, #d9dee8);
+  padding-top: 20px;
+}
+
 .mb_log_cate,
 .btn_confirm,
 .win_btn,

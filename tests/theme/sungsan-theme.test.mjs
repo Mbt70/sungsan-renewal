@@ -24,6 +24,19 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
+    const source = read('src/skin/member/sungsan/login.skin.php');
+
+    for (const forbidden of ['비회원 구매', '비회원 주문조회', '상품구입', 'orderform.php', 'orderinquiry.php']) {
+      assert.doesNotMatch(source, new RegExp(forbidden), `login skin should not include ${forbidden}`);
+    }
+
+    assert.match(source, /성산회 회원 로그인/);
+    assert.match(source, /회원가입/);
+    assert.match(source, /아이디\/비밀번호 찾기/);
+    assert.match(source, /flogin_submit/);
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',
