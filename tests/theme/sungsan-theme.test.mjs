@@ -52,6 +52,25 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /회원 관리와 회 운영 안내/);
   });
 
+  it('explains that registration is pending operator approval before member use', () => {
+    const source = read('src/skin/member/sungsan/register_result.skin.php');
+
+    assert.match(source, /가입 신청이 접수/);
+    assert.match(source, /운영자 승인/);
+    assert.match(source, /승인 전까지/);
+    assert.doesNotMatch(source, /회원가입을 진심으로 축하/);
+  });
+
+  it('escapes account details shown on the registration result screen', () => {
+    const source = read('src/skin/member/sungsan/register_result.skin.php');
+
+    assert.match(source, /get_text\(\$mb\['mb_name'\]\)/);
+    assert.match(source, /get_text\(\$mb\['mb_id'\]\)/);
+    assert.match(source, /get_text\(\$mb\['mb_email'\]\)/);
+    assert.doesNotMatch(source, /echo \$mb\['mb_id'\]/);
+    assert.doesNotMatch(source, /echo \$mb\['mb_email'\]/);
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',
