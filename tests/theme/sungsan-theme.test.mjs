@@ -2512,6 +2512,8 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /PHP, HTML, JS, SVG/, `${file} should name blocked active file types`);
       assert.match(source, /\.htaccess/, `${file} should name server config files as blocked`);
       assert.match(source, /\.user\.ini/, `${file} should name PHP per-directory config files as blocked`);
+      assert.match(source, /shell\.php7/, `${file} should name numeric PHP upload examples`);
+      assert.match(source, /shell\.php8/, `${file} should name numeric PHP upload examples`);
       assert.match(source, /shell\.php\.jpg/, `${file} should explain multi-extension active files are blocked`);
       assert.match(source, /업로드할 수 없습니다/, `${file} should explain blocked files cannot be uploaded`);
       assert.doesNotMatch(source, /실행 파일은 업로드하지 않습니다\./, `${file} should avoid vague upload guidance`);
