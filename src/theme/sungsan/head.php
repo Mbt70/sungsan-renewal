@@ -68,4 +68,4 @@ $ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
         </div>
     </div>
 </header>
-<main id="container">
+<main id="container" tabindex="-1">

@@ -147,6 +147,17 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-search-form\s+\.ss-search-row\s*\{/);
   });
 
+  it('connects the skip link to a keyboard-focusable main landmark', () => {
+    const head = read('src/theme/sungsan/head.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(head, /<a href="#container" class="ss-skip-link">/);
+    assert.match(head, /<main id="container" tabindex="-1">/);
+    assert.doesNotMatch(head, /<main id="container">/);
+    assert.match(css, /\.ss-skip-link\s*\{/);
+    assert.match(css, /\.ss-skip-link:focus,\s*\n\.ss-skip-link:focus-visible\s*\{/);
+  });
+
   it('preserves and escapes the compact header search term', () => {
     const head = read('src/theme/sungsan/head.php');
     const inputLine = head.split('\n').find((line) => line.includes('id="ss_stx"'));
