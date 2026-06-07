@@ -94,8 +94,8 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
             <?php } ?>
             <?php if (count($photo_posts) === 0) { ?>
                 <div class="ss-panel ss-empty-state">
-                    <strong>사진자료 이전 준비 중</strong>
-                    <p>기존 사진자료 게시판의 첨부를 검수한 뒤 이 영역에서 최신 활동 사진과 영상을 확인할 수 있습니다.</p>
+                    <strong>등록된 사진·영상 자료가 없습니다</strong>
+                    <p>활동소식에 사진이나 영상이 포함된 글이 올라오면 이 영역에 함께 표시됩니다.</p>
                 </div>
             <?php } ?>
         </div>

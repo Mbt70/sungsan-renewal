@@ -623,6 +623,16 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
   });
 
+  it('uses an operational empty state for home media instead of migration placeholders', () => {
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(index, /등록된 사진·영상 자료가 없습니다/);
+    assert.match(index, /활동소식에 사진이나 영상이 포함된 글이 올라오면/);
+    assert.doesNotMatch(index, /사진자료 이전 준비 중/);
+    assert.doesNotMatch(index, /기존 사진자료/);
+    assert.doesNotMatch(index, /이전 준비 중/);
+  });
+
   it('keeps the intro page usable without future replacement placeholders', () => {
     const intro = read('src/theme/sungsan/page/intro.php');
 
