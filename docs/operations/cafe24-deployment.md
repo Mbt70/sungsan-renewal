@@ -23,15 +23,17 @@
 4. Cafe24의 임시 경로에 압축을 풉니다.
 5. 새 DB를 만들거나 스테이징용 테이블 prefix를 사용합니다.
 6. 그누보드 설치 후 `npm run export:setup-sql`로 생성한 `docs/generated/sungsan-setup.sql`을 검토해 적용합니다.
-7. 관리자에서 테마 `sungsan`, 회원 스킨 `sungsan`, 게시판 스킨 `sungsan_news/sungsan_free`, 권한, 분류, 업로드 제한이 의도대로 잡혔는지 확인합니다.
-8. 이전 리허설 데이터를 반영합니다. `wr_7=review_required` 글은 운영자 검토 전 공개하지 않습니다.
-9. 변환 결과로 redirect CSV와 Apache 초안을 생성하고 운영 전환 전에 샘플 URL을 확인합니다.
+7. `docs/operations/data-htaccess-template.txt` 내용을 그누보드 설치 경로의 `data/.htaccess`로 복사합니다. 배포 zip은 `/data`를 제외하므로 스테이징과 운영 전환 때 모두 직접 적용합니다.
+8. 관리자에서 테마 `sungsan`, 회원 스킨 `sungsan`, 게시판 스킨 `sungsan_news/sungsan_free`, 권한, 분류, 업로드 제한이 의도대로 잡혔는지 확인합니다.
+9. 이전 리허설 데이터를 반영합니다. `wr_7=review_required` 글은 운영자 검토 전 공개하지 않습니다.
+10. 변환 결과로 redirect CSV와 Apache 초안을 생성하고 운영 전환 전에 샘플 URL을 확인합니다.
 
 ## 4. 검수
 - 모바일 375px, 태블릿, 데스크톱에서 홈/소개/소식/자유게시판 확인
 - 비회원, 회원, 임원, 운영자 권한 확인
 - 비회원 자유게시판 목록 노출과 본문 로그인 차단 확인
 - 첨부 업로드와 다운로드 확인
+- `data/.htaccess` 적용 후 `data` 하위 PHP/HTML/JS/SVG 계열 파일 직접 접근이 차단되는지 확인
 - `news` 임원/운영자 공개 글의 첨부 직접 다운로드 URL 차단 확인
 - 검색과 종류 필터 확인
 - 한글 깨짐 확인
