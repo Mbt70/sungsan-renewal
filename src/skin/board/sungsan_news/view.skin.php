@@ -12,6 +12,7 @@ $sungsan_view_hits = isset($view['wr_hit']) ? (int) $view['wr_hit'] : 0;
 $sungsan_view_content = isset($view['content']) ? $view['content'] : '';
 $sungsan_view_category = isset($view['ca_name']) ? $view['ca_name'] : '';
 $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
+$visibility_label = get_text(sungsan_get_visibility_label($visibility));
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
 $can_read = sungsan_can_read_news_post($view);
 $sungsan_show_login_cta = !$is_member && !sungsan_is_review_restricted($view);
@@ -20,9 +21,9 @@ $sungsan_login_url = sungsan_login_url($sungsan_request_uri);
 if (sungsan_is_review_restricted($view)) {
     $access_message = '운영자 검토 전 비공개 글입니다.';
 } elseif ($sungsan_show_login_cta) {
-    $access_message = '이 글은 '.sungsan_get_visibility_label($visibility).' 공개 글입니다. 권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다.';
+    $access_message = '이 글은 '.$visibility_label.' 공개 글입니다. 권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다.';
 } else {
-    $access_message = '현재 계정으로는 이 글을 열람할 수 없습니다. '.sungsan_get_visibility_label($visibility).' 공개 글은 해당 권한이 필요합니다.';
+    $access_message = '현재 계정으로는 이 글을 열람할 수 없습니다. '.$visibility_label.' 공개 글은 해당 권한이 필요합니다.';
 }
 ?>
 <article class="ss-section">

@@ -1983,6 +1983,14 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(view, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
   });
 
+  it('escapes news detail visibility labels before composing access guidance', () => {
+    const view = read('src/skin/board/sungsan_news/view.skin.php');
+
+    assert.match(view, /\$visibility_label = get_text\(sungsan_get_visibility_label\(\$visibility\)\);/);
+    assert.match(view, /\$access_message = '[^']*'\.\$visibility_label\./);
+    assert.doesNotMatch(view, /\$access_message = '[^']*'\.sungsan_get_visibility_label\(\$visibility\)/);
+  });
+
   it('keeps restricted news visible in lists while marking posts that need permission', () => {
     const list = read('src/skin/board/sungsan_news/list.skin.php');
     const css = read('src/scss/main.scss');
