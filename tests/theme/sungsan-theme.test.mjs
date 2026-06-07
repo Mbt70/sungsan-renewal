@@ -1437,6 +1437,36 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<input type="file" name="file2" id="file2" class="frm_file full_input">/);
   });
 
+  it('limits form mail attachment pickers to common passive files', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+
+    assert.match(
+      source,
+      /\$formmail_attachment_accept = '\.jpg,\.jpeg,\.png,\.gif,\.webp,\.pdf,\.hwp,\.hwpx,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx,\.txt';/,
+    );
+
+    for (const field of ['file1', 'file2']) {
+      assert.match(
+        source,
+        new RegExp(`id="${field}"[^\\n]+accept="<\\?php echo get_text\\(\\$formmail_attachment_accept\\); \\?>"[^\\n]+aria-describedby="formmail_attachment_help"`),
+        `form mail should apply the picker filter to ${field}`,
+      );
+    }
+
+    const acceptLine = source.match(/\$formmail_attachment_accept = '([^']+)';/);
+    assert.ok(acceptLine, 'form mail should expose an attachment accept list');
+    for (const blocked of ['php', 'php7', 'php8', 'html', 'js', 'svg', 'htaccess', 'user.ini']) {
+      assert.doesNotMatch(acceptLine[1], new RegExp(`\\.${blocked}(?:,|$)`), `form mail should not suggest ${blocked} attachments`);
+    }
+
+    assert.match(source, /PHP, HTML, JS, SVG/);
+    assert.match(source, /\.htaccess/);
+    assert.match(source, /\.user\.ini/);
+    assert.match(source, /shell\.php7/);
+    assert.match(source, /shell\.php8/);
+    assert.match(source, /shell\.php\.jpg/);
+  });
+
   it('keeps optional registration address profile and recommender controls out of the visible form', () => {
     const source = read('src/skin/member/sungsan/register_form.skin.php');
 

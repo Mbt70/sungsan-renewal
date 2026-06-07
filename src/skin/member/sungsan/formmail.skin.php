@@ -7,6 +7,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 $formmail_action_url = './formmail_send.php';
 $formmail_member_nick = isset($member['mb_nick']) ? $member['mb_nick'] : '';
 $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
+$formmail_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 ?>
 
 <!-- 폼메일 시작 { -->
@@ -60,14 +61,14 @@ $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
             <li class="formmail_flie">
                 <div class="file_wr">
                     <label for="file1">첨부 파일 1</label>
-                    <input type="file" name="file1"  id="file1"  class="frm_file full_input" aria-describedby="formmail_attachment_help">
+                    <input type="file" name="file1"  id="file1"  class="frm_file full_input" accept="<?php echo get_text($formmail_attachment_accept); ?>" aria-describedby="formmail_attachment_help">
                </div>
-               <div id="formmail_attachment_help" class="frm_info">첨부 파일은 누락될 수 있으므로 메일을 보낸 후 파일이 첨부 되었는지 반드시 확인해 주시기 바랍니다.</div>
+               <div id="formmail_attachment_help" class="frm_info">사진과 문서 파일만 첨부해 주세요. PHP, HTML, JS, SVG, .htaccess, .user.ini처럼 브라우저나 서버에서 실행될 수 있는 파일은 첨부할 수 없습니다. shell.php7, shell.php8, shell.php.jpg처럼 실행형 또는 여러 확장자를 붙인 파일도 보내지 마세요. 메일을 보낸 후 파일이 첨부 되었는지 반드시 확인해 주시기 바랍니다.</div>
             </li>
             <li class="formmail_flie">
                 <div class="file_wr">
                     <label for="file2">첨부 파일 2</label>
-                    <input type="file" name="file2" id="file2" class="frm_file full_input" aria-describedby="formmail_attachment_help">
+                    <input type="file" name="file2" id="file2" class="frm_file full_input" accept="<?php echo get_text($formmail_attachment_accept); ?>" aria-describedby="formmail_attachment_help">
                 </div>
             </li>
             <li>
