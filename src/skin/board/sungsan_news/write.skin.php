@@ -7,6 +7,8 @@ global $sungsan_news_categories, $sungsan_groups;
 
 $visibility = isset($write['wr_2']) && $write['wr_2'] ? $write['wr_2'] : 'member';
 $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
+$sungsan_event_start_date = isset($write['wr_3']) ? $write['wr_3'] : '';
+$sungsan_event_end_date = isset($write['wr_4']) ? $write['wr_4'] : '';
 $legacy_board_id = isset($write['wr_5']) ? get_text($write['wr_5']) : '';
 $legacy_post_id = isset($write['wr_6']) ? get_text($write['wr_6']) : '';
 $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
@@ -73,11 +75,11 @@ $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((
                 </div>
                 <div class="ss-field">
                     <label for="wr_3">행사 시작일</label>
-                    <input id="wr_3" name="wr_3" type="date" value="<?php echo isset($write['wr_3']) ? get_text($write['wr_3']) : ''; ?>">
+                    <input id="wr_3" name="wr_3" type="date" value="<?php echo get_text($sungsan_event_start_date); ?>">
                 </div>
                 <div class="ss-field">
                     <label for="wr_4">행사 종료일</label>
-                    <input id="wr_4" name="wr_4" type="date" value="<?php echo isset($write['wr_4']) ? get_text($write['wr_4']) : ''; ?>">
+                    <input id="wr_4" name="wr_4" type="date" value="<?php echo get_text($sungsan_event_end_date); ?>">
                 </div>
             </div>
 

@@ -1084,10 +1084,16 @@ describe('sungsan theme static contract', () => {
 
     assert.match(news, /<option value="<\?php echo get_text\(\$category\); \?>"<\?php echo sungsan_selected\(\$ca_name, \$category\); \?>><\?php echo get_text\(\$category\); \?><\/option>/);
     assert.match(news, /<option value="<\?php echo get_text\(\$slug\); \?>"<\?php echo sungsan_selected\(\$group_slug, \$slug\); \?>><\?php echo get_text\(\$label\); \?><\/option>/);
+    assert.match(news, /\$sungsan_event_start_date = isset\(\$write\['wr_3'\]\) \? \$write\['wr_3'\] : '';/);
+    assert.match(news, /\$sungsan_event_end_date = isset\(\$write\['wr_4'\]\) \? \$write\['wr_4'\] : '';/);
+    assert.match(news, /id="wr_3" name="wr_3" type="date" value="<\?php echo get_text\(\$sungsan_event_start_date\); \?>"/);
+    assert.match(news, /id="wr_4" name="wr_4" type="date" value="<\?php echo get_text\(\$sungsan_event_end_date\); \?>"/);
     assert.doesNotMatch(news, /<option value="<\?php echo \$category; \?>"/);
     assert.doesNotMatch(news, /<option value="<\?php echo \$slug; \?>"/);
     assert.doesNotMatch(news, /><\?php echo \$category; \?><\/option>/);
     assert.doesNotMatch(news, /><\?php echo \$label; \?><\/option>/);
+    assert.doesNotMatch(news, /value="<\?php echo isset\(\$write\['wr_3'\]\) \? get_text\(\$write\['wr_3'\]\) : ''; \?>"/);
+    assert.doesNotMatch(news, /value="<\?php echo isset\(\$write\['wr_4'\]\) \? get_text\(\$write\['wr_4'\]\) : ''; \?>"/);
   });
 
   it('routes board write cancel links to list for new posts and view for edits', () => {
