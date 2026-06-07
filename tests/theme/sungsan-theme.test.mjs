@@ -1283,6 +1283,16 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('connects form mail attachment guidance to both file fields', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+
+    assert.match(source, /<div id="formmail_attachment_help" class="frm_info">/);
+    for (const field of ['file1', 'file2']) {
+      assert.match(source, new RegExp(`id="${field}"[^\\n]+aria-describedby="formmail_attachment_help"`), `form mail should connect ${field} to attachment guidance`);
+    }
+    assert.doesNotMatch(source, /<input type="file" name="file2" id="file2" class="frm_file full_input">/);
+  });
+
   it('keeps optional registration address profile and recommender controls out of the visible form', () => {
     const source = read('src/skin/member/sungsan/register_form.skin.php');
 
