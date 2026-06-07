@@ -1187,6 +1187,24 @@ describe('sungsan theme static contract', () => {
     assert.ok(headingIndex < fieldsetIndex, 'password reset heading should appear before form fields');
   });
 
+  it('connects password recovery email guidance to the email field', () => {
+    const source = read('src/skin/member/sungsan/password_lost.skin.php');
+
+    assert.match(source, /<p id="password_lost_email_help">[\s\S]*회원가입 시 등록하신 이메일 주소/);
+    assert.match(source, /id="mb_email"[^>]+aria-describedby="password_lost_email_help"/);
+    assert.doesNotMatch(source, /<p>\s*회원가입 시 등록하신 이메일 주소/);
+  });
+
+  it('connects password reset guidance to both new password fields', () => {
+    const source = read('src/skin/member/sungsan/password_reset.skin.php');
+
+    assert.match(source, /<p id="password_reset_help">새로운 비밀번호를 입력해주세요\.<\/p>/);
+    for (const field of ['mb_pw', 'mb_pw2']) {
+      assert.match(source, new RegExp(`id="${field}"[^>]+aria-describedby="password_reset_help"`), `${field} should reference the reset guidance`);
+    }
+    assert.doesNotMatch(source, /<p>새로운 비밀번호를 입력해주세요\.<\/p>/);
+  });
+
   it('uses semantic input types for member email and phone fields', () => {
     const cases = [
       {

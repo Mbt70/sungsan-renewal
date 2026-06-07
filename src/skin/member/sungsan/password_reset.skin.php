@@ -13,14 +13,14 @@ $password_reset_mb_id = isset($_POST['mb_id']) ? $_POST['mb_id'] : '';
         <h1 id="win_title">비밀번호 재설정</h1>
         <form name="fpasswordreset" action="<?php echo get_text($action_url); ?>" onsubmit="return fpasswordreset_submit(this);" method="post" autocomplete="off">
             <fieldset id="info_fs">
-                <p>새로운 비밀번호를 입력해주세요.</p>
+                <p id="password_reset_help">새로운 비밀번호를 입력해주세요.</p>
                 <span class="sound_only">아이디</span>
                 <br>
                 <b>회원 아이디 : <?php echo get_text($password_reset_mb_id); ?></b>
                 <label for="mb_pw">새 비밀번호 <strong>필수</strong></label>
-                <input type="password" name="mb_password" id="mb_pw" required class="required frm_input full_input" size="30" autocomplete="new-password" placeholder="새 비밀번호">
+                <input type="password" name="mb_password" id="mb_pw" required class="required frm_input full_input" size="30" autocomplete="new-password" aria-describedby="password_reset_help" placeholder="새 비밀번호">
                 <label for="mb_pw2">새 비밀번호 확인 <strong>필수</strong></label>
-                <input type="password" name="mb_password_re" id="mb_pw2" required class="required frm_input full_input" size="30" autocomplete="new-password" placeholder="새 비밀번호 확인">
+                <input type="password" name="mb_password_re" id="mb_pw2" required class="required frm_input full_input" size="30" autocomplete="new-password" aria-describedby="password_reset_help" placeholder="새 비밀번호 확인">
             </fieldset>
             <div class="win_btn">
                 <button type="submit" class="btn_submit">확인</button>

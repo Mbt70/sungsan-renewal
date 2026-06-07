@@ -16,12 +16,12 @@ if($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipin
         <input type="hidden" name="cert_no" value="">
         <h3>이메일로 찾기</h3>
         <fieldset id="info_fs">
-            <p>
+            <p id="password_lost_email_help">
                 회원가입 시 등록하신 이메일 주소를 입력해 주세요.<br>
                 해당 이메일로 아이디와 비밀번호 정보를 보내드립니다.
             </p>
             <label for="mb_email">E-mail 주소 <strong>필수</strong></label>
-            <input type="email" name="mb_email" id="mb_email" required class="required frm_input full_input email" size="30" autocomplete="email" placeholder="E-mail 주소">
+            <input type="email" name="mb_email" id="mb_email" required class="required frm_input full_input email" size="30" autocomplete="email" aria-describedby="password_lost_email_help" placeholder="E-mail 주소">
         </fieldset>
         <?php echo captcha_html();  ?>
 
