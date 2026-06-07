@@ -16,7 +16,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
 <!-- 쪽지보기 시작 { -->
 <div id="memo_view" class="new_win">
-    <h1 id="win_title"><?php echo $g5['title'] ?></h1>
+    <h1 id="win_title"><?php echo get_text($g5['title']); ?></h1>
     <div class="new_win_con2">
         <!-- 쪽지함 선택 시작 { -->
         <ul class="win_ul">
@@ -37,16 +37,16 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 				            <?php echo get_member_profile_img($mb['mb_id']); ?>
 				        </li>
 						<li class="memo_view_nick"><?php echo $nick ?></li>
-						<li class="memo_view_date"><span class="sound_only"><?php echo $kind_date ?>시간</span><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $memo['me_send_datetime'] ?></li> 
-						<li class="memo_op_btn list_btn"><a href="<?php echo $list_link ?>" class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"></i><span class="sound_only">목록</span></a></li>
-						<li class="memo_op_btn del_btn"><a href="<?php echo $del_link; ?>" onclick="del(this.href); return false;" class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a></li>	
+						<li class="memo_view_date"><span class="sound_only"><?php echo get_text($kind_date); ?>시간</span><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo['me_send_datetime']); ?></li>
+						<li class="memo_op_btn list_btn"><a href="<?php echo get_text($list_link); ?>" class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"></i><span class="sound_only">목록</span></a></li>
+						<li class="memo_op_btn del_btn"><a href="<?php echo get_text($del_link); ?>" onclick="del(this.href); return false;" class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a></li>
 					</ul>
                     <div class="memo_btn">
                     	<?php if($prev_link) {  ?>
-			            <a href="<?php echo $prev_link ?>" class="btn_left"><i class="fa fa-chevron-left" aria-hidden="true"></i> 이전쪽지</a>
+			            <a href="<?php echo get_text($prev_link); ?>" class="btn_left"><i class="fa fa-chevron-left" aria-hidden="true"></i> 이전쪽지</a>
 			            <?php }  ?>
 			            <?php if($next_link) {  ?>
-			            <a href="<?php echo $next_link ?>" class="btn_right">다음쪽지 <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+			            <a href="<?php echo get_text($next_link); ?>" class="btn_right">다음쪽지 <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
 			            <?php }  ?>  
                     </div>
                 </div>
@@ -56,7 +56,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             </p>
         </article>
 		<div class="win_btn">
-			<?php if ($kind == 'recv') {  ?><a href="./memo_form.php?me_recv_mb_id=<?php echo $mb['mb_id'] ?>&amp;me_id=<?php echo $memo['me_id'] ?>" class="reply_btn">답장</a><?php }  ?>
+			<?php if ($kind == 'recv') {  ?><a href="./memo_form.php?me_recv_mb_id=<?php echo get_text($mb['mb_id']); ?>&amp;me_id=<?php echo (int) $memo['me_id']; ?>" class="reply_btn">답장</a><?php }  ?>
 			<button type="button" onclick="window.close();" class="btn_close">창닫기</button>
     	</div>
     </div>

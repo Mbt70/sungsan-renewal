@@ -6,7 +6,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 ?>
 
 <div id="point" class="new_win">
-    <h1 id="win_title"><?php echo $g5['title'] ?></h1>
+    <h1 id="win_title"><?php echo get_text($g5['title']); ?></h1>
 
     <div class="new_win_con2">
         <ul class="point_all">
@@ -40,14 +40,14 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             ?>
             <li class="<?php echo $point_use_class; ?>">
                 <div class="point_top">
-                    <span class="point_tit"><?php echo $po_content; ?></span>
+                    <span class="point_tit"><?php echo get_text($po_content); ?></span>
                     <span class="point_num"><?php if ($point1) echo $point1; else echo $point2; ?></span>
                 </div>
-                <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $row['po_datetime']; ?></span>
+                <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row['po_datetime']); ?></span>
                 <span class="point_date<?php echo $expr; ?>">
                     <?php if ($row['po_expired'] == 1) { ?>
-                    만료 <?php echo substr(str_replace('-', '', $row['po_expire_date']), 2); ?>
-                    <?php } else echo $row['po_expire_date'] == '9999-12-31' ? '&nbsp;' : $row['po_expire_date']; ?>
+                    만료 <?php echo get_text(substr(str_replace('-', '', $row['po_expire_date']), 2)); ?>
+                    <?php } else echo $row['po_expire_date'] == '9999-12-31' ? '&nbsp;' : get_text($row['po_expire_date']); ?>
                 </span>
             </li>
             <?php

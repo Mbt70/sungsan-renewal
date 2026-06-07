@@ -7,14 +7,14 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
 <!-- 스크랩 목록 시작 { -->
 <div id="scrap" class="new_win">
-    <h1 id="win_title"><?php echo $g5['title'] ?></h1>
+    <h1 id="win_title"><?php echo get_text($g5['title']); ?></h1>
     <ul>
         <?php for ($i=0; $i<count($list); $i++) {  ?>
         <li>
-            <a href="<?php echo $list[$i]['opener_href_wr_id'] ?>" class="scrap_tit" target="_blank" onclick="opener.document.location.href='<?php echo $list[$i]['opener_href_wr_id'] ?>'; return false;"><?php echo $list[$i]['subject'] ?></a>
-            <a href="<?php echo $list[$i]['opener_href'] ?>" class="scrap_cate" target="_blank" onclick="opener.document.location.href='<?php echo $list[$i]['opener_href'] ?>'; return false;"><?php echo $list[$i]['bo_subject'] ?></a>
-            <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $list[$i]['ms_datetime'] ?></span>
-            <a href="<?php echo $list[$i]['del_href'];  ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i><span class="sound_only">삭제</span></a>
+            <a href="<?php echo get_text($list[$i]['opener_href_wr_id']); ?>" class="scrap_tit" target="_blank" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['subject']); ?></a>
+            <a href="<?php echo get_text($list[$i]['opener_href']); ?>" class="scrap_cate" target="_blank" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($list[$i]['bo_subject']); ?></a>
+            <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['ms_datetime']); ?></span>
+            <a href="<?php echo get_text($list[$i]['del_href']); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i><span class="sound_only">삭제</span></a>
         </li>
         <?php }  ?>
 

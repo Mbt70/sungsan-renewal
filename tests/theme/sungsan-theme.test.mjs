@@ -236,6 +236,107 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('escapes member popup list and detail values before rendering community utilities', () => {
+    const cases = [
+      {
+        file: 'src/skin/member/sungsan/memo.skin.php',
+        expected: [
+          /<\?php echo get_text\(\$g5\['title'\]\); \?>/,
+          /<\?php echo get_text\(\$kind_title\); \?>/,
+          /<\?php echo number_format\(\(int\) \$total_count\); \?>/,
+          /get_text\(\$list\[\$i\]\['send_datetime'\]\)/,
+          /href="<\?php echo get_text\(\$list\[\$i\]\['view_href'\]\); \?>"/,
+          /<\?php echo get_text\(\$memo_preview\); \?>/,
+          /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
+        ],
+        forbidden: [
+          /echo \$g5\['title'\]/,
+          /echo \$kind_title/,
+          /echo \$total_count/,
+          /echo \$list\[\$i\]\['send_datetime'\]/,
+          /href="<\?php echo \$list\[\$i\]\['view_href'\]/,
+          /echo \$memo_preview/,
+          /href="<\?php echo \$list\[\$i\]\['del_href'\]/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/memo_view.skin.php',
+        expected: [
+          /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
+          /<\?php echo get_text\(\$kind_date\); \?>/,
+          /<\?php echo get_text\(\$memo\['me_send_datetime'\]\); \?>/,
+          /href="<\?php echo get_text\(\$list_link\); \?>"/,
+          /href="<\?php echo get_text\(\$del_link\); \?>"/,
+          /href="<\?php echo get_text\(\$prev_link\); \?>"/,
+          /href="<\?php echo get_text\(\$next_link\); \?>"/,
+          /me_recv_mb_id=<\?php echo get_text\(\$mb\['mb_id'\]\); \?>&amp;me_id=<\?php echo \(int\) \$memo\['me_id'\]; \?>/,
+        ],
+        forbidden: [
+          /echo \$g5\['title'\]/,
+          /echo \$kind_date/,
+          /echo \$memo\['me_send_datetime'\]/,
+          /href="<\?php echo \$list_link/,
+          /href="<\?php echo \$del_link/,
+          /href="<\?php echo \$prev_link/,
+          /href="<\?php echo \$next_link/,
+          /me_recv_mb_id=<\?php echo \$mb\['mb_id'\]/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/point.skin.php',
+        expected: [
+          /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
+          /<\?php echo get_text\(\$po_content\); \?>/,
+          /<\?php echo get_text\(\$row\['po_datetime'\]\); \?>/,
+          /<\?php echo get_text\(substr\(str_replace\('-', '', \$row\['po_expire_date'\]\), 2\)\); \?>/,
+          /: get_text\(\$row\['po_expire_date'\]\); \?>/,
+        ],
+        forbidden: [
+          /echo \$g5\['title'\]/,
+          /echo \$po_content/,
+          /echo \$row\['po_datetime'\]/,
+          /echo substr\(str_replace\('-', '', \$row\['po_expire_date'\]\), 2\)/,
+          /: \$row\['po_expire_date'\]/,
+        ],
+      },
+      {
+        file: 'src/skin/member/sungsan/scrap.skin.php',
+        expected: [
+          /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
+          /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href_wr_id'\]\); \?>"/,
+          /onclick="opener\.document\.location\.href=this\.href; return false;"/,
+          /<\?php echo get_text\(\$list\[\$i\]\['subject'\]\); \?>/,
+          /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href'\]\); \?>"/,
+          /<\?php echo get_text\(\$list\[\$i\]\['bo_subject'\]\); \?>/,
+          /<\?php echo get_text\(\$list\[\$i\]\['ms_datetime'\]\); \?>/,
+          /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
+        ],
+        forbidden: [
+          /echo \$g5\['title'\]/,
+          /href="<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
+          /opener\.document\.location\.href='<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
+          /echo \$list\[\$i\]\['subject'\]/,
+          /href="<\?php echo \$list\[\$i\]\['opener_href'\]/,
+          /echo \$list\[\$i\]\['bo_subject'\]/,
+          /echo \$list\[\$i\]\['ms_datetime'\]/,
+          /href="<\?php echo \$list\[\$i\]\['del_href'\]/,
+        ],
+      },
+    ];
+
+    for (const { file, expected, forbidden } of cases) {
+      const source = read(file);
+
+      for (const pattern of expected) {
+        assert.match(source, pattern, `${file} should render escaped popup values`);
+      }
+
+      for (const pattern of forbidden) {
+        assert.doesNotMatch(source, pattern, `${file} should not render raw popup values`);
+      }
+    }
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',

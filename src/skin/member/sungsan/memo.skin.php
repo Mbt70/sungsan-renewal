@@ -8,8 +8,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <!-- 쪽지 목록 시작 { -->
 <div id="memo_list" class="new_win">
     <h1 id="win_title">
-    	<?php echo $g5['title'] ?>
-    	<div class="win_total">전체 <?php echo $kind_title ?>쪽지 <?php echo $total_count ?>통<br></div>
+        <?php echo get_text($g5['title']); ?>
+        <div class="win_total">전체 <?php echo get_text($kind_title); ?>쪽지 <?php echo number_format((int) $total_count); ?>통<br></div>
     </h1>
     <div class="new_win_con2">
         <ul class="win_ul">
@@ -31,12 +31,12 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 	            		<?php if (! $readed){ ?><span class="no_read">안 읽은 쪽지</span><?php } ?>
 	            	</div>
 	                <div class="memo_li memo_name">
-	                	<?php echo $list[$i]['name']; ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo $list[$i]['send_datetime']; ?></span>
+                        <?php echo $list[$i]['name']; ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['send_datetime']); ?></span>
 						<div class="memo_preview">
-						    <a href="<?php echo $list[$i]['view_href']; ?>"><?php echo $memo_preview; ?></a>
+						    <a href="<?php echo get_text($list[$i]['view_href']); ?>"><?php echo get_text($memo_preview); ?></a>
                         </div>
 					</div>	
-					<a href="<?php echo $list[$i]['del_href']; ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a>
+					<a href="<?php echo get_text($list[$i]['del_href']); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a>
 	            </li>
 	            <?php } ?>
 	            <?php if ($i==0) { echo '<li class="empty_table">자료가 없습니다.</li>'; }  ?>
