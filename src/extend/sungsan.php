@@ -560,6 +560,8 @@ function sungsan_member_recent_posts($member_id, $limit = 5)
                 $where[] = "(wr_2 = 'public' or wr_2 = '')";
             } elseif (!$is_admin && $level < 6) {
                 $where[] = "(wr_2 in ('public', 'member') or wr_2 = '')";
+            } elseif (!$is_admin && $level < 10) {
+                $where[] = "(wr_2 in ('public', 'member', 'officer') or wr_2 = '')";
             }
         }
 

@@ -106,6 +106,16 @@ describe('sungsan theme static contract', () => {
     assert.match(mypage, /아직 작성한 글이 없습니다\./);
   });
 
+  it('keeps mypage recent news aligned with role-based visibility levels', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /function sungsan_member_recent_posts\(\$member_id,\s*\$limit = 5\)/);
+    assert.match(extend, /\$level = isset\(\$member\['mb_level'\]\) \? \(int\) \$member\['mb_level'\] : 0;/);
+    assert.match(extend, /if \(!\$is_admin && \$level < 2\) \{[\s\S]*?\(wr_2 = 'public' or wr_2 = ''\)/);
+    assert.match(extend, /elseif \(!\$is_admin && \$level < 6\) \{[\s\S]*?\(wr_2 in \('public', 'member'\) or wr_2 = ''\)/);
+    assert.match(extend, /elseif \(!\$is_admin && \$level < 10\) \{[\s\S]*?\(wr_2 in \('public', 'member', 'officer'\) or wr_2 = ''\)/);
+  });
+
   it('keeps footer notices reachable from shared navigation', () => {
     const source = read('src/theme/sungsan/tail.php');
 
