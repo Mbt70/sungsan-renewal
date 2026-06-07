@@ -236,6 +236,22 @@ function sungsan_board_href($bo_table, $wr_id = 0)
     return $href;
 }
 
+function sungsan_prepare_latest_post($row, $board_id, $with_thumbnail, $thumb_width, $thumb_height, $is_notice = false)
+{
+    $row['href'] = sungsan_board_href($board_id, $row['wr_id']);
+    $row['subject'] = get_text($row['wr_subject']);
+    $row['date'] = substr($row['wr_datetime'], 0, 10);
+    $row['is_notice'] = $is_notice;
+
+    if ($with_thumbnail && function_exists('get_list_thumbnail')) {
+        $thumb = get_list_thumbnail($board_id, $row['wr_id'], $thumb_width, $thumb_height, false, true);
+        $row['thumb_src'] = isset($thumb['src']) ? $thumb['src'] : '';
+        $row['thumb_alt'] = isset($thumb['alt']) && $thumb['alt'] ? $thumb['alt'] : $row['subject'];
+    }
+
+    return $row;
+}
+
 function sungsan_latest_board_posts($bo_table, $args = array())
 {
     global $g5, $is_admin, $member;
@@ -253,6 +269,7 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     $with_thumbnail = !empty($args['thumbnail']);
     $thumb_width = isset($args['thumbWidth']) ? max(120, (int) $args['thumbWidth']) : 420;
     $thumb_height = isset($args['thumbHeight']) ? max(90, (int) $args['thumbHeight']) : 260;
+    $include_notice = !empty($args['includeNotice']);
     $where = array('wr_is_comment = 0');
 
     if ($board_id === SUNGSAN_NEWS_BOARD) {
@@ -296,30 +313,73 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     }
 
     $write_table = $g5['write_prefix'].$board_id;
+    $notice_ids = array();
+
+    if ($include_notice && isset($g5['board_table']) && function_exists('sql_fetch')) {
+        $board_row = sql_fetch(" select bo_notice from {$g5['board_table']} where bo_table = '".sql_escape_string($board_id)."' ");
+        if (!empty($board_row['bo_notice'])) {
+            $raw_notice_ids = explode(',', trim($board_row['bo_notice']));
+
+            foreach ($raw_notice_ids as $raw_notice_id) {
+                $notice_id = (int) $raw_notice_id;
+                if ($notice_id > 0) {
+                    $notice_ids[] = $notice_id;
+                }
+            }
+
+            $notice_ids = array_values(array_unique($notice_ids));
+        }
+    }
+
+    $posts = array();
+
+    if (!empty($notice_ids)) {
+        $notice_sql = " select wr_id, wr_subject, ca_name, wr_datetime, wr_hit, wr_1, wr_2, wr_3, wr_4, wr_7
+             from {$write_table}
+             where wr_id in (".implode(',', $notice_ids).")
+               and ".implode(' and ', $where)." ";
+        $notice_result = sql_query($notice_sql, false);
+        $notice_rows = array();
+
+        if ($notice_result) {
+            while ($row = sql_fetch_array($notice_result)) {
+                $notice_rows[(int) $row['wr_id']] = $row;
+            }
+        }
+
+        foreach ($notice_ids as $notice_id) {
+            if (!isset($notice_rows[$notice_id])) {
+                continue;
+            }
+
+            $posts[] = sungsan_prepare_latest_post($notice_rows[$notice_id], $board_id, $with_thumbnail, $thumb_width, $thumb_height, true);
+
+            if (count($posts) >= $limit) {
+                return $posts;
+            }
+        }
+
+        $where[] = 'wr_id not in ('.implode(',', $notice_ids).')';
+    }
+
+    $remaining_limit = $limit - count($posts);
+    if ($remaining_limit <= 0) {
+        return $posts;
+    }
+
     $sql = " select wr_id, wr_subject, ca_name, wr_datetime, wr_hit, wr_1, wr_2, wr_3, wr_4, wr_7
              from {$write_table}
              where ".implode(' and ', $where)."
              order by {$order}
-             limit {$limit} ";
+             limit {$remaining_limit} ";
     $result = sql_query($sql, false);
-    $posts = array();
 
     if (!$result) {
         return $posts;
     }
 
     while ($row = sql_fetch_array($result)) {
-        $row['href'] = sungsan_board_href($board_id, $row['wr_id']);
-        $row['subject'] = get_text($row['wr_subject']);
-        $row['date'] = substr($row['wr_datetime'], 0, 10);
-
-        if ($with_thumbnail && function_exists('get_list_thumbnail')) {
-            $thumb = get_list_thumbnail($board_id, $row['wr_id'], $thumb_width, $thumb_height, false, true);
-            $row['thumb_src'] = isset($thumb['src']) ? $thumb['src'] : '';
-            $row['thumb_alt'] = isset($thumb['alt']) && $thumb['alt'] ? $thumb['alt'] : $row['subject'];
-        }
-
-        $posts[] = $row;
+        $posts[] = sungsan_prepare_latest_post($row, $board_id, $with_thumbnail, $thumb_width, $thumb_height);
     }
 
     return $posts;

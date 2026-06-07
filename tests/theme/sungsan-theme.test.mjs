@@ -1304,6 +1304,26 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /object-fit:\s*cover/);
   });
 
+  it('puts pinned home notices before ordinary latest notices', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+    const css = read('src/scss/main.scss');
+
+    assert.match(
+      index,
+      /\$notice_posts = sungsan_latest_board_posts\('news', array\('category' => '공지', 'includeNotice' => true, 'limit' => 5\)\);/,
+    );
+    assert.match(extend, /\$include_notice = !empty\(\$args\['includeNotice'\]\);/);
+    assert.match(extend, /select bo_notice from \{\$g5\['board_table'\]\}/);
+    assert.match(extend, /explode\(',', trim\(\$board_row\['bo_notice'\]\)\)/);
+    assert.match(extend, /wr_id in \("\.implode\(',', \$notice_ids\)\."\)/);
+    assert.match(extend, /\$where\[\] = 'wr_id not in \('\.implode\(',', \$notice_ids\)\.'\)';/);
+    assert.match(extend, /\$row\['is_notice'\] = \$is_notice;/);
+    assert.match(index, /\$sungsan_home_post_is_notice = !empty\(\$sungsan_home_post\['is_notice'\]\);/);
+    assert.match(index, /<span class="ss-pin-label">중요<\/span>/);
+    assert.match(css, /\.ss-pin-label\s*\{/);
+  });
+
   it('escapes home and latest post links and titles before rendering latest content', () => {
     const index = read('src/theme/sungsan/index.php');
     const latest = read('src/skin/latest/sungsan_list/latest.skin.php');
