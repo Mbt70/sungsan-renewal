@@ -291,10 +291,50 @@ function sungsan_active_class($current, $value)
     return $current === $value ? ' active' : '';
 }
 
-function sungsan_login_url($return_url = '')
+function sungsan_url_origin($url)
+{
+    $parts = parse_url($url);
+    if (!is_array($parts) || empty($parts['host'])) {
+        return '';
+    }
+
+    $scheme = isset($parts['scheme']) ? strtolower($parts['scheme']) : 'http';
+    if ($scheme !== 'http' && $scheme !== 'https') {
+        return '';
+    }
+
+    $host = strtolower($parts['host']);
+    $port = isset($parts['port']) ? ':'.(int) $parts['port'] : '';
+
+    return $scheme.'://'.$host.$port;
+}
+
+function sungsan_sanitize_return_url($return_url)
 {
     $return_url = trim((string) $return_url);
     $return_url = htmlspecialchars_decode($return_url, ENT_QUOTES);
+
+    if ($return_url === '' || strpos($return_url, '//') === 0) {
+        return G5_URL;
+    }
+
+    if (preg_match('/^[a-z][a-z0-9+.-]*:/i', $return_url)) {
+        $return_origin = sungsan_url_origin($return_url);
+        $allowed_origins = array_filter(array(sungsan_url_origin(G5_URL), sungsan_url_origin(G5_BBS_URL)));
+
+        if ($return_origin !== '' && in_array($return_origin, $allowed_origins, true)) {
+            return $return_url;
+        }
+
+        return G5_URL;
+    }
+
+    return $return_url;
+}
+
+function sungsan_login_url($return_url = '')
+{
+    $return_url = sungsan_sanitize_return_url($return_url);
 
     return G5_BBS_URL.'/login.php?url='.urlencode($return_url);
 }
