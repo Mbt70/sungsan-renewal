@@ -680,16 +680,19 @@ describe('sungsan theme static contract', () => {
         expected: [
           /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
           /<\?php echo get_text\(\$po_content\); \?>/,
-          /<\?php echo get_text\(\$row\['po_datetime'\]\); \?>/,
-          /<\?php echo get_text\(substr\(str_replace\('-', '', \$row\['po_expire_date'\]\), 2\)\); \?>/,
-          /: get_text\(\$row\['po_expire_date'\]\); \?>/,
+          /<\?php echo get_text\(\$row_datetime\); \?>/,
+          /<\?php echo get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\); \?>/,
+          /: get_text\(\$row_expire_date\); \?>/,
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
           /echo \$po_content/,
           /echo \$row\['po_datetime'\]/,
+          /get_text\(\$row\['po_datetime'\]\)/,
           /echo substr\(str_replace\('-', '', \$row\['po_expire_date'\]\), 2\)/,
+          /get_text\(substr\(str_replace\('-', '', \$row\['po_expire_date'\]\), 2\)\)/,
           /: \$row\['po_expire_date'\]/,
+          /: get_text\(\$row\['po_expire_date'\]\)/,
         ],
       },
       {
@@ -737,19 +740,33 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /\$member_point = isset\(\$member\['mb_point'\]\) \? \(int\) \$member\['mb_point'\] : 0;/);
     assert.match(source, /number_format\(\$member_point\)/);
-    assert.match(source, /\$row_point = \(int\) \$row\['po_point'\];/);
+    assert.match(source, /\$row_point = isset\(\$row\['po_point'\]\) \? \(int\) \$row\['po_point'\] : 0;/);
+    assert.match(source, /\$row_content = isset\(\$row\['po_content'\]\) \? \$row\['po_content'\] : '';/);
+    assert.match(source, /\$row_expired = isset\(\$row\['po_expired'\]\) \? \(int\) \$row\['po_expired'\] : 0;/);
+    assert.match(source, /\$row_datetime = isset\(\$row\['po_datetime'\]\) \? \$row\['po_datetime'\] : '';/);
+    assert.match(source, /\$row_expire_date = isset\(\$row\['po_expire_date'\]\) \? \$row\['po_expire_date'\] : '';/);
     assert.match(source, /if \(\$row_point > 0\)/);
     assert.match(source, /\$point1 = '\+' \.number_format\(\$row_point\);/);
     assert.match(source, /\$sum_point1 \+= \$row_point;/);
     assert.match(source, /\$point2 = number_format\(\$row_point\);/);
     assert.match(source, /\$sum_point2 \+= \$row_point;/);
     assert.match(source, /\$point_value = \$point1 \?: \$point2;/);
+    assert.match(source, /\$po_content = \$row_content;/);
+    assert.match(source, /if\(\$row_expired == 1\)/);
+    assert.match(source, /get_text\(\$row_datetime\)/);
+    assert.match(source, /get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\)/);
+    assert.match(source, /\$row_expire_date == '9999-12-31'/);
+    assert.match(source, /get_text\(\$row_expire_date\)/);
     assert.match(source, /<span class="point_num"><\?php echo get_text\(\$point_value\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point1\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point2\); \?><\/span>/);
     assert.doesNotMatch(source, /number_format\(\$member\['mb_point'\]\)/);
     assert.doesNotMatch(source, /\$member_point = \(int\) \$member\['mb_point'\];/);
+    assert.doesNotMatch(source, /\$row_point = \(int\) \$row\['po_point'\];/);
     assert.doesNotMatch(source, /\$row\['po_point'\] > 0/);
+    assert.doesNotMatch(source, /\$po_content = \$row\['po_content'\];/);
+    assert.doesNotMatch(source, /get_text\(\$row\['po_datetime'\]\)/);
+    assert.doesNotMatch(source, /\$row\['po_expire_date'\] == '9999-12-31'/);
     assert.doesNotMatch(source, /echo \$sum_point1/);
     assert.doesNotMatch(source, /echo \$sum_point2/);
   });

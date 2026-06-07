@@ -25,7 +25,11 @@ $member_point = isset($member['mb_point']) ? (int) $member['mb_point'] : 0;
             foreach((array) $list as $row){
                 $point1 = $point2 = 0;
                 $point_use_class = '';
-                $row_point = (int) $row['po_point'];
+                $row_point = isset($row['po_point']) ? (int) $row['po_point'] : 0;
+                $row_content = isset($row['po_content']) ? $row['po_content'] : '';
+                $row_expired = isset($row['po_expired']) ? (int) $row['po_expired'] : 0;
+                $row_datetime = isset($row['po_datetime']) ? $row['po_datetime'] : '';
+                $row_expire_date = isset($row['po_expire_date']) ? $row['po_expire_date'] : '';
                 if ($row_point > 0) {
                     $point1 = '+' .number_format($row_point);
                     $sum_point1 += $row_point;
@@ -36,10 +40,10 @@ $member_point = isset($member['mb_point']) ? (int) $member['mb_point'] : 0;
                 }
                 $point_value = $point1 ?: $point2;
 
-                $po_content = $row['po_content'];
+                $po_content = $row_content;
 
                 $expr = '';
-                if($row['po_expired'] == 1)
+                if($row_expired == 1)
                     $expr = ' txt_expired';
             ?>
             <li class="<?php echo $point_use_class; ?>">
@@ -47,11 +51,11 @@ $member_point = isset($member['mb_point']) ? (int) $member['mb_point'] : 0;
                     <span class="point_tit"><?php echo get_text($po_content); ?></span>
                     <span class="point_num"><?php echo get_text($point_value); ?></span>
                 </div>
-                <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row['po_datetime']); ?></span>
+                <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row_datetime); ?></span>
                 <span class="point_date<?php echo $expr; ?>">
-                    <?php if ($row['po_expired'] == 1) { ?>
-                    만료 <?php echo get_text(substr(str_replace('-', '', $row['po_expire_date']), 2)); ?>
-                    <?php } else echo $row['po_expire_date'] == '9999-12-31' ? '&nbsp;' : get_text($row['po_expire_date']); ?>
+                    <?php if ($row_expired == 1) { ?>
+                    만료 <?php echo get_text(substr(str_replace('-', '', $row_expire_date), 2)); ?>
+                    <?php } else echo $row_expire_date == '9999-12-31' ? '&nbsp;' : get_text($row_expire_date); ?>
                 </span>
             </li>
             <?php
