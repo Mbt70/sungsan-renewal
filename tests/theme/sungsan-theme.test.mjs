@@ -116,6 +116,55 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
   });
 
+  it('escapes form mail recipient details before rendering the popup', () => {
+    const source = read('src/skin/member/sungsan/formmail.skin.php');
+
+    assert.match(source, /id="win_title"><\?php echo get_text\(\$name\); \?>/);
+    assert.match(source, /name="to" value="<\?php echo get_text\(\$email\); \?>"/);
+    assert.match(source, /name="fmail" value="<\?php echo get_text\(\$member\['mb_email'\]\); \?>"/);
+    assert.doesNotMatch(source, /echo\s+\$name(?:\s|\?>)/);
+    assert.doesNotMatch(source, /echo\s+\$email(?:\s|\?>)/);
+    assert.doesNotMatch(source, /echo\s+\$member\['mb_email'\]/);
+    assert.doesNotMatch(source, /\sstyle=/);
+  });
+
+  it('escapes member confirmation form values before rendering the password confirmation screen', () => {
+    const source = read('src/skin/member/sungsan/member_confirm.skin.php');
+
+    assert.match(source, /<h1><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/);
+    assert.match(source, /action="<\?php echo get_text\(\$url\); \?>"/);
+    assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
+    assert.match(source, /id="mb_confirm_id"><\?php echo get_text\(\$member\['mb_id'\]\); \?><\/span>/);
+    assert.doesNotMatch(source, /echo\s+\$g5\['title'\]/);
+    assert.doesNotMatch(source, /echo\s+\$url(?:\s|\?>)/);
+    assert.doesNotMatch(source, /echo\s+\$member\['mb_id'\]/);
+  });
+
+  it('escapes certification refresh hidden member values before rendering the form', () => {
+    const source = read('src/skin/member/sungsan/member_cert_refresh.skin.php');
+
+    assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/);
+    assert.match(source, /name="w" value="<\?php echo get_text\(\$w\); \?>"/);
+    assert.match(source, /name="url" value="<\?php echo get_text\(\$urlencode\); \?>"/);
+
+    for (const field of ['mb_certify', 'mb_id', 'mb_hp', 'mb_name']) {
+      assert.match(
+        source,
+        new RegExp(`name="${field === 'mb_certify' ? 'cert_type' : field}" value="<\\?php echo get_text\\(\\$member\\['${field}'\\]\\); \\?>"`),
+        `certification refresh should escape ${field}`,
+      );
+      assert.doesNotMatch(
+        source,
+        new RegExp(`name="${field === 'mb_certify' ? 'cert_type' : field}" value="<\\?php echo \\$member\\['${field}'\\]`),
+        `certification refresh should not echo raw ${field}`,
+      );
+    }
+
+    assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
+    assert.doesNotMatch(source, /name="w" value="<\?php echo \$w/);
+    assert.doesNotMatch(source, /name="url" value="<\?php echo \$urlencode/);
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',

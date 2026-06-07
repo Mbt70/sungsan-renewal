@@ -8,13 +8,13 @@ if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipi
 ?>
 <!-- 기존 회원 본인인증 시작 { -->
 <div class="member_cert_refresh">
-    <form name="fcertrefreshform" id="member_cert_refresh" action="<?php echo $action_url ?>" onsubmit="return fcertrefreshform_submit(this);" method="POST" autocomplete="off">
-    <input type="hidden" name="w" value="<?php echo $w ?>">
-	<input type="hidden" name="url" value="<?php echo $urlencode ?>">
-	<input type="hidden" name="cert_type" value="<?php echo $member['mb_certify']; ?>">
-    <input type="hidden" name="mb_id" value="<?php echo $member['mb_id']; ?>">
-    <input type="hidden" name="mb_hp" value="<?php echo $member['mb_hp']; ?>">
-    <input type="hidden" name="mb_name" value="<?php echo $member['mb_name']; ?>">
+    <form name="fcertrefreshform" id="member_cert_refresh" action="<?php echo get_text($action_url); ?>" onsubmit="return fcertrefreshform_submit(this);" method="POST" autocomplete="off">
+    <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+	<input type="hidden" name="url" value="<?php echo get_text($urlencode); ?>">
+	<input type="hidden" name="cert_type" value="<?php echo get_text($member['mb_certify']); ?>">
+    <input type="hidden" name="mb_id" value="<?php echo get_text($member['mb_id']); ?>">
+    <input type="hidden" name="mb_hp" value="<?php echo get_text($member['mb_hp']); ?>">
+    <input type="hidden" name="mb_name" value="<?php echo get_text($member['mb_name']); ?>">
 	<input type="hidden" name="cert_no" value="">
         <section id="member_cert_refresh_private">
             <h2>(필수) 추가 개인정보처리방침 안내</h2>
