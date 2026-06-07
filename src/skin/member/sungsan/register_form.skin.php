@@ -256,7 +256,7 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 				<template id="tpl_thirdparty">
 					* 목적: 성산회 운영 안내와 행사 알림 발송 대행<br>
 					* 항목: 이름, 휴대폰 번호<br>
-					* 제공받는 자: <?php echo implode(', ', $usedCompanies);?><br>
+					* 제공받는 자: <?php echo get_text(implode(', ', $usedCompanies)); ?><br>
 					* 보유기간: 발송 대행 기간 또는 동의 철회 시까지
 				</template>
 				</li>

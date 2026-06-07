@@ -174,6 +174,13 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /회원 관리와 회 운영 안내/);
   });
 
+  it('escapes third-party provider labels before rendering registration consent copy', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    assert.match(source, /get_text\(implode\(', ', \$usedCompanies\)\)/);
+    assert.doesNotMatch(source, /echo implode\(', ', \$usedCompanies\)/);
+  });
+
   it('explains that registration is pending operator approval before member use', () => {
     const source = read('src/skin/member/sungsan/register_result.skin.php');
 
