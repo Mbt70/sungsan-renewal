@@ -24,6 +24,23 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('escapes mypage action links before rendering member navigation', () => {
+    const source = read('src/pages/mypage.php');
+
+    for (const variable of ['edit_url', 'my_posts_url', 'logout_url']) {
+      assert.match(
+        source,
+        new RegExp(`href="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+        `mypage should escape ${variable}`,
+      );
+      assert.doesNotMatch(
+        source,
+        new RegExp(`href="<\\?php echo \\$${variable}; \\?>"`),
+        `mypage should not render raw ${variable}`,
+      );
+    }
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 

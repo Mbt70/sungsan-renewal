@@ -44,9 +44,9 @@ $logout_url = G5_BBS_URL.'/logout.php';
         </article>
 
         <nav class="ss-panel ss-member-actions" aria-label="회원 메뉴">
-            <a class="ss-button" href="<?php echo $edit_url; ?>">내 정보 수정</a>
-            <a class="ss-button secondary" href="<?php echo $my_posts_url; ?>">내가 쓴 글</a>
-            <a class="ss-button secondary" href="<?php echo $logout_url; ?>">로그아웃</a>
+            <a class="ss-button" href="<?php echo get_text($edit_url); ?>">내 정보 수정</a>
+            <a class="ss-button secondary" href="<?php echo get_text($my_posts_url); ?>">내가 쓴 글</a>
+            <a class="ss-button secondary" href="<?php echo get_text($logout_url); ?>">로그아웃</a>
         </nav>
 
         <section class="ss-panel ss-review-note">
