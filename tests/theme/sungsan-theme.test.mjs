@@ -240,6 +240,18 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /href="<\?php echo G5_BBS_URL; \?>\/register\.php"/);
   });
 
+  it('escapes registration navigation URLs before rendering attributes', () => {
+    const consent = read('src/skin/member/sungsan/register.skin.php');
+    const result = read('src/skin/member/sungsan/register_result.skin.php');
+
+    assert.match(consent, /\$sungsan_register_cancel_url = G5_URL;/);
+    assert.match(result, /\$sungsan_register_home_url = G5_URL;/);
+    assert.match(consent, /href="<\?php echo get_text\(\$sungsan_register_cancel_url\); \?>" class="btn_close"/);
+    assert.match(result, /href="<\?php echo get_text\(\$sungsan_register_home_url\); \?>" class="btn_submit"/);
+    assert.doesNotMatch(consent, /href="<\?php echo G5_URL/);
+    assert.doesNotMatch(result, /href="<\?php echo G5_URL/);
+  });
+
   it('keeps registration consent copy aligned with Sungsan communications', () => {
     const source = [
       read('src/skin/member/sungsan/register.skin.php'),

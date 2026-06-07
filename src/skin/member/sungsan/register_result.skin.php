@@ -3,6 +3,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$sungsan_register_home_url = G5_URL;
 ?>
 
 <!-- 회원가입결과 시작 { -->
@@ -36,7 +38,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         </p>
 
         <div class="btn_confirm_reg">
-            <a href="<?php echo G5_URL; ?>/" class="btn_submit">메인으로</a>
+            <a href="<?php echo get_text($sungsan_register_home_url); ?>" class="btn_submit">메인으로</a>
         </div>
     </div>
 </div>
