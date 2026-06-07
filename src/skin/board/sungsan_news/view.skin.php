@@ -32,7 +32,7 @@ if (sungsan_is_review_restricted($view)) {
             <div class="ss-meta">
                 <?php if ($sungsan_view_category !== '') { ?><span class="ss-badge"><?php echo get_text($sungsan_view_category); ?></span><?php } ?>
                 <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
-                <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
+                <span><?php echo get_text(sungsan_get_visibility_label($visibility)); ?></span>
                 <span><?php echo get_text($sungsan_view_writer); ?></span>
                 <time datetime="<?php echo get_text($sungsan_view_date); ?>"><?php echo get_text($sungsan_view_date); ?></time>
                 <span>조회 <?php echo number_format($sungsan_view_hits); ?></span>

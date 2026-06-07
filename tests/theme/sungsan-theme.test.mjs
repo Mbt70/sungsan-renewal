@@ -1984,6 +1984,16 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-access-label\s*\{/);
   });
 
+  it('escapes news visibility labels before rendering metadata', () => {
+    const list = read('src/skin/board/sungsan_news/list.skin.php');
+    const view = read('src/skin/board/sungsan_news/view.skin.php');
+
+    assert.match(list, /<span><\?php echo get_text\(sungsan_get_visibility_label\(\$visibility\)\); \?><\/span>/);
+    assert.match(view, /<span><\?php echo get_text\(sungsan_get_visibility_label\(\$visibility\)\); \?><\/span>/);
+    assert.doesNotMatch(list, /<span><\?php echo sungsan_get_visibility_label\(\$visibility\); \?><\/span>/);
+    assert.doesNotMatch(view, /<span><\?php echo sungsan_get_visibility_label\(\$visibility\); \?><\/span>/);
+  });
+
   it('marks free board list posts as member-readable before visitors open them', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 

@@ -70,7 +70,7 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
                 <div class="ss-meta">
                     <?php if ($sungsan_news_post_category) { ?><span class="ss-badge"><?php echo get_text($sungsan_news_post_category); ?></span><?php } ?>
                     <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
-                    <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
+                    <span><?php echo get_text(sungsan_get_visibility_label($visibility)); ?></span>
                     <?php if (!$can_read_post) { ?><span class="ss-access-label">권한 확인 필요</span><?php } ?>
                     <time datetime="<?php echo get_text($sungsan_news_post_datetime); ?>"><?php echo get_text($sungsan_news_post_date); ?></time>
                     <span>조회 <?php echo number_format($sungsan_news_post_hits); ?></span>
