@@ -38,15 +38,24 @@ $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((
                     $sungsan_write_file = isset($file[$i]) ? $file[$i] : array();
                     $sungsan_write_file_exists = isset($sungsan_write_file['file']) ? $sungsan_write_file['file'] : '';
                     $sungsan_write_file_source = isset($sungsan_write_file['source']) ? $sungsan_write_file['source'] : '';
+                    $sungsan_write_file_size = isset($sungsan_write_file['size']) ? $sungsan_write_file['size'] : '';
+                    $sungsan_write_file_delete_id = 'bf_file_del_'.$i;
                     ?>
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                         <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" aria-describedby="ss-attachment-help">
                         <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
-                            <label class="ss-checkline">
-                                <input type="checkbox" name="bf_file_del[<?php echo $i; ?>]" value="1">
-                                기존 파일 삭제: <?php echo get_text($sungsan_write_file_source); ?>
-                            </label>
+                            <div class="ss-existing-file">
+                                <p>
+                                    <strong>현재 첨부</strong>
+                                    <span><?php echo get_text($sungsan_write_file_source); ?></span>
+                                    <?php if ($sungsan_write_file_size !== '') { ?><span><?php echo get_text($sungsan_write_file_size); ?></span><?php } ?>
+                                </p>
+                                <label class="ss-checkline" for="<?php echo get_text($sungsan_write_file_delete_id); ?>">
+                                    <input type="checkbox" id="<?php echo get_text($sungsan_write_file_delete_id); ?>" name="bf_file_del[<?php echo $i; ?>]" value="1">
+                                    이 파일 삭제
+                                </label>
+                            </div>
                         <?php } ?>
                     </div>
                 <?php } ?>

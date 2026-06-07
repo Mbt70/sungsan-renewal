@@ -1133,8 +1133,16 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/, `${file} should normalize existing file rows`);
       assert.match(source, /\$sungsan_write_file_exists = isset\(\$sungsan_write_file\['file'\]\) \? \$sungsan_write_file\['file'\] : '';/, `${file} should normalize existing file state`);
       assert.match(source, /\$sungsan_write_file_source = isset\(\$sungsan_write_file\['source'\]\) \? \$sungsan_write_file\['source'\] : '';/, `${file} should normalize existing file label`);
+      assert.match(source, /\$sungsan_write_file_size = isset\(\$sungsan_write_file\['size'\]\) \? \$sungsan_write_file\['size'\] : '';/, `${file} should normalize existing file size`);
+      assert.match(source, /\$sungsan_write_file_delete_id = 'bf_file_del_'\.\$i;/, `${file} should create a stable delete checkbox id`);
       assert.match(source, /if \(\$w === 'u' && \$sungsan_write_file_exists !== ''\)/, `${file} should test normalized file state`);
+      assert.match(source, /<div class="ss-existing-file">/, `${file} should render existing attachments as a distinct state`);
+      assert.match(source, /<strong>현재 첨부<\/strong>/, `${file} should label the current attachment before delete controls`);
       assert.match(source, /get_text\(\$sungsan_write_file_source\)/, `${file} should escape normalized existing file label`);
+      assert.match(source, /get_text\(\$sungsan_write_file_size\)/, `${file} should escape normalized existing file size`);
+      assert.match(source, /id="<\?php echo get_text\(\$sungsan_write_file_delete_id\); \?>"/, `${file} should escape delete checkbox id`);
+      assert.match(source, /for="<\?php echo get_text\(\$sungsan_write_file_delete_id\); \?>"/, `${file} should connect delete checkbox label`);
+      assert.match(source, /이 파일 삭제/, `${file} should make the delete action explicit`);
 
       assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
       assert.doesNotMatch(source, /value="<\?php echo \$subject/);
@@ -1653,6 +1661,8 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-form-summary,\s*\n\.ss-attachment-help/);
     assert.match(css, /border-left:\s*4px solid var\(--ss-color-primary\)/);
     assert.match(css, /background:\s*var\(--ss-color-primary-soft\)/);
+    assert.match(css, /\.ss-existing-file\s*\{/);
+    assert.match(css, /\.ss-existing-file\s+\.ss-checkline\s*\{/);
   });
 
   it('shows blocked upload extension guidance on board write forms', () => {
