@@ -89,4 +89,20 @@ describe('Cafe24 staging validation handoff', () => {
       expectIncludes(checklist, expected, checklistPath);
     }
   });
+
+  it('documents that board-managed news categories drive home summary links', () => {
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+    const checklist = readFileSync(checklistPath, 'utf8');
+
+    for (const expected of [
+      '홈 요약 링크',
+      '최근 공지',
+      '다가오는 일정',
+      '자료와 규정',
+      '활동소식 보기',
+    ]) {
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
+      expectIncludes(checklist, expected, checklistPath);
+    }
+  });
 });
