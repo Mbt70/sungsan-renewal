@@ -1859,6 +1859,53 @@ describe('sungsan theme static contract', () => {
     assert.match(news, /id="ca_name"[\s\S]*?aria-describedby="ss-write-required-help"/, 'news write should connect category help');
   });
 
+  it('limits board attachment file pickers to common image and document extensions', () => {
+    const expectedExtensions = [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+      'pdf',
+      'hwp',
+      'hwpx',
+      'doc',
+      'docx',
+      'xls',
+      'xlsx',
+      'ppt',
+      'pptx',
+      'txt',
+    ];
+
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(
+        source,
+        /\$sungsan_attachment_accept = '\.jpg,\.jpeg,\.png,\.gif,\.webp,\.pdf,\.hwp,\.hwpx,\.doc,\.docx,\.xls,\.xlsx,\.ppt,\.pptx,\.txt';/,
+        `${file} should define a shared image/document picker filter`,
+      );
+      assert.match(
+        source,
+        /<input type="file" name="bf_file\[\]" id="bf_file_<\?php echo \$i \+ 1; \?>" accept="<\?php echo get_text\(\$sungsan_attachment_accept\); \?>" aria-describedby="ss-attachment-help">/,
+        `${file} should apply the picker filter to each attachment input`,
+      );
+
+      const acceptLine = source.match(/\$sungsan_attachment_accept = '([^']+)';/);
+      assert.ok(acceptLine, `${file} should expose an attachment accept list`);
+      for (const extension of expectedExtensions) {
+        assert.match(acceptLine[1], new RegExp(`\\.${extension}(?:,|$)`), `${file} should allow ${extension} in the picker`);
+      }
+      for (const blocked of ['php', 'html', 'js', 'svg', 'htaccess', 'user.ini']) {
+        assert.doesNotMatch(acceptLine[1], new RegExp(`\\.${blocked}(?:,|$)`), `${file} should not suggest ${blocked} uploads`);
+      }
+    }
+  });
+
   it('styles board write summaries as scannable guidance blocks', () => {
     const css = read('src/scss/main.scss');
 

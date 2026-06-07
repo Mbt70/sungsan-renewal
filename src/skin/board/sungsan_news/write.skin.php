@@ -15,6 +15,7 @@ $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
 $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
+$sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $board : array());
 ?>
 <section class="ss-section">
@@ -101,7 +102,7 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
                     ?>
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
-                        <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" aria-describedby="ss-attachment-help">
+                        <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" accept="<?php echo get_text($sungsan_attachment_accept); ?>" aria-describedby="ss-attachment-help">
                         <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
                             <div class="ss-existing-file">
                                 <p>
