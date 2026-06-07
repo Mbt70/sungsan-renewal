@@ -285,9 +285,9 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 					<span class="chk_li">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</span>
 					<button type="button" class="js-open-consent" data-title="성산회 소식 수신을 위한 개인정보 수집 및 이용" data-template="#tpl_marketing" data-check="#reg_mb_marketing_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
-				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo $member['mb_marketing_agree'] ?>">
+				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo get_text($member['mb_marketing_agree']); ?>">
 				<div id="desc_marketing" class="sound_only">성산회 소식 수신을 위한 개인정보 수집·이용 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($member['mb_marketing_agree'] == 1 && $member['mb_marketing_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_marketing_date'].")"; ?></div>
+				<div class="consent-date"><?php if ($member['mb_marketing_agree'] == 1 && $member['mb_marketing_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_marketing_date']).")"; ?></div>
 
 				<template id="tpl_marketing">
 					* 목적: 성산회 소식과 행사 안내<br>
@@ -314,8 +314,8 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 						<input type="checkbox" name="mb_mailling" value="1" id="reg_mb_mailling" <?php echo $member['mb_mailling'] ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_mailling"><span></span><b class="sound_only">광고성 이메일 수신 동의</b></label>
 						<span class="chk_li">광고성 이메일 수신 동의</span>
-						<input type="hidden" name="mb_mailling_default" value="<?php echo $member['mb_mailling']; ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $member['mb_mailling'] == 1 && $member['mb_mailling_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_mailling_date'].")"; ?></div>
+						<input type="hidden" name="mb_mailling_default" value="<?php echo get_text($member['mb_mailling']); ?>">
+						<div class="consent-date"><?php if ($w == 'u' && $member['mb_mailling'] == 1 && $member['mb_mailling_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_mailling_date']).")"; ?></div>
 					</li>
 
 					<!-- 휴대폰번호 입력 보이기 or 필수입력일 경우에만 -->
@@ -324,8 +324,8 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 						<input type="checkbox" name="mb_sms" value="1" id="reg_mb_sms" <?php echo $member['mb_sms'] ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_sms"><span></span><b class="sound_only">광고성 SMS/카카오톡 수신 동의</b></label>
 						<span class="chk_li">광고성 SMS/카카오톡 수신 동의</span>
-						<input type="hidden" name="mb_sms_default" value="<?php echo $member['mb_sms']; ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $member['mb_sms'] == 1 && $member['mb_sms_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_sms_date'].")"; ?></div>
+						<input type="hidden" name="mb_sms_default" value="<?php echo get_text($member['mb_sms']); ?>">
+						<div class="consent-date"><?php if ($w == 'u' && $member['mb_sms'] == 1 && $member['mb_sms_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_sms_date']).")"; ?></div>
 					</li>
 					<?php } ?>
 				</ul>
@@ -357,9 +357,9 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 					<span class="chk_li">(선택) 개인정보 제3자 제공 동의</span>
 					<button type="button" class="js-open-consent" data-title="개인정보 제3자 제공 동의" data-template="#tpl_thirdparty" data-check="#reg_mb_thirdparty_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
-				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo $member['mb_thirdparty_agree'] ?>">
+				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo get_text($member['mb_thirdparty_agree']); ?>">
 				<div id="desc_thirdparty" class="sound_only">개인정보 제3자 제공 동의에 대한 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($member['mb_thirdparty_agree'] == 1 && $member['mb_thirdparty_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".$member['mb_thirdparty_date'].")"; ?></div>
+				<div class="consent-date"><?php if ($member['mb_thirdparty_agree'] == 1 && $member['mb_thirdparty_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_thirdparty_date']).")"; ?></div>
 
 				<template id="tpl_thirdparty">
 					* 목적: 성산회 운영 안내와 행사 알림 발송 대행<br>

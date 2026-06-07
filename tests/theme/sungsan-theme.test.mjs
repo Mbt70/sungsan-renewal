@@ -92,6 +92,30 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /get_text\(\$member\['mb_profile'\]\)/);
     assert.match(source, /name="mb_open_default" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
     assert.match(source, /name="mb_open" value="<\?php echo get_text\(\$member\['mb_open'\]\); \?>"/);
+    for (const field of ['mb_marketing_agree', 'mb_mailling', 'mb_sms', 'mb_thirdparty_agree']) {
+      assert.match(
+        source,
+        new RegExp(`name="${field}_default" value="<\\?php echo get_text\\(\\$member\\['${field}'\\]\\); \\?>"`),
+        `register form should escape ${field} defaults`,
+      );
+      assert.doesNotMatch(
+        source,
+        new RegExp(`name="${field}_default" value="<\\?php echo \\$member\\['${field}'\\]`),
+        `register form should not echo raw ${field} defaults`,
+      );
+    }
+    for (const field of ['mb_marketing_date', 'mb_mailling_date', 'mb_sms_date', 'mb_thirdparty_date']) {
+      assert.match(
+        source,
+        new RegExp(`get_text\\(\\$member\\['${field}'\\]\\)`),
+        `register form should escape ${field}`,
+      );
+      assert.doesNotMatch(
+        source,
+        new RegExp(`\\.\\$member\\['${field}'\\]`),
+        `register form should not concatenate raw ${field}`,
+      );
+    }
     assert.doesNotMatch(source, /echo \$member\['mb_id'\]/);
     assert.doesNotMatch(source, /echo \$member\['mb_certify'\]/);
     assert.doesNotMatch(source, /echo \$member\['mb_sex'\]/);
