@@ -1205,6 +1205,14 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<p>새로운 비밀번호를 입력해주세요\.<\/p>/);
   });
 
+  it('connects member confirmation guidance to the password field', () => {
+    const source = read('src/skin/member/sungsan/member_confirm.skin.php');
+
+    assert.match(source, /<p id="member_confirm_help">[\s\S]*비밀번호를 한번 더 입력해주세요\./);
+    assert.match(source, /id="confirm_mb_password"[^>]+aria-describedby="member_confirm_help"/);
+    assert.doesNotMatch(source, /<p>\s*<strong>비밀번호를 한번 더 입력해주세요\.<\/strong>/);
+  });
+
   it('uses semantic input types for member email and phone fields', () => {
     const cases = [
       {
