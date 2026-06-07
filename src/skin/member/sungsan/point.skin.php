@@ -5,6 +5,12 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $member_point = isset($member['mb_point']) ? (int) $member['mb_point'] : 0;
+$point_paging_pages = G5_IS_MOBILE ? (int) $config['cf_mobile_pages'] : (int) $config['cf_write_pages'];
+$point_paging_page = isset($page) ? (int) $page : 1;
+$point_paging_total = isset($total_page) ? (int) $total_page : 1;
+$point_paging_script = isset($_SERVER['SCRIPT_NAME']) ? get_text($_SERVER['SCRIPT_NAME']) : '';
+$point_paging_query = isset($qstr) && $qstr !== '' ? $qstr.'&amp;page=' : 'page=';
+$point_paging_url = $point_paging_script.'?'.$point_paging_query;
 ?>
 
 <div id="point" class="new_win">
@@ -79,7 +85,7 @@ $member_point = isset($member['mb_point']) ? (int) $member['mb_point'] : 0;
         </ul>
     </div>
 
-    <?php echo get_paging(G5_IS_MOBILE ? $config['cf_mobile_pages'] : $config['cf_write_pages'], $page, $total_page, $_SERVER['SCRIPT_NAME'].'?'.$qstr.'&amp;page='); ?>
+    <?php echo get_paging($point_paging_pages, $point_paging_page, $point_paging_total, $point_paging_url); ?>
 
     <button type="button" onclick="javascript:window.close();" class="btn_close">창닫기</button>
 </div>

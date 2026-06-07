@@ -837,6 +837,13 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /<span class="point_num"><\?php echo get_text\(\$point_value\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point1\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point2\); \?><\/span>/);
+    assert.match(source, /\$point_paging_pages = G5_IS_MOBILE \? \(int\) \$config\['cf_mobile_pages'\] : \(int\) \$config\['cf_write_pages'\];/);
+    assert.match(source, /\$point_paging_page = isset\(\$page\) \? \(int\) \$page : 1;/);
+    assert.match(source, /\$point_paging_total = isset\(\$total_page\) \? \(int\) \$total_page : 1;/);
+    assert.match(source, /\$point_paging_script = isset\(\$_SERVER\['SCRIPT_NAME'\]\) \? get_text\(\$_SERVER\['SCRIPT_NAME'\]\) : '';/);
+    assert.match(source, /\$point_paging_query = isset\(\$qstr\) && \$qstr !== '' \? \$qstr\.'&amp;page=' : 'page=';/);
+    assert.match(source, /\$point_paging_url = \$point_paging_script\.'\?'\.\$point_paging_query;/);
+    assert.match(source, /get_paging\(\$point_paging_pages, \$point_paging_page, \$point_paging_total, \$point_paging_url\)/);
     assert.doesNotMatch(source, /number_format\(\$member\['mb_point'\]\)/);
     assert.doesNotMatch(source, /\$member_point = \(int\) \$member\['mb_point'\];/);
     assert.doesNotMatch(source, /\$row_point = \(int\) \$row\['po_point'\];/);
@@ -846,6 +853,8 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\$row\['po_expire_date'\] == '9999-12-31'/);
     assert.doesNotMatch(source, /echo \$sum_point1/);
     assert.doesNotMatch(source, /echo \$sum_point2/);
+    assert.doesNotMatch(source, /get_text\(\$qstr\)\.'&amp;page='/);
+    assert.doesNotMatch(source, /get_paging\(G5_IS_MOBILE \? \$config\['cf_mobile_pages'\] : \$config\['cf_write_pages'\], \$page, \$total_page, \$_SERVER\['SCRIPT_NAME'\]\.'\?'\.\$qstr\.'&amp;page='\)/);
   });
 
   it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
