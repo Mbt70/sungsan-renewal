@@ -363,6 +363,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /name="url" value="<\?php echo \$urlencode/);
   });
 
+  it('renders certification refresh popup parameters as JSON string literals', () => {
+    const source = read('src/skin/member/sungsan/member_cert_refresh.skin.php');
+
+    assert.match(source, /\$cert_type_json = json_encode\(\$cert_type, JSON_UNESCAPED_SLASHES\);/);
+    assert.match(source, /\$cert_url_json = json_encode\(\$cert_url, JSON_UNESCAPED_SLASHES\);/);
+    assert.match(source, /certify_win_open\(<\?php echo \$cert_type_json; \?>, <\?php echo \$cert_url_json; \?> \+ params\);/);
+    assert.doesNotMatch(source, /certify_win_open\("<\?php echo \$cert_type; \?>", "<\?php echo \$cert_url; \?>" \+ params\);/);
+  });
+
   it('escapes member input form actions and values before rendering account utility screens', () => {
     const cases = [
       {
