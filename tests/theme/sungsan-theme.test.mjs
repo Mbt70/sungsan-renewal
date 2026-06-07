@@ -2241,6 +2241,26 @@ describe('sungsan theme static contract', () => {
     assert.match(updateHead, /sungsan_preserve_news_migration_fields\(\)/);
   });
 
+  it('normalizes posted news metadata before the core write handler stores it', () => {
+    const extend = read('src/extend/sungsan.php');
+    const updateHead = read('src/skin/board/sungsan_news/write_update.head.skin.php');
+
+    assert.match(extend, /function sungsan_normalize_news_write_fields\(\)/);
+    assert.match(extend, /global \$sungsan_groups;/);
+    assert.match(extend, /global \$wr_1, \$wr_2, \$wr_3, \$wr_4;/);
+    assert.match(extend, /\$allowed_visibilities = array\('public', 'member', 'officer'\);/);
+    assert.match(extend, /if \(!isset\(\$sungsan_groups\[\$wr_1\]\)\) \{/);
+    assert.match(extend, /\$wr_1 = '';/);
+    assert.match(extend, /if \(!in_array\(\$wr_2, \$allowed_visibilities, true\)\) \{/);
+    assert.match(extend, /\$wr_2 = 'member';/);
+    assert.match(extend, /preg_match\('\/\^\\d\{4\}-\\d\{2\}-\\d\{2\}\$\/', \$wr_3\)/);
+    assert.match(extend, /preg_match\('\/\^\\d\{4\}-\\d\{2\}-\\d\{2\}\$\/', \$wr_4\)/);
+    assert.match(
+      updateHead,
+      /sungsan_preserve_news_migration_fields\(\);\s*\n\s*sungsan_normalize_news_write_fields\(\);\s*\n\s*sungsan_reject_blocked_uploads\(\$_FILES\);/,
+    );
+  });
+
   it('keeps review-required migrated news hidden from non-admin readers', () => {
     const extend = read('src/extend/sungsan.php');
     const list = read('src/skin/board/sungsan_news/list.skin.php');
