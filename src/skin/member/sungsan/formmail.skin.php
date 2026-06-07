@@ -27,16 +27,16 @@ $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
             <?php if (!$is_member) {  ?>
             <li>
                 <label for="fnick">이름 <strong>필수</strong></label>
-                <input type="text" name="fnick" id="fnick" required class="frm_input full_input required" placeholder="이름">
+                <input type="text" name="fnick" id="fnick" required class="frm_input full_input required">
             </li>
             <li>
                 <label for="fmail">E-mail <strong>필수</strong></label>
-                <input type="email" name="fmail"  id="fmail" required class="frm_input full_input required" autocomplete="email" placeholder="E-mail">
+                <input type="email" name="fmail"  id="fmail" required class="frm_input full_input required" autocomplete="email">
             </li>
             <?php }  ?>
             <li>
                 <label for="subject">제목 <strong>필수</strong></label>
-                <input type="text" name="subject" id="subject" required class="frm_input full_input required"  placeholder="제목">
+                <input type="text" name="subject" id="subject" required class="frm_input full_input required">
             </li>
             <li>
                 <fieldset class="ss-choice-group">

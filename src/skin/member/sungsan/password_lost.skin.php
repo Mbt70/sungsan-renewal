@@ -21,7 +21,7 @@ if($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipin
                 해당 이메일로 아이디와 비밀번호 정보를 보내드립니다.
             </p>
             <label for="mb_email">E-mail 주소 <strong>필수</strong></label>
-            <input type="email" name="mb_email" id="mb_email" required class="required frm_input full_input email" size="30" autocomplete="email" aria-describedby="password_lost_email_help" placeholder="E-mail 주소">
+            <input type="email" name="mb_email" id="mb_email" required class="required frm_input full_input email" size="30" autocomplete="email" aria-describedby="password_lost_email_help">
         </fieldset>
         <?php echo captcha_html();  ?>
 

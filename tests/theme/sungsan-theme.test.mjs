@@ -1174,8 +1174,12 @@ describe('sungsan theme static contract', () => {
       const source = read(file);
 
       for (const field of fields) {
+        const fieldLine = source.split('\n').find((line) => line.includes(`id="${field}"`));
+
         assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible label for ${field}`);
         assert.doesNotMatch(source, new RegExp(`<label for="${field}"[^>]*class="sound_only"`), `${file} should not hide the ${field} label`);
+        assert.ok(fieldLine, `${file} should render ${field}`);
+        assert.doesNotMatch(fieldLine, /placeholder=/, `${file} should not duplicate ${field} label as placeholder`);
       }
     }
   });
