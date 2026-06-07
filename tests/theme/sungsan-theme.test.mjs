@@ -387,12 +387,22 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /get_text\(\$mb_homepage\)/);
     assert.match(source, /get_text\(set_http\(\$mb_homepage\)\)/);
     assert.match(source, /get_text\(\$mb_profile\)/);
-    assert.match(source, /\(int\)\s*\$mb\['mb_level'\]/);
-    assert.match(source, /\(int\)\s*\$mb\['mb_point'\]/);
+    assert.match(source, /\$profile_member_id = isset\(\$mb\['mb_id'\]\) \? \$mb\['mb_id'\] : '';/);
+    assert.match(source, /\$profile_member_level = isset\(\$mb\['mb_level'\]\) \? \(int\) \$mb\['mb_level'\] : 0;/);
+    assert.match(source, /\$profile_member_point = isset\(\$mb\['mb_point'\]\) \? \(int\) \$mb\['mb_point'\] : 0;/);
+    assert.match(source, /\$profile_viewer_level = isset\(\$member\['mb_level'\]\) \? \(int\) \$member\['mb_level'\] : 0;/);
+    assert.match(source, /\$profile_member_join_date = isset\(\$mb\['mb_datetime'\]\) \? substr\(\$mb\['mb_datetime'\], 0, 10\) : '';/);
+    assert.match(source, /\$profile_member_today_login = isset\(\$mb\['mb_today_login'\]\) \? \$mb\['mb_today_login'\] : '';/);
+    assert.match(source, /get_member_profile_img\(\$profile_member_id\)/);
+    assert.match(source, /<td><\?php echo \$profile_member_level; \?><\/td>/);
+    assert.match(source, /number_format\(\$profile_member_point\)/);
+    assert.match(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_join_date\)/);
+    assert.match(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_today_login\)/);
     assert.doesNotMatch(source, /echo \$mb_nick/);
     assert.doesNotMatch(source, /echo \$mb_homepage/);
     assert.doesNotMatch(source, /echo \$mb_profile/);
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
+    assert.doesNotMatch(source, /get_member_profile_img\(\$mb\['mb_id'\]\)/);
   });
 
   it('escapes form mail recipient details before rendering the popup', () => {
