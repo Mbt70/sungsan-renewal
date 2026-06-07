@@ -22,16 +22,16 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <ul>
             <?php if (!$is_member) {  ?>
             <li>
-                <label for="fnick" class="sound_only">이름<strong>필수</strong></label>
+                <label for="fnick">이름 <strong>필수</strong></label>
                 <input type="text" name="fnick" id="fnick" required class="frm_input full_input required" placeholder="이름">
             </li>
             <li>
-                <label for="fmail" class="sound_only">E-mail<strong>필수</strong></label>
+                <label for="fmail">E-mail <strong>필수</strong></label>
                 <input type="text" name="fmail"  id="fmail" required class="frm_input full_input required" placeholder="E-mail">
             </li>
             <?php }  ?>
             <li>
-                <label for="subject" class="sound_only">제목<strong>필수</strong></label>
+                <label for="subject">제목 <strong>필수</strong></label>
                 <input type="text" name="subject" id="subject" required class="frm_input full_input required"  placeholder="제목">
             </li>
             <li class="chk_box">
@@ -46,7 +46,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 <label for="type_both"><span></span>TEXT+HTML</label>
             </li>
             <li>
-                <label for="content" class="sound_only">내용<strong>필수</strong></label>
+                <label for="content">내용 <strong>필수</strong></label>
                 <textarea name="content" id="content" required class="required"></textarea>
             </li>
             <li class="formmail_flie">

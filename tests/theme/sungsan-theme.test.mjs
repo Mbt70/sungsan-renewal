@@ -407,6 +407,36 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
+    const visibleLabelCases = [
+      {
+        file: 'src/skin/member/sungsan/password_lost.skin.php',
+        fields: ['mb_email'],
+      },
+      {
+        file: 'src/skin/member/sungsan/password_reset.skin.php',
+        fields: ['mb_pw', 'mb_pw2'],
+      },
+      {
+        file: 'src/skin/member/sungsan/memo_form.skin.php',
+        fields: ['me_recv_mb_id', 'me_memo'],
+      },
+      {
+        file: 'src/skin/member/sungsan/formmail.skin.php',
+        fields: ['fnick', 'fmail', 'subject', 'content'],
+      },
+    ];
+
+    for (const { file, fields } of visibleLabelCases) {
+      const source = read(file);
+
+      for (const field of fields) {
+        assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible label for ${field}`);
+        assert.doesNotMatch(source, new RegExp(`<label for="${field}"[^>]*class="sound_only"`), `${file} should not hide the ${field} label`);
+      }
+    }
+  });
+
   it('keeps board skins free of inline styles and emoji-only cues', () => {
     for (const file of [
       'src/skin/board/sungsan_news/list.skin.php',

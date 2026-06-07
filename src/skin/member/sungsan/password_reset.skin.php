@@ -14,9 +14,9 @@ add_stylesheet('<link rel="stylesheet" href="' . $member_skin_url . '/style.css"
                 <label for="mb_id" class="sound_only">아이디</label>
                 <br>
                 <b>회원 아이디 : <?php echo get_text($_POST['mb_id']); ?></b>
-                <label for="mb_pw" class="sound_only">새 비밀번호<strong class="sound_only">필수</strong></label>
+                <label for="mb_pw">새 비밀번호 <strong>필수</strong></label>
                 <input type="password" name="mb_password" id="mb_pw" required class="required frm_input full_input" size="30" placeholder="새 비밀번호">
-                <label for="mb_pw2" class="sound_only">새 비밀번호 확인<strong class="sound_only">필수</strong></label>
+                <label for="mb_pw2">새 비밀번호 확인 <strong>필수</strong></label>
                 <input type="password" name="mb_password_re" id="mb_pw2" required class="required frm_input full_input" size="30" placeholder="새 비밀번호 확인">
             </fieldset>
             <div class="win_btn">
