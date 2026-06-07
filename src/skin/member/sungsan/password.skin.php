@@ -27,13 +27,13 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     </p>
 
     <form name="fboardpassword" action="<?php echo $action;  ?>" method="post">
-    <input type="hidden" name="w" value="<?php echo $w ?>">
-    <input type="hidden" name="bo_table" value="<?php echo $bo_table ?>">
-    <input type="hidden" name="wr_id" value="<?php echo $wr_id ?>">
-    <input type="hidden" name="comment_id" value="<?php echo $comment_id ?>">
-    <input type="hidden" name="sfl" value="<?php echo $sfl ?>">
-    <input type="hidden" name="stx" value="<?php echo $stx ?>">
-    <input type="hidden" name="page" value="<?php echo $page ?>">
+    <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+    <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
+    <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
+    <input type="hidden" name="comment_id" value="<?php echo get_text($comment_id); ?>">
+    <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
+    <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
+    <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
 
     <fieldset>
         <label for="pw_wr_password" class="sound_only">비밀번호<strong>필수</strong></label>

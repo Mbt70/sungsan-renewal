@@ -18,16 +18,16 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
         <p class="ss-form-help">종류는 필수입니다. 소속과 공개 범위는 글의 성격에 맞게 선택해 주세요.</p>
         <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
-            <input type="hidden" name="w" value="<?php echo $w; ?>">
-            <input type="hidden" name="bo_table" value="<?php echo $bo_table; ?>">
-            <input type="hidden" name="wr_id" value="<?php echo $wr_id; ?>">
-            <input type="hidden" name="sca" value="<?php echo $sca; ?>">
-            <input type="hidden" name="sfl" value="<?php echo $sfl; ?>">
-            <input type="hidden" name="stx" value="<?php echo $stx; ?>">
-            <input type="hidden" name="spt" value="<?php echo $spt; ?>">
-            <input type="hidden" name="sst" value="<?php echo $sst; ?>">
-            <input type="hidden" name="sod" value="<?php echo $sod; ?>">
-            <input type="hidden" name="page" value="<?php echo $page; ?>">
+            <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
+            <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
+            <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
+            <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
+            <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
+            <input type="hidden" name="spt" value="<?php echo get_text($spt); ?>">
+            <input type="hidden" name="sst" value="<?php echo get_text($sst); ?>">
+            <input type="hidden" name="sod" value="<?php echo get_text($sod); ?>">
+            <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
             <input type="hidden" name="wr_5" value="<?php echo $legacy_board_id; ?>">
             <input type="hidden" name="wr_6" value="<?php echo $legacy_post_id; ?>">
             <input type="hidden" name="wr_7" value="<?php echo $review_flag; ?>">

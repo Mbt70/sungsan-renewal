@@ -102,6 +102,49 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('escapes board return parameters before rendering hidden form attributes', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+      'src/skin/member/sungsan/password.skin.php',
+    ]) {
+      const source = read(file);
+
+      for (const variable of ['bo_table', 'sfl', 'stx', 'page']) {
+        assert.match(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+          `${file} should escape ${variable}`,
+        );
+        assert.doesNotMatch(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo \\$${variable};? \\?>"`),
+          `${file} should not echo raw ${variable}`,
+        );
+      }
+    }
+
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      for (const variable of ['sca', 'spt', 'sst', 'sod']) {
+        assert.match(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+          `${file} should escape ${variable}`,
+        );
+        assert.doesNotMatch(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo \\$${variable};? \\?>"`),
+          `${file} should not echo raw ${variable}`,
+        );
+      }
+    }
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');
