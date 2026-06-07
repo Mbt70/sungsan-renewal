@@ -334,10 +334,20 @@ describe('sungsan theme static contract', () => {
     const source = read('src/skin/board/sungsan_news/list.skin.php');
 
     assert.match(source, /\$sungsan_news_board_param = urlencode\(\$bo_table\);/);
-    assert.match(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param;/);
-    assert.match(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\);/);
+    assert.match(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param.\$sungsan_news_search_query;/);
+    assert.match(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\).\$sungsan_news_search_query;/);
     assert.doesNotMatch(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table;/);
     assert.doesNotMatch(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table/);
+  });
+
+  it('keeps active news search terms when switching category filters', () => {
+    const source = read('src/skin/board/sungsan_news/list.skin.php');
+
+    assert.match(source, /\$sungsan_news_search_query = '';/);
+    assert.match(source, /if \(\$sungsan_news_search_term !== ''\) \{/);
+    assert.match(source, /\$sungsan_news_search_query = '&sfl=wr_subject%7C%7Cwr_content&sop=and&stx='\.urlencode\(\$sungsan_news_search_term\);/);
+    assert.match(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param.\$sungsan_news_search_query;/);
+    assert.match(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\).\$sungsan_news_search_query;/);
   });
 
   it('uses board-managed news categories for home summary queries and filter links', () => {
@@ -1761,8 +1771,8 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['ca_name'\]\)/);
     assert.doesNotMatch(newsList, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
     assert.doesNotMatch(newsList, /number_format\(\(int\) \$list\[\$i\]\['wr_hit'\]\)/);
-    assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param;/);
-    assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\);/);
+    assert.match(newsList, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param.\$sungsan_news_search_query;/);
+    assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\).\$sungsan_news_search_query;/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_list_url\); \?>"/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_category_href\); \?>"/);
     assert.match(newsList, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>">/);
