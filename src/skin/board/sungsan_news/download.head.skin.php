@@ -27,7 +27,9 @@ if (!sungsan_can_read_news_post($write)) {
     }
 
     if ($sungsan_show_login_redirect) {
-        alert($message, G5_BBS_URL.'/login.php?wr_id='.$wr_id.'&'.$qstr.'&url='.urlencode(get_pretty_url($bo_table, $wr_id)));
+        $sungsan_news_download_return_url = get_pretty_url($bo_table, $wr_id);
+        $sungsan_news_download_login_url = sungsan_login_url($sungsan_news_download_return_url);
+        alert($message, $sungsan_news_download_login_url);
     }
 
     alert($message);

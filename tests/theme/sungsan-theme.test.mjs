@@ -208,6 +208,8 @@ describe('sungsan theme static contract', () => {
     const extend = read('src/extend/sungsan.php');
     const head = read('src/theme/sungsan/head.php');
     const index = read('src/theme/sungsan/index.php');
+    const mypage = read('src/pages/mypage.php');
+    const newsDownload = read('src/skin/board/sungsan_news/download.head.skin.php');
     const newsView = read('src/skin/board/sungsan_news/view.skin.php');
     const freeList = read('src/skin/board/sungsan_free/list.skin.php');
     const freeView = read('src/skin/board/sungsan_free/view.skin.php');
@@ -219,12 +221,14 @@ describe('sungsan theme static contract', () => {
 
     assert.match(head, /\$ss_login_url = sungsan_login_url\(\$ss_request_uri\);/);
     assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? sungsan_login_url\(\$sungsan_home_post_raw_href\) : \$sungsan_home_post_raw_href;/);
+    assert.match(mypage, /\$sungsan_mypage_login_url = sungsan_login_url\(G5_URL\.'\/sungsan\/mypage\.php'\);/);
+    assert.match(newsDownload, /\$sungsan_news_download_login_url = sungsan_login_url\(\$sungsan_news_download_return_url\);/);
     assert.match(newsView, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
     assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(freeView, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
     assert.match(freeDownload, /\$sungsan_free_download_login_url = sungsan_login_url\(\$sungsan_free_download_return_url\);/);
 
-    for (const source of [head, index, newsView, freeList, freeView, freeDownload]) {
+    for (const source of [head, index, mypage, newsDownload, newsView, freeList, freeView, freeDownload]) {
       assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode/);
     }
   });
@@ -1559,7 +1563,7 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$write\['wr_2'\]/);
     assert.match(source, /sungsan_can_read_news_post\(\$write\)/);
     assert.match(source, /sungsan_get_visibility_label\(\$visibility\)/);
-    assert.match(source, /login\.php/);
+    assert.match(source, /sungsan_login_url\(\$sungsan_news_download_return_url\)/);
     assert.match(source, /get_pretty_url\(\$bo_table,\s*\$wr_id\)/);
     assert.match(source, /alert\(/);
     assert.match(extend, /sungsan_can_read_visibility\(\$visibility\)/);
@@ -1573,16 +1577,19 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$sungsan_show_login_redirect = !\$is_member && !\$is_review_restricted;/);
     assert.match(source, /권한이 있는 계정으로 로그인하면 첨부를 내려받을 수 있습니다\./);
     assert.match(source, /현재 계정으로는 이 첨부 파일을 내려받을 수 없습니다\./);
-    assert.match(source, /if \(\$sungsan_show_login_redirect\) \{[\s\S]*?login\.php[\s\S]*?\}[\s\S]*?alert\(\$message\);/);
+    assert.match(source, /if \(\$sungsan_show_login_redirect\) \{[\s\S]*?sungsan_login_url\(\$sungsan_news_download_return_url\)[\s\S]*?\}[\s\S]*?alert\(\$message\);/);
     assert.doesNotMatch(source, /로그인 후 권한을 확인해 주세요/);
     assert.doesNotMatch(source, /!\s*empty\(\$member\['mb_id'\]\)/);
   });
 
-  it('uses raw query separators for server-side news download login redirects', () => {
+  it('uses the centralized login helper for news download redirects', () => {
     const source = read('src/skin/board/sungsan_news/download.head.skin.php');
 
-    assert.match(source, /login\.php\?wr_id='\.\$wr_id\.'&'\.\$qstr\.'&url='/);
-    assert.doesNotMatch(source, /&amp;/);
+    assert.match(source, /\$sungsan_news_download_return_url = get_pretty_url\(\$bo_table, \$wr_id\);/);
+    assert.match(source, /\$sungsan_news_download_login_url = sungsan_login_url\(\$sungsan_news_download_return_url\);/);
+    assert.match(source, /alert\(\$message, \$sungsan_news_download_login_url\);/);
+    assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?wr_id='/);
+    assert.doesNotMatch(source, /\$qstr\.'&url='/);
   });
 
   it('preserves migrated news audit metadata when posts are edited', () => {

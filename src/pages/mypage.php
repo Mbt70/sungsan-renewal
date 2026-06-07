@@ -2,7 +2,8 @@
 include_once '../common.php';
 
 if (!$is_member) {
-    goto_url(G5_BBS_URL.'/login.php?url='.urlencode(G5_URL.'/sungsan/mypage.php'));
+    $sungsan_mypage_login_url = sungsan_login_url(G5_URL.'/sungsan/mypage.php');
+    goto_url($sungsan_mypage_login_url);
 }
 
 $sungsan_page = 'mypage';
