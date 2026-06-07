@@ -211,6 +211,7 @@ describe('sungsan theme static contract', () => {
     const newsView = read('src/skin/board/sungsan_news/view.skin.php');
     const freeList = read('src/skin/board/sungsan_free/list.skin.php');
     const freeView = read('src/skin/board/sungsan_free/view.skin.php');
+    const freeDownload = read('src/skin/board/sungsan_free/download.head.skin.php');
 
     assert.match(extend, /function sungsan_login_url\(\$return_url = ''\)/);
     assert.match(extend, /htmlspecialchars_decode\(\$return_url, ENT_QUOTES\)/);
@@ -221,8 +222,9 @@ describe('sungsan theme static contract', () => {
     assert.match(newsView, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
     assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(freeView, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
+    assert.match(freeDownload, /\$sungsan_free_download_login_url = sungsan_login_url\(\$sungsan_free_download_return_url\);/);
 
-    for (const source of [head, index, newsView, freeList, freeView]) {
+    for (const source of [head, index, newsView, freeList, freeView, freeDownload]) {
       assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?url='\.urlencode/);
     }
   });
@@ -1728,7 +1730,10 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /global \$is_member;/);
     assert.match(source, /if \(!\$is_member\) \{/);
-    assert.match(source, /\$sungsan_free_download_login_url = G5_BBS_URL\.'\/login\.php\?wr_id='.\$wr_id\.'&'.\$qstr\.'&url='\.urlencode\(get_pretty_url\(\$bo_table, \$wr_id\)\);/);
+    assert.match(source, /\$sungsan_free_download_return_url = get_pretty_url\(\$bo_table, \$wr_id\);/);
+    assert.match(source, /\$sungsan_free_download_login_url = sungsan_login_url\(\$sungsan_free_download_return_url\);/);
+    assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?wr_id='/);
+    assert.doesNotMatch(source, /\$qstr\.'&url='/);
     assert.match(source, /회원 전용 자유게시판 첨부 파일입니다/);
     assert.match(source, /alert\(\$message, \$sungsan_free_download_login_url\);/);
   });
