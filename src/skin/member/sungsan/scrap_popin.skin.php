@@ -22,11 +22,11 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 	        </li>
 	        <li>
 	            <label for="wr_content">댓글작성</label>
-	            <textarea name="wr_content" id="wr_content"></textarea>
+	            <textarea name="wr_content" id="wr_content" aria-describedby="scrap_comment_help"></textarea>
 	        </li>
 	    </ul>
 	</div>
-    <p class="win_desc">스크랩을 하시면서 감사 혹은 격려의 댓글을 남기실 수 있습니다.</p>
+    <p id="scrap_comment_help" class="win_desc">스크랩을 하시면서 감사 혹은 격려의 댓글을 남기실 수 있습니다.</p>
 
     <div class="win_btn">
         <button type="submit" class="btn_submit">스크랩 확인</button>

@@ -1221,6 +1221,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<p>\s*<\?php if \(\$w == 'u'\) \{ \?>/);
   });
 
+  it('connects scrap comment guidance to the optional comment textarea', () => {
+    const source = read('src/skin/member/sungsan/scrap_popin.skin.php');
+
+    assert.match(source, /<textarea name="wr_content" id="wr_content" aria-describedby="scrap_comment_help"><\/textarea>/);
+    assert.match(source, /<p id="scrap_comment_help" class="win_desc">/);
+    assert.doesNotMatch(source, /<textarea name="wr_content" id="wr_content"><\/textarea>/);
+    assert.doesNotMatch(source, /<p class="win_desc">/);
+  });
+
   it('uses semantic input types for member email and phone fields', () => {
     const cases = [
       {
