@@ -1166,22 +1166,47 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
-      assert.match(source, /get_text\(\$view\['datetime'\]\)/, `${file} should escape view datetime`);
-      assert.match(source, /get_text\(\$view\['wr_name'\]\)/, `${file} should escape view author name`);
-      assert.match(source, /number_format\(\(int\) \$view\['wr_hit'\]\)/, `${file} should cast view hit count`);
-      assert.match(source, /href="<\?php echo get_text\(\$view\['file'\]\[\$i\]\['href'\]\); \?>"/, `${file} should escape attachment href`);
+      assert.match(source, /\$sungsan_view_subject = isset\(\$view\['wr_subject'\]\) \? \$view\['wr_subject'\] : '';/, `${file} should normalize view subject`);
+      assert.match(source, /\$sungsan_view_writer = isset\(\$view\['wr_name'\]\) \? \$view\['wr_name'\] : '';/, `${file} should normalize view author`);
+      assert.match(source, /\$sungsan_view_date = isset\(\$view\['datetime'\]\) \? \$view\['datetime'\] : '';/, `${file} should normalize view datetime`);
+      assert.match(source, /\$sungsan_view_hits = isset\(\$view\['wr_hit'\]\) \? \(int\) \$view\['wr_hit'\] : 0;/, `${file} should normalize view hit count`);
+      assert.match(source, /\$sungsan_view_content = isset\(\$view\['content'\]\) \? \$view\['content'\] : '';/, `${file} should normalize view content`);
+      assert.match(source, /get_text\(\$sungsan_view_subject\)/, `${file} should escape view subject`);
+      assert.match(source, /get_text\(\$sungsan_view_date\)/, `${file} should escape view datetime`);
+      assert.match(source, /get_text\(\$sungsan_view_writer\)/, `${file} should escape view author name`);
+      assert.match(source, /number_format\(\$sungsan_view_hits\)/, `${file} should render normalized hit count`);
+      assert.match(source, /get_view_thumbnail\(\$sungsan_view_content\)/, `${file} should render normalized content`);
+      assert.match(source, /\$sungsan_view_file = isset\(\$view\['file'\]\[\$i\]\) \? \$view\['file'\]\[\$i\] : array\(\);/, `${file} should normalize each attachment row`);
+      assert.match(source, /\$sungsan_view_file_href = isset\(\$sungsan_view_file\['href'\]\) \? \$sungsan_view_file\['href'\] : '#';/, `${file} should normalize attachment href`);
+      assert.match(source, /\$sungsan_view_file_source = isset\(\$sungsan_view_file\['source'\]\) \? \$sungsan_view_file\['source'\] : '';/, `${file} should normalize attachment name`);
+      assert.match(source, /if \(\$sungsan_view_file_source !== ''\)/, `${file} should test normalized attachment name`);
+      assert.match(source, /href="<\?php echo get_text\(\$sungsan_view_file_href\); \?>"/, `${file} should escape attachment href`);
+      assert.match(source, /get_text\(\$sungsan_view_file_source\)/, `${file} should escape attachment source`);
       assert.match(source, /href="<\?php echo get_text\(\$list_href\); \?>"/, `${file} should escape list_href`);
       assert.match(source, /href="<\?php echo get_text\(\$update_href\); \?>"/, `${file} should escape update_href`);
       assert.match(source, /href="<\?php echo get_text\(\$delete_href\); \?>"/, `${file} should escape delete_href`);
 
+      assert.doesNotMatch(source, /get_text\(\$view\['wr_subject'\]\)/);
       assert.doesNotMatch(source, /echo \$view\['datetime'\]/);
+      assert.doesNotMatch(source, /get_text\(\$view\['datetime'\]\)/);
       assert.doesNotMatch(source, /echo \$view\['name'\]/);
+      assert.doesNotMatch(source, /get_text\(\$view\['wr_name'\]\)/);
       assert.doesNotMatch(source, /number_format\(\$view\['wr_hit'\]\)/);
+      assert.doesNotMatch(source, /number_format\(\(int\) \$view\['wr_hit'\]\)/);
+      assert.doesNotMatch(source, /get_view_thumbnail\(\$view\['content'\]\)/);
       assert.doesNotMatch(source, /href="<\?php echo \$view\['file'\]\[\$i\]\['href'\]/);
+      assert.doesNotMatch(source, /get_text\(\$view\['file'\]\[\$i\]\['href'\]\)/);
+      assert.doesNotMatch(source, /get_text\(\$view\['file'\]\[\$i\]\['source'\]\)/);
       assert.doesNotMatch(source, /href="<\?php echo \$list_href/);
       assert.doesNotMatch(source, /href="<\?php echo \$update_href/);
       assert.doesNotMatch(source, /href="<\?php echo \$delete_href/);
     }
+
+    const newsView = read('src/skin/board/sungsan_news/view.skin.php');
+
+    assert.match(newsView, /\$sungsan_view_category = isset\(\$view\['ca_name'\]\) \? \$view\['ca_name'\] : '';/);
+    assert.match(newsView, /if \(\$sungsan_view_category !== ''\) \{ \?><span class="ss-badge"><\?php echo get_text\(\$sungsan_view_category\); \?><\/span><\?php \} \?>/);
+    assert.doesNotMatch(newsView, /get_text\(\$view\['ca_name'\]\)/);
   });
 
   it('renders home media posts with GnuBoard thumbnails when available', () => {
@@ -1419,7 +1444,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(view, /global \$is_member;/);
     assert.match(view, /\$sungsan_free_login_url = G5_BBS_URL\.'\/login\.php\?url='\.urlencode\(\$_SERVER\['REQUEST_URI'\]\);/);
-    assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$view\['content'\]\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
+    assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$sungsan_view_content\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
     assert.match(view, /회원 전용 자유게시판 글입니다/);
     assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);
   });

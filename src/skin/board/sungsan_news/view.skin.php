@@ -5,6 +5,12 @@ if (!defined('_GNUBOARD_')) {
 
 global $is_member;
 
+$sungsan_view_subject = isset($view['wr_subject']) ? $view['wr_subject'] : '';
+$sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
+$sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
+$sungsan_view_hits = isset($view['wr_hit']) ? (int) $view['wr_hit'] : 0;
+$sungsan_view_content = isset($view['content']) ? $view['content'] : '';
+$sungsan_view_category = isset($view['ca_name']) ? $view['ca_name'] : '';
 $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
 $can_read = sungsan_can_read_news_post($view);
@@ -21,21 +27,21 @@ if (sungsan_is_review_restricted($view)) {
 <article class="ss-section">
     <div class="ss-container">
         <header class="ss-panel ss-post-header">
-            <h1 class="ss-section-title"><?php echo get_text($view['wr_subject']); ?></h1>
+            <h1 class="ss-section-title"><?php echo get_text($sungsan_view_subject); ?></h1>
             <div class="ss-meta">
-                <?php if ($view['ca_name']) { ?><span class="ss-badge"><?php echo get_text($view['ca_name']); ?></span><?php } ?>
+                <?php if ($sungsan_view_category !== '') { ?><span class="ss-badge"><?php echo get_text($sungsan_view_category); ?></span><?php } ?>
                 <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
                 <span><?php echo sungsan_get_visibility_label($visibility); ?></span>
-                <span><?php echo get_text($view['wr_name']); ?></span>
-                <span><?php echo get_text($view['datetime']); ?></span>
-                <span>조회 <?php echo number_format((int) $view['wr_hit']); ?></span>
+                <span><?php echo get_text($sungsan_view_writer); ?></span>
+                <span><?php echo get_text($sungsan_view_date); ?></span>
+                <span>조회 <?php echo number_format($sungsan_view_hits); ?></span>
             </div>
         </header>
 
         <div class="ss-panel ss-content-panel">
             <?php if ($can_read) { ?>
                 <div class="ss-content">
-                    <?php echo get_view_thumbnail($view['content']); ?>
+                    <?php echo get_view_thumbnail($sungsan_view_content); ?>
                 </div>
 
                 <?php if (!empty($view['file']['count'])) { ?>
@@ -43,10 +49,15 @@ if (sungsan_is_review_restricted($view)) {
                         <h2 class="ss-section-title">첨부 파일</h2>
                         <div class="ss-attachment-list">
                         <?php for ($i = 0; $i < $view['file']['count']; $i++) { ?>
-                            <?php if (!empty($view['file'][$i]['source'])) { ?>
-                                <a class="ss-attachment-row" href="<?php echo get_text($view['file'][$i]['href']); ?>">
+                            <?php
+                            $sungsan_view_file = isset($view['file'][$i]) ? $view['file'][$i] : array();
+                            $sungsan_view_file_href = isset($sungsan_view_file['href']) ? $sungsan_view_file['href'] : '#';
+                            $sungsan_view_file_source = isset($sungsan_view_file['source']) ? $sungsan_view_file['source'] : '';
+                            ?>
+                            <?php if ($sungsan_view_file_source !== '') { ?>
+                                <a class="ss-attachment-row" href="<?php echo get_text($sungsan_view_file_href); ?>">
                                     <span class="ss-file-icon" aria-hidden="true"></span>
-                                    <span><?php echo get_text($view['file'][$i]['source']); ?></span>
+                                    <span><?php echo get_text($sungsan_view_file_source); ?></span>
                                     <strong>내려받기</strong>
                                 </a>
                             <?php } ?>
