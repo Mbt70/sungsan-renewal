@@ -102,6 +102,24 @@ function sungsan_can_read_visibility($visibility)
     return false;
 }
 
+function sungsan_is_review_restricted($post)
+{
+    return isset($post['wr_7']) && $post['wr_7'] === 'review_required';
+}
+
+function sungsan_can_read_news_post($post)
+{
+    global $is_admin;
+
+    if (sungsan_is_review_restricted($post) && !$is_admin) {
+        return false;
+    }
+
+    $visibility = isset($post['wr_2']) ? $post['wr_2'] : 'member';
+
+    return sungsan_can_read_visibility($visibility);
+}
+
 function sungsan_reject_blocked_uploads($files)
 {
     global $sungsan_blocked_upload_extensions;
@@ -170,7 +188,7 @@ function sungsan_board_href($bo_table, $wr_id = 0)
 
 function sungsan_latest_board_posts($bo_table, $args = array())
 {
-    global $g5;
+    global $g5, $is_admin, $member;
 
     if (!isset($g5['write_prefix']) || !function_exists('sql_query')) {
         return array();
@@ -186,6 +204,19 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     $thumb_width = isset($args['thumbWidth']) ? max(120, (int) $args['thumbWidth']) : 420;
     $thumb_height = isset($args['thumbHeight']) ? max(90, (int) $args['thumbHeight']) : 260;
     $where = array('wr_is_comment = 0');
+
+    if ($board_id === SUNGSAN_NEWS_BOARD) {
+        if (!$is_admin) {
+            $where[] = "(wr_7 <> 'review_required' or wr_7 is null)";
+        }
+
+        $level = isset($member['mb_level']) ? (int) $member['mb_level'] : 0;
+        if (!$is_admin && $level < 2) {
+            $where[] = "(wr_2 = 'public' or wr_2 = '')";
+        } elseif (!$is_admin && $level < 6) {
+            $where[] = "(wr_2 in ('public', 'member') or wr_2 = '')";
+        }
+    }
 
     if ($with_thumbnail && !function_exists('get_list_thumbnail') && defined('G5_LIB_PATH') && is_file(G5_LIB_PATH.'/thumbnail.lib.php')) {
         include_once G5_LIB_PATH.'/thumbnail.lib.php';
@@ -215,7 +246,7 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     }
 
     $write_table = $g5['write_prefix'].$board_id;
-    $sql = " select wr_id, wr_subject, ca_name, wr_datetime, wr_hit, wr_1, wr_2, wr_3, wr_4
+    $sql = " select wr_id, wr_subject, ca_name, wr_datetime, wr_hit, wr_1, wr_2, wr_3, wr_4, wr_7
              from {$write_table}
              where ".implode(' and ', $where)."
              order by {$order}

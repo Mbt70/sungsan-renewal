@@ -105,13 +105,41 @@ describe('sungsan theme static contract', () => {
     assert.equal(existsSync(path.join(repoRoot, file)), true, `${file} should exist`);
 
     const source = read(file);
+    const extend = read('src/extend/sungsan.php');
 
     assert.match(source, /\$write\['wr_2'\]/);
-    assert.match(source, /sungsan_can_read_visibility\(\$visibility\)/);
+    assert.match(source, /sungsan_can_read_news_post\(\$write\)/);
     assert.match(source, /sungsan_get_visibility_label\(\$visibility\)/);
     assert.match(source, /login\.php/);
     assert.match(source, /get_pretty_url\(\$bo_table,\s*\$wr_id\)/);
     assert.match(source, /alert\(/);
+    assert.match(extend, /sungsan_can_read_visibility\(\$visibility\)/);
+  });
+
+  it('preserves migrated news audit metadata when posts are edited', () => {
+    const source = read('src/skin/board/sungsan_news/write.skin.php');
+
+    for (const field of ['wr_5', 'wr_6', 'wr_7', 'wr_8']) {
+      assert.match(source, new RegExp(`name="${field}"`));
+      assert.match(source, new RegExp(`\\$write\\['${field}'\\]`));
+    }
+  });
+
+  it('keeps review-required migrated news hidden from non-admin readers', () => {
+    const extend = read('src/extend/sungsan.php');
+    const list = read('src/skin/board/sungsan_news/list.skin.php');
+    const view = read('src/skin/board/sungsan_news/view.skin.php');
+    const download = read('src/skin/board/sungsan_news/download.head.skin.php');
+
+    assert.match(extend, /function sungsan_is_review_restricted/);
+    assert.match(extend, /function sungsan_can_read_news_post/);
+    assert.match(extend, /wr_7/);
+    assert.match(extend, /review_required/);
+    assert.match(extend, /wr_7 <> 'review_required'/);
+
+    assert.match(list, /sungsan_can_read_news_post\(\$list\[\$i\]\)/);
+    assert.match(view, /sungsan_can_read_news_post\(\$view\)/);
+    assert.match(download, /sungsan_can_read_news_post\(\$write\)/);
   });
 
   it('blocks executable or browser-active board upload extensions before storage', () => {

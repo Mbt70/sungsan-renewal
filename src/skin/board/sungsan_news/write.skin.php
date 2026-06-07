@@ -7,6 +7,10 @@ global $sungsan_news_categories, $sungsan_groups;
 
 $visibility = isset($write['wr_2']) && $write['wr_2'] ? $write['wr_2'] : 'member';
 $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
+$legacy_board_id = isset($write['wr_5']) ? get_text($write['wr_5']) : '';
+$legacy_post_id = isset($write['wr_6']) ? get_text($write['wr_6']) : '';
+$review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
+$review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -24,6 +28,10 @@ $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
             <input type="hidden" name="sst" value="<?php echo $sst; ?>">
             <input type="hidden" name="sod" value="<?php echo $sod; ?>">
             <input type="hidden" name="page" value="<?php echo $page; ?>">
+            <input type="hidden" name="wr_5" value="<?php echo $legacy_board_id; ?>">
+            <input type="hidden" name="wr_6" value="<?php echo $legacy_post_id; ?>">
+            <input type="hidden" name="wr_7" value="<?php echo $review_flag; ?>">
+            <input type="hidden" name="wr_8" value="<?php echo $review_reason; ?>">
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
 
             <div class="ss-field">

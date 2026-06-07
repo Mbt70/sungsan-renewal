@@ -6,6 +6,7 @@ if (!defined('_GNUBOARD_')) {
 global $sungsan_news_categories;
 
 $current_category = isset($sca) ? $sca : '';
+$visible_count = 0;
 ?>
 <section class="ss-section">
     <div class="ss-container">
@@ -36,6 +37,11 @@ $current_category = isset($sca) ? $sca : '';
         <div class="ss-post-list">
         <?php for ($i = 0; $i < count($list); $i++) { ?>
             <?php
+            if (!sungsan_can_read_news_post($list[$i])) {
+                continue;
+            }
+
+            $visible_count++;
             $group_label = sungsan_get_group_label(isset($list[$i]['wr_1']) ? $list[$i]['wr_1'] : '');
             $visibility = isset($list[$i]['wr_2']) ? $list[$i]['wr_2'] : 'member';
             ?>
@@ -53,7 +59,7 @@ $current_category = isset($sca) ? $sca : '';
                 </div>
             </a>
         <?php } ?>
-        <?php if (count($list) === 0) { ?>
+        <?php if ($visible_count === 0) { ?>
             <div class="ss-post-row"><p class="ss-post-title">조건에 맞는 글이 없습니다.</p></div>
         <?php } ?>
         </div>

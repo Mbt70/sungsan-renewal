@@ -5,7 +5,10 @@ if (!defined('_GNUBOARD_')) {
 
 $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
-$can_read = sungsan_can_read_visibility($visibility);
+$can_read = sungsan_can_read_news_post($view);
+$access_message = sungsan_is_review_restricted($view)
+    ? '운영자 검토 전 비공개 글입니다.'
+    : '이 글은 '.sungsan_get_visibility_label($visibility).' 공개 글입니다. 로그인 후 권한을 확인해 주세요.';
 ?>
 <article class="ss-section">
     <div class="ss-container">
@@ -43,7 +46,7 @@ $can_read = sungsan_can_read_visibility($visibility);
                     </section>
                 <?php } ?>
             <?php } else { ?>
-                <p class="ss-access-note">이 글은 <?php echo sungsan_get_visibility_label($visibility); ?> 공개 글입니다. 로그인 후 확인해 주세요.</p>
+                <p class="ss-access-note"><?php echo get_text($access_message); ?></p>
                 <a class="ss-button" href="<?php echo G5_BBS_URL; ?>/login.php?url=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">로그인</a>
             <?php } ?>
         </div>
