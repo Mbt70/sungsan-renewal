@@ -98,10 +98,10 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
 
             <label class="ss-comment-content-label" for="wr_content">댓글 내용 <span class="ss-required">필수</span></label>
             <?php if ($sungsan_comment_min || $sungsan_comment_max) { ?>
-                <p id="char_cnt" class="ss-form-help"><span id="char_count"></span>글자</p>
+                <p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"></span>글자</p>
             <?php } ?>
 
-            <textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help" <?php if ($sungsan_comment_min || $sungsan_comment_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_comment_content_value); ?></textarea>
+            <textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help<?php if ($sungsan_comment_min || $sungsan_comment_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_comment_min || $sungsan_comment_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_comment_content_value); ?></textarea>
 
             <?php if ($is_guest) { ?>
                 <div class="ss-comment-guest-fields">

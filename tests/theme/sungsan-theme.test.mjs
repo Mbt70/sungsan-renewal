@@ -2108,10 +2108,18 @@ describe('sungsan theme static contract', () => {
     const css = read('src/scss/main.scss');
 
     assert.match(comment, /<label class="ss-comment-content-label" for="wr_content">댓글 내용 <span class="ss-required">필수<\/span><\/label>/);
-    assert.match(comment, /<textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help"/);
+    assert.match(comment, /<textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help/);
     assert.doesNotMatch(comment, /<label class="sound_only" for="wr_content">댓글 내용<\/label>/);
     assert.doesNotMatch(comment, /<textarea[^>]+placeholder="댓글 내용을 입력해 주세요."/);
     assert.match(css, /\.ss-comment-content-label\s*\{[\s\S]*?font-weight:\s*800;/);
+  });
+
+  it('connects free-board comment length guidance to the comment textarea', () => {
+    const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
+
+    assert.match(comment, /<p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"><\/span>글자<\/p>/);
+    assert.match(comment, /<textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help<\?php if \(\$sungsan_comment_min \|\| \$sungsan_comment_max\) \{ \?> char_cnt<\?php \} \?>"/);
+    assert.doesNotMatch(comment, /aria-describedby="ss-comment-help" <\?php if \(\$sungsan_comment_min \|\| \$sungsan_comment_max\) \{ \?>onkeyup=/);
   });
 
   it('renders free-board comment dates as semantic time elements', () => {
