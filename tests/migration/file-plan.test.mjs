@@ -68,9 +68,11 @@ describe('legacy attachment migration plan', () => {
       files: [
         { bf_no: '0', bf_file: 'minutes.pdf' },
         { bf_no: '1', bf_file: 'shell.php' },
-        { bf_no: '2', bf_file: 'legacy.HTML' },
-        { bf_no: '3', bf_file: 'script.js' },
-        { bf_no: '4', bf_file: 'diagram.svg' },
+        { bf_no: '2', bf_file: 'shell.php7' },
+        { bf_no: '3', bf_file: 'shell.php8' },
+        { bf_no: '4', bf_file: 'legacy.HTML' },
+        { bf_no: '5', bf_file: 'script.js' },
+        { bf_no: '6', bf_file: 'diagram.svg' },
       ],
     });
 
@@ -83,6 +85,8 @@ describe('legacy attachment migration plan', () => {
       })),
       [
         { sourceFile: 'shell.php', reason: 'blocked-extension' },
+        { sourceFile: 'shell.php7', reason: 'blocked-extension' },
+        { sourceFile: 'shell.php8', reason: 'blocked-extension' },
         { sourceFile: 'legacy.HTML', reason: 'blocked-extension' },
         { sourceFile: 'script.js', reason: 'blocked-extension' },
         { sourceFile: 'diagram.svg', reason: 'blocked-extension' },

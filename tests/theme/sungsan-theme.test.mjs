@@ -2394,7 +2394,7 @@ describe('sungsan theme static contract', () => {
     const extend = read('src/extend/sungsan.php');
 
     assert.match(extend, /function sungsan_reject_blocked_uploads/);
-    for (const extension of ['php', 'html', 'js', 'svg']) {
+    for (const extension of ['php', 'php7', 'php8', 'html', 'js', 'svg']) {
       assert.match(extend, new RegExp(`'${extension}'`));
     }
     for (const extension of ['htaccess', 'htpasswd', 'user.ini']) {

@@ -152,6 +152,8 @@ $sungsan_blocked_upload_extensions = array(
     'php3',
     'php4',
     'php5',
+    'php7',
+    'php8',
     'pht',
     'phtm',
     'phtml',
