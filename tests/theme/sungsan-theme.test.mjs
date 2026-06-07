@@ -58,9 +58,11 @@ describe('sungsan theme static contract', () => {
       'src/skin/board/sungsan_news/view.skin.php',
       'src/skin/board/sungsan_news/write.skin.php',
       'src/skin/board/sungsan_news/download.head.skin.php',
+      'src/skin/board/sungsan_news/write_update.head.skin.php',
       'src/skin/board/sungsan_free/list.skin.php',
       'src/skin/board/sungsan_free/view.skin.php',
       'src/skin/board/sungsan_free/write.skin.php',
+      'src/skin/board/sungsan_free/write_update.head.skin.php',
     ]) {
       const source = read(file);
       assert.doesNotMatch(source, /\sstyle=/, `${file} should use CSS classes instead of inline styles`);
@@ -110,5 +112,23 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /login\.php/);
     assert.match(source, /get_pretty_url\(\$bo_table,\s*\$wr_id\)/);
     assert.match(source, /alert\(/);
+  });
+
+  it('blocks executable or browser-active board upload extensions before storage', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(extend, /function sungsan_reject_blocked_uploads/);
+    for (const extension of ['php', 'html', 'js', 'svg']) {
+      assert.match(extend, new RegExp(`'${extension}'`));
+    }
+
+    for (const file of [
+      'src/skin/board/sungsan_news/write_update.head.skin.php',
+      'src/skin/board/sungsan_free/write_update.head.skin.php',
+    ]) {
+      const source = read(file);
+      assert.match(source, /sungsan_reject_blocked_uploads\(\$_FILES\)/);
+      assert.match(source, /alert\(/);
+    }
   });
 });

@@ -37,6 +37,32 @@ $sungsan_visibility_labels = array(
     'admin' => '운영자',
 );
 
+$sungsan_blocked_upload_extensions = array(
+    'php',
+    'php3',
+    'php4',
+    'php5',
+    'pht',
+    'phtm',
+    'phtml',
+    'phar',
+    'htm',
+    'html',
+    'xhtml',
+    'shtm',
+    'shtml',
+    'js',
+    'mjs',
+    'svg',
+    'svgz',
+    'cgi',
+    'pl',
+    'exe',
+    'jsp',
+    'asp',
+    'inc',
+);
+
 function sungsan_get_group_label($slug)
 {
     global $sungsan_groups;
@@ -74,6 +100,27 @@ function sungsan_can_read_visibility($visibility)
     }
 
     return false;
+}
+
+function sungsan_reject_blocked_uploads($files)
+{
+    global $sungsan_blocked_upload_extensions;
+
+    if (empty($files['bf_file']['name']) || !is_array($files['bf_file']['name'])) {
+        return;
+    }
+
+    foreach ($files['bf_file']['name'] as $filename) {
+        $filename = trim((string) $filename);
+        if ($filename === '') {
+            continue;
+        }
+
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (in_array($extension, $sungsan_blocked_upload_extensions, true)) {
+            alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
+        }
+    }
 }
 
 function sungsan_selected($current, $value)
