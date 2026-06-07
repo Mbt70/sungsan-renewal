@@ -824,6 +824,18 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_text\(\$_POST\['mb_id'\]\)/);
   });
 
+  it('starts password recovery with a visible popup heading before recovery forms', () => {
+    const source = read('src/skin/member/sungsan/password_lost.skin.php');
+    const css = read('src/skin/member/sungsan/style.css');
+    const headingIndex = source.indexOf('<h1 id="win_title">아이디/비밀번호 찾기</h1>');
+    const formIndex = source.indexOf('<form name="fpasswordlost"');
+
+    assert.ok(headingIndex > -1, 'password recovery should render a visible popup heading');
+    assert.ok(formIndex > -1, 'password recovery should render the email recovery form');
+    assert.ok(headingIndex < formIndex, 'password recovery heading should appear before recovery forms');
+    assert.match(css, /\.new_win_con h1,\s*\n\.new_win_con h3/);
+  });
+
   it('escapes member popup list and detail values before rendering community utilities', () => {
     const cases = [
       {
