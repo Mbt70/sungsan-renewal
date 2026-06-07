@@ -1086,8 +1086,10 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /<p id="ss-write-required-help" class="ss-form-help ss-form-summary">/, `${file} should expose a required-field summary`);
       assert.match(source, /id="wr_subject"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect subject help`);
       assert.match(source, /id="wr_content"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect content help`);
+      assert.match(source, /\$sungsan_upload_limit_mb = isset\(\$board\['bo_upload_size'\]\) \? max\(1, \(int\) ceil\(\(int\) \$board\['bo_upload_size'\] \/ 1048576\)\) : 10;/, `${file} should calculate the upload size limit from board settings`);
       assert.match(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should group attachment guidance before file fields`);
       assert.match(source, /<p id="ss-attachment-help" class="ss-form-help ss-attachment-help">/, `${file} should expose attachment guidance once`);
+      assert.match(source, /파일 한 개당 <\?php echo number_format\(\(int\) \$sungsan_upload_limit_mb\); \?>MB 이하/, `${file} should show the per-file upload size limit`);
       assert.match(source, /id="bf_file_<\?php echo \$i \+ 1; \?>"[\s\S]*?aria-describedby="ss-attachment-help"/, `${file} should connect attachment help`);
     }
 
