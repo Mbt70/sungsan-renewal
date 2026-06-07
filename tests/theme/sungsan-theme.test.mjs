@@ -307,7 +307,8 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /name="cert_type" value="<\?php echo get_text\(\$member\['mb_certify'\]\); \?>"/);
     assert.match(source, /name="mb_sex" value="<\?php echo get_text\(\$member\['mb_sex'\]\); \?>"/);
     assert.match(source, /<div class="ss-register-compat-fields" hidden>/);
-    assert.match(source, /\$sungsan_member_value = function \(\$field, \$default = ''\) use \(\$member\)/);
+    assert.match(source, /\$sungsan_member_raw = function \(\$field, \$default = ''\) use \(\$member\)/);
+    assert.match(source, /\$sungsan_member_value = function \(\$field, \$default = ''\) use \(\$sungsan_member_raw\)/);
     assert.match(source, /isset\(\$member\[\$field\]\) \? \$member\[\$field\] : \$default/);
     assert.match(source, /\$sungsan_member_zip = \$sungsan_member_value\('mb_zip1'\)\.\$sungsan_member_value\('mb_zip2'\);/);
     assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member\['mb_id'\]\); \?>"/);
@@ -328,7 +329,7 @@ describe('sungsan theme static contract', () => {
     for (const field of ['mb_marketing_agree', 'mb_mailling', 'mb_sms', 'mb_thirdparty_agree']) {
       assert.match(
         source,
-        new RegExp(`name="${field}_default" value="<\\?php echo get_text\\(\\$member\\['${field}'\\]\\); \\?>"`),
+        new RegExp(`name="${field}_default" value="<\\?php echo \\$sungsan_member_value\\('${field}'\\); \\?>"`),
         `register form should escape ${field} defaults`,
       );
       assert.doesNotMatch(
@@ -340,7 +341,7 @@ describe('sungsan theme static contract', () => {
     for (const field of ['mb_marketing_date', 'mb_mailling_date', 'mb_sms_date', 'mb_thirdparty_date']) {
       assert.match(
         source,
-        new RegExp(`get_text\\(\\$member\\['${field}'\\]\\)`),
+        new RegExp(`\\$sungsan_member_value\\('${field}'\\)`),
         `register form should escape ${field}`,
       );
       assert.doesNotMatch(
@@ -356,6 +357,27 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$member\['mb_zip1'\]\.\$member\['mb_zip2'\]/);
     assert.doesNotMatch(source, /echo \$member\['mb_signature'\]/);
     assert.doesNotMatch(source, /echo \$member\['mb_profile'\]/);
+  });
+
+  it('normalizes optional registration consent values before rendering promotion controls', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    assert.match(source, /\$sungsan_member_raw = function \(\$field, \$default = ''\) use \(\$member\)/);
+    assert.match(source, /\$sungsan_member_value = function \(\$field, \$default = ''\) use \(\$sungsan_member_raw\)/);
+
+    for (const field of ['mb_marketing_agree', 'mb_mailling', 'mb_sms', 'mb_thirdparty_agree']) {
+      assert.match(
+        source,
+        new RegExp(`name="${field}_default" value="<\\?php echo \\$sungsan_member_value\\('${field}'\\); \\?>"`),
+        `register form should render ${field} defaults through the normalized member helper`,
+      );
+      assert.doesNotMatch(source, new RegExp(`\\$member\\['${field}'\\]`));
+    }
+
+    for (const field of ['mb_marketing_date', 'mb_mailling_date', 'mb_sms_date', 'mb_thirdparty_date']) {
+      assert.match(source, new RegExp(`\\$sungsan_member_value\\('${field}'`));
+      assert.doesNotMatch(source, new RegExp(`\\$member\\['${field}'\\]`));
+    }
   });
 
   it('escapes public member profile fields before rendering the profile popup', () => {

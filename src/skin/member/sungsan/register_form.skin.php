@@ -7,8 +7,11 @@ add_javascript('<script src="'.G5_JS_URL.'/jquery.register_form.js"></script>', 
 if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipin'] || $config['cf_cert_hp']))
     add_javascript('<script src="'.G5_JS_URL.'/certify.js?v='.G5_JS_VER.'"></script>', 0);
 
-$sungsan_member_value = function ($field, $default = '') use ($member) {
-    return get_text(isset($member[$field]) ? $member[$field] : $default);
+$sungsan_member_raw = function ($field, $default = '') use ($member) {
+    return isset($member[$field]) ? $member[$field] : $default;
+};
+$sungsan_member_value = function ($field, $default = '') use ($sungsan_member_raw) {
+    return get_text($sungsan_member_raw($field, $default));
 };
 $sungsan_member_zip = $sungsan_member_value('mb_zip1').$sungsan_member_value('mb_zip2');
 $sungsan_cancel_url = $w == 'u' ? G5_URL.'/sungsan/mypage.php' : G5_URL;
@@ -172,14 +175,14 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 				<!-- (선택) 마케팅 목적의 개인정보 수집 및 이용 -->
 				<li class="chk_box">
 				<div class="consent-line">
-					<input type="checkbox" name="mb_marketing_agree" value="1" id="reg_mb_marketing_agree" aria-describedby="desc_marketing" <?php echo $member['mb_marketing_agree'] ? 'checked' : ''; ?> class="selec_chk marketing-sync">
+					<input type="checkbox" name="mb_marketing_agree" value="1" id="reg_mb_marketing_agree" aria-describedby="desc_marketing" <?php echo $sungsan_member_value('mb_marketing_agree') ? 'checked' : ''; ?> class="selec_chk marketing-sync">
 					<label for="reg_mb_marketing_agree"><span></span><b class="sound_only">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</b></label>
 					<span class="chk_li">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</span>
 					<button type="button" class="js-open-consent" data-title="성산회 소식 수신을 위한 개인정보 수집 및 이용" data-template="#tpl_marketing" data-check="#reg_mb_marketing_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
-				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo get_text($member['mb_marketing_agree']); ?>">
+				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo $sungsan_member_value('mb_marketing_agree'); ?>">
 				<div id="desc_marketing" class="sound_only">성산회 소식 수신을 위한 개인정보 수집·이용 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($member['mb_marketing_agree'] == 1 && $member['mb_marketing_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_marketing_date']).")"; ?></div>
+				<div class="consent-date"><?php if ($sungsan_member_value('mb_marketing_agree') == 1 && $sungsan_member_value('mb_marketing_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_marketing_date').")"; ?></div>
 
 				<template id="tpl_marketing">
 					* 목적: 성산회 소식과 행사 안내<br>
@@ -203,21 +206,21 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 				<!-- 하위 채널(이메일/SMS) -->
 				<ul class="sub-consents">
 					<li class="chk_box is-inline">
-						<input type="checkbox" name="mb_mailling" value="1" id="reg_mb_mailling" <?php echo $member['mb_mailling'] ? 'checked' : ''; ?> class="selec_chk child-promo">
+						<input type="checkbox" name="mb_mailling" value="1" id="reg_mb_mailling" <?php echo $sungsan_member_value('mb_mailling') ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_mailling"><span></span><b class="sound_only">광고성 이메일 수신 동의</b></label>
 						<span class="chk_li">광고성 이메일 수신 동의</span>
-						<input type="hidden" name="mb_mailling_default" value="<?php echo get_text($member['mb_mailling']); ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $member['mb_mailling'] == 1 && $member['mb_mailling_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_mailling_date']).")"; ?></div>
+						<input type="hidden" name="mb_mailling_default" value="<?php echo $sungsan_member_value('mb_mailling'); ?>">
+						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_mailling') == 1 && $sungsan_member_value('mb_mailling_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_mailling_date').")"; ?></div>
 					</li>
 
 					<!-- 휴대폰번호 입력 보이기 or 필수입력일 경우에만 -->
 					<?php if ($config['cf_use_hp'] || $config['cf_req_hp']) { ?>
 					<li class="chk_box is-inline">
-						<input type="checkbox" name="mb_sms" value="1" id="reg_mb_sms" <?php echo $member['mb_sms'] ? 'checked' : ''; ?> class="selec_chk child-promo">
+						<input type="checkbox" name="mb_sms" value="1" id="reg_mb_sms" <?php echo $sungsan_member_value('mb_sms') ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_sms"><span></span><b class="sound_only">광고성 SMS/카카오톡 수신 동의</b></label>
 						<span class="chk_li">광고성 SMS/카카오톡 수신 동의</span>
-						<input type="hidden" name="mb_sms_default" value="<?php echo get_text($member['mb_sms']); ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $member['mb_sms'] == 1 && $member['mb_sms_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_sms_date']).")"; ?></div>
+						<input type="hidden" name="mb_sms_default" value="<?php echo $sungsan_member_value('mb_sms'); ?>">
+						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_sms') == 1 && $sungsan_member_value('mb_sms_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_sms_date').")"; ?></div>
 					</li>
 					<?php } ?>
 				</ul>
@@ -244,14 +247,14 @@ $sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 				<?php if (!empty($usedCompanies)) { ?>
 				<li class="chk_box">
 				<div class="consent-line">
-					<input type="checkbox" name="mb_thirdparty_agree" value="1" id="reg_mb_thirdparty_agree" aria-describedby="desc_thirdparty" <?php echo $member['mb_thirdparty_agree'] ? 'checked' : ''; ?> class="selec_chk marketing-sync">
+					<input type="checkbox" name="mb_thirdparty_agree" value="1" id="reg_mb_thirdparty_agree" aria-describedby="desc_thirdparty" <?php echo $sungsan_member_value('mb_thirdparty_agree') ? 'checked' : ''; ?> class="selec_chk marketing-sync">
 					<label for="reg_mb_thirdparty_agree"><span></span><b class="sound_only">(선택) 개인정보 제3자 제공 동의</b></label>
 					<span class="chk_li">(선택) 개인정보 제3자 제공 동의</span>
 					<button type="button" class="js-open-consent" data-title="개인정보 제3자 제공 동의" data-template="#tpl_thirdparty" data-check="#reg_mb_thirdparty_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
-				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo get_text($member['mb_thirdparty_agree']); ?>">
+				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo $sungsan_member_value('mb_thirdparty_agree'); ?>">
 				<div id="desc_thirdparty" class="sound_only">개인정보 제3자 제공 동의에 대한 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($member['mb_thirdparty_agree'] == 1 && $member['mb_thirdparty_date'] != "0000-00-00 00:00:00") echo "(동의일자: ".get_text($member['mb_thirdparty_date']).")"; ?></div>
+				<div class="consent-date"><?php if ($sungsan_member_value('mb_thirdparty_agree') == 1 && $sungsan_member_value('mb_thirdparty_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_thirdparty_date').")"; ?></div>
 
 				<template id="tpl_thirdparty">
 					* 목적: 성산회 운영 안내와 행사 알림 발송 대행<br>
