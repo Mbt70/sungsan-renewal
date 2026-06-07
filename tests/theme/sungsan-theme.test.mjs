@@ -1168,6 +1168,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /<label for="me_memo">\uB0B4\uC6A9<\/label>/);
   });
 
+  it('connects memo recipient guidance to the recipient field', () => {
+    const source = read('src/skin/member/sungsan/memo_form.skin.php');
+
+    assert.match(source, /id="me_recv_mb_id"[\s\S]*?aria-describedby="me_recv_help<\?php if \(\$memo_send_point > 0\) \{ \?> me_point_help<\?php \} \?>"/);
+    assert.match(source, /<span id="me_recv_help" class="frm_info">/);
+    assert.match(source, /<span id="me_point_help" class="frm_info">/);
+    assert.doesNotMatch(source, /<span class="frm_info">여러 회원에게/);
+  });
+
   it('starts password reset with a visible popup heading before form fields', () => {
     const source = read('src/skin/member/sungsan/password_reset.skin.php');
     const headingIndex = source.indexOf('<h1 id="win_title">비밀번호 재설정</h1>');
