@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | `tools/migration/post-transform.mjs` | 기존 게시글 행 | `news/free` 글 INSERT SQL | `wr_5`, `wr_6`에 기존 보드/글 ID 보존 |
 | `tools/migration/member-transform.mjs` | 기존 회원 행 JSON/JSONL | `g5_member` INSERT SQL | 레거시 비밀번호 해시는 버리고 `mb_3=password_reset_required` 표시 |
-| `tools/migration/file-plan.mjs` | 이전된 글과 첨부 묶음 JSON/JSONL | 첨부 복사 계획 JSON, `g5_board_file` INSERT SQL | `news/free` 대상만 생성, `exclude/intro` 대상은 제외 |
+| `tools/migration/file-plan.mjs` | 이전된 글과 첨부 묶음 JSON/JSONL | 첨부 계획 JSON, `g5_board_file` INSERT SQL | `news/free` 대상만 생성, `exclude/intro` 대상과 차단 확장자는 복사 제외 |
 | `tools/migration/redirect-map.mjs` | 이전 결과 JSON/JSONL | redirect CSV 또는 Apache 초안 | 실제 이전된 `news/free` 글만 포함 |
 | `tools/migration/rehearsal-summary.mjs` | posts, members, attachmentPlan, redirectRecords 묶음 JSON | 리허설 요약 JSON | 글/회원/첨부/redirect/검토 플래그 수 대조 |
 
@@ -22,12 +22,14 @@ node tools/migration/redirect-map.mjs .\migration-output.jsonl .\redirects-apach
 node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-summary.json
 ```
 
-`attachments.jsonl`의 각 행은 `legacyBoard`, `legacyPostId`, `targetBoard`, `targetPostId`, `files`를 포함합니다. `files`는 기존 `board_file` 행 배열입니다. 도구는 `../danger.php` 같은 경로 조작 문자열에서 파일명만 남기고, 새 파일명은 `{legacyBoard}_{legacyPostId}_{sourceFile}` 형식으로 만듭니다.
+`attachments.jsonl`의 각 행은 `legacyBoard`, `legacyPostId`, `targetBoard`, `targetPostId`, `files`를 포함합니다. `files`는 기존 `board_file` 행 배열입니다. 도구는 `../danger.pdf` 같은 경로 조작 문자열에서 파일명만 남기고, 새 파일명은 `{legacyBoard}_{legacyPostId}_{sourceFile}` 형식으로 만듭니다.
+
+`attachment-copy-plan.json`은 `copyRecords`, `fileRows`, `blockedRecords`를 포함합니다. `blockedRecords`에는 PHP, HTML, JS, SVG 계열 파일이 `blocked-extension` 사유로 기록됩니다.
 
 ## Review Rules
 
 - `z6_2`, `z6_3`은 공개 이전 금지 보드이므로 글, 첨부, redirect 산출물에 들어가면 안 됩니다.
 - `z5_4` 등 회원 명부성 글은 `wr_7=review_required`, `wr_8=possible-member-directory`로 표시된 수를 운영자가 확인합니다.
 - 회원 비밀번호는 이전하지 않습니다. 스테이징에서 회원에게 비밀번호 재설정 절차를 안내할 운영 문구와 관리자 승인 흐름을 별도로 점검합니다.
-- 첨부 복사는 계획 JSON을 먼저 검토한 뒤 SFTP 또는 로컬 스크립트로 수행합니다. PHP, HTML, JS, SVG처럼 차단할 확장자는 실제 복사 전에 제외합니다.
+- 첨부 복사는 계획 JSON을 먼저 검토한 뒤 SFTP 또는 로컬 스크립트로 수행합니다. `blockedRecords`에 기록된 PHP, HTML, JS, SVG 계열 파일은 복사하지 않습니다.
 - 리허설 요약의 기존 글 수, 새 글 수, 회원 수, 첨부 수, redirect 수가 운영자 검수표와 맞아야 운영 전환 단계로 넘어갑니다.

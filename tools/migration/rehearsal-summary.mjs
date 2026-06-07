@@ -33,6 +33,7 @@ export function buildRehearsalSummary({
     attachments: {
       copyRecords: attachmentPlan.copyRecords?.length ?? 0,
       fileRows: attachmentPlan.fileRows?.length ?? 0,
+      blockedRecords: attachmentPlan.blockedRecords?.length ?? 0,
     },
     redirects: {
       total: redirectRecords.length,

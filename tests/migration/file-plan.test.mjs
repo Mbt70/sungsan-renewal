@@ -59,6 +59,37 @@ describe('legacy attachment migration plan', () => {
     assert.deepEqual(plan.fileRows, []);
   });
 
+  it('blocks executable or browser-active attachment extensions for review', () => {
+    const plan = buildAttachmentCopyPlan({
+      legacyBoard: 'z5_4',
+      legacyPostId: '88',
+      targetBoard: 'news',
+      targetPostId: '99',
+      files: [
+        { bf_no: '0', bf_file: 'minutes.pdf' },
+        { bf_no: '1', bf_file: 'shell.php' },
+        { bf_no: '2', bf_file: 'legacy.HTML' },
+        { bf_no: '3', bf_file: 'script.js' },
+        { bf_no: '4', bf_file: 'diagram.svg' },
+      ],
+    });
+
+    assert.deepEqual(plan.copyRecords.map((record) => record.sourceFile), ['minutes.pdf']);
+    assert.deepEqual(plan.fileRows.map((row) => row.bf_file), ['z5_4_88_minutes.pdf']);
+    assert.deepEqual(
+      plan.blockedRecords.map((record) => ({
+        sourceFile: record.sourceFile,
+        reason: record.reason,
+      })),
+      [
+        { sourceFile: 'shell.php', reason: 'blocked-extension' },
+        { sourceFile: 'legacy.HTML', reason: 'blocked-extension' },
+        { sourceFile: 'script.js', reason: 'blocked-extension' },
+        { sourceFile: 'diagram.svg', reason: 'blocked-extension' },
+      ],
+    );
+  });
+
   it('builds SQL insert rows for the GnuBoard board file table', () => {
     const plan = buildAttachmentCopyPlan({
       legacyBoard: 'z1_1',

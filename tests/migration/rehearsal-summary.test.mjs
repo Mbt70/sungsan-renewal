@@ -23,6 +23,7 @@ describe('migration rehearsal summary', () => {
       attachmentPlan: {
         copyRecords: [{}, {}],
         fileRows: [{}, {}],
+        blockedRecords: [{}],
       },
       redirectRecords: [{}, {}, {}],
     });
@@ -42,6 +43,7 @@ describe('migration rehearsal summary', () => {
       attachments: {
         copyRecords: 2,
         fileRows: 2,
+        blockedRecords: 1,
       },
       redirects: {
         total: 3,

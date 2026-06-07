@@ -19,6 +19,24 @@ const BOARD_FILE_INSERT_FIELDS = Object.freeze([
   'bf_datetime',
 ]);
 
+const BLOCKED_ATTACHMENT_EXTENSIONS = Object.freeze([
+  'php',
+  'php3',
+  'php4',
+  'php5',
+  'phtml',
+  'phar',
+  'html',
+  'htm',
+  'xhtml',
+  'shtml',
+  'js',
+  'mjs',
+  'cjs',
+  'svg',
+  'svgz',
+]);
+
 function escapeSqlString(value) {
   return String(value ?? '').replaceAll("'", "''");
 }
@@ -50,6 +68,15 @@ function buildTargetFileName({ legacyBoard, legacyPostId, sourceFile }) {
   return `${safeBoard}_${legacyPostId}_${sourceFile}`;
 }
 
+function getFileExtension(fileName) {
+  const match = String(fileName).match(/\.([^.]+)$/);
+  return match ? match[1].toLowerCase() : '';
+}
+
+function isBlockedAttachment(fileName) {
+  return BLOCKED_ATTACHMENT_EXTENSIONS.includes(getFileExtension(fileName));
+}
+
 export function buildAttachmentCopyPlan({
   legacyBoard,
   legacyPostId,
@@ -66,16 +93,32 @@ export function buildAttachmentCopyPlan({
     return {
       copyRecords: [],
       fileRows: [],
+      blockedRecords: [],
     };
   }
 
   const copyRecords = [];
   const fileRows = [];
+  const blockedRecords = [];
 
   for (const file of files) {
     const sourceFile = sanitizeFileName(readField(file, 'bf_file'));
 
     if (!sourceFile) {
+      continue;
+    }
+
+    if (isBlockedAttachment(sourceFile)) {
+      blockedRecords.push({
+        sourcePath: `${legacyDataRoot}/${legacyBoard}/${sourceFile}`,
+        legacyBoard,
+        legacyPostId: normalizedLegacyPostId,
+        targetBoard,
+        targetPostId: normalizedTargetPostId,
+        sourceFile,
+        extension: getFileExtension(sourceFile),
+        reason: 'blocked-extension',
+      });
       continue;
     }
 
@@ -118,6 +161,7 @@ export function buildAttachmentCopyPlan({
   return {
     copyRecords,
     fileRows,
+    blockedRecords,
   };
 }
 
@@ -167,15 +211,17 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       (accumulator, plan) => ({
         copyRecords: [...accumulator.copyRecords, ...plan.copyRecords],
         fileRows: [...accumulator.fileRows, ...plan.fileRows],
+        blockedRecords: [...accumulator.blockedRecords, ...plan.blockedRecords],
       }),
-      { copyRecords: [], fileRows: [] },
+      { copyRecords: [], fileRows: [], blockedRecords: [] },
     );
   const sql = mergedPlan.fileRows
     .map((fileRow) => buildBoardFileInsertSql(fileRow, { tablePrefix }))
     .join('\n');
 
-  await writeFile(copyPlanPath, `${JSON.stringify(mergedPlan.copyRecords, null, 2)}\n`, 'utf8');
+  await writeFile(copyPlanPath, `${JSON.stringify(mergedPlan, null, 2)}\n`, 'utf8');
   await writeFile(sqlPath, `${sql}\n`, 'utf8');
   console.log(`Wrote ${mergedPlan.copyRecords.length} attachment copy records to ${copyPlanPath}`);
   console.log(`Wrote ${mergedPlan.fileRows.length} board_file inserts to ${sqlPath}`);
+  console.log(`Flagged ${mergedPlan.blockedRecords.length} blocked attachments for review`);
 }
