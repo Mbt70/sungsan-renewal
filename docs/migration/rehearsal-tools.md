@@ -30,6 +30,8 @@ node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-s
 
 - `posts.excludedByLegacyBoard`: `z6_2`, `z6_3`처럼 공개 이전 금지 보드에서 제외된 글 수
 - `posts.reviewReasons`: `possible-member-directory`처럼 `wr_7=review_required`로 남긴 검토 사유별 글 수
+- `members.byLevel`: 이전 회원의 새 권한 분포. `member`, `officer`, `admin`, `pending`, `unknown` 수를 운영자 승인 계획과 대조합니다.
+- `members.passwordResetMissing`: `mb_3=password_reset_required` 플래그가 없는 회원 수. 0이 아니면 회원 SQL을 다시 검토합니다.
 - `attachments.blockedByReason`: `blocked-extension` 등 첨부 복사 차단 사유별 수
 - `attachments.blockedByLegacyBoard`: 차단 첨부가 나온 원본 보드별 수
 

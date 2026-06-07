@@ -20,7 +20,11 @@ describe('migration rehearsal summary', () => {
         { legacyBoard: 'z6_2', targetBoard: 'exclude', fields: null },
         { legacyBoard: 'z6_3', targetBoard: 'exclude', fields: null },
       ],
-      members: [{ fields: { mb_id: 'a' } }, { fields: { mb_id: 'b' } }],
+      members: [
+        { fields: { mb_id: 'a', mb_level: '2', mb_3: 'password_reset_required' } },
+        { fields: { mb_id: 'b', mb_level: '6', mb_3: 'password_reset_required' } },
+        { fields: { mb_id: 'c', mb_level: '10', mb_3: '' } },
+      ],
       attachmentPlan: {
         copyRecords: [{}, {}],
         fileRows: [{}, {}],
@@ -48,8 +52,16 @@ describe('migration rehearsal summary', () => {
         },
       },
       members: {
-        total: 2,
+        total: 3,
         passwordResetRequired: 2,
+        passwordResetMissing: 1,
+        byLevel: {
+          member: 1,
+          officer: 1,
+          admin: 1,
+          pending: 0,
+          unknown: 0,
+        },
       },
       attachments: {
         copyRecords: 2,

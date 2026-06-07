@@ -35,6 +35,8 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 - `blockedRecords`에 남은 PHP, HTML, JS, SVG 계열 첨부, `shell.php.jpg` 같은 다중 확장자 파일, `.htaccess`, `.user.ini` 서버 설정 파일 수
 - `blockedByReason`, `blockedByLegacyBoard`로 나뉜 차단 첨부 사유와 원본 보드별 수
 - `wr_7=review_required` 글 수, `reviewReasons`, 운영자 검토 대상 목록
+- `members.byLevel`의 `member/officer/admin/pending/unknown` 분포와 운영자 승인 계획의 일치 여부
+- `members.passwordResetMissing`이 0인지 확인하고 모든 이전 회원에 `mb_3=password_reset_required`가 남았는지 검토
 - `excludedByLegacyBoard`에서 `z6_2`, `z6_3` 원본 글과 첨부가 공개 이전 산출물에 들어가지 않았다는 확인
 - `redirect` CSV와 Apache 초안의 생성 수와 샘플 URL 검수 결과
 

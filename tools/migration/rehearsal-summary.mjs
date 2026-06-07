@@ -18,6 +18,38 @@ function countsBy(items, keySelector) {
   }, {});
 }
 
+function memberLevelBucket(member) {
+  const level = Number(member.fields?.mb_level);
+
+  if (!Number.isFinite(level)) {
+    return 'unknown';
+  }
+
+  if (level >= 10) {
+    return 'admin';
+  }
+
+  if (level >= 6) {
+    return 'officer';
+  }
+
+  if (level >= 2) {
+    return 'member';
+  }
+
+  return 'pending';
+}
+
+function memberLevelCounts(members) {
+  return {
+    member: countBy(members, (member) => memberLevelBucket(member) === 'member'),
+    officer: countBy(members, (member) => memberLevelBucket(member) === 'officer'),
+    admin: countBy(members, (member) => memberLevelBucket(member) === 'admin'),
+    pending: countBy(members, (member) => memberLevelBucket(member) === 'pending'),
+    unknown: countBy(members, (member) => memberLevelBucket(member) === 'unknown'),
+  };
+}
+
 function parseBundleText(text) {
   return JSON.parse(String(text).replace(/^\uFEFF/, '').trim());
 }
@@ -48,8 +80,13 @@ export function buildRehearsalSummary({
       total: members.length,
       passwordResetRequired: countBy(
         members,
-        (member) => member.fields?.mb_3 !== 'password_migrated',
+        (member) => member.fields?.mb_3 === 'password_reset_required',
       ),
+      passwordResetMissing: countBy(
+        members,
+        (member) => member.fields?.mb_3 !== 'password_reset_required',
+      ),
+      byLevel: memberLevelCounts(members),
     },
     attachments: {
       copyRecords: attachmentPlan.copyRecords?.length ?? 0,
