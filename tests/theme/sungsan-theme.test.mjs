@@ -949,6 +949,16 @@ describe('sungsan theme static contract', () => {
     assert.match(download, /sungsan_can_read_news_post\(\$write\)/);
   });
 
+  it('separates login guidance from insufficient-permission guidance on restricted news detail', () => {
+    const view = read('src/skin/board/sungsan_news/view.skin.php');
+
+    assert.match(view, /global \$is_member;/);
+    assert.match(view, /\$sungsan_show_login_cta = !\$is_member && !sungsan_is_review_restricted\(\$view\);/);
+    assert.match(view, /권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다\./);
+    assert.match(view, /현재 계정으로는 이 글을 열람할 수 없습니다\./);
+    assert.match(view, /<\?php if \(\$sungsan_show_login_cta\) \{ \?>[\s\S]*?로그인[\s\S]*?<\?php \} else \{ \?>[\s\S]*?목록으로 돌아가기/);
+  });
+
   it('keeps restricted news visible in lists while marking posts that need permission', () => {
     const list = read('src/skin/board/sungsan_news/list.skin.php');
     const css = read('src/scss/main.scss');
