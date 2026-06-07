@@ -316,7 +316,20 @@ function sungsan_normalize_formmail_attach_count()
     $attach = isset($attach) ? max(0, min(2, (int) $attach)) : 0;
 }
 
+function sungsan_validate_formmail_required_fields()
+{
+    global $subject, $content;
+
+    $formmail_subject = isset($subject) ? trim((string) $subject) : '';
+    $formmail_content = isset($content) ? trim((string) $content) : '';
+
+    if ($formmail_subject === '' || $formmail_content === '') {
+        alert_close('메일 제목과 내용을 입력해 주세요.');
+    }
+}
+
 if (isset($_SERVER['SCRIPT_NAME']) && basename($_SERVER['SCRIPT_NAME']) === 'formmail_send.php') {
+    sungsan_validate_formmail_required_fields();
     sungsan_normalize_formmail_attach_count();
     sungsan_reject_blocked_formmail_uploads($_FILES);
 }

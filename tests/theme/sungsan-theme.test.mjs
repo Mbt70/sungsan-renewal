@@ -2487,6 +2487,23 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(coreSend, /sungsan_normalize_formmail_attach_count/);
   });
 
+  it('validates required form mail message fields before the core send handler', () => {
+    const extend = read('src/extend/sungsan.php');
+    const coreSend = read('www/bbs/formmail_send.php');
+
+    assert.match(extend, /function sungsan_validate_formmail_required_fields\(\)/);
+    assert.match(extend, /global \$subject, \$content;/);
+    assert.match(extend, /\$formmail_subject = isset\(\$subject\) \? trim\(\(string\) \$subject\) : '';/);
+    assert.match(extend, /\$formmail_content = isset\(\$content\) \? trim\(\(string\) \$content\) : '';/);
+    assert.match(extend, /if \(\$formmail_subject === '' \|\| \$formmail_content === ''\) \{/);
+    assert.match(extend, /alert_close\('메일 제목과 내용을 입력해 주세요\.'\);/);
+    assert.match(
+      extend,
+      /sungsan_validate_formmail_required_fields\(\);\s*\n\s*sungsan_normalize_formmail_attach_count\(\);/,
+    );
+    assert.doesNotMatch(coreSend, /sungsan_validate_formmail_required_fields/);
+  });
+
   it('connects board write required and attachment guidance to form controls', () => {
     for (const file of [
       'src/skin/board/sungsan_news/write.skin.php',
