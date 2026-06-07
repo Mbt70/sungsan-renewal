@@ -120,6 +120,23 @@ function sungsan_can_read_news_post($post)
     return sungsan_can_read_visibility($visibility);
 }
 
+function sungsan_preserve_news_migration_fields()
+{
+    global $w, $wr, $is_admin, $wr_5, $wr_6, $wr_7, $wr_8;
+
+    if ($w !== 'u' || empty($wr) || !is_array($wr)) {
+        return;
+    }
+
+    $wr_5 = isset($wr['wr_5']) ? $wr['wr_5'] : $wr_5;
+    $wr_6 = isset($wr['wr_6']) ? $wr['wr_6'] : $wr_6;
+
+    if (!$is_admin) {
+        $wr_7 = isset($wr['wr_7']) ? $wr['wr_7'] : $wr_7;
+        $wr_8 = isset($wr['wr_8']) ? $wr['wr_8'] : $wr_8;
+    }
+}
+
 function sungsan_reject_blocked_uploads($files)
 {
     global $sungsan_blocked_upload_extensions;

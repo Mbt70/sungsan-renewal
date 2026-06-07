@@ -125,6 +125,21 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('prevents non-admin news edits from tampering migrated audit metadata', () => {
+    const extend = read('src/extend/sungsan.php');
+    const updateHead = read('src/skin/board/sungsan_news/write_update.head.skin.php');
+
+    assert.match(extend, /function sungsan_preserve_news_migration_fields/);
+    assert.match(extend, /global \$w, \$wr, \$is_admin, \$wr_5, \$wr_6, \$wr_7, \$wr_8/);
+    assert.match(extend, /\$w !== 'u'/);
+    assert.match(extend, /\$wr_5 = isset\(\$wr\['wr_5'\]\)/);
+    assert.match(extend, /\$wr_6 = isset\(\$wr\['wr_6'\]\)/);
+    assert.match(extend, /!\$is_admin/);
+    assert.match(extend, /\$wr_7 = isset\(\$wr\['wr_7'\]\)/);
+    assert.match(extend, /\$wr_8 = isset\(\$wr\['wr_8'\]\)/);
+    assert.match(updateHead, /sungsan_preserve_news_migration_fields\(\)/);
+  });
+
   it('keeps review-required migrated news hidden from non-admin readers', () => {
     const extend = read('src/extend/sungsan.php');
     const list = read('src/skin/board/sungsan_news/list.skin.php');
