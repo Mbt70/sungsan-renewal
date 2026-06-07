@@ -38,14 +38,18 @@ describe('sungsan theme static contract', () => {
   });
 
   it('keeps registration consent copy aligned with Sungsan communications', () => {
-    const source = read('src/skin/member/sungsan/register_form.skin.php');
+    const source = [
+      read('src/skin/member/sungsan/register.skin.php'),
+      read('src/skin/member/sungsan/register_form.skin.php'),
+    ].join('\n');
 
-    for (const forbidden of ['상품/서비스', '사은/판촉행사', '프로모션', '맞춤형 혜택']) {
+    for (const forbidden of ['상품/서비스', '사은/판촉행사', '프로모션', '맞춤형 혜택', '고객서비스', 'CS대응']) {
       assert.doesNotMatch(source, new RegExp(forbidden), `registration consent should not include ${forbidden}`);
     }
 
     assert.match(source, /성산회 소식과 행사 안내/);
     assert.match(source, /회 운영 안내/);
+    assert.match(source, /회원 관리와 회 운영 안내/);
   });
 
   it('keeps board skins free of inline styles and emoji-only cues', () => {

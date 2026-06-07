@@ -68,10 +68,19 @@ describe('sungsan gnuboard setup config', () => {
   it('builds complete setup SQL with theme, group, boards, and write tables', () => {
     const sql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate });
 
-    assert.match(sql, /UPDATE `g5_config` SET cf_theme = 'sungsan'/);
+    assert.match(sql, /UPDATE `g5_config` SET/);
+    assert.match(sql, /cf_theme = 'sungsan'/);
     assert.match(sql, /cf_member_skin = 'sungsan'/);
     assert.match(sql, /cf_mobile_member_skin = 'sungsan'/);
     assert.match(sql, /cf_register_level = '1'/);
+    assert.match(sql, /cf_use_homepage = '0'/);
+    assert.match(sql, /cf_req_homepage = '0'/);
+    assert.match(sql, /cf_use_addr = '0'/);
+    assert.match(sql, /cf_req_addr = '0'/);
+    assert.match(sql, /cf_use_signature = '0'/);
+    assert.match(sql, /cf_use_profile = '0'/);
+    assert.match(sql, /cf_use_recommend = '0'/);
+    assert.match(sql, /cf_use_member_icon = '0'/);
     assert.match(sql, /INSERT INTO `g5_group`/);
     assert.match(sql, /gr_id = 'sungsan'/);
     assert.match(sql, /bo_table = 'news'/);

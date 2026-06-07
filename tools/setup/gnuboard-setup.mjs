@@ -4,6 +4,26 @@ import path from 'node:path';
 const DEFAULT_TABLE_PREFIX = 'g5_';
 const DEFAULT_GROUP_ID = 'sungsan';
 
+const SUNGSAN_CONFIG_SETTINGS = Object.freeze({
+  cf_theme: 'sungsan',
+  cf_title: '성산회',
+  cf_member_skin: 'sungsan',
+  cf_mobile_member_skin: 'sungsan',
+  cf_register_level: 1,
+  cf_use_homepage: 0,
+  cf_req_homepage: 0,
+  cf_use_tel: 0,
+  cf_req_tel: 0,
+  cf_use_addr: 0,
+  cf_req_addr: 0,
+  cf_use_signature: 0,
+  cf_req_signature: 0,
+  cf_use_profile: 0,
+  cf_req_profile: 0,
+  cf_use_recommend: 0,
+  cf_use_member_icon: 0,
+});
+
 const DEFAULT_BOARD_SETTINGS = Object.freeze({
   gr_id: DEFAULT_GROUP_ID,
   bo_device: 'both',
@@ -142,7 +162,7 @@ ON DUPLICATE KEY UPDATE
 }
 
 export function buildThemeUpdateSql({ tablePrefix = DEFAULT_TABLE_PREFIX } = {}) {
-  return `UPDATE ${prefixedTable('config', tablePrefix)} SET cf_theme = 'sungsan', cf_title = '성산회', cf_member_skin = 'sungsan', cf_mobile_member_skin = 'sungsan', cf_register_level = '1';`;
+  return `UPDATE ${prefixedTable('config', tablePrefix)} SET\n${buildSetClause(SUNGSAN_CONFIG_SETTINGS)};`;
 }
 
 export function buildSetupSql({

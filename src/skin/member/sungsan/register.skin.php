@@ -44,7 +44,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                     <td>회원 탈퇴 시까지</td>
                 </tr>
                 <tr>
-                    <td>고객서비스 이용에 관한 통지,<br>CS대응을 위한 이용자 식별</td>
+                    <td>회원 관리와 회 운영 안내,<br>문의 대응을 위한 이용자 식별</td>
                     <td>연락처 (이메일, 휴대전화번호)</td>
                     <td>회원 탈퇴 시까지</td>
                 </tr>
