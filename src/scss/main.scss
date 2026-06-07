@@ -481,6 +481,14 @@ img {
   font-size: 0.96rem;
 }
 
+.ss-form-summary,
+.ss-attachment-help {
+  border-left: 4px solid var(--ss-color-primary);
+  border-radius: var(--ss-radius-md);
+  padding: var(--ss-space-3) var(--ss-space-4);
+  background: var(--ss-color-primary-soft);
+}
+
 .ss-required {
   color: var(--ss-color-error);
   font-size: 0.88rem;

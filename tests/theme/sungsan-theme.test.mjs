@@ -617,7 +617,7 @@ describe('sungsan theme static contract', () => {
 
       assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/, `${file} should escape action_url`);
       assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
-      assert.match(source, /<textarea id="wr_content" name="wr_content" required><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
+      assert.match(source, /<textarea id="wr_content" name="wr_content" required[^>]*><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
       assert.match(source, /href="<\?php echo get_text\(\$list_href\); \?>"/, `${file} should escape list_href`);
 
       assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
@@ -831,6 +831,33 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /sungsan_reject_blocked_uploads\(\$_FILES\)/);
       assert.match(source, /alert\(/);
     }
+  });
+
+  it('connects board write required and attachment guidance to form controls', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /<p id="ss-write-required-help" class="ss-form-help ss-form-summary">/, `${file} should expose a required-field summary`);
+      assert.match(source, /id="wr_subject"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect subject help`);
+      assert.match(source, /id="wr_content"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect content help`);
+      assert.match(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should group attachment guidance before file fields`);
+      assert.match(source, /<p id="ss-attachment-help" class="ss-form-help ss-attachment-help">/, `${file} should expose attachment guidance once`);
+      assert.match(source, /id="bf_file_<\?php echo \$i \+ 1; \?>"[\s\S]*?aria-describedby="ss-attachment-help"/, `${file} should connect attachment help`);
+    }
+
+    const news = read('src/skin/board/sungsan_news/write.skin.php');
+    assert.match(news, /id="ca_name"[\s\S]*?aria-describedby="ss-write-required-help"/, 'news write should connect category help');
+  });
+
+  it('styles board write summaries as scannable guidance blocks', () => {
+    const css = read('src/scss/main.scss');
+
+    assert.match(css, /\.ss-form-summary,\s*\n\.ss-attachment-help/);
+    assert.match(css, /border-left:\s*4px solid var\(--ss-color-primary\)/);
+    assert.match(css, /background:\s*var\(--ss-color-primary-soft\)/);
   });
 
   it('shows blocked upload extension guidance on board write forms', () => {

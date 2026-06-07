@@ -108,6 +108,31 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_free`/);
   });
 
+  it('documents board metadata and access policy inside generated setup SQL', () => {
+    const sql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate });
+
+    assert.match(sql, /-- news: 통합 소식 게시판/);
+    assert.match(sql, /-- news ca_name: 공지\|행사\|자료\|규정\|활동소식/);
+    assert.match(sql, /-- news wr_1 소속 slug, wr_2 공개 범위, wr_3 행사 시작일, wr_4 행사 종료일/);
+    assert.match(sql, /-- news wr_5 기존 보드 ID, wr_6 기존 글 ID, wr_7 이전 검토 플래그, wr_8 검토 사유/);
+    assert.match(sql, /-- news access: 목록\/본문은 공개, 작성\/수정\/삭제\/첨부는 임원 이상/);
+    assert.match(sql, /-- free: 회원 자유게시판/);
+    assert.match(sql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
+  });
+
+  it('keeps the tracked generated setup SQL in sync with policy comments', async () => {
+    const [generatedSql, writeTableTemplate] = await Promise.all([
+      readFile(path.join(process.cwd(), 'docs', 'generated', 'sungsan-setup.sql'), 'utf8'),
+      readFile(path.join(process.cwd(), 'www', 'adm', 'sql_write.sql'), 'utf8'),
+    ]);
+
+    const expectedSql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate: writeTableTemplate });
+
+    assert.equal(generatedSql, expectedSql);
+    assert.match(generatedSql, /-- news: 통합 소식 게시판/);
+    assert.match(generatedSql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
+  });
+
   it('writes setup SQL to a file and creates parent directories', async () => {
     const dir = await mkdtemp(path.join(tmpdir(), 'sungsan-setup-'));
     const outputPath = path.join(dir, 'nested', 'sungsan-setup.sql');

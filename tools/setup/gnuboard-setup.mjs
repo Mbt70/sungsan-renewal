@@ -150,6 +150,27 @@ export function buildBoardUpsertSql(boardConfig, { tablePrefix = DEFAULT_TABLE_P
   return `INSERT INTO ${prefixedTable('board', tablePrefix)} SET\n${buildSetClause(insertValues)}\nON DUPLICATE KEY UPDATE\n${updateClause};`;
 }
 
+export function buildBoardPolicyComment(boardConfig) {
+  if (boardConfig.bo_table === 'news') {
+    return [
+      '-- news: 통합 소식 게시판',
+      `-- news ca_name: ${boardConfig.bo_category_list}`,
+      `-- news wr_1 ${boardConfig.bo_1_subj}, wr_2 ${boardConfig.bo_2_subj}, wr_3 ${boardConfig.bo_3_subj}, wr_4 ${boardConfig.bo_4_subj}`,
+      `-- news wr_5 ${boardConfig.bo_5_subj}, wr_6 ${boardConfig.bo_6_subj}, wr_7 ${boardConfig.bo_7_subj}, wr_8 ${boardConfig.bo_8_subj}`,
+      '-- news access: 목록/본문은 공개, 작성/수정/삭제/첨부는 임원 이상',
+    ].join('\n');
+  }
+
+  if (boardConfig.bo_table === 'free') {
+    return [
+      '-- free: 회원 자유게시판',
+      '-- free access: 목록은 공개, 본문/작성/댓글/첨부/다운로드는 회원 이상',
+    ].join('\n');
+  }
+
+  return `-- ${boardConfig.bo_table}: ${boardConfig.bo_subject}`;
+}
+
 export function buildWriteTableSql(boardId, writeSqlTemplate, { tablePrefix = DEFAULT_TABLE_PREFIX } = {}) {
   if (!writeSqlTemplate || !writeSqlTemplate.includes('__TABLE_NAME__')) {
     throw new Error('writeSqlTemplate must contain __TABLE_NAME__');
@@ -193,7 +214,7 @@ export function buildSetupSql({
     '-- Review on staging before applying to production.',
     buildThemeUpdateSql({ tablePrefix }),
     buildGroupUpsertSql({ tablePrefix }),
-    ...boards.map((board) => buildBoardUpsertSql(board, { tablePrefix })),
+    ...boards.map((board) => `${buildBoardPolicyComment(board)}\n${buildBoardUpsertSql(board, { tablePrefix })}`),
     ...boards.map((board) => buildWriteTableSql(board.bo_table, writeSqlTemplate, { tablePrefix })),
   ].join('\n\n') + '\n';
 }
