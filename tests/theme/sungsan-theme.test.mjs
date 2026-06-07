@@ -1896,6 +1896,16 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /sungsan_can_read_visibility\(\$visibility\)/);
   });
 
+  it('escapes news download visibility labels before composing permission alerts', () => {
+    const source = read('src/skin/board/sungsan_news/download.head.skin.php');
+
+    assert.match(source, /\$visibility_label = get_text\(sungsan_get_visibility_label\(\$visibility\)\);/);
+    assert.match(source, /\$message = \$visibility_label\./);
+    assert.match(source, /\$message = '[^']*'\.\$visibility_label\./);
+    assert.doesNotMatch(source, /\$message = sungsan_get_visibility_label\(\$visibility\)\./);
+    assert.doesNotMatch(source, /\$message = '[^']*'\.sungsan_get_visibility_label\(\$visibility\)/);
+  });
+
   it('separates login redirects from insufficient-permission alerts for news downloads', () => {
     const source = read('src/skin/board/sungsan_news/download.head.skin.php');
 
