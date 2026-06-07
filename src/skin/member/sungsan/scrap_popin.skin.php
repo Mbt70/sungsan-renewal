@@ -1,6 +1,8 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
+$scrap_popin_subject = isset($write['wr_subject']) ? $write['wr_subject'] : '';
+
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 ?>
@@ -16,7 +18,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 	    <ul>
 	        <li class="scrap_tit">
 	            <span class="sound_only">제목</span>
-	            <?php echo get_text(cut_str($write['wr_subject'], 255)) ?>
+	            <?php echo get_text(cut_str($scrap_popin_subject, 255)) ?>
 	        </li>
 	        <li>
 	            <label for="wr_content">댓글작성</label>

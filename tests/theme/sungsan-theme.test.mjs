@@ -607,8 +607,14 @@ describe('sungsan theme static contract', () => {
         expected: [
           /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/,
           /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/,
+          /\$scrap_popin_subject = isset\(\$write\['wr_subject'\]\) \? \$write\['wr_subject'\] : '';/,
+          /<\?php echo get_text\(cut_str\(\$scrap_popin_subject, 255\)\) \?>/,
         ],
-        forbidden: [/name="bo_table" value="<\?php echo \$bo_table/, /name="wr_id" value="<\?php echo \$wr_id/],
+        forbidden: [
+          /name="bo_table" value="<\?php echo \$bo_table/,
+          /name="wr_id" value="<\?php echo \$wr_id/,
+          /cut_str\(\$write\['wr_subject'\]/,
+        ],
       },
     ];
 
