@@ -429,6 +429,30 @@ img {
   margin-bottom: var(--ss-space-6);
 }
 
+.ss-board-search {
+  display: grid;
+  width: min(100%, 520px);
+  min-width: 0;
+  gap: var(--ss-space-2);
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.ss-board-search label:not(.sound_only) {
+  font-weight: 800;
+}
+
+.ss-search-row {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--ss-color-border);
+  border-radius: var(--ss-radius-md);
+  background: #fff;
+}
+
 .ss-field label {
   display: block;
   margin-bottom: var(--ss-space-2);

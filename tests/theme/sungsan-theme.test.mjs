@@ -464,6 +464,21 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows visible labels on board list search forms instead of relying on placeholders', () => {
+    const cases = [
+      ['src/skin/board/sungsan_news/list.skin.php', 'board_stx'],
+      ['src/skin/board/sungsan_free/list.skin.php', 'free_board_stx'],
+    ];
+
+    for (const [file, field] of cases) {
+      const source = read(file);
+
+      assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `${file} should show a visible search label`);
+      assert.doesNotMatch(source, new RegExp(`<label[^>]*class="sound_only"[^>]*for="${field}"`), `${file} should not hide the search label`);
+      assert.match(source, /<div class="ss-search-row">/, `${file} should keep search input and button grouped`);
+    }
+  });
+
   it('styles visible account utility labels and textareas for scan-friendly forms', () => {
     const css = read('src/skin/member/sungsan/style.css');
 
@@ -517,9 +532,21 @@ describe('sungsan theme static contract', () => {
       '.ss-member-shell',
       '.ss-media-grid',
       '.ss-review-note',
+      '.ss-search-row',
     ]) {
       assert.match(css, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     }
+  });
+
+  it('styles board list search labels without changing the compact header search', () => {
+    const css = read('src/scss/main.scss');
+
+    assert.match(css, /\.ss-board-search\s*\{/);
+    assert.match(css, /\.ss-board-search\s+label:not\(\.sound_only\)/);
+    assert.match(css, /width:\s*min\(100%,\s*520px\)/);
+    assert.match(css, /overflow:\s*visible/);
+    assert.match(css, /\.ss-search-row\s*\{/);
+    assert.match(css, /border:\s*1px solid var\(--ss-color-border\)/);
   });
 
   it('escapes board search terms before rendering them in form attributes', () => {

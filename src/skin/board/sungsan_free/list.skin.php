@@ -14,9 +14,11 @@ if (!defined('_GNUBOARD_')) {
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
-            <label class="sound_only" for="free_board_stx">자유게시판 검색어</label>
-            <input id="free_board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
-            <button type="submit">검색</button>
+            <label for="free_board_stx">검색어</label>
+            <div class="ss-search-row">
+                <input id="free_board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
+                <button type="submit">검색</button>
+            </div>
         </form>
 
         <div class="ss-post-list">

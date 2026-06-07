@@ -29,9 +29,11 @@ $visible_count = 0;
             <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
-            <label class="sound_only" for="board_stx">게시판 검색어</label>
-            <input id="board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
-            <button type="submit">검색</button>
+            <label for="board_stx">검색어</label>
+            <div class="ss-search-row">
+                <input id="board_stx" name="stx" value="<?php echo get_text(stripslashes($stx)); ?>" placeholder="제목과 내용을 검색">
+                <button type="submit">검색</button>
+            </div>
         </form>
 
         <div class="ss-post-list">
