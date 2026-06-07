@@ -22,21 +22,29 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <ul>
 	            <?php
                 for ($i=0; $i<count($list); $i++) {
-                $readed = (substr($list[$i]['me_read_datetime'],0,1) == 0) ? '' : 'read';
-                $memo_preview = utf8_strcut(strip_tags($list[$i]['me_memo']), 30, '..');
+                $memo_row = isset($list[$i]) ? $list[$i] : array();
+                $memo_read_datetime = isset($memo_row['me_read_datetime']) ? $memo_row['me_read_datetime'] : '';
+                $memo_body = isset($memo_row['me_memo']) ? $memo_row['me_memo'] : '';
+                $memo_member_id = isset($memo_row['mb_id']) ? $memo_row['mb_id'] : '';
+                $memo_name = isset($memo_row['name']) ? $memo_row['name'] : '';
+                $memo_send_datetime = isset($memo_row['send_datetime']) ? $memo_row['send_datetime'] : '';
+                $memo_view_href = isset($memo_row['view_href']) ? $memo_row['view_href'] : '';
+                $memo_del_href = isset($memo_row['del_href']) ? $memo_row['del_href'] : '';
+                $readed = (substr($memo_read_datetime,0,1) == 0) ? '' : 'read';
+                $memo_preview = utf8_strcut(strip_tags($memo_body), 30, '..');
                 ?>
 	            <li class="<?php echo $readed; ?>">
 	            	<div class="memo_li profile_big_img">
-	            		<?php echo get_member_profile_img($list[$i]['mb_id']); ?>
+						<?php echo get_member_profile_img($memo_member_id); ?>
 	            		<?php if (! $readed){ ?><span class="no_read">안 읽은 쪽지</span><?php } ?>
 	            	</div>
 	                <div class="memo_li memo_name">
-                        <?php echo get_text(strip_tags($list[$i]['name'])); ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($list[$i]['send_datetime']); ?></span>
+                        <?php echo get_text(strip_tags($memo_name)); ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_send_datetime); ?></span>
 						<div class="memo_preview">
-						    <a href="<?php echo get_text($list[$i]['view_href']); ?>"><?php echo get_text($memo_preview); ?></a>
+						    <a href="<?php echo get_text($memo_view_href); ?>"><?php echo get_text($memo_preview); ?></a>
                         </div>
 					</div>	
-					<a href="<?php echo get_text($list[$i]['del_href']); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a>
+					<a href="<?php echo get_text($memo_del_href); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> <span class="sound_only">삭제</span></a>
 	            </li>
 	            <?php } ?>
 	            <?php if ($i==0) { echo '<li class="empty_table">자료가 없습니다.</li>'; }  ?>
