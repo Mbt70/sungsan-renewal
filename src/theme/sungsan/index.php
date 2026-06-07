@@ -8,6 +8,14 @@ if (!defined('_INDEX_')) {
 }
 include_once G5_THEME_PATH.'/head.php';
 
+$ss_home_news_url = G5_BBS_URL.'/board.php?bo_table=news';
+$ss_home_intro_url = G5_URL.'/theme/sungsan/page/intro.php';
+$ss_home_notice_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('공지');
+$ss_home_event_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('행사');
+$ss_home_resource_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('자료');
+$ss_home_free_url = G5_BBS_URL.'/board.php?bo_table=free';
+$ss_home_activity_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('활동소식');
+
 $notice_posts = sungsan_latest_board_posts('news', array('category' => '공지', 'limit' => 5));
 $event_posts = sungsan_latest_board_posts('news', array('category' => '행사', 'upcoming' => true, 'limit' => 3));
 $resource_posts = sungsan_latest_board_posts('news', array('category' => array('자료', '규정'), 'limit' => 5));
@@ -21,8 +29,8 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
             <h1>중요한 공지와 자료를 더 빠르고 또렷하게 확인하세요</h1>
             <p>성산회의 공지, 일정, 자료, 활동 소식을 한곳에 모아 회원 누구나 편하게 찾고 읽을 수 있도록 새롭게 정리했습니다.</p>
             <div class="ss-action-bar">
-                <a class="ss-button" href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news">소식 보기</a>
-                <a class="ss-button secondary" href="<?php echo G5_URL; ?>/theme/sungsan/page/intro.php">성산회 소개</a>
+                <a class="ss-button" href="<?php echo get_text($ss_home_news_url); ?>">소식 보기</a>
+                <a class="ss-button secondary" href="<?php echo get_text($ss_home_intro_url); ?>">성산회 소개</a>
             </div>
         </div>
         <aside class="ss-hero-summary" aria-label="홈페이지 주요 기능">
@@ -41,14 +49,14 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">최근 공지</h2>
-                <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=공지">더보기</a>
+                <a href="<?php echo get_text($ss_home_notice_url); ?>">더보기</a>
             </div>
             <?php sungsan_render_home_list($notice_posts, '등록된 공지가 없습니다.'); ?>
         </div>
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">다가오는 일정</h2>
-                <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=행사">더보기</a>
+                <a href="<?php echo get_text($ss_home_event_url); ?>">더보기</a>
             </div>
             <?php sungsan_render_home_list($event_posts, '예정된 일정이 없습니다.', true); ?>
         </div>
@@ -60,14 +68,14 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">자료와 규정</h2>
-                <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=자료">더보기</a>
+                <a href="<?php echo get_text($ss_home_resource_url); ?>">더보기</a>
             </div>
             <?php sungsan_render_home_list($resource_posts, '등록된 자료가 없습니다.'); ?>
         </div>
         <div>
             <div class="ss-section-header">
                 <h2 class="ss-section-title">자유게시판</h2>
-                <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=free">더보기</a>
+                <a href="<?php echo get_text($ss_home_free_url); ?>">더보기</a>
             </div>
             <?php sungsan_render_home_list($free_posts, '등록된 자유게시판 글이 없습니다.', false, false, '회원 열람'); ?>
         </div>
@@ -78,7 +86,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 
     <div class="ss-container">
         <div class="ss-section-header">
             <h2 class="ss-section-title">사진·영상 자료</h2>
-            <a href="<?php echo G5_BBS_URL; ?>/board.php?bo_table=news&sca=활동소식">활동소식 보기</a>
+            <a href="<?php echo get_text($ss_home_activity_url); ?>">활동소식 보기</a>
         </div>
         <div class="ss-media-grid">
             <?php for ($i = 0; $i < count($photo_posts); $i++) { ?>

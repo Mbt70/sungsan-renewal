@@ -1020,6 +1020,30 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(latest, /echo \$list\[\$i\]\['datetime2'\]/);
   });
 
+  it('escapes home page static action and section URLs before rendering attributes', () => {
+    const index = read('src/theme/sungsan/index.php');
+
+    for (const variable of [
+      'ss_home_news_url',
+      'ss_home_intro_url',
+      'ss_home_notice_url',
+      'ss_home_event_url',
+      'ss_home_resource_url',
+      'ss_home_free_url',
+      'ss_home_activity_url',
+    ]) {
+      assert.match(index, new RegExp(`\\$${variable} = `), `home should define ${variable}`);
+      assert.match(
+        index,
+        new RegExp(`href="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+        `home should escape ${variable}`,
+      );
+    }
+
+    assert.doesNotMatch(index, /href="<\?php echo G5_URL; \?>/);
+    assert.doesNotMatch(index, /href="<\?php echo G5_BBS_URL; \?>/);
+  });
+
   it('marks home free-board posts as member-readable before visitors open them', () => {
     const index = read('src/theme/sungsan/index.php');
 
