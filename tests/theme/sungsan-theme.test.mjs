@@ -2472,6 +2472,21 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(coreSend, /sungsan_reject_blocked_formmail_uploads/);
   });
 
+  it('normalizes form mail attachment count before the core send loop', () => {
+    const extend = read('src/extend/sungsan.php');
+    const coreSend = read('www/bbs/formmail_send.php');
+
+    assert.match(extend, /function sungsan_normalize_formmail_attach_count\(\)/);
+    assert.match(extend, /global \$attach;/);
+    assert.match(extend, /\$attach = isset\(\$attach\) \? max\(0, min\(2, \(int\) \$attach\)\) : 0;/);
+    assert.match(
+      extend,
+      /sungsan_normalize_formmail_attach_count\(\);\s*\n\s*sungsan_reject_blocked_formmail_uploads\(\$_FILES\);/,
+    );
+    assert.match(coreSend, /for \(\$i=1; \$i<=\$attach; \$i\+\+\)/);
+    assert.doesNotMatch(coreSend, /sungsan_normalize_formmail_attach_count/);
+  });
+
   it('connects board write required and attachment guidance to form controls', () => {
     for (const file of [
       'src/skin/board/sungsan_news/write.skin.php',

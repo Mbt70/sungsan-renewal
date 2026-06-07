@@ -309,7 +309,15 @@ function sungsan_reject_blocked_formmail_uploads($files)
     }
 }
 
+function sungsan_normalize_formmail_attach_count()
+{
+    global $attach;
+
+    $attach = isset($attach) ? max(0, min(2, (int) $attach)) : 0;
+}
+
 if (isset($_SERVER['SCRIPT_NAME']) && basename($_SERVER['SCRIPT_NAME']) === 'formmail_send.php') {
+    sungsan_normalize_formmail_attach_count();
     sungsan_reject_blocked_formmail_uploads($_FILES);
 }
 
