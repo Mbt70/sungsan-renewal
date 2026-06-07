@@ -455,11 +455,21 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('shows visible labels for optional registration address and recommender fields', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    for (const field of ['reg_mb_zip', 'reg_mb_addr1', 'reg_mb_addr2', 'reg_mb_addr3', 'reg_mb_recommend']) {
+      assert.match(source, new RegExp(`<label for="${field}"(?![^>]*sound_only)`), `registration form should show a visible label for ${field}`);
+      assert.doesNotMatch(source, new RegExp(`<label for="${field}"[^>]*class="sound_only"`), `registration form should not hide the ${field} label`);
+    }
+  });
+
   it('styles visible account utility labels and textareas for scan-friendly forms', () => {
     const css = read('src/skin/member/sungsan/style.css');
 
     assert.match(css, /#info_fs\s*>\s*label:not\(\.sound_only\)/);
     assert.match(css, /\.form_01\s+li\s*>\s*label:not\(\.sound_only\)/);
+    assert.match(css, /\.form_01\s+li\s*>\s*\.frm_label/);
     assert.match(css, /display:\s*block/);
     assert.match(css, /margin-bottom:\s*6px/);
     assert.match(css, /font-weight:\s*800/);

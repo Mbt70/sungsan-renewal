@@ -155,18 +155,18 @@ if ($config['cf_cert_use'] && ($config['cf_cert_simple'] || $config['cf_cert_ipi
 	
 	            <?php if ($config['cf_use_addr']) { ?>
 	            <li>
-	            	<label>주소</label>
-					<?php if ($config['cf_req_addr']) { ?> (필수)<?php }  ?>
-	                <label for="reg_mb_zip" class="sound_only">우편번호<?php echo $config['cf_req_addr']?' (필수)':''; ?></label>
+					<span class="frm_label">주소<?php if ($config['cf_req_addr']) { ?> (필수)<?php }  ?></span>
+	                <label for="reg_mb_zip">우편번호<?php echo $config['cf_req_addr']?' (필수)':''; ?></label>
 	                <input type="text" name="mb_zip" value="<?php echo get_text($member['mb_zip1'].$member['mb_zip2']); ?>" id="reg_mb_zip" <?php echo $config['cf_req_addr']?"required":""; ?> class="frm_input twopart_input <?php echo $config['cf_req_addr']?"required":""; ?>" size="5" maxlength="6"  placeholder="우편번호">
 	                <button type="button" class="btn_frmline" onclick="win_zip('fregisterform', 'mb_zip', 'mb_addr1', 'mb_addr2', 'mb_addr3', 'mb_addr_jibeon');">주소 검색</button><br>
+	                <label for="reg_mb_addr1">기본주소<?php echo $config['cf_req_addr']?' (필수)':''; ?></label>
 	                <input type="text" name="mb_addr1" value="<?php echo get_text($member['mb_addr1']) ?>" id="reg_mb_addr1" <?php echo $config['cf_req_addr']?"required":""; ?> class="frm_input frm_address full_input <?php echo $config['cf_req_addr']?"required":""; ?>" size="50"  placeholder="기본주소">
-	                <label for="reg_mb_addr1" class="sound_only">기본주소<?php echo $config['cf_req_addr']?' (필수)':''; ?></label><br>
-	                <input type="text" name="mb_addr2" value="<?php echo get_text($member['mb_addr2']) ?>" id="reg_mb_addr2" class="frm_input frm_address full_input" size="50" placeholder="상세주소">
-	                <label for="reg_mb_addr2" class="sound_only">상세주소</label>
 	                <br>
+	                <label for="reg_mb_addr2">상세주소</label>
+	                <input type="text" name="mb_addr2" value="<?php echo get_text($member['mb_addr2']) ?>" id="reg_mb_addr2" class="frm_input frm_address full_input" size="50" placeholder="상세주소">
+	                <br>
+	                <label for="reg_mb_addr3">참고항목</label>
 	                <input type="text" name="mb_addr3" value="<?php echo get_text($member['mb_addr3']) ?>" id="reg_mb_addr3" class="frm_input frm_address full_input" size="50" readonly="readonly" placeholder="참고항목">
-	                <label for="reg_mb_addr3" class="sound_only">참고항목</label>
 	                <input type="hidden" name="mb_addr_jibeon" value="<?php echo get_text($member['mb_addr_jibeon']); ?>">
 	            </li>
 	            <?php }  ?>
@@ -264,7 +264,7 @@ gif, jpg, png파일만 가능하며 용량 <?php echo number_format($config['cf_
 	            
 	            <?php if ($w == "" && $config['cf_use_recommend']) {  ?>
 	            <li>
-	                <label for="reg_mb_recommend" class="sound_only">추천인아이디</label>
+	                <label for="reg_mb_recommend">추천인아이디</label>
 	                <input type="text" name="mb_recommend" id="reg_mb_recommend" class="frm_input" placeholder="추천인아이디">
 	            </li>
 	            <?php }  ?>

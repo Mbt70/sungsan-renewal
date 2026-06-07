@@ -88,7 +88,7 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 1. 기존 DB와 `/renewal/data`를 백업합니다.
 2. 백업을 로컬로 복원해 EUC-KR에서 UTF-8 변환을 리허설합니다.
 3. 새 사이트를 Cafe24 스테이징 경로에 업로드합니다.
-4. 관리자와 함께 권한, 첨부, 검색, 모바일 화면을 검수합니다.
+4. 관리자와 함께 권한, 첨부, 검색, 모바일 화면을 검수하고 `docs/operations/staging-validation-checklist.md`에 결과를 남깁니다.
 5. 최종 백업 후 루트 전환합니다.
 
 자세한 절차는 `docs/operations`와 `docs/migration`을 확인합니다.
