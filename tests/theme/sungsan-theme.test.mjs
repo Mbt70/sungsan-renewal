@@ -1092,6 +1092,31 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('marks new member password fields for password managers', () => {
+    const cases = [
+      {
+        file: 'src/skin/member/sungsan/register_form.skin.php',
+        ids: ['reg_mb_password', 'reg_mb_password_re'],
+      },
+      {
+        file: 'src/skin/member/sungsan/password_reset.skin.php',
+        ids: ['mb_pw', 'mb_pw2'],
+      },
+    ];
+
+    for (const { file, ids } of cases) {
+      const source = read(file);
+
+      for (const id of ids) {
+        const inputLine = source.split('\n').find((line) => line.includes(`id="${id}"`));
+
+        assert.ok(inputLine, `${file} should render ${id}`);
+        assert.match(inputLine, /type="password"/, `${file} should keep ${id} as a password input`);
+        assert.match(inputLine, /autocomplete="new-password"/, `${file} should mark ${id} as a new password`);
+      }
+    }
+  });
+
   it('groups form mail format choices with a visible legend', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
     const css = read('src/skin/member/sungsan/style.css');

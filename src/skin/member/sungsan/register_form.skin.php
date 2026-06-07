@@ -67,11 +67,11 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 	            </li>
 	            <li class="half_input left_input margin_input">
 	                <label for="reg_mb_password">비밀번호 (필수)</label>
-	                <input type="password" name="mb_password" id="reg_mb_password" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" placeholder="비밀번호">
+	                <input type="password" name="mb_password" id="reg_mb_password" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password" placeholder="비밀번호">
 	            </li>
 	            <li class="half_input left_input">
 	                <label for="reg_mb_password_re">비밀번호 확인 (필수)</label>
-	                <input type="password" name="mb_password_re" id="reg_mb_password_re" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" placeholder="비밀번호 확인">
+	                <input type="password" name="mb_password_re" id="reg_mb_password_re" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password" placeholder="비밀번호 확인">
 	            </li>
 	        </ul>
 	    </div>
