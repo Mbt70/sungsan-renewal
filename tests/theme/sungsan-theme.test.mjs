@@ -121,7 +121,7 @@ describe('sungsan theme static contract', () => {
     const head = read('src/theme/sungsan/head.php');
     const css = read('src/scss/main.scss');
 
-    assert.match(head, /<form class="ss-search-form" method="get" action="<\?php echo G5_BBS_URL; \?>\/board\.php">/);
+    assert.match(head, /<form class="ss-search-form" method="get" action="<\?php echo get_text\(\$ss_search_action_url\); \?>">/);
     assert.match(head, /<input type="hidden" name="bo_table" value="news">/);
     assert.doesNotMatch(head, /\/search\.php/);
     assert.match(head, /<label class="ss-search-label" for="ss_stx">소식 검색<\/label>/);
@@ -132,13 +132,37 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-search-form\s+\.ss-search-row\s*\{/);
   });
 
+  it('escapes shared header navigation and search URLs before rendering attributes', () => {
+    const head = read('src/theme/sungsan/head.php');
+
+    for (const variable of [
+      'ss_home_url',
+      'ss_intro_url',
+      'ss_news_url',
+      'ss_free_url',
+      'ss_search_action_url',
+      'ss_mypage_url',
+    ]) {
+      assert.match(head, new RegExp(`\\$${variable} = `), `header should define ${variable}`);
+      assert.match(
+        head,
+        new RegExp(`(?:href|action)="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+        `header should escape ${variable}`,
+      );
+    }
+
+    assert.doesNotMatch(head, /href="<\?php echo G5_URL; \?>/);
+    assert.doesNotMatch(head, /href="<\?php echo G5_BBS_URL; \?>/);
+    assert.doesNotMatch(head, /action="<\?php echo G5_BBS_URL; \?>/);
+  });
+
   it('shows a member account icon for the logged-in mypage entry', () => {
     const head = read('src/theme/sungsan/head.php');
     const css = read('src/scss/main.scss');
 
     assert.match(
       head,
-      /<a class="ss-account-link ss-account-link-member" href="<\?php echo G5_URL; \?>\/sungsan\/mypage\.php"<\?php echo \$ss_is_mypage \? ' aria-current="page"' : ''; \?>>/,
+      /<a class="ss-account-link ss-account-link-member" href="<\?php echo get_text\(\$ss_mypage_url\); \?>"<\?php echo \$ss_is_mypage \? ' aria-current="page"' : ''; \?>>/,
     );
     assert.match(head, /<span class="ss-account-icon" aria-hidden="true"><\/span>\s*<span class="ss-account-text">마이페이지<\/span>/);
     assert.match(css, /\.ss-account-icon\s*\{[\s\S]*?width:\s*24px;[\s\S]*?height:\s*24px;[\s\S]*?border-radius:\s*50%;/);
