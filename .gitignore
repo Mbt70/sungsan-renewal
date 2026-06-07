@@ -15,8 +15,21 @@ backups/
 !docs/generated/
 !docs/generated/sungsan-setup.sql
 *.sql.gz
+*.sql.zip
 *.dump
+*.dump.gz
 *.bak
+*.tar.gz
+*.tgz
+*.7z
+*.pem
+*.key
+*.ppk
+*.p12
+secrets/
+deploy.env
+cafe24*.env
+sftp*.json
 
 .DS_Store
 Thumbs.db

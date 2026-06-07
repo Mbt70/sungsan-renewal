@@ -33,6 +33,13 @@
 - 현재 사이트처럼 PHP warning과 PHP 버전이 공개 응답에 노출되지 않는지 스테이징과 운영에서 모두 확인합니다.
 - 설정 SQL 적용 후 회원가입 기본 권한이 승인 대기 수준인지 확인합니다.
 
+## Version Control
+- `.env`, `.env.*`, `deploy.env`, `cafe24*.env`는 Git에 올리지 않습니다.
+- DB와 리허설 덤프는 `*.sql`, `*.sql.gz`, `*.sql.zip`, `*.dump`, `*.dump.gz` 패턴으로 Git에서 제외합니다.
+- 기존 소스와 첨부 백업은 `backups/`, `*.tar.gz`, `*.tgz`, `*.7z`처럼 로컬 백업 경로 또는 압축 파일로만 보관합니다.
+- Cafe24 SFTP/SSH 비밀값은 `*.pem`, `*.key`, `*.ppk`, `*.p12`, `sftp*.json`, `secrets/`에 두고 Git에 올리지 않습니다.
+- 예외로 `.env.example`과 `docs/generated/sungsan-setup.sql`만 검토 가능한 샘플/설정 산출물로 추적합니다.
+
 ## Verification
 - 비회원으로 회원 전용 글 본문 접근 차단 확인
 - 회원으로 자유게시판 작성 확인
