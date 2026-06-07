@@ -1319,6 +1319,23 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps registration fields readable through visible labels, not duplicate placeholders', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    for (const id of [
+      'reg_mb_id',
+      'reg_mb_password',
+      'reg_mb_password_re',
+      'reg_mb_name',
+      'reg_mb_nick',
+      'reg_mb_email',
+      'reg_mb_hp',
+    ]) {
+      assert.match(source, new RegExp(`<label for="${id}"`), `registration form should show a visible label for ${id}`);
+      assert.doesNotMatch(source, new RegExp(`id="${id}"[^\\n]*placeholder=`), `registration form should not duplicate ${id} label as placeholder`);
+    }
+  });
+
   it('groups form mail format choices with a visible legend', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
     const css = read('src/skin/member/sungsan/style.css');

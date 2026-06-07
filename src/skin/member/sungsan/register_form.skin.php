@@ -62,16 +62,16 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 	                    <button type="button" class="tooltip_icon"><i class="fa fa-question-circle-o" aria-hidden="true"></i><span class="sound_only">설명보기</span></button>
 	                    <span class="tooltip">영문자, 숫자, _ 만 입력 가능. 최소 3자이상 입력하세요.</span>
 	                </label>
-	                <input type="text" name="mb_id" value="<?php echo $sungsan_member_value('mb_id'); ?>" id="reg_mb_id" <?php echo $required ?> <?php echo $readonly ?> class="frm_input full_input <?php echo $required ?> <?php echo $readonly ?>" minlength="3" maxlength="20" placeholder="아이디">
+	                <input type="text" name="mb_id" value="<?php echo $sungsan_member_value('mb_id'); ?>" id="reg_mb_id" <?php echo $required ?> <?php echo $readonly ?> class="frm_input full_input <?php echo $required ?> <?php echo $readonly ?>" minlength="3" maxlength="20">
 	                <span id="msg_mb_id"></span>
 	            </li>
 	            <li class="half_input left_input margin_input">
 	                <label for="reg_mb_password">비밀번호 (필수)</label>
-	                <input type="password" name="mb_password" id="reg_mb_password" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password" placeholder="비밀번호">
+	                <input type="password" name="mb_password" id="reg_mb_password" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password">
 	            </li>
 	            <li class="half_input left_input">
 	                <label for="reg_mb_password_re">비밀번호 확인 (필수)</label>
-	                <input type="password" name="mb_password_re" id="reg_mb_password_re" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password" placeholder="비밀번호 확인">
+	                <input type="password" name="mb_password_re" id="reg_mb_password_re" <?php echo $required ?> class="frm_input full_input <?php echo $required ?>" minlength="3" maxlength="20" autocomplete="new-password">
 	            </li>
 	        </ul>
 	    </div>
@@ -125,7 +125,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				<?php } ?>
 	            <li>
 	                <label for="reg_mb_name">이름 (필수)<?php echo $desc_name ?></label>
-	                <input type="text" id="reg_mb_name" name="mb_name" value="<?php echo $sungsan_member_value('mb_name'); ?>" <?php echo $required ?> <?php echo $name_readonly; ?> class="frm_input full_input <?php echo $required ?> <?php echo $name_readonly ?>" size="10" placeholder="이름">
+	                <input type="text" id="reg_mb_name" name="mb_name" value="<?php echo $sungsan_member_value('mb_name'); ?>" <?php echo $required ?> <?php echo $name_readonly; ?> class="frm_input full_input <?php echo $required ?> <?php echo $name_readonly ?>" size="10">
 	            </li>
 	            <?php if ($req_nick) {  ?>
 	            <li>
@@ -136,7 +136,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 	                </label>
 	                
                     <input type="hidden" name="mb_nick_default" value="<?php echo $sungsan_member_value('mb_nick'); ?>">
-                    <input type="text" name="mb_nick" value="<?php echo $sungsan_member_value('mb_nick'); ?>" id="reg_mb_nick" required class="frm_input required nospace full_input" size="10" maxlength="20" placeholder="닉네임">
+                    <input type="text" name="mb_nick" value="<?php echo $sungsan_member_value('mb_nick'); ?>" id="reg_mb_nick" required class="frm_input required nospace full_input" size="10" maxlength="20">
                     <span id="msg_mb_nick"></span>	                
 	            </li>
 	            <?php }  ?>
@@ -154,14 +154,14 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 					</label>
 
 	                <input type="hidden" name="old_email" value="<?php echo $sungsan_member_value('mb_email'); ?>">
-	                <input type="email" name="mb_email" value="<?php echo $sungsan_member_value('mb_email'); ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" autocomplete="email" placeholder="E-mail">
+	                <input type="email" name="mb_email" value="<?php echo $sungsan_member_value('mb_email'); ?>" id="reg_mb_email" required class="frm_input email full_input required" size="70" maxlength="100" autocomplete="email">
 	            </li>
 	
 				<li>
 	            <?php if ($config['cf_use_hp'] || ($config["cf_cert_use"] && ($config['cf_cert_hp'] || $config['cf_cert_simple']))) {  ?>
 	                <label for="reg_mb_hp">휴대폰번호<?php if (!empty($hp_required)) { ?> (필수)<?php } ?><?php echo $desc_phone ?></label>
 	                
-	                <input type="tel" name="mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="휴대폰번호">
+	                <input type="tel" name="mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>" id="reg_mb_hp" <?php echo $hp_required; ?> <?php echo $hp_readonly; ?> class="frm_input full_input <?php echo $hp_required; ?> <?php echo $hp_readonly; ?>" maxlength="20" inputmode="tel" autocomplete="tel">
 	                <?php if ($config['cf_cert_use'] && ($config['cf_cert_hp'] || $config['cf_cert_simple'])) { ?>
 	                <input type="hidden" name="old_mb_hp" value="<?php echo $sungsan_member_value('mb_hp'); ?>">
 	                <?php } ?>
