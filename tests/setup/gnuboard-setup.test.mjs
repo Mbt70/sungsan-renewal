@@ -33,6 +33,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.equal(news.bo_category_list, '공지|행사|자료|규정|활동소식');
     assert.equal(news.bo_list_level, 1);
     assert.equal(news.bo_write_level, 6);
+    assert.equal(news.bo_comment_level, 10);
     assert.equal(news.bo_upload_level, 6);
     assert.equal(news.bo_upload_size, 20971520);
     assert.equal(news.bo_download_level, 1);
@@ -50,6 +51,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.equal(free.bo_list_level, 1);
     assert.equal(free.bo_read_level, 2);
     assert.equal(free.bo_write_level, 2);
+    assert.equal(free.bo_comment_level, 2);
     assert.equal(free.bo_upload_size, 20971520);
   });
 
@@ -63,6 +65,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /INSERT INTO `g5_board`/);
     assert.match(sql, /bo_table = 'news'/);
     assert.match(sql, /bo_skin = 'sungsan_news'/);
+    assert.match(sql, /bo_comment_level = '10'/);
     assert.match(sql, /bo_download_level = '1'/);
     assert.match(sql, /bo_upload_size = '20971520'/);
     assert.match(sql, /bo_1_subj = '소속 slug'/);
@@ -124,6 +127,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /-- news wr_5 기존 보드 ID, wr_6 기존 글 ID, wr_7 이전 검토 플래그, wr_8 검토 사유/);
     assert.match(sql, /-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
     assert.match(sql, /-- news write access: 작성\/수정\/삭제\/첨부 업로드는 임원 이상/);
+    assert.match(sql, /-- news comments: 공식 소식은 댓글 UI를 사용하지 않고 회원 의견은 free 게시판에서 받습니다\./);
     assert.match(sql, /-- free: 회원 자유게시판/);
     assert.match(sql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
   });
@@ -143,6 +147,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(generatedSql, /-- news: 통합 소식 게시판/);
     assert.match(generatedSql, /-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
     assert.match(generatedSql, /-- news write access: 작성\/수정\/삭제\/첨부 업로드는 임원 이상/);
+    assert.match(generatedSql, /-- news comments: 공식 소식은 댓글 UI를 사용하지 않고 회원 의견은 free 게시판에서 받습니다\./);
     assert.match(generatedSql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
   });
 

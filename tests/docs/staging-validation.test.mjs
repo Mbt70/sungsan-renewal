@@ -105,4 +105,15 @@ describe('Cafe24 staging validation handoff', () => {
       expectIncludes(checklist, expected, checklistPath);
     }
   });
+
+  it('documents official news comments and free-board community comment checks', () => {
+    const checklist = readFileSync(checklistPath, 'utf8');
+
+    for (const expected of [
+      '`news` 게시판 상세는 댓글 UI를 노출하지 않고 의견 수렴은 `free` 게시판에서 처리함',
+      '`free` 게시판 상세에서 회원 댓글 작성/답글/수정/삭제 UX가 동작함',
+    ]) {
+      expectIncludes(checklist, expected, checklistPath);
+    }
+  });
 });
