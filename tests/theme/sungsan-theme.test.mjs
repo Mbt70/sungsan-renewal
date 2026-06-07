@@ -2030,10 +2030,27 @@ describe('sungsan theme static contract', () => {
     const index = read('src/theme/sungsan/index.php');
 
     assert.match(index, /global \$is_member;/);
-    assert.match(index, /\$sungsan_requires_login = !\$is_member && \$access_label;/);
+    assert.match(index, /\$sungsan_requires_login = !\$is_member && \(\$access_label \|\| !\$sungsan_home_post_can_read\);/);
     assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? sungsan_login_url\(\$sungsan_home_post_raw_href\) : \$sungsan_home_post_raw_href;/);
-    assert.match(index, /class="ss-post-row<\?php echo \$sungsan_requires_login \? ' restricted' : ''; \?>"/);
+    assert.match(index, /\$sungsan_home_post_restricted = \$sungsan_requires_login \|\| !\$sungsan_home_post_can_read;/);
+    assert.match(index, /class="ss-post-row<\?php echo \$sungsan_home_post_restricted \? ' restricted' : ''; \?>"/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
+  });
+
+  it('keeps restricted news posts visible in home summaries while marking visibility', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+    const latestFunction = extend.match(/function sungsan_latest_board_posts\(\$bo_table, \$args = array\(\)\)[\s\S]*?\n}\n\nfunction sungsan_member_recent_posts/)[0];
+
+    assert.match(latestFunction, /\(wr_7 <> 'review_required' or wr_7 is null\)/);
+    assert.doesNotMatch(latestFunction, /\$level = isset\(\$member\['mb_level'\]\)/);
+    assert.doesNotMatch(latestFunction, /wr_2 = 'public'/);
+    assert.doesNotMatch(latestFunction, /wr_2 in \('public', 'member'\)/);
+
+    assert.match(index, /\$sungsan_home_post_visibility = isset\(\$sungsan_home_post\['wr_2'\]\) \? \$sungsan_home_post\['wr_2'\] : '';/);
+    assert.match(index, /\$sungsan_home_post_visibility_label = \$sungsan_home_post_visibility !== '' \? sungsan_get_visibility_label\(\$sungsan_home_post_visibility\) : '';/);
+    assert.match(index, /\$sungsan_home_post_can_read = \$sungsan_home_post_visibility === '' \|\| sungsan_can_read_visibility\(\$sungsan_home_post_visibility\);/);
+    assert.match(index, /<\?php if \(\$sungsan_home_post_visibility_label !== ''\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$sungsan_home_post_visibility_label\); \?><\/span><\?php \} \?>/);
   });
 
   it('uses an operational empty state for home media instead of migration placeholders', () => {

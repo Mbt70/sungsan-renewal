@@ -398,7 +398,7 @@ function sungsan_prepare_latest_post($row, $board_id, $with_thumbnail, $thumb_wi
 
 function sungsan_latest_board_posts($bo_table, $args = array())
 {
-    global $g5, $is_admin, $member;
+    global $g5, $is_admin;
 
     if (!isset($g5['write_prefix']) || !function_exists('sql_query')) {
         return array();
@@ -419,13 +419,6 @@ function sungsan_latest_board_posts($bo_table, $args = array())
     if ($board_id === SUNGSAN_NEWS_BOARD) {
         if (!$is_admin) {
             $where[] = "(wr_7 <> 'review_required' or wr_7 is null)";
-        }
-
-        $level = isset($member['mb_level']) ? (int) $member['mb_level'] : 0;
-        if (!$is_admin && $level < 2) {
-            $where[] = "(wr_2 = 'public' or wr_2 = '')";
-        } elseif (!$is_admin && $level < 6) {
-            $where[] = "(wr_2 in ('public', 'member') or wr_2 = '')";
         }
     }
 
