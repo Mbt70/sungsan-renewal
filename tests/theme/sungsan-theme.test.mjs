@@ -1045,6 +1045,16 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('starts password reset with a visible popup heading before form fields', () => {
+    const source = read('src/skin/member/sungsan/password_reset.skin.php');
+    const headingIndex = source.indexOf('<h1 id="win_title">비밀번호 재설정</h1>');
+    const fieldsetIndex = source.indexOf('<fieldset id="info_fs">');
+
+    assert.ok(headingIndex > -1, 'password reset should render a visible popup heading');
+    assert.ok(fieldsetIndex > -1, 'password reset should render the password fieldset');
+    assert.ok(headingIndex < fieldsetIndex, 'password reset heading should appear before form fields');
+  });
+
   it('uses semantic input types for member email and phone fields', () => {
     const cases = [
       {

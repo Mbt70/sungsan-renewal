@@ -10,6 +10,7 @@ $password_reset_mb_id = isset($_POST['mb_id']) ? $_POST['mb_id'] : '';
 <!-- 비밀번호 재설정 시작 { -->
 <div id="pw_reset" class="new_win">
     <div class="new_win_con">
+        <h1 id="win_title">비밀번호 재설정</h1>
         <form name="fpasswordreset" action="<?php echo get_text($action_url); ?>" onsubmit="return fpasswordreset_submit(this);" method="post" autocomplete="off">
             <fieldset id="info_fs">
                 <p>새로운 비밀번호를 입력해주세요.</p>
