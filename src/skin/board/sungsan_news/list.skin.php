@@ -3,7 +3,7 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-global $is_admin;
+global $is_admin, $is_member;
 
 $current_category = isset($sca) ? $sca : '';
 $sungsan_news_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
@@ -57,7 +57,8 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
 
             $visible_count++;
             $can_read_post = sungsan_can_read_news_post($sungsan_news_row);
-            $sungsan_news_post_href = isset($sungsan_news_row['href']) ? $sungsan_news_row['href'] : '#';
+            $sungsan_news_post_raw_href = isset($sungsan_news_row['href']) ? $sungsan_news_row['href'] : '#';
+            $sungsan_news_post_href = (!$is_member && !$can_read_post) ? sungsan_login_url($sungsan_news_post_raw_href) : $sungsan_news_post_raw_href;
             $sungsan_news_post_subject = isset($sungsan_news_row['subject']) ? $sungsan_news_row['subject'] : '';
             $sungsan_news_post_category = isset($sungsan_news_row['ca_name']) ? $sungsan_news_row['ca_name'] : '';
             $sungsan_news_post_date = isset($sungsan_news_row['datetime2']) ? $sungsan_news_row['datetime2'] : '';

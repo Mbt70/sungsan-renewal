@@ -1776,7 +1776,8 @@ describe('sungsan theme static contract', () => {
     const newsList = read('src/skin/board/sungsan_news/list.skin.php');
 
     assert.match(newsList, /\$sungsan_news_row = \$list\[\$i\];/);
-    assert.match(newsList, /\$sungsan_news_post_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
+    assert.match(newsList, /\$sungsan_news_post_raw_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
+    assert.match(newsList, /\$sungsan_news_post_href = \(!\$is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
     assert.match(newsList, /\$sungsan_news_post_subject = isset\(\$sungsan_news_row\['subject'\]\) \? \$sungsan_news_row\['subject'\] : '';/);
     assert.match(newsList, /\$sungsan_news_post_category = isset\(\$sungsan_news_row\['ca_name'\]\) \? \$sungsan_news_row\['ca_name'\] : '';/);
     assert.match(newsList, /\$sungsan_news_post_date = isset\(\$sungsan_news_row\['datetime2'\]\) \? \$sungsan_news_row\['datetime2'\] : '';/);
@@ -2234,6 +2235,15 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(list, /if \(!sungsan_can_read_news_post\(\$list\[\$i\]\)\) \{\s*continue;\s*\}/);
     assert.match(css, /\.ss-post-row\.restricted\s*\{/);
     assert.match(css, /\.ss-access-label\s*\{/);
+  });
+
+  it('sends guest restricted-news row clicks to login with the post as return target', () => {
+    const list = read('src/skin/board/sungsan_news/list.skin.php');
+
+    assert.match(list, /global \$is_admin, \$is_member;/);
+    assert.match(list, /\$sungsan_news_post_raw_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
+    assert.match(list, /\$sungsan_news_post_href = \(!\$is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
+    assert.doesNotMatch(list, /\$sungsan_news_post_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
   });
 
   it('escapes news visibility labels before rendering metadata', () => {
