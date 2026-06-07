@@ -87,6 +87,59 @@ function sungsan_get_news_categories($board)
     return !empty($categories) ? $categories : $sungsan_news_categories;
 }
 
+function sungsan_get_current_news_categories()
+{
+    global $g5, $sungsan_news_categories;
+
+    if (!isset($g5['board_table']) || !function_exists('sql_fetch') || !function_exists('sql_escape_string')) {
+        return $sungsan_news_categories;
+    }
+
+    $board_row = sql_fetch(" select bo_category_list from {$g5['board_table']} where bo_table = '".sql_escape_string(SUNGSAN_NEWS_BOARD)."' ");
+    if (!is_array($board_row)) {
+        return $sungsan_news_categories;
+    }
+
+    return sungsan_get_news_categories($board_row);
+}
+
+function sungsan_get_news_category_at($categories, $preferred, $index)
+{
+    if (!is_array($categories)) {
+        return $preferred;
+    }
+
+    if (in_array($preferred, $categories, true)) {
+        return $preferred;
+    }
+
+    return isset($categories[$index]) ? $categories[$index] : $preferred;
+}
+
+function sungsan_get_news_categories_at($categories, $preferred, $indexes)
+{
+    if (!is_array($categories)) {
+        return $preferred;
+    }
+
+    $selected = array();
+    foreach ($preferred as $category) {
+        if (in_array($category, $categories, true)) {
+            $selected[] = $category;
+        }
+    }
+
+    foreach ($indexes as $index) {
+        if (isset($categories[$index])) {
+            $selected[] = $categories[$index];
+        }
+    }
+
+    $selected = array_values(array_unique($selected));
+
+    return !empty($selected) ? $selected : $preferred;
+}
+
 $sungsan_visibility_labels = array(
     'public' => '누구나',
     'member' => '회원',

@@ -238,6 +238,30 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('uses board-managed news categories for home summary queries and filter links', () => {
+    const extend = read('src/extend/sungsan.php');
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(extend, /function sungsan_get_current_news_categories\(\)/);
+    assert.match(extend, /select bo_category_list from \{\$g5\['board_table'\]\}/);
+    assert.match(extend, /sungsan_get_news_categories\(\$board_row\)/);
+    assert.match(extend, /function sungsan_get_news_category_at\(\$categories, \$preferred, \$index\)/);
+    assert.match(extend, /function sungsan_get_news_categories_at\(\$categories, \$preferred, \$indexes\)/);
+
+    assert.match(index, /\$sungsan_home_news_categories = sungsan_get_current_news_categories\(\);/);
+    assert.match(index, /\$sungsan_home_notice_category = sungsan_get_news_category_at\(\$sungsan_home_news_categories, '공지', 0\);/);
+    assert.match(index, /\$sungsan_home_event_category = sungsan_get_news_category_at\(\$sungsan_home_news_categories, '행사', 1\);/);
+    assert.match(index, /\$sungsan_home_resource_categories = sungsan_get_news_categories_at\(\$sungsan_home_news_categories, array\('자료', '규정'\), array\(2, 3\)\);/);
+    assert.match(index, /urlencode\(\$sungsan_home_notice_category\)/);
+    assert.match(index, /urlencode\(\$sungsan_home_event_category\)/);
+    assert.match(index, /urlencode\(\$sungsan_home_resource_category\)/);
+    assert.match(index, /'category' => \$sungsan_home_notice_category/);
+    assert.match(index, /'category' => \$sungsan_home_event_category/);
+    assert.match(index, /'category' => \$sungsan_home_resource_categories/);
+    assert.doesNotMatch(index, /urlencode\('공지'\)/);
+    assert.doesNotMatch(index, /'category' => '공지'/);
+  });
+
   it('keeps the login skin focused on Sungsan membership, not commerce flows', () => {
     const source = read('src/skin/member/sungsan/login.skin.php');
 
@@ -1339,7 +1363,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       index,
-      /\$notice_posts = sungsan_latest_board_posts\('news', array\('category' => '공지', 'includeNotice' => true, 'limit' => 5\)\);/,
+      /\$notice_posts = sungsan_latest_board_posts\('news', array\('category' => \$sungsan_home_notice_category, 'includeNotice' => true, 'limit' => 5\)\);/,
     );
     assert.match(extend, /\$include_notice = !empty\(\$args\['includeNotice'\]\);/);
     assert.match(extend, /select bo_notice from \{\$g5\['board_table'\]\}/);

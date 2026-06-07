@@ -10,15 +10,21 @@ include_once G5_THEME_PATH.'/head.php';
 
 $ss_home_news_url = G5_BBS_URL.'/board.php?bo_table=news';
 $ss_home_intro_url = G5_URL.'/theme/sungsan/page/intro.php';
-$ss_home_notice_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('공지');
-$ss_home_event_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('행사');
-$ss_home_resource_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('자료');
+$sungsan_home_news_categories = sungsan_get_current_news_categories();
+$sungsan_home_notice_category = sungsan_get_news_category_at($sungsan_home_news_categories, '공지', 0);
+$sungsan_home_event_category = sungsan_get_news_category_at($sungsan_home_news_categories, '행사', 1);
+$sungsan_home_resource_categories = sungsan_get_news_categories_at($sungsan_home_news_categories, array('자료', '규정'), array(2, 3));
+$sungsan_home_resource_category = isset($sungsan_home_resource_categories[0]) ? $sungsan_home_resource_categories[0] : '자료';
+$sungsan_home_activity_category = sungsan_get_news_category_at($sungsan_home_news_categories, '활동소식', 4);
+$ss_home_notice_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode($sungsan_home_notice_category);
+$ss_home_event_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode($sungsan_home_event_category);
+$ss_home_resource_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode($sungsan_home_resource_category);
 $ss_home_free_url = G5_BBS_URL.'/board.php?bo_table=free';
-$ss_home_activity_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode('활동소식');
+$ss_home_activity_url = G5_BBS_URL.'/board.php?bo_table=news&sca='.urlencode($sungsan_home_activity_category);
 
-$notice_posts = sungsan_latest_board_posts('news', array('category' => '공지', 'includeNotice' => true, 'limit' => 5));
-$event_posts = sungsan_latest_board_posts('news', array('category' => '행사', 'upcoming' => true, 'limit' => 3));
-$resource_posts = sungsan_latest_board_posts('news', array('category' => array('자료', '규정'), 'limit' => 5));
+$notice_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_notice_category, 'includeNotice' => true, 'limit' => 5));
+$event_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_event_category, 'upcoming' => true, 'limit' => 3));
+$resource_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_resource_categories, 'limit' => 5));
 $free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
 $photo_posts = sungsan_latest_board_posts('news', array('groupSlug' => 'photo', 'thumbnail' => true, 'limit' => 4));
 ?>
