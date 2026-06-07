@@ -7,7 +7,7 @@ if (!defined('_GNUBOARD_')) {
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
         <p class="ss-form-help">회원끼리 나누는 글입니다. 개인정보가 포함된 자료는 올리기 전에 한 번 더 확인해 주세요.</p>
-        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
+        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
@@ -22,11 +22,11 @@ if (!defined('_GNUBOARD_')) {
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
             <div class="ss-field">
                 <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
-                <input id="wr_subject" name="wr_subject" value="<?php echo $subject; ?>" required>
+                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($subject); ?>" required>
             </div>
             <div class="ss-field">
                 <label for="wr_content">본문 <span class="ss-required">필수</span></label>
-                <textarea id="wr_content" name="wr_content" required><?php echo $content; ?></textarea>
+                <textarea id="wr_content" name="wr_content" required><?php echo get_text($content); ?></textarea>
             </div>
             <?php for ($i = 0; $is_file && $i < $file_count; $i++) { ?>
                 <div class="ss-field">
@@ -48,7 +48,7 @@ if (!defined('_GNUBOARD_')) {
             <?php } ?>
             <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
-                <a class="ss-button secondary" href="<?php echo $list_href; ?>">취소</a>
+                <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">취소</a>
             </div>
         </form>
     </div>

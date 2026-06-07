@@ -456,6 +456,39 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('escapes board write form actions and editable values before rendering forms', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/, `${file} should escape action_url`);
+      assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
+      assert.match(source, /<textarea id="wr_content" name="wr_content" required><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
+      assert.match(source, /href="<\?php echo get_text\(\$list_href\); \?>"/, `${file} should escape list_href`);
+
+      assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
+      assert.doesNotMatch(source, /value="<\?php echo \$subject/);
+      assert.doesNotMatch(source, /<textarea id="wr_content" name="wr_content" required><\?php echo \$content/);
+      assert.doesNotMatch(source, /href="<\?php echo \$list_href/);
+    }
+
+    const news = read('src/skin/board/sungsan_news/write.skin.php');
+
+    for (const field of ['legacy_board_id', 'legacy_post_id', 'review_flag', 'review_reason']) {
+      assert.match(news, new RegExp(`value="<\\?php echo get_text\\(\\$${field}\\); \\?>"`), `news write should escape ${field}`);
+      assert.doesNotMatch(news, new RegExp(`value="<\\?php echo \\$${field}; \\?>"`), `news write should not echo raw ${field}`);
+    }
+
+    assert.match(news, /<option value="<\?php echo get_text\(\$category\); \?>"<\?php echo sungsan_selected\(\$ca_name, \$category\); \?>><\?php echo get_text\(\$category\); \?><\/option>/);
+    assert.match(news, /<option value="<\?php echo get_text\(\$slug\); \?>"<\?php echo sungsan_selected\(\$group_slug, \$slug\); \?>><\?php echo get_text\(\$label\); \?><\/option>/);
+    assert.doesNotMatch(news, /<option value="<\?php echo \$category; \?>"/);
+    assert.doesNotMatch(news, /<option value="<\?php echo \$slug; \?>"/);
+    assert.doesNotMatch(news, /><\?php echo \$category; \?><\/option>/);
+    assert.doesNotMatch(news, /><\?php echo \$label; \?><\/option>/);
+  });
+
   it('renders home media posts with GnuBoard thumbnails when available', () => {
     const extend = read('src/extend/sungsan.php');
     const index = read('src/theme/sungsan/index.php');

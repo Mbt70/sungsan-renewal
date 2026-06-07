@@ -16,7 +16,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '소식 수정' : '소식 글쓰기'; ?></h1>
         <p class="ss-form-help">종류는 필수입니다. 소속과 공개 범위는 글의 성격에 맞게 선택해 주세요.</p>
-        <form name="fwrite" id="fwrite" action="<?php echo $action_url; ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
+        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
@@ -28,15 +28,15 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
             <input type="hidden" name="sst" value="<?php echo get_text($sst); ?>">
             <input type="hidden" name="sod" value="<?php echo get_text($sod); ?>">
             <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
-            <input type="hidden" name="wr_5" value="<?php echo $legacy_board_id; ?>">
-            <input type="hidden" name="wr_6" value="<?php echo $legacy_post_id; ?>">
-            <input type="hidden" name="wr_7" value="<?php echo $review_flag; ?>">
-            <input type="hidden" name="wr_8" value="<?php echo $review_reason; ?>">
+            <input type="hidden" name="wr_5" value="<?php echo get_text($legacy_board_id); ?>">
+            <input type="hidden" name="wr_6" value="<?php echo get_text($legacy_post_id); ?>">
+            <input type="hidden" name="wr_7" value="<?php echo get_text($review_flag); ?>">
+            <input type="hidden" name="wr_8" value="<?php echo get_text($review_reason); ?>">
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
 
             <div class="ss-field">
                 <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
-                <input id="wr_subject" name="wr_subject" value="<?php echo $subject; ?>" required>
+                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($subject); ?>" required>
             </div>
 
             <div class="ss-card-grid">
@@ -45,7 +45,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
                     <select id="ca_name" name="ca_name" required>
                         <option value="">종류 선택</option>
                         <?php foreach ($sungsan_news_categories as $category) { ?>
-                            <option value="<?php echo $category; ?>"<?php echo sungsan_selected($ca_name, $category); ?>><?php echo $category; ?></option>
+                            <option value="<?php echo get_text($category); ?>"<?php echo sungsan_selected($ca_name, $category); ?>><?php echo get_text($category); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -54,7 +54,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
                     <select id="wr_1" name="wr_1">
                         <option value="">소속 없음</option>
                         <?php foreach ($sungsan_groups as $slug => $label) { ?>
-                            <option value="<?php echo $slug; ?>"<?php echo sungsan_selected($group_slug, $slug); ?>><?php echo $label; ?></option>
+                            <option value="<?php echo get_text($slug); ?>"<?php echo sungsan_selected($group_slug, $slug); ?>><?php echo get_text($label); ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -81,7 +81,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 
             <div class="ss-field">
                 <label for="wr_content">본문 <span class="ss-required">필수</span></label>
-                <textarea id="wr_content" name="wr_content" required><?php echo $content; ?></textarea>
+                <textarea id="wr_content" name="wr_content" required><?php echo get_text($content); ?></textarea>
             </div>
 
             <?php for ($i = 0; $is_file && $i < $file_count; $i++) { ?>
@@ -106,7 +106,7 @@ $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
 
             <div class="ss-action-bar">
                 <button type="submit" class="ss-button">저장</button>
-                <a class="ss-button secondary" href="<?php echo $list_href; ?>">취소</a>
+                <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">취소</a>
             </div>
         </form>
     </div>
