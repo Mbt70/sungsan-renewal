@@ -5,6 +5,9 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $sungsan_register_home_url = G5_URL;
+$register_result_mb_name = isset($mb['mb_name']) ? $mb['mb_name'] : '';
+$register_result_mb_id = isset($mb['mb_id']) ? $mb['mb_id'] : '';
+$register_result_mb_email = isset($mb['mb_email']) ? $mb['mb_email'] : '';
 ?>
 
 <!-- 회원가입결과 시작 { -->
@@ -12,7 +15,7 @@ $sungsan_register_home_url = G5_URL;
     <div class="mbskin_box">
         <h1>가입 신청이 접수되었습니다</h1>
         <p class="reg_result_p">
-            <strong><?php echo get_text($mb['mb_name']); ?></strong>님의 성산회 홈페이지 가입 신청이 접수되었습니다.
+            <strong><?php echo get_text($register_result_mb_name); ?></strong>님의 성산회 홈페이지 가입 신청이 접수되었습니다.
         </p>
         <p class="result_txt">
             운영자 승인 후 회원 전용 게시판과 소식 자료를 이용할 수 있습니다. 승인 전까지는 일부 게시판 열람과 작성이 제한됩니다.
@@ -24,9 +27,9 @@ $sungsan_register_home_url = G5_URL;
         </p>
         <div id="result_email">
             <span>아이디</span>
-            <strong><?php echo get_text($mb['mb_id']); ?></strong><br>
+            <strong><?php echo get_text($register_result_mb_id); ?></strong><br>
             <span>이메일 주소</span>
-            <strong><?php echo get_text($mb['mb_email']); ?></strong>
+            <strong><?php echo get_text($register_result_mb_email); ?></strong>
         </div>
         <p class="result_txt">
             이메일 주소를 잘못 입력하셨다면 사이트 관리자에게 문의해 주세요.

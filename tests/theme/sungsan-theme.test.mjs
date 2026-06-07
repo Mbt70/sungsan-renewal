@@ -286,9 +286,15 @@ describe('sungsan theme static contract', () => {
   it('escapes account details shown on the registration result screen', () => {
     const source = read('src/skin/member/sungsan/register_result.skin.php');
 
-    assert.match(source, /get_text\(\$mb\['mb_name'\]\)/);
-    assert.match(source, /get_text\(\$mb\['mb_id'\]\)/);
-    assert.match(source, /get_text\(\$mb\['mb_email'\]\)/);
+    assert.match(source, /\$register_result_mb_name = isset\(\$mb\['mb_name'\]\) \? \$mb\['mb_name'\] : '';/);
+    assert.match(source, /\$register_result_mb_id = isset\(\$mb\['mb_id'\]\) \? \$mb\['mb_id'\] : '';/);
+    assert.match(source, /\$register_result_mb_email = isset\(\$mb\['mb_email'\]\) \? \$mb\['mb_email'\] : '';/);
+    assert.match(source, /get_text\(\$register_result_mb_name\)/);
+    assert.match(source, /get_text\(\$register_result_mb_id\)/);
+    assert.match(source, /get_text\(\$register_result_mb_email\)/);
+    assert.doesNotMatch(source, /get_text\(\$mb\['mb_name'\]\)/);
+    assert.doesNotMatch(source, /get_text\(\$mb\['mb_id'\]\)/);
+    assert.doesNotMatch(source, /get_text\(\$mb\['mb_email'\]\)/);
     assert.doesNotMatch(source, /echo \$mb\['mb_id'\]/);
     assert.doesNotMatch(source, /echo \$mb\['mb_email'\]/);
   });
