@@ -560,6 +560,17 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('uses spec-aligned registration and profile edit action labels', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    assert.match(source, /\$sungsan_cancel_url = \$w == 'u' \? G5_URL\.'\/sungsan\/mypage\.php' : G5_URL;/);
+    assert.match(source, /\$sungsan_submit_label = \$w == '' \? '가입 신청' : '저장';/);
+    assert.match(source, /<a href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>" class="btn_close">취소<\/a>/);
+    assert.match(source, /<button type="submit" id="btn_submit" class="btn_submit" accesskey="s"><\?php echo get_text\(\$sungsan_submit_label\); \?><\/button>/);
+    assert.doesNotMatch(source, /href="<\?php echo G5_URL \?>"/);
+    assert.doesNotMatch(source, /\$w==''\?'회원가입':'정보수정'/);
+  });
+
   it('shows visible labels on board list search forms instead of relying on placeholders', () => {
     const cases = [
       ['src/skin/board/sungsan_news/list.skin.php', 'board_stx'],

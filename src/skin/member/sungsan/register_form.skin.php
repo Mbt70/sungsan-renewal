@@ -11,6 +11,8 @@ $sungsan_member_value = function ($field, $default = '') use ($member) {
     return get_text(isset($member[$field]) ? $member[$field] : $default);
 };
 $sungsan_member_zip = $sungsan_member_value('mb_zip1').$sungsan_member_value('mb_zip2');
+$sungsan_cancel_url = $w == 'u' ? G5_URL.'/sungsan/mypage.php' : G5_URL;
+$sungsan_submit_label = $w == '' ? '가입 신청' : '저장';
 ?>
 
 <!-- 회원정보 입력/수정 시작 { -->
@@ -274,8 +276,8 @@ $sungsan_member_zip = $sungsan_member_value('mb_zip1').$sungsan_member_value('mb
 		</div>
 	</div>
 	<div class="btn_confirm">
-	    <a href="<?php echo G5_URL ?>" class="btn_close">취소</a>
-	    <button type="submit" id="btn_submit" class="btn_submit" accesskey="s"><?php echo $w==''?'회원가입':'정보수정'; ?></button>
+	    <a href="<?php echo get_text($sungsan_cancel_url); ?>" class="btn_close">취소</a>
+	    <button type="submit" id="btn_submit" class="btn_submit" accesskey="s"><?php echo get_text($sungsan_submit_label); ?></button>
 	</div>
 	</form>
 </div>
