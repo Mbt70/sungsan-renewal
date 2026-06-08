@@ -15,6 +15,7 @@ $profile_member_today_login_attr = ($profile_member_today_login !== '0000-00-00 
 $profile_member_reg_after = isset($mb_reg_after) ? (int) $mb_reg_after : 0;
 $profile_can_view_activity_dates = $profile_viewer_level >= $profile_member_level;
 $profile_homepage_raw = isset($mb['mb_homepage']) ? trim($mb['mb_homepage']) : '';
+$profile_homepage_text = $profile_homepage_raw;
 $profile_homepage_url = '';
 if ($profile_homepage_raw !== '') {
     $profile_homepage_scheme = parse_url($profile_homepage_raw, PHP_URL_SCHEME);
@@ -64,7 +65,7 @@ if ($profile_homepage_raw !== '') {
         <?php if ($profile_homepage_url !== '') {  ?>
         <tr>
             <th scope="row"><i class="fa fa-home" aria-hidden="true"></i> 홈페이지</th>
-            <td colspan="3"><a href="<?php echo get_text($profile_homepage_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo get_text($mb_homepage); ?></a></td>
+            <td colspan="3"><a href="<?php echo get_text($profile_homepage_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo get_text($profile_homepage_text); ?></a></td>
         </tr>
         <?php }  ?>
 

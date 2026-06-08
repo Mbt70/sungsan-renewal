@@ -785,7 +785,7 @@ describe('sungsan theme static contract', () => {
     const source = read('src/skin/member/sungsan/profile.skin.php');
 
     assert.match(source, /get_text\(\$mb_nick\)/);
-    assert.match(source, /get_text\(\$mb_homepage\)/);
+    assert.match(source, /get_text\(\$profile_homepage_text\)/);
     assert.match(source, /get_text\(\$profile_homepage_url\)/);
     assert.match(source, /get_text\(\$mb_profile\)/);
     assert.match(source, /\$profile_member_id = isset\(\$mb\['mb_id'\]\) \? \$mb\['mb_id'\] : '';/);
@@ -806,6 +806,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_today_login\)/);
     assert.doesNotMatch(source, /echo \$mb_nick/);
     assert.doesNotMatch(source, /echo \$mb_homepage/);
+    assert.doesNotMatch(source, /get_text\(\$mb_homepage\)/);
     assert.doesNotMatch(source, /echo \$mb_profile/);
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
     assert.doesNotMatch(source, /get_member_profile_img\(\$mb\['mb_id'\]\)/);
@@ -821,6 +822,14 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /<\?php if \(\$profile_homepage_url !== ''\) \{/);
     assert.match(source, /href="<\?php echo get_text\(\$profile_homepage_url\); \?>"/);
     assert.doesNotMatch(source, /href="<\?php echo get_text\(set_http\(\$mb_homepage\)\); \?>"/);
+  });
+
+  it('renders profile homepage text from the normalized member homepage value', () => {
+    const source = read('src/skin/member/sungsan/profile.skin.php');
+
+    assert.match(source, /\$profile_homepage_text = \$profile_homepage_raw;/);
+    assert.match(source, /<a href="<\?php echo get_text\(\$profile_homepage_url\); \?>" target="_blank" rel="noopener noreferrer"><\?php echo get_text\(\$profile_homepage_text\); \?><\/a>/);
+    assert.doesNotMatch(source, /get_text\(\$mb_homepage\)/);
   });
 
   it('escapes form mail recipient details before rendering the popup', () => {
