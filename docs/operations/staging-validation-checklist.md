@@ -18,6 +18,7 @@
 | `free` 게시판 상세에서 회원 댓글 작성/답글/수정/삭제 UX가 동작함 |  |  | 대기 |  |  |
 | 모바일 `375px`, 태블릿, 데스크톱에서 홈/소개/소식/자유게시판 화면이 겹치지 않음 |  |  | 대기 |  |  |
 | `비회원`, `회원`, `임원`, `운영자` 계정으로 목록/본문/작성/수정/삭제 권한을 확인함 |  |  | 대기 |  |  |
+| 로그인 회원이 마이페이지에서 `회원 탈퇴`를 눌러 `member_confirm.php?url=member_leave.php` 비밀번호 확인 화면으로 이동함 |  |  | 대기 |  |  |
 | `PHP/HTML/JS/SVG`, `shell.php7`, `shell.php8`, `shell.php.jpg`, `.htaccess`, `.user.ini` 첨부 업로드와 직접 접근이 차단됨 |  |  | 대기 |  |  |
 | `news/free` 게시판 첨부는 `jpg/jpeg/png/gif/webp/mp4/mov/webm/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt`만 저장 전 허용됨 |  |  | 대기 |  |  |
 | `formmail_send.php` 폼메일 첨부 `file1/file2`가 20MB 초과 파일과 `shell.php7`, `shell.php8`, `shell.php.jpg`, `.htaccess`, `.user.ini`를 전송 전에 차단함 |  |  | 대기 |  |  |

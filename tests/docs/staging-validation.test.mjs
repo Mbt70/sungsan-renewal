@@ -158,6 +158,20 @@ describe('Cafe24 staging validation handoff', () => {
     }
   });
 
+  it('documents member withdrawal checks in staging handoff', () => {
+    const checklist = readFileSync(checklistPath, 'utf8');
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+
+    for (const expected of [
+      '회원 탈퇴',
+      'member_confirm.php?url=member_leave.php',
+      '비밀번호 확인',
+    ]) {
+      expectIncludes(checklist, expected, checklistPath);
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
+    }
+  });
+
   it('documents numeric PHP attachment extension checks for operators', () => {
     for (const path of [
       checklistPath,
