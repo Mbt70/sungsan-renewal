@@ -1285,11 +1285,19 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /function sungsanOpenScrapLink\(link\) \{/);
     assert.match(source, /if \(window\.opener && !window\.opener\.closed\) \{/);
-    assert.match(source, /window\.opener\.location\.href = link\.href;/);
     assert.match(source, /return false;/);
     assert.match(source, /return true;/);
     assert.match(source, /onclick="return sungsanOpenScrapLink\(this\);"/);
     assert.doesNotMatch(source, /opener\.document\.location\.href=this\.href/);
+  });
+
+  it('only redirects the scrap opener to same-origin links', () => {
+    const source = read('src/skin/member/sungsan/scrap.skin.php');
+
+    assert.match(source, /const targetUrl = new URL\(link\.href, window\.location\.href\);/);
+    assert.match(source, /if \(targetUrl\.origin !== window\.location\.origin\) \{\s*return true;\s*\}/);
+    assert.match(source, /window\.opener\.location\.href = targetUrl\.href;/);
+    assert.doesNotMatch(source, /window\.opener\.location\.href = link\.href;/);
   });
 
   it('lets users close the scrap confirmation popup without submitting', () => {

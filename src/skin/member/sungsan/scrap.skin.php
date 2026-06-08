@@ -14,7 +14,11 @@ $scrap_paging_url = '?'.($scrap_paging_qstr !== '' ? $scrap_paging_qstr.'&amp;pa
 function sungsanOpenScrapLink(link) {
     if (window.opener && !window.opener.closed) {
         try {
-            window.opener.location.href = link.href;
+            const targetUrl = new URL(link.href, window.location.href);
+            if (targetUrl.origin !== window.location.origin) {
+                return true;
+            }
+            window.opener.location.href = targetUrl.href;
             return false;
         } catch (e) {
             return true;
