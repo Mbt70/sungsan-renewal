@@ -1119,7 +1119,7 @@ describe('sungsan theme static contract', () => {
           /\$scrap_del_href = isset\(\$scrap_row\['del_href'\]\) \? \$scrap_row\['del_href'\] : '';/,
           /href="<\?php echo get_text\(\$scrap_post_href\); \?>"/,
           /class="scrap_tit" target="_blank" rel="noopener noreferrer"/,
-          /onclick="opener\.document\.location\.href=this\.href; return false;"/,
+          /onclick="return sungsanOpenScrapLink\(this\);"/,
           /<\?php echo get_text\(\$scrap_subject\); \?>/,
           /href="<\?php echo get_text\(\$scrap_board_href\); \?>"/,
           /class="scrap_cate" target="_blank" rel="noopener noreferrer"/,
@@ -1132,6 +1132,7 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href_wr_id'\]\); \?>"/,
           /opener\.document\.location\.href='<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
+          /onclick="opener\.document\.location\.href=this\.href; return false;"/,
           /echo \$list\[\$i\]\['subject'\]/,
           /get_text\(\$list\[\$i\]\['subject'\]\)/,
           /href="<\?php echo \$list\[\$i\]\['opener_href'\]/,
@@ -1255,6 +1256,18 @@ describe('sungsan theme static contract', () => {
       const source = read(file);
       assert.doesNotMatch(source, /javascript:/i, `${file} should not use javascript: pseudo-protocols in controls`);
     }
+  });
+
+  it('falls back to normal scrap links when the opener window is unavailable', () => {
+    const source = read('src/skin/member/sungsan/scrap.skin.php');
+
+    assert.match(source, /function sungsanOpenScrapLink\(link\) \{/);
+    assert.match(source, /if \(window\.opener && !window\.opener\.closed\) \{/);
+    assert.match(source, /window\.opener\.location\.href = link\.href;/);
+    assert.match(source, /return false;/);
+    assert.match(source, /return true;/);
+    assert.match(source, /onclick="return sungsanOpenScrapLink\(this\);"/);
+    assert.doesNotMatch(source, /opener\.document\.location\.href=this\.href/);
   });
 
   it('lets users close the scrap confirmation popup without submitting', () => {

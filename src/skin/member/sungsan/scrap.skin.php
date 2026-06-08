@@ -4,6 +4,20 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 ?>
+<script>
+function sungsanOpenScrapLink(link) {
+    if (window.opener && !window.opener.closed) {
+        try {
+            window.opener.location.href = link.href;
+            return false;
+        } catch (e) {
+            return true;
+        }
+    }
+
+    return true;
+}
+</script>
 
 <!-- 스크랩 목록 시작 { -->
 <div id="scrap" class="new_win">
@@ -19,8 +33,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             $scrap_del_href = isset($scrap_row['del_href']) ? $scrap_row['del_href'] : '';
         ?>
         <li>
-            <a href="<?php echo get_text($scrap_post_href); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($scrap_subject); ?></a>
-            <a href="<?php echo get_text($scrap_board_href); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="opener.document.location.href=this.href; return false;"><?php echo get_text($scrap_board_subject); ?></a>
+            <a href="<?php echo get_text($scrap_post_href); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="return sungsanOpenScrapLink(this);"><?php echo get_text($scrap_subject); ?></a>
+            <a href="<?php echo get_text($scrap_board_href); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="return sungsanOpenScrapLink(this);"><?php echo get_text($scrap_board_subject); ?></a>
             <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($scrap_datetime); ?></span>
             <a href="<?php echo get_text($scrap_del_href); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
         </li>
