@@ -1390,7 +1390,7 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$point_paging_pages = G5_IS_MOBILE \? \(int\) \$config\['cf_mobile_pages'\] : \(int\) \$config\['cf_write_pages'\];/);
     assert.match(source, /\$point_paging_page = isset\(\$page\) \? \(int\) \$page : 1;/);
     assert.match(source, /\$point_paging_total = isset\(\$total_page\) \? \(int\) \$total_page : 1;/);
-    assert.match(source, /\$point_paging_script = isset\(\$_SERVER\['SCRIPT_NAME'\]\) \? get_text\(\$_SERVER\['SCRIPT_NAME'\]\) : '';/);
+    assert.match(source, /\$point_paging_script = G5_BBS_URL\.'\/point\.php';/);
     assert.match(source, /\$point_paging_qstr = isset\(\$qstr\) \? get_text\(\$qstr\) : '';/);
     assert.match(source, /\$point_paging_query = \$point_paging_qstr !== '' \? \$point_paging_qstr\.'&amp;page=' : 'page=';/);
     assert.match(source, /\$point_paging_url = \$point_paging_script\.'\?'\.\$point_paging_query;/);
@@ -1405,6 +1405,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$sum_point1/);
     assert.doesNotMatch(source, /echo \$sum_point2/);
     assert.doesNotMatch(source, /\$point_paging_query = isset\(\$qstr\) && \$qstr !== '' \? \$qstr\.'&amp;page=' : 'page=';/);
+    assert.doesNotMatch(source, /\$_SERVER\['SCRIPT_NAME'\]/);
     assert.doesNotMatch(source, /get_paging\(G5_IS_MOBILE \? \$config\['cf_mobile_pages'\] : \$config\['cf_write_pages'\], \$page, \$total_page, \$_SERVER\['SCRIPT_NAME'\]\.'\?'\.\$qstr\.'&amp;page='\)/);
   });
 
