@@ -20,6 +20,8 @@ const writeSqlTemplate = `CREATE TABLE \`__TABLE_NAME__\` (
   PRIMARY KEY (\`wr_id\`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;`;
 
+const mojibakePattern = /(?:�|\?[가-힣]|[가-힣]\?|\?{2,}|泥|湲|蹂|濡|鍮|議|怨|寃|洹|臾|醫|珥|釉|誘|媛|遺|沅|뚯|꾩|먯|쒕|볤)/;
+
 describe('sungsan gnuboard setup config', () => {
   it('defines the planned news and free boards', () => {
     assert.equal(SUNGSAN_BOARD_CONFIGS.length, 2);
@@ -76,6 +78,7 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /ON DUPLICATE KEY UPDATE/);
     assert.match(sql, /bo_subject = VALUES\(bo_subject\)/);
     assert.match(sql, /bo_8_subj = VALUES\(bo_8_subj\)/);
+    assert.doesNotMatch(sql, mojibakePattern);
   });
 
   it('normalizes write table DDL to the requested table and utf8mb4', () => {
@@ -93,6 +96,7 @@ describe('sungsan gnuboard setup config', () => {
 
     assert.match(sql, /UPDATE `g5_config` SET/);
     assert.match(sql, /cf_theme = 'sungsan'/);
+    assert.match(sql, /cf_title = '성산회'/);
     assert.match(sql, /cf_member_skin = 'sungsan'/);
     assert.match(sql, /cf_mobile_member_skin = 'sungsan'/);
     assert.match(sql, /cf_register_level = '1'/);
@@ -115,12 +119,14 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /cf_member_img_height = '0'/);
     assert.match(sql, /INSERT INTO `g5_group`/);
     assert.match(sql, /gr_id = 'sungsan'/);
+    assert.match(sql, /gr_subject = '성산회'/);
     assert.match(sql, /bo_table = 'news'/);
     assert.match(sql, /-- news:[\s\S]*?bo_reply_level = '6'[\s\S]*?bo_table = 'news'/);
     assert.match(sql, /bo_table = 'free'/);
     assert.match(sql, /bo_upload_size = '20971520'/);
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_free`/);
+    assert.doesNotMatch(sql, mojibakePattern);
   });
 
   it('documents board metadata and access policy inside generated setup SQL', () => {
@@ -130,11 +136,12 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /-- news ca_name: 공지\|행사\|자료\|규정\|활동소식/);
     assert.match(sql, /-- news wr_1 소속 slug, wr_2 공개 범위, wr_3 행사 시작일, wr_4 행사 종료일/);
     assert.match(sql, /-- news wr_5 기존 보드 ID, wr_6 기존 글 ID, wr_7 이전 검토 플래그, wr_8 검토 사유/);
-    assert.match(sql, /-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
+    assert.match(sql, /-- news access: 목록과 상세 제목\/메타는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
     assert.match(sql, /-- news write access: 작성\/답글\/수정\/삭제\/첨부 업로드는 임원 이상/);
     assert.match(sql, /-- news comments: 공식 소식은 댓글 UI를 사용하지 않고 회원 의견은 free 게시판에서 받습니다\./);
     assert.match(sql, /-- free: 회원 자유게시판/);
     assert.match(sql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
+    assert.doesNotMatch(sql, mojibakePattern);
   });
 
   it('keeps setup SQL reproducible from a tracked write-table template', async () => {
@@ -164,10 +171,11 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(generatedSql, /-- account policy: 기본 admin ID를 사용하지 않고 실명 운영자 계정만 유지합니다\./);
     assert.match(generatedSql, /-- account policy: 임원은 mb_level >= 6, 운영자는 mb_level = 10으로 분리합니다\./);
     assert.match(generatedSql, /-- news: 통합 소식 게시판/);
-    assert.match(generatedSql, /-- news access: 목록과 상세 라우트는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
+    assert.match(generatedSql, /-- news access: 목록과 상세 제목\/메타는 공개, 본문과 첨부는 wr_2 공개 범위로 제한/);
     assert.match(generatedSql, /-- news write access: 작성\/답글\/수정\/삭제\/첨부 업로드는 임원 이상/);
     assert.match(generatedSql, /-- news comments: 공식 소식은 댓글 UI를 사용하지 않고 회원 의견은 free 게시판에서 받습니다\./);
     assert.match(generatedSql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
+    assert.doesNotMatch(generatedSql, mojibakePattern);
   });
 
   it('writes setup SQL to a file and creates parent directories', async () => {
@@ -181,6 +189,7 @@ describe('sungsan gnuboard setup config', () => {
       assert.equal(result.outputPath, outputPath);
       assert.match(content, /Sungsan GnuBoard5 setup SQL/);
       assert.match(content, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
+      assert.doesNotMatch(content, mojibakePattern);
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
