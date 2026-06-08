@@ -10,6 +10,7 @@ include_once G5_THEME_PATH.'/head.php';
 
 $ss_home_news_url = G5_BBS_URL.'/board.php?bo_table=news';
 $ss_home_intro_url = G5_URL.'/theme/sungsan/page/intro.php';
+$ss_home_hero_image_url = G5_THEME_URL.'/img/hero-sungsan-hanok.png';
 $sungsan_home_news_categories = sungsan_get_current_news_categories();
 $sungsan_home_notice_category = sungsan_get_news_category_at($sungsan_home_news_categories, '공지', 0);
 $sungsan_home_event_category = sungsan_get_news_category_at($sungsan_home_news_categories, '행사', 1);
@@ -29,7 +30,7 @@ $free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
 $photo_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_activity_category, 'mediaOnly' => true, 'thumbnail' => true, 'limit' => 4));
 $sungsan_home_is_member = !empty($is_member);
 ?>
-<section class="ss-hero">
+<section class="ss-hero ss-home-hero">
     <div class="ss-container ss-hero-layout">
         <div>
             <p class="ss-eyebrow">성산회 공식 홈페이지</p>
@@ -40,13 +41,16 @@ $sungsan_home_is_member = !empty($is_member);
                 <a class="ss-button secondary" href="<?php echo get_text($ss_home_intro_url); ?>">성산회 소개</a>
             </div>
         </div>
-        <aside class="ss-hero-summary" aria-label="홈페이지 주요 기능">
-            <strong>홈페이지 이용</strong>
-            <ul>
-                <li>공지와 행사를 먼저 확인합니다.</li>
-                <li>자료와 규정은 소식에서 종류별로 찾습니다.</li>
-                <li>자유게시판은 로그인한 회원이 이용합니다.</li>
-            </ul>
+        <aside class="ss-hero-visual" aria-label="홈페이지 주요 이미지와 기능">
+            <img class="ss-hero-image" src="<?php echo get_text($ss_home_hero_image_url); ?>" alt="" loading="eager" decoding="async">
+            <div class="ss-hero-summary">
+                <strong>홈페이지 이용</strong>
+                <ul>
+                    <li>공지와 행사를 먼저 확인합니다.</li>
+                    <li>자료와 규정은 소식에서 종류별로 찾습니다.</li>
+                    <li>자유게시판은 로그인한 회원이 이용합니다.</li>
+                </ul>
+            </div>
         </aside>
     </div>
 </section>

@@ -2026,6 +2026,65 @@ describe('sungsan theme static contract', () => {
     assert.match(postListBlock[1], /box-shadow:\s*var\(--ss-shadow-soft\);/);
   });
 
+  it('adds a traditional navy and gold home hero visual without weakening structure', () => {
+    const index = read('src/theme/sungsan/index.php');
+    const css = read('src/scss/main.scss');
+    const heroAssetPath = path.join(repoRoot, 'src/theme/sungsan/img/hero-sungsan-hanok.png');
+    const homeHeroBlock = css.match(/\.ss-home-hero\s*\{([^}]*)\}/);
+    const heroVisualBlock = css.match(/\.ss-hero-visual\s*\{([^}]*)\}/);
+    const heroImageBlock = css.match(/\.ss-hero-image\s*\{([^}]*)\}/);
+    const heroVisualSummaryBlock = css.match(/\.ss-hero-visual \.ss-hero-summary\s*\{([^}]*)\}/);
+    const homeHeroButtonBlock = css.match(/\.ss-home-hero \.ss-button\s*\{([^}]*)\}/);
+
+    assert.equal(existsSync(heroAssetPath), true, 'home hero should use a tracked bitmap visual asset');
+    assert.match(index, /\$ss_home_hero_image_url = G5_THEME_URL\.'\/img\/hero-sungsan-hanok\.png';/);
+    assert.match(index, /<section class="ss-hero ss-home-hero">/);
+    assert.match(index, /<aside class="ss-hero-visual"/);
+    assert.match(index, /<img class="ss-hero-image" src="<\?php echo get_text\(\$ss_home_hero_image_url\); \?>" alt="" loading="eager" decoding="async">/);
+    assert.match(index, /<div class="ss-hero-summary">/);
+    assert.match(css, /--ss-color-navy:\s*#08284a;/);
+    assert.match(css, /--ss-color-gold:\s*#c99545;/);
+    assert.match(css, /--ss-shadow-hero:/);
+    assert.ok(homeHeroBlock, 'home hero should have a dedicated visual treatment');
+    assert.match(homeHeroBlock[1], /background:\s*var\(--ss-color-navy\);/);
+    assert.match(homeHeroBlock[1], /color:\s*#fff;/);
+    assert.ok(heroVisualBlock, 'home hero visual panel should be styled');
+    assert.match(heroVisualBlock[1], /box-shadow:\s*var\(--ss-shadow-hero\);/);
+    assert.ok(heroImageBlock, 'home hero image should be styled');
+    assert.match(heroImageBlock[1], /aspect-ratio:\s*16 \/ 10;/);
+    assert.match(heroImageBlock[1], /object-fit:\s*cover;/);
+    assert.ok(heroVisualSummaryBlock, 'home hero summary should not inherit white text on a white panel');
+    assert.match(heroVisualSummaryBlock[1], /color:\s*var\(--ss-color-text-muted\);/);
+    assert.ok(homeHeroButtonBlock, 'home hero buttons should use the gold reference accent');
+    assert.match(homeHeroButtonBlock[1], /background:\s*var\(--ss-color-gold\);/);
+  });
+
+  it('carries the traditional brand tone into the shared header and footer chrome', () => {
+    const css = read('src/scss/main.scss');
+    const brandBlock = css.match(/\.ss-brand\s*\{([^}]*)\}/);
+    const brandMarkBlock = css.match(/\.ss-brand-mark\s*\{([^}]*)\}/);
+    const navActiveBlock = css.match(/\.ss-primary-nav a:hover,[\s\S]*?\.ss-account-link\[aria-current="page"\]\s*\{([^}]*)\}/);
+    const footerBlock = css.match(/\.ss-site-footer\s*\{([^}]*)\}/);
+    const footerLinkBlock = css.match(/\.ss-site-footer a\s*\{([^}]*)\}/);
+
+    assert.ok(brandBlock, 'shared brand should be styled');
+    assert.match(brandBlock[1], /color:\s*var\(--ss-color-navy\);/);
+    assert.ok(brandMarkBlock, 'shared brand mark should carry the gold seal treatment');
+    assert.match(brandMarkBlock[1], /border:\s*2px solid var\(--ss-color-gold\);/);
+    assert.match(brandMarkBlock[1], /border-radius:\s*50%;/);
+    assert.match(brandMarkBlock[1], /background:\s*var\(--ss-color-warm-surface\);/);
+    assert.match(brandMarkBlock[1], /color:\s*var\(--ss-color-navy\);/);
+    assert.ok(navActiveBlock, 'active navigation should stay in the warm brand family');
+    assert.match(navActiveBlock[1], /background:\s*var\(--ss-color-warm-surface\);/);
+    assert.match(navActiveBlock[1], /color:\s*var\(--ss-color-navy\);/);
+    assert.ok(footerBlock, 'shared footer should anchor the page in the navy brand color');
+    assert.match(footerBlock[1], /border-top:\s*4px solid var\(--ss-color-gold\);/);
+    assert.match(footerBlock[1], /background:\s*var\(--ss-color-navy-strong\);/);
+    assert.match(footerBlock[1], /color:\s*rgba\(255,\s*255,\s*255,\s*0\.76\);/);
+    assert.ok(footerLinkBlock, 'footer links should remain readable on the navy footer');
+    assert.match(footerLinkBlock[1], /color:\s*#fff;/);
+  });
+
   it('styles board list search labels without changing the compact header search', () => {
     const css = read('src/scss/main.scss');
     const boardSearchInputBlock = css.match(/\.ss-board-search input\s*\{([^}]*)\}/);
