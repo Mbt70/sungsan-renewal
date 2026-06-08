@@ -11,7 +11,7 @@ $sungsan_free_board_subject = isset($board['bo_subject']) ? $board['bo_subject']
 $sungsan_free_write_href = isset($write_href) ? $write_href : '';
 $sungsan_free_write_pages = isset($write_pages) ? $write_pages : '';
 $sungsan_free_rows = (isset($list) && is_array($list)) ? $list : array();
-$sungsan_free_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
+$sungsan_free_search_action = G5_BBS_URL.'/board.php';
 $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
 ?>
 <section class="ss-section">

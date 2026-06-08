@@ -2030,8 +2030,8 @@ describe('sungsan theme static contract', () => {
 
       assert.match(
         source,
-        new RegExp(`\\$${actionVariable} = isset\\(\\$_SERVER\\['SCRIPT_NAME'\\]\\) \\? \\$_SERVER\\['SCRIPT_NAME'\\] : '';`),
-        `${file} should normalize form action before rendering`,
+        new RegExp(`\\$${actionVariable} = G5_BBS_URL\\.'/board\\.php';`),
+        `${file} should submit searches through the canonical board endpoint`,
       );
       assert.match(
         source,
@@ -2047,6 +2047,7 @@ describe('sungsan theme static contract', () => {
       assert.match(source, new RegExp(`<input[^\\n]+name="stx"[^\\n]+value="<\\?php echo get_text\\(\\$${termVariable}\\); \\?>"`), `${file} should escape normalized stx`);
       assert.doesNotMatch(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should not render superglobal directly`);
       assert.doesNotMatch(source, /action="<\?php echo \$_SERVER\['SCRIPT_NAME'\]; \?>"/, `${file} should not echo raw form action`);
+      assert.doesNotMatch(source, /\$_SERVER\['SCRIPT_NAME'\]/, `${file} should not rely on the current request script for search actions`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should not render raw bo_table variable`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo \$bo_table; \?>"/, `${file} should not echo raw bo_table`);
       assert.doesNotMatch(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should not normalize stx inline while rendering`);
