@@ -1244,6 +1244,23 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\$row_expire_date == '9999-12-31' \? '&nbsp;' : get_text\(\$row_expire_date\)/);
   });
 
+  it('renders member utility dates as semantic time elements', () => {
+    const memo = read('src/skin/member/sungsan/memo.skin.php');
+    const memoView = read('src/skin/member/sungsan/memo_view.skin.php');
+    const scrap = read('src/skin/member/sungsan/scrap.skin.php');
+
+    assert.match(memo, /\$memo_send_datetime_attr = \$memo_send_datetime !== '' \? str_replace\(' ', 'T', \$memo_send_datetime\) : '';/);
+    assert.match(memo, /<time class="memo_datetime" datetime="<\?php echo get_text\(\$memo_send_datetime_attr\); \?>"><i class="fa fa-clock-o" aria-hidden="true"><\/i> <\?php echo get_text\(\$memo_send_datetime\); \?><\/time>/);
+    assert.doesNotMatch(memo, /<span class="memo_datetime">/);
+
+    assert.match(memoView, /\$memo_sent_at_attr = \$memo_sent_at !== '' \? str_replace\(' ', 'T', \$memo_sent_at\) : '';/);
+    assert.match(memoView, /<time datetime="<\?php echo get_text\(\$memo_sent_at_attr\); \?>"><i class="fa fa-clock-o" aria-hidden="true"><\/i> <\?php echo get_text\(\$memo_sent_at\); \?><\/time>/);
+
+    assert.match(scrap, /\$scrap_datetime_attr = \$scrap_datetime !== '' \? str_replace\(' ', 'T', \$scrap_datetime\) : '';/);
+    assert.match(scrap, /<time class="scrap_datetime" datetime="<\?php echo get_text\(\$scrap_datetime_attr\); \?>"><i class="fa fa-clock-o" aria-hidden="true"><\/i> <\?php echo get_text\(\$scrap_datetime\); \?><\/time>/);
+    assert.doesNotMatch(scrap, /<span class="scrap_datetime">/);
+  });
+
   it('shows visible text on popup icon action links', () => {
     const cases = [
       {

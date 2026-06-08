@@ -30,6 +30,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 $memo_member_id = isset($memo_row['mb_id']) ? $memo_row['mb_id'] : '';
                 $memo_name = isset($memo_row['name']) ? $memo_row['name'] : '';
                 $memo_send_datetime = isset($memo_row['send_datetime']) ? $memo_row['send_datetime'] : '';
+                $memo_send_datetime_attr = $memo_send_datetime !== '' ? str_replace(' ', 'T', $memo_send_datetime) : '';
                 $memo_view_href = isset($memo_row['view_href']) ? $memo_row['view_href'] : '';
                 $memo_del_href = isset($memo_row['del_href']) ? $memo_row['del_href'] : '';
                 $readed = (substr($memo_read_datetime,0,1) == 0) ? '' : 'read';
@@ -41,7 +42,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 	            		<?php if (! $readed){ ?><span class="no_read">안 읽은 쪽지</span><?php } ?>
 	            	</div>
 	                <div class="memo_li memo_name">
-                        <?php echo get_text(strip_tags($memo_name)); ?> <span class="memo_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_send_datetime); ?></span>
+                        <?php echo get_text(strip_tags($memo_name)); ?> <time class="memo_datetime" datetime="<?php echo get_text($memo_send_datetime_attr); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_send_datetime); ?></time>
 						<div class="memo_preview">
 						    <a href="<?php echo get_text($memo_view_href); ?>"><?php echo get_text($memo_preview); ?></a>
                         </div>

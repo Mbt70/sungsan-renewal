@@ -40,12 +40,13 @@ function sungsanOpenScrapLink(link) {
             $scrap_board_href = isset($scrap_row['opener_href']) ? $scrap_row['opener_href'] : '';
             $scrap_board_subject = isset($scrap_row['bo_subject']) ? $scrap_row['bo_subject'] : '';
             $scrap_datetime = isset($scrap_row['ms_datetime']) ? $scrap_row['ms_datetime'] : '';
+            $scrap_datetime_attr = $scrap_datetime !== '' ? str_replace(' ', 'T', $scrap_datetime) : '';
             $scrap_del_href = isset($scrap_row['del_href']) ? $scrap_row['del_href'] : '';
         ?>
         <li>
             <a href="<?php echo get_text($scrap_post_href); ?>" class="scrap_tit" target="_blank" rel="noopener noreferrer" onclick="return sungsanOpenScrapLink(this);"><?php echo get_text($scrap_subject); ?></a>
             <a href="<?php echo get_text($scrap_board_href); ?>" class="scrap_cate" target="_blank" rel="noopener noreferrer" onclick="return sungsanOpenScrapLink(this);"><?php echo get_text($scrap_board_subject); ?></a>
-            <span class="scrap_datetime"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($scrap_datetime); ?></span>
+            <time class="scrap_datetime" datetime="<?php echo get_text($scrap_datetime_attr); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($scrap_datetime); ?></time>
             <a href="<?php echo get_text($scrap_del_href); ?>" onclick="del(this.href); return false;" class="scrap_del"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
         </li>
         <?php }  ?>

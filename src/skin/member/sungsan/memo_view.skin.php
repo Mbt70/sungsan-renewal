@@ -5,6 +5,7 @@ $memo_sender_nick = isset($mb['mb_nick']) ? $mb['mb_nick'] : '';
 $memo_sender_email = isset($mb['mb_email']) ? $mb['mb_email'] : '';
 $memo_sender_homepage = isset($mb['mb_homepage']) ? $mb['mb_homepage'] : '';
 $memo_sent_at = isset($memo['me_send_datetime']) ? $memo['me_send_datetime'] : '';
+$memo_sent_at_attr = $memo_sent_at !== '' ? str_replace(' ', 'T', $memo_sent_at) : '';
 $memo_body = isset($memo['me_memo']) ? $memo['me_memo'] : '';
 $memo_id = isset($memo['me_id']) ? (int) $memo['me_id'] : 0;
 $memo_reply_href = './memo_form.php?me_recv_mb_id='.urlencode($memo_sender_id).'&amp;me_id='.$memo_id;
@@ -45,7 +46,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 				            <?php echo get_member_profile_img($memo_sender_id); ?>
 				        </li>
 						<li class="memo_view_nick"><?php echo $nick ?></li>
-						<li class="memo_view_date"><span class="sound_only"><?php echo get_text($kind_date); ?>시간</span><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_sent_at); ?></li>
+						<li class="memo_view_date"><span class="sound_only"><?php echo get_text($kind_date); ?>시간</span><time datetime="<?php echo get_text($memo_sent_at_attr); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($memo_sent_at); ?></time></li>
 						<li class="memo_op_btn list_btn"><a href="<?php echo get_text($list_link); ?>" class="btn_b01 btn"><i class="fa fa-list" aria-hidden="true"></i> 목록</a></li>
 						<li class="memo_op_btn del_btn"><a href="<?php echo get_text($del_link); ?>" onclick="del(this.href); return false;" class="memo_del btn_b01 btn"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a></li>
 					</ul>
