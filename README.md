@@ -61,7 +61,7 @@ node tools/migration/file-plan.mjs .\attachments.jsonl .\attachment-copy-plan.js
 node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-summary.json
 ```
 
-회원 비밀번호 해시는 이전하지 않으며, 첨부 계획은 `news/free`로 실제 이전된 글만 대상으로 합니다. PHP, HTML, JS, SVG 계열 첨부는 `blockedRecords`에 표시하고 복사하지 않습니다. 자세한 기준은 `docs/migration/rehearsal-tools.md`를 확인합니다.
+회원 비밀번호 해시는 이전하지 않으며, 첨부 계획은 `news/free`로 실제 이전된 글만 대상으로 합니다. PHP, HTML, JS, SVG 계열 첨부와 `archive.zip`, `backup.7z`처럼 서버 허용 목록 밖의 첨부는 `blockedRecords`에 표시하고 복사하지 않습니다. 자세한 기준은 `docs/migration/rehearsal-tools.md`를 확인합니다.
 `z6_2`, `z6_3`, 소개 페이지 대상 글은 redirect에서 제외되고 `news/free`로 실제 이전된 글만 포함됩니다. `wr_7=review_required` 글은 운영자 검토가 끝날 때까지 redirect CSV/Apache output에서도 제외됩니다.
 
 설정 SQL은 추적 파일인 `tools/setup/sql_write.template.sql`을 기본 입력으로 사용하므로 `www/` 부트스트랩 산출물이 없어도 GitHub 체크아웃에서 재현할 수 있습니다.

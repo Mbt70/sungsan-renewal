@@ -59,6 +59,27 @@ const BLOCKED_ATTACHMENT_FILENAMES = Object.freeze([
   'user.ini',
 ]);
 
+const ALLOWED_ATTACHMENT_EXTENSIONS = Object.freeze([
+  'jpg',
+  'jpeg',
+  'png',
+  'gif',
+  'webp',
+  'mp4',
+  'mov',
+  'webm',
+  'pdf',
+  'hwp',
+  'hwpx',
+  'doc',
+  'docx',
+  'xls',
+  'xlsx',
+  'ppt',
+  'pptx',
+  'txt',
+]);
+
 function escapeSqlString(value) {
   return String(value ?? '').replaceAll("'", "''");
 }
@@ -115,6 +136,16 @@ function getBlockedAttachmentExtension(fileName) {
   return '';
 }
 
+function getUploadFileExtension(fileName) {
+  const extensions = getFileExtensions(fileName);
+  return extensions.length ? extensions[extensions.length - 1] : '';
+}
+
+function getUnsupportedAttachmentExtension(fileName) {
+  const extension = getUploadFileExtension(fileName);
+  return ALLOWED_ATTACHMENT_EXTENSIONS.includes(extension) ? null : extension;
+}
+
 export function buildAttachmentCopyPlan({
   legacyBoard,
   legacyPostId,
@@ -158,6 +189,22 @@ export function buildAttachmentCopyPlan({
         sourceFile,
         extension: blockedExtension,
         reason: 'blocked-extension',
+      });
+      continue;
+    }
+
+    const unsupportedExtension = getUnsupportedAttachmentExtension(sourceFile);
+
+    if (unsupportedExtension !== null) {
+      blockedRecords.push({
+        sourcePath: `${legacyDataRoot}/${legacyBoard}/${sourceFile}`,
+        legacyBoard,
+        legacyPostId: normalizedLegacyPostId,
+        targetBoard,
+        targetPostId: normalizedTargetPostId,
+        sourceFile,
+        extension: unsupportedExtension,
+        reason: 'unsupported-extension',
       });
       continue;
     }

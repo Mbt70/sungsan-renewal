@@ -101,14 +101,14 @@ describe('legacy attachment migration plan', () => {
       targetBoard: 'news',
       targetPostId: '100',
       files: [
-        { bf_no: '0', bf_file: 'archive.zip' },
+        { bf_no: '0', bf_file: 'report.docx' },
         { bf_no: '1', bf_file: 'shell.php.jpg' },
         { bf_no: '2', bf_file: '.htaccess' },
         { bf_no: '3', bf_file: '.user.ini' },
       ],
     });
 
-    assert.deepEqual(plan.copyRecords.map((record) => record.sourceFile), ['archive.zip']);
+    assert.deepEqual(plan.copyRecords.map((record) => record.sourceFile), ['report.docx']);
     assert.deepEqual(
       plan.blockedRecords.map((record) => ({
         sourceFile: record.sourceFile,
@@ -119,6 +119,35 @@ describe('legacy attachment migration plan', () => {
         { sourceFile: 'shell.php.jpg', extension: 'php', reason: 'blocked-extension' },
         { sourceFile: '.htaccess', extension: 'htaccess', reason: 'blocked-extension' },
         { sourceFile: '.user.ini', extension: 'user.ini', reason: 'blocked-extension' },
+      ],
+    );
+  });
+
+  it('blocks attachments outside the board upload allow list for review', () => {
+    const plan = buildAttachmentCopyPlan({
+      legacyBoard: 'z5_4',
+      legacyPostId: '90',
+      targetBoard: 'news',
+      targetPostId: '101',
+      files: [
+        { bf_no: '0', bf_file: 'notice.pdf' },
+        { bf_no: '1', bf_file: 'archive.zip' },
+        { bf_no: '2', bf_file: 'backup.7z' },
+        { bf_no: '3', bf_file: 'README' },
+      ],
+    });
+
+    assert.deepEqual(plan.copyRecords.map((record) => record.sourceFile), ['notice.pdf']);
+    assert.deepEqual(
+      plan.blockedRecords.map((record) => ({
+        sourceFile: record.sourceFile,
+        extension: record.extension,
+        reason: record.reason,
+      })),
+      [
+        { sourceFile: 'archive.zip', extension: 'zip', reason: 'unsupported-extension' },
+        { sourceFile: 'backup.7z', extension: '7z', reason: 'unsupported-extension' },
+        { sourceFile: 'README', extension: '', reason: 'unsupported-extension' },
       ],
     );
   });

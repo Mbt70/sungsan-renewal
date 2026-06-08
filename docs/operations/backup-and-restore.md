@@ -8,7 +8,7 @@
 - 새 사이트 운영 전환 직전 `www/data`
 
 ## Local Restore Drill
-리허설 산출물은 `docs/migration/rehearsal-tools.md`의 도구로 생성합니다. 회원 SQL은 비밀번호 재설정 플래그를 포함해야 하고, 첨부 복사 계획은 `news/free` 대상만 포함해야 합니다.
+리허설 산출물은 `docs/migration/rehearsal-tools.md`의 도구로 생성합니다. 회원 SQL은 비밀번호 재설정 플래그를 포함해야 하고, 첨부 복사 계획은 `news/free` 대상만 포함해야 합니다. 서버 허용 목록 밖 첨부는 복사 대상이 아니라 `blockedRecords` 검토 대상으로 남아야 합니다.
 
 1. DB 덤프를 로컬 `backups/`에 둡니다.
 2. EUC-KR 덤프는 UTF-8 변환 후 별도 파일로 저장합니다.
@@ -32,7 +32,7 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 ## Rehearsal Evidence
 리허설이 끝나면 `rehearsal-summary.json`을 생성해 아래 항목을 검수표와 대조합니다.
 
-- `blockedRecords`에 남은 PHP, PHP7/PHP8, HTML, JS, SVG 계열 첨부, `shell.php7`, `shell.php8`, `shell.php.jpg` 같은 실행형 또는 다중 확장자 파일, `.htaccess`, `.user.ini` 서버 설정 파일 수
+- `blockedRecords`에 남은 PHP, PHP7/PHP8, HTML, JS, SVG 계열 첨부, `shell.php7`, `shell.php8`, `shell.php.jpg` 같은 실행형 또는 다중 확장자 파일, `.htaccess`, `.user.ini` 서버 설정 파일, `archive.zip`, `backup.7z` 같은 허용 목록 밖 파일, 확장자가 없는 파일 수
 - `blockedByReason`, `blockedByLegacyBoard`로 나뉜 차단 첨부 사유와 원본 보드별 수
 - `wr_7=review_required` 글 수, `reviewReasons`, 운영자 검토 대상 목록
 - `members.byLevel`의 `member/officer/admin/pending/unknown` 분포와 운영자 승인 계획의 일치 여부

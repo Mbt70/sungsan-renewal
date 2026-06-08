@@ -55,7 +55,10 @@ describe('backup restore operating handoff', () => {
       'possible-member-directory',
       '모든 이전 대상 게시글',
       'blocked-extension',
+      'unsupported-extension',
+      '확장자가 없는 파일',
       'shell.php.jpg',
+      'archive.zip',
       '.htaccess',
       '.user.ini',
     ]) {
