@@ -2048,7 +2048,7 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
-      for (const variable of ['bo_table', 'sfl', 'stx', 'page']) {
+      for (const variable of ['sfl', 'stx', 'page']) {
         assert.match(
           source,
           new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
@@ -2081,6 +2081,44 @@ describe('sungsan theme static contract', () => {
         );
       }
     }
+  });
+
+  it('normalizes board write identifiers before rendering hidden form attributes', () => {
+    for (const { file, boardId, fallbackId } of [
+      {
+        file: 'src/skin/board/sungsan_news/write.skin.php',
+        boardId: 'sungsan_write_board_id',
+        fallbackId: 'news',
+      },
+      {
+        file: 'src/skin/board/sungsan_free/write.skin.php',
+        boardId: 'sungsan_write_board_id',
+        fallbackId: 'free',
+      },
+    ]) {
+      const source = read(file);
+
+      assert.match(source, new RegExp(`\\$${boardId} = isset\\(\\$bo_table\\) \\? \\$bo_table : '${fallbackId}';`), `${file} should default the board id`);
+      assert.match(source, /\$sungsan_write_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/, `${file} should normalize wr_id as an integer`);
+      assert.match(source, new RegExp(`name="bo_table" value="<\\?php echo get_text\\(\\$${boardId}\\); \\?>"`), `${file} should render the normalized board id`);
+      assert.match(source, /name="wr_id" value="<\?php echo \(int\) \$sungsan_write_wr_id; \?>"/, `${file} should render the normalized write id`);
+      assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should not render raw bo_table directly`);
+      assert.doesNotMatch(source, /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/, `${file} should not render raw wr_id directly`);
+    }
+  });
+
+  it('normalizes board password identifiers before rendering hidden form attributes', () => {
+    const source = read('src/skin/member/sungsan/password.skin.php');
+
+    assert.match(source, /\$sungsan_password_board_id = isset\(\$bo_table\) \? \$bo_table : '';/);
+    assert.match(source, /\$sungsan_password_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/);
+    assert.match(source, /\$sungsan_password_comment_id = isset\(\$comment_id\) \? \(int\) \$comment_id : 0;/);
+    assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$sungsan_password_board_id\); \?>"/);
+    assert.match(source, /name="wr_id" value="<\?php echo \(int\) \$sungsan_password_wr_id; \?>"/);
+    assert.match(source, /name="comment_id" value="<\?php echo \(int\) \$sungsan_password_comment_id; \?>"/);
+    assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/);
+    assert.doesNotMatch(source, /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/);
+    assert.doesNotMatch(source, /name="comment_id" value="<\?php echo get_text\(\$comment_id\); \?>"/);
   });
 
   it('escapes board write form actions and editable values before rendering forms', () => {

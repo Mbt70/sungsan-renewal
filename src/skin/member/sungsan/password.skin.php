@@ -5,6 +5,9 @@ if ($w == 'x') $delete_str = "댓";
 if ($w == 'u') $g5['title'] = $delete_str."글 수정";
 else if ($w == 'd' || $w == 'x') $g5['title'] = $delete_str."글 삭제";
 else $g5['title'] = $g5['title'];
+$sungsan_password_board_id = isset($bo_table) ? $bo_table : '';
+$sungsan_password_wr_id = isset($wr_id) ? (int) $wr_id : 0;
+$sungsan_password_comment_id = isset($comment_id) ? (int) $comment_id : 0;
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -28,9 +31,9 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 
     <form name="fboardpassword" action="<?php echo get_text($action); ?>" method="post">
     <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
-    <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
-    <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
-    <input type="hidden" name="comment_id" value="<?php echo get_text($comment_id); ?>">
+    <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_password_board_id); ?>">
+    <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_password_wr_id; ?>">
+    <input type="hidden" name="comment_id" value="<?php echo (int) $sungsan_password_comment_id; ?>">
     <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
     <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
     <input type="hidden" name="page" value="<?php echo get_text($page); ?>">

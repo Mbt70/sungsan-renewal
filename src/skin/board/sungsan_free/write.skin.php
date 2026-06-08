@@ -9,6 +9,8 @@ $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.h
 $sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
 $sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
 $sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
+$sungsan_write_board_id = isset($bo_table) ? $bo_table : 'free';
+$sungsan_write_wr_id = isset($wr_id) ? (int) $wr_id : 0;
 ?>
 <script>
 var char_min = parseInt(<?php echo $sungsan_write_min; ?>, 10);
@@ -23,8 +25,8 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
         <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
-            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
-            <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_write_board_id); ?>">
+            <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_write_wr_id; ?>">
             <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
             <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
             <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">

@@ -13,6 +13,8 @@ $legacy_board_id = isset($write['wr_5']) ? get_text($write['wr_5']) : '';
 $legacy_post_id = isset($write['wr_6']) ? get_text($write['wr_6']) : '';
 $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
 $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
+$sungsan_write_board_id = isset($bo_table) ? $bo_table : 'news';
+$sungsan_write_wr_id = isset($wr_id) ? (int) $wr_id : 0;
 $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
 $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
@@ -34,8 +36,8 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
         <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
-            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
-            <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_write_board_id); ?>">
+            <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_write_wr_id; ?>">
             <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
             <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
             <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
