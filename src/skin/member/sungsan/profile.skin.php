@@ -35,6 +35,7 @@ if ($profile_homepage_raw !== '') {
     </div>
     <div class="tbl_head02 tbl_wrap new_win_con">
         <table>
+        <caption>회원 프로필 요약</caption>
         <tbody>
         <tr>
             <th scope="row"><i class="fa fa-star-o" aria-hidden="true"></i>  회원권한</th>
