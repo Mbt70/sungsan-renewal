@@ -30,6 +30,7 @@
 - 첨부 복사 계획의 `blockedRecords`에 표시된 PHP, PHP7/PHP8, HTML, JS, SVG 계열 파일, `shell.php7`, `shell.php8`, `shell.php.jpg` 같은 실행형 또는 다중 확장자 파일, `.htaccess`, `.user.ini`, `archive.zip`, `backup.7z` 같은 허용 목록 밖 파일, 확장자가 없는 파일은 운영 서버에 복사하지 않습니다.
 
 ## Runtime
+- Local HTTP verification keeps `PHP_SESSION_COOKIE_SECURE=0`; HTTPS staging and production set `PHP_SESSION_COOKIE_SECURE=1` and verify PHP `session.cookie_secure`, `HttpOnly`, and `Secure` cookie attributes.
 - PHP 오류는 화면에 표시하지 않고 로그로만 남깁니다.
 - HTTPS 인증서를 확인합니다.
 - 세션 쿠키는 `HttpOnly`, 가능하면 `Secure`로 설정합니다.

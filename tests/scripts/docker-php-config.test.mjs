@@ -7,6 +7,14 @@ function readPhpIni() {
   return readFileSync(path.join(process.cwd(), 'docker', 'php', 'php.ini'), 'utf8');
 }
 
+function readDockerCompose() {
+  return readFileSync(path.join(process.cwd(), 'docker-compose.yml'), 'utf8');
+}
+
+function readEnvExample() {
+  return readFileSync(path.join(process.cwd(), '.env.example'), 'utf8');
+}
+
 function readIniValue(source, key) {
   const pattern = new RegExp(`^\\s*${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*=\\s*([^\\r\\n]+)`, 'm');
   const match = source.match(pattern);
@@ -42,11 +50,16 @@ describe('docker php security config', () => {
     assert.ok(parseSize(readIniValue(source, 'post_max_size')) <= 24);
   });
 
-  it('sets baseline session cookie protections for staging parity', () => {
+  it('sets baseline session cookie protections while keeping local HTTP sessions usable', () => {
     const source = readPhpIni();
+    const compose = readDockerCompose();
+    const envExample = readEnvExample();
 
     assert.equal(readIniValue(source, 'session.cookie_httponly'), '1');
+    assert.equal(readIniValue(source, 'session.cookie_secure'), '${PHP_SESSION_COOKIE_SECURE}');
     assert.equal(readIniValue(source, 'session.cookie_samesite'), 'Lax');
     assert.equal(readIniValue(source, 'session.use_strict_mode'), '1');
+    assert.match(compose, /PHP_SESSION_COOKIE_SECURE: \$\{PHP_SESSION_COOKIE_SECURE:-0\}/);
+    assert.match(envExample, /PHP_SESSION_COOKIE_SECURE=0/);
   });
 });

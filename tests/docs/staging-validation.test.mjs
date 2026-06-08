@@ -215,4 +215,22 @@ describe('Cafe24 staging validation handoff', () => {
       }
     }
   });
+
+  it('documents the secure cookie switch for HTTPS staging', () => {
+    for (const path of [
+      checklistPath,
+      'docs/operations/security-checklist.md',
+      'docs/operations/cafe24-deployment.md',
+    ]) {
+      const source = readFileSync(path, 'utf8');
+
+      for (const expected of [
+        'PHP_SESSION_COOKIE_SECURE=1',
+        'PHP_SESSION_COOKIE_SECURE=0',
+        'session.cookie_secure',
+      ]) {
+        expectIncludes(source, expected, path);
+      }
+    }
+  });
 });

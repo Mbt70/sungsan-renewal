@@ -7,7 +7,7 @@
 | Cafe24 PHP 버전이 `PHP 8.2` 이상이며 실제 스테이징 경로에서 적용됨 |  |  | 대기 |  |  |
 | 스테이징 DB가 `MySQL/MariaDB`이고 운영 DB와 분리되어 있음 |  |  | 대기 |  |  |
 | 운영 도메인 또는 스테이징 도메인에서 `HTTPS` 접속이 정상임 |  |  | 대기 |  |  |
-| 로그인 세션 쿠키가 `HttpOnly`로 발급되고 가능한 환경에서 `Secure`가 적용됨 |  |  | 대기 |  |  |
+| 로컬 HTTP 검증은 `PHP_SESSION_COOKIE_SECURE=0`, HTTPS 스테이징/운영은 `PHP_SESSION_COOKIE_SECURE=1`로 두고 `session.cookie_secure`, `HttpOnly`, `Secure` 쿠키 속성이 의도대로 적용됨 |  |  | 대기 |  |  |
 | `scripts/build-release.ps1` 산출물의 `.sha256` 값과 `Get-FileHash -Algorithm SHA256` 결과가 일치함 |  |  | 대기 |  |  |
 | 그누보드 설치 경로의 `data/.htaccess`가 적용되어 실행형 첨부 직접 접근을 차단함 |  |  | 대기 |  |  |
 | `news` 게시판이 공지/행사/자료/규정/활동소식 분류와 `wr_1~wr_6` 정책을 유지함 |  |  | 대기 |  |  |
