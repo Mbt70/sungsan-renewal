@@ -1080,6 +1080,30 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_text\(\$content\)/);
   });
 
+  it('normalizes memo detail navigation before rendering', () => {
+    const source = read('src/skin/member/sungsan/memo_view.skin.php');
+
+    assert.match(source, /\$memo_current_kind = \(isset\(\$kind\) && \$kind === 'send'\) \? 'send' : 'recv';/);
+    assert.match(source, /\$memo_list_href = isset\(\$list_link\) \? \$list_link : '\.\/memo\.php\?kind='.\$memo_current_kind;/);
+    assert.match(source, /\$memo_delete_href = isset\(\$del_link\) \? \$del_link : '';/);
+    assert.match(source, /\$memo_prev_href = isset\(\$prev_link\) \? \$prev_link : '';/);
+    assert.match(source, /\$memo_next_href = isset\(\$next_link\) \? \$next_link : '';/);
+    assert.match(source, /\$memo_sender_sideview = get_sideview\(get_text\(\$memo_sender_id\), get_text\(\$memo_sender_nick\), get_text\(\$memo_sender_email\), get_text\(\$memo_sender_homepage\)\);/);
+    assert.match(source, /<li class="memo_view_nick"><\?php echo \$memo_sender_sideview; \?><\/li>/);
+    assert.match(source, /href="<\?php echo get_text\(\$memo_list_href\); \?>"/);
+    assert.match(source, /href="<\?php echo get_text\(\$memo_delete_href\); \?>"/);
+    assert.match(source, /<\?php if\(\$memo_prev_href !== ''\) \{  \?>/);
+    assert.match(source, /href="<\?php echo get_text\(\$memo_prev_href\); \?>"/);
+    assert.match(source, /<\?php if\(\$memo_next_href !== ''\) \{  \?>/);
+    assert.match(source, /href="<\?php echo get_text\(\$memo_next_href\); \?>"/);
+    assert.doesNotMatch(source, /\$nick = get_sideview/);
+    assert.doesNotMatch(source, /echo \$nick/);
+    assert.doesNotMatch(source, /get_text\(\$list_link\)/);
+    assert.doesNotMatch(source, /get_text\(\$del_link\)/);
+    assert.doesNotMatch(source, /get_text\(\$prev_link\)/);
+    assert.doesNotMatch(source, /get_text\(\$next_link\)/);
+  });
+
   it('normalizes password reset account identifiers before rendering the reset form', () => {
     const source = read('src/skin/member/sungsan/password_reset.skin.php');
 
@@ -1157,14 +1181,20 @@ describe('sungsan theme static contract', () => {
           /\$memo_sent_at = isset\(\$memo\['me_send_datetime'\]\) \? \$memo\['me_send_datetime'\] : '';/,
           /\$memo_body = isset\(\$memo\['me_memo'\]\) \? \$memo\['me_memo'\] : '';/,
           /\$memo_id = isset\(\$memo\['me_id'\]\) \? \(int\) \$memo\['me_id'\] : 0;/,
+          /\$memo_current_kind = \(isset\(\$kind\) && \$kind === 'send'\) \? 'send' : 'recv';/,
+          /\$memo_list_href = isset\(\$list_link\) \? \$list_link : '\.\/memo\.php\?kind='.\$memo_current_kind;/,
+          /\$memo_delete_href = isset\(\$del_link\) \? \$del_link : '';/,
+          /\$memo_prev_href = isset\(\$prev_link\) \? \$prev_link : '';/,
+          /\$memo_next_href = isset\(\$next_link\) \? \$next_link : '';/,
           /\$memo_reply_href = '\.\/memo_form\.php\?me_recv_mb_id='\.urlencode\(\$memo_sender_id\)\.'&amp;me_id='.\$memo_id;/,
-          /\$nick = get_sideview\(get_text\(\$memo_sender_id\), get_text\(\$memo_sender_nick\), get_text\(\$memo_sender_email\), get_text\(\$memo_sender_homepage\)\);/,
+          /\$memo_sender_sideview = get_sideview\(get_text\(\$memo_sender_id\), get_text\(\$memo_sender_nick\), get_text\(\$memo_sender_email\), get_text\(\$memo_sender_homepage\)\);/,
           /get_member_profile_img\(\$memo_sender_id\)/,
+          /<li class="memo_view_nick"><\?php echo \$memo_sender_sideview; \?><\/li>/,
           /<\?php echo get_text\(\$memo_sent_at\); \?>/,
-          /href="<\?php echo get_text\(\$list_link\); \?>"/,
-          /href="<\?php echo get_text\(\$del_link\); \?>"/,
-          /href="<\?php echo get_text\(\$prev_link\); \?>"/,
-          /href="<\?php echo get_text\(\$next_link\); \?>"/,
+          /href="<\?php echo get_text\(\$memo_list_href\); \?>"/,
+          /href="<\?php echo get_text\(\$memo_delete_href\); \?>"/,
+          /href="<\?php echo get_text\(\$memo_prev_href\); \?>"/,
+          /href="<\?php echo get_text\(\$memo_next_href\); \?>"/,
           /conv_content\(\$memo_body, 0\)/,
           /href="<\?php echo get_text\(\$memo_reply_href\); \?>"/,
         ],
@@ -1176,12 +1206,18 @@ describe('sungsan theme static contract', () => {
           /conv_content\(\$memo\['me_memo'\], 0\)/,
           /get_member_profile_img\(\$mb\['mb_id'\]\)/,
           /href="<\?php echo \$list_link/,
+          /get_text\(\$list_link\)/,
           /href="<\?php echo \$del_link/,
+          /get_text\(\$del_link\)/,
           /href="<\?php echo \$prev_link/,
+          /get_text\(\$prev_link\)/,
           /href="<\?php echo \$next_link/,
+          /get_text\(\$next_link\)/,
           /me_recv_mb_id=<\?php echo get_text\(\$memo_sender_id\); \?>&amp;me_id=<\?php echo \$memo_id; \?>/,
           /me_recv_mb_id=<\?php echo \$mb\['mb_id'\]/,
           /me_recv_mb_id=<\?php echo get_text\(\$mb\['mb_id'\]\); \?>&amp;me_id=<\?php echo \(int\) \$memo\['me_id'\]; \?>/,
+          /\$nick = get_sideview/,
+          /echo \$nick/,
           /get_sideview\(\$mb\['mb_id'\], \$mb\['mb_nick'\], \$mb\['mb_email'\], \$mb\['mb_homepage'\]\)/,
           /get_sideview\(get_text\(\$mb\['mb_id'\]\), get_text\(\$mb\['mb_nick'\]\), get_text\(\$mb\['mb_email'\]\), get_text\(\$mb\['mb_homepage'\]\)\)/,
         ],
