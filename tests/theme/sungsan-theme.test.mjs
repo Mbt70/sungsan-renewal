@@ -754,6 +754,33 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('renders registration consent dates as semantic time values when present', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    assert.match(source, /\$sungsan_member_datetime_attr = function \(\$field\) use \(\$sungsan_member_raw\)/);
+    assert.ok(source.includes("preg_match('/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/', $value)"));
+
+    const cases = [
+      { variable: 'sungsan_marketing_date_attr', field: 'mb_marketing_date' },
+      { variable: 'sungsan_mailling_date_attr', field: 'mb_mailling_date' },
+      { variable: 'sungsan_sms_date_attr', field: 'mb_sms_date' },
+      { variable: 'sungsan_thirdparty_date_attr', field: 'mb_thirdparty_date' },
+    ];
+
+    for (const { variable, field } of cases) {
+      assert.match(source, new RegExp(`\\$${variable} = \\$sungsan_member_datetime_attr\\('${field}'\\);`));
+      assert.match(
+        source,
+        new RegExp(`<time datetime="<\\?php echo get_text\\(\\$${variable}\\); \\?>"><\\?php echo \\$sungsan_member_value\\('${field}'\\); \\?><\\/time>`),
+      );
+    }
+
+    assert.doesNotMatch(source, /echo "\([^"]*"\.\$sungsan_member_value\('mb_marketing_date'\)\."\)"/);
+    assert.doesNotMatch(source, /echo "\([^"]*"\.\$sungsan_member_value\('mb_mailling_date'\)\."\)"/);
+    assert.doesNotMatch(source, /echo "\([^"]*"\.\$sungsan_member_value\('mb_sms_date'\)\."\)"/);
+    assert.doesNotMatch(source, /echo "\([^"]*"\.\$sungsan_member_value\('mb_thirdparty_date'\)\."\)"/);
+  });
+
   it('escapes public member profile fields before rendering the profile popup', () => {
     const source = read('src/skin/member/sungsan/profile.skin.php');
 

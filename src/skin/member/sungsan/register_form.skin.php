@@ -13,7 +13,15 @@ $sungsan_member_raw = function ($field, $default = '') use ($member) {
 $sungsan_member_value = function ($field, $default = '') use ($sungsan_member_raw) {
     return get_text($sungsan_member_raw($field, $default));
 };
+$sungsan_member_datetime_attr = function ($field) use ($sungsan_member_raw) {
+    $value = $sungsan_member_raw($field);
+    return ($value !== '' && $value !== '0000-00-00 00:00:00' && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $value)) ? str_replace(' ', 'T', $value) : '';
+};
 $sungsan_member_zip = $sungsan_member_value('mb_zip1').$sungsan_member_value('mb_zip2');
+$sungsan_marketing_date_attr = $sungsan_member_datetime_attr('mb_marketing_date');
+$sungsan_mailling_date_attr = $sungsan_member_datetime_attr('mb_mailling_date');
+$sungsan_sms_date_attr = $sungsan_member_datetime_attr('mb_sms_date');
+$sungsan_thirdparty_date_attr = $sungsan_member_datetime_attr('mb_thirdparty_date');
 $sungsan_member_certify = $sungsan_member_raw('mb_certify');
 $sungsan_member_adult = (int) $sungsan_member_raw('mb_adult', 0);
 $sungsan_cancel_url = $w == 'u' ? G5_URL.'/sungsan/mypage.php' : G5_URL;
@@ -185,7 +193,11 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				</div>
 				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo $sungsan_member_value('mb_marketing_agree'); ?>">
 				<div id="desc_marketing" class="sound_only">성산회 소식 수신을 위한 개인정보 수집·이용 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($sungsan_member_value('mb_marketing_agree') == 1 && $sungsan_member_value('mb_marketing_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_marketing_date').")"; ?></div>
+				<div class="consent-date">
+					<?php if ($sungsan_member_value('mb_marketing_agree') == 1 && $sungsan_marketing_date_attr !== '') { ?>
+						(동의일자: <time datetime="<?php echo get_text($sungsan_marketing_date_attr); ?>"><?php echo $sungsan_member_value('mb_marketing_date'); ?></time>)
+					<?php } ?>
+				</div>
 
 				<template id="tpl_marketing">
 					* 목적: 성산회 소식과 행사 안내<br>
@@ -211,7 +223,11 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 						<input type="checkbox" name="mb_mailling" value="1" id="reg_mb_mailling" <?php echo $sungsan_member_value('mb_mailling') ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_mailling"><span></span>광고성 이메일 수신 동의</label>
 						<input type="hidden" name="mb_mailling_default" value="<?php echo $sungsan_member_value('mb_mailling'); ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_mailling') == 1 && $sungsan_member_value('mb_mailling_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_mailling_date').")"; ?></div>
+						<div class="consent-date">
+							<?php if ($w == 'u' && $sungsan_member_value('mb_mailling') == 1 && $sungsan_mailling_date_attr !== '') { ?>
+								(동의일자: <time datetime="<?php echo get_text($sungsan_mailling_date_attr); ?>"><?php echo $sungsan_member_value('mb_mailling_date'); ?></time>)
+							<?php } ?>
+						</div>
 					</li>
 
 					<!-- 휴대폰번호 입력 보이기 or 필수입력일 경우에만 -->
@@ -220,7 +236,11 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 						<input type="checkbox" name="mb_sms" value="1" id="reg_mb_sms" <?php echo $sungsan_member_value('mb_sms') ? 'checked' : ''; ?> class="selec_chk child-promo">
 						<label for="reg_mb_sms"><span></span>광고성 SMS/카카오톡 수신 동의</label>
 						<input type="hidden" name="mb_sms_default" value="<?php echo $sungsan_member_value('mb_sms'); ?>">
-						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_sms') == 1 && $sungsan_member_value('mb_sms_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_sms_date').")"; ?></div>
+						<div class="consent-date">
+							<?php if ($w == 'u' && $sungsan_member_value('mb_sms') == 1 && $sungsan_sms_date_attr !== '') { ?>
+								(동의일자: <time datetime="<?php echo get_text($sungsan_sms_date_attr); ?>"><?php echo $sungsan_member_value('mb_sms_date'); ?></time>)
+							<?php } ?>
+						</div>
 					</li>
 					<?php } ?>
 				</ul>
@@ -253,7 +273,11 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				</div>
 				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo $sungsan_member_value('mb_thirdparty_agree'); ?>">
 				<div id="desc_thirdparty" class="sound_only">개인정보 제3자 제공 동의에 대한 안내입니다. 자세히보기를 눌러 전문을 확인할 수 있습니다.</div>
-				<div class="consent-date"><?php if ($sungsan_member_value('mb_thirdparty_agree') == 1 && $sungsan_member_value('mb_thirdparty_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_thirdparty_date').")"; ?></div>
+				<div class="consent-date">
+					<?php if ($sungsan_member_value('mb_thirdparty_agree') == 1 && $sungsan_thirdparty_date_attr !== '') { ?>
+						(동의일자: <time datetime="<?php echo get_text($sungsan_thirdparty_date_attr); ?>"><?php echo $sungsan_member_value('mb_thirdparty_date'); ?></time>)
+					<?php } ?>
+				</div>
 
 				<template id="tpl_thirdparty">
 					* 목적: 성산회 운영 안내와 행사 알림 발송 대행<br>
