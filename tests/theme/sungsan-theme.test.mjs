@@ -2833,7 +2833,8 @@ describe('sungsan theme static contract', () => {
     const view = read('src/skin/board/sungsan_news/view.skin.php');
 
     assert.match(view, /global \$is_member;/);
-    assert.match(view, /\$sungsan_show_login_cta = !\$is_member && !sungsan_is_review_restricted\(\$view\);/);
+    assert.match(view, /\$sungsan_view_is_member = !empty\(\$is_member\);/);
+    assert.match(view, /\$sungsan_show_login_cta = !\$sungsan_view_is_member && !sungsan_is_review_restricted\(\$view\);/);
     assert.match(view, /\$sungsan_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
     assert.match(view, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
     assert.match(view, /권한이 있는 계정으로 로그인하면 본문과 첨부를 볼 수 있습니다\./);
@@ -2923,12 +2924,14 @@ describe('sungsan theme static contract', () => {
     const view = read('src/skin/board/sungsan_free/view.skin.php');
 
     assert.match(view, /global \$is_member;/);
+    assert.match(view, /\$sungsan_view_is_member = !empty\(\$is_member\);/);
     assert.match(view, /\$sungsan_free_request_uri = isset\(\$_SERVER\['REQUEST_URI'\]\) \? \$_SERVER\['REQUEST_URI'\] : '';/);
     assert.match(view, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
-    assert.match(view, /<\?php if \(\$is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$sungsan_view_content\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
+    assert.match(view, /<\?php if \(\$sungsan_view_is_member\) \{ \?>[\s\S]*?<div class="ss-content">[\s\S]*?get_view_thumbnail\(\$sungsan_view_content\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<p class="ss-access-note">/);
     assert.match(view, /회원 전용 자유게시판 글입니다/);
     assert.match(view, /href="<\?php echo get_text\(\$sungsan_free_login_url\); \?>"/);
     assert.doesNotMatch(view, /urlencode\(\$_SERVER\['REQUEST_URI'\]\)/);
+    assert.doesNotMatch(view, /<\?php if \(\$is_member\) \{ \?>/);
   });
 
   it('renders member comments on free-board detail through the Sungsan skin', () => {
@@ -2940,7 +2943,7 @@ describe('sungsan theme static contract', () => {
 
     const comment = read(commentFile);
 
-    assert.match(view, /if \(\$is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
+    assert.match(view, /if \(\$sungsan_view_is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
     assert.match(comment, /<section id="bo_vc" class="ss-comment-section"[^>]*>/);
     assert.match(comment, /for \(\$i = 0; \$i < count\(\$sungsan_comment_rows\); \$i\+\+\)/);
     assert.match(comment, /\$sungsan_comment_content = isset\(\$sungsan_comment_row\['content'\]\) \? \$sungsan_comment_row\['content'\] : '';/);
@@ -2972,7 +2975,7 @@ describe('sungsan theme static contract', () => {
     const scss = read('src/scss/main.scss');
     const css = read('src/theme/sungsan/css/sungsan.css');
 
-    assert.match(view, /if \(\$is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
+    assert.match(view, /if \(\$sungsan_view_is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
     assert.doesNotMatch(comment, /\$is_guest/);
     assert.doesNotMatch(comment, /name="wr_name"/);
     assert.doesNotMatch(comment, /name="wr_password"/);

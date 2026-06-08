@@ -6,6 +6,7 @@ if (!defined('_GNUBOARD_')) {
 global $is_member;
 
 $sungsan_view_board_id = isset($bo_table) ? $bo_table : 'news';
+$sungsan_view_is_member = !empty($is_member);
 $sungsan_view_subject = isset($view['wr_subject']) ? $view['wr_subject'] : '';
 $sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
 $sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
@@ -21,7 +22,7 @@ $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
 $visibility_label = get_text(sungsan_get_visibility_label($visibility));
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
 $can_read = sungsan_can_read_news_post($view);
-$sungsan_show_login_cta = !$is_member && !sungsan_is_review_restricted($view);
+$sungsan_show_login_cta = !$sungsan_view_is_member && !sungsan_is_review_restricted($view);
 $sungsan_request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 $sungsan_login_url = sungsan_login_url($sungsan_request_uri);
 if (sungsan_is_review_restricted($view)) {

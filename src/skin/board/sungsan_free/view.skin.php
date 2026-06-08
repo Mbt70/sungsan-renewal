@@ -6,6 +6,7 @@ if (!defined('_GNUBOARD_')) {
 global $is_member;
 
 $sungsan_view_board_id = isset($bo_table) ? $bo_table : 'free';
+$sungsan_view_is_member = !empty($is_member);
 $sungsan_view_subject = isset($view['wr_subject']) ? $view['wr_subject'] : '';
 $sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
 $sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
@@ -30,7 +31,7 @@ $sungsan_free_login_url = sungsan_login_url($sungsan_free_request_uri);
             </div>
         </header>
         <div class="ss-panel ss-content-panel">
-            <?php if ($is_member) { ?>
+            <?php if ($sungsan_view_is_member) { ?>
                 <div class="ss-content">
                     <?php echo get_view_thumbnail($sungsan_view_content); ?>
                 </div>
@@ -61,7 +62,7 @@ $sungsan_free_login_url = sungsan_login_url($sungsan_free_request_uri);
                 <a class="ss-button" href="<?php echo get_text($sungsan_free_login_url); ?>">로그인</a>
             <?php } ?>
         </div>
-        <?php if ($is_member) { include_once(G5_BBS_PATH.'/view_comment.php'); } ?>
+        <?php if ($sungsan_view_is_member) { include_once(G5_BBS_PATH.'/view_comment.php'); } ?>
         <div class="ss-action-bar">
             <a class="ss-button secondary" href="<?php echo get_text($sungsan_view_list_href); ?>">목록</a>
             <?php if ($sungsan_view_update_href !== '') { ?><a class="ss-button secondary" href="<?php echo get_text($sungsan_view_update_href); ?>">수정</a><?php } ?>
