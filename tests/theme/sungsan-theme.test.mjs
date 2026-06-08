@@ -1106,8 +1106,8 @@ describe('sungsan theme static contract', () => {
           /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
           /<\?php echo get_text\(\$po_content\); \?>/,
           /<\?php echo get_text\(\$row_datetime\); \?>/,
-          /<\?php echo get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\); \?>/,
-          /: get_text\(\$row_expire_date\); \?>/,
+          /'만료 '\.get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\)/,
+          /: get_text\(\$row_expire_date\); \?><\/time>/,
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
@@ -1201,7 +1201,7 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /if\(\$row_expired == 1\)/);
     assert.match(source, /get_text\(\$row_datetime\)/);
     assert.match(source, /get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\)/);
-    assert.match(source, /\$row_expire_date == '9999-12-31'/);
+    assert.match(source, /\$row_expire_date_attr = \(\$row_expire_date !== '' && \$row_expire_date !== '9999-12-31'\) \? \$row_expire_date : '';/);
     assert.match(source, /get_text\(\$row_expire_date\)/);
     assert.match(source, /<span class="point_num"><\?php echo get_text\(\$point_value\); \?><\/span>/);
     assert.match(source, /<span><\?php echo get_text\(\$sum_point1\); \?><\/span>/);
@@ -1233,6 +1233,15 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$row_datetime_attr = \$row_datetime !== '' \? str_replace\(' ', 'T', \$row_datetime\) : '';/);
     assert.match(source, /<time class="point_date1" datetime="<\?php echo get_text\(\$row_datetime_attr\); \?>"><i class="fa fa-clock-o" aria-hidden="true"><\/i> <\?php echo get_text\(\$row_datetime\); \?><\/time>/);
     assert.doesNotMatch(source, /<span class="point_date1">/);
+  });
+
+  it('renders point popup expiry dates as semantic time elements when present', () => {
+    const source = read('src/skin/member/sungsan/point.skin.php');
+
+    assert.match(source, /\$row_expire_date_attr = \(\$row_expire_date !== '' && \$row_expire_date !== '9999-12-31'\) \? \$row_expire_date : '';/);
+    assert.match(source, /<\?php if \(\$row_expire_date_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$row_expire_date_attr\); \?>"><\?php echo \$row_expired == 1 \? '만료 '\.get_text\(substr\(str_replace\('-', '', \$row_expire_date\), 2\)\) : get_text\(\$row_expire_date\); \?><\/time>/);
+    assert.match(source, /<\?php \} else \{ \?>&nbsp;<\?php \} \?>/);
+    assert.doesNotMatch(source, /\$row_expire_date == '9999-12-31' \? '&nbsp;' : get_text\(\$row_expire_date\)/);
   });
 
   it('shows visible text on popup icon action links', () => {
