@@ -10,6 +10,7 @@ describe('README release handoff instructions', () => {
       'scripts/build-release.ps1',
       'release/sungsan-site-YYYYMMDD-HHMMSS.zip',
       '.sha256',
+      '.manifest.json',
       'Get-FileHash -Algorithm SHA256',
       'docs/operations/cafe24-deployment.md',
     ]) {
@@ -30,5 +31,18 @@ describe('README release handoff instructions', () => {
     assert.match(source, /tools\/setup\/sql_write\.template\.sql/);
     assert.match(source, /GNUBOARD_WRITE_SQL_TEMPLATE/);
     assert.match(source, /www\/adm\/sql_write\.sql/);
+  });
+
+  it('documents that release zip is a post-install overlay', () => {
+    const readme = readFileSync('README.md', 'utf8');
+    const runbook = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+
+    for (const source of [readme, runbook]) {
+      assert.match(source, /post-install overlay/);
+      assert.match(source, /install\/, data\/, shop\//);
+      assert.match(source, /data\/dbconfig\.php/);
+      assert.match(source, /그누보드 설치를 먼저 완료/);
+      assert.match(source, /\.manifest\.json/);
+    }
   });
 });

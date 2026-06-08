@@ -87,6 +87,8 @@ Get-FileHash -Algorithm SHA256 .\release\sungsan-site-*.zip
 
 `scripts/build-release.ps1`는 `release/sungsan-site-YYYYMMDD-HHMMSS.zip`과 같은 이름의 `.sha256` 체크섬 파일을 만듭니다. Cafe24 SFTP 업로드 전후에 ZIP의 SHA256 값이 `.sha256` 파일과 일치하는지 확인합니다. 자세한 절차는 `docs/operations/cafe24-deployment.md`를 확인합니다.
 
+배포 ZIP은 그누보드 설치를 먼저 완료한 경로 위에 덮어쓰는 post-install overlay입니다. 보안과 운영 데이터 보호를 위해 `install/, data/, shop/`은 ZIP에서 제외되며, Cafe24 스테이징 경로에는 이미 `data/dbconfig.php`가 있어야 합니다. 같은 이름으로 생성되는 `.manifest.json`에는 GnuBoard 버전, SHA256, 제외 디렉터리, post-install overlay 여부가 기록됩니다.
+
 ## 운영 전환 개요
 1. 기존 DB와 `/renewal/data`를 백업하고 `docs/operations/backup-and-restore.md` 기준으로 무결성 값을 남깁니다.
 2. 백업을 로컬로 복원해 EUC-KR에서 UTF-8 변환을 리허설합니다.

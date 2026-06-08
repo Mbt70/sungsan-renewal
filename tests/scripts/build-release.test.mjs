@@ -45,6 +45,19 @@ describe('release build script', () => {
     assert.match(source, /Release checksum created/);
   });
 
+  it('creates a post-install release manifest beside the deployment zip', () => {
+    const source = readFileSync(path.join(process.cwd(), 'scripts', 'build-release.ps1'), 'utf8');
+
+    assert.match(source, /\$manifestPath = "\$zipPath\.manifest\.json"/);
+    assert.match(source, /postInstallOverlay = \$true/);
+    assert.match(source, /requiresExistingGnuboardInstall = \$true/);
+    assert.match(source, /requiresDataDbconfig = \$true/);
+    assert.match(source, /excludedDirectories = \$excludeDirectories/);
+    assert.match(source, /sha256 = \$zipHash\.Hash/);
+    assert.match(source, /ConvertTo-Json/);
+    assert.match(source, /Release manifest created/);
+  });
+
   it('keeps accidental secrets dumps backups and deployment keys out of the release zip', () => {
     const source = readFileSync(path.join(process.cwd(), 'scripts', 'build-release.ps1'), 'utf8');
     const runbook = readFileSync(path.join(process.cwd(), 'docs', 'operations', 'cafe24-deployment.md'), 'utf8');

@@ -9,6 +9,10 @@ $releaseDir = Join-Path $root "release"
 $stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $zipPath = Join-Path $releaseDir "sungsan-site-$stamp.zip"
 
+if (-not $Version) {
+    $Version = "v5.6.28"
+}
+
 function Get-RelativeReleasePath {
     param(
         [string]$Path,
@@ -118,5 +122,22 @@ $checksumPath = "$zipPath.sha256"
 $checksumLine = "$($zipHash.Hash)  $(Split-Path -Leaf $zipPath)"
 Set-Content -LiteralPath $checksumPath -Value $checksumLine -Encoding UTF8
 
+$manifestPath = "$zipPath.manifest.json"
+$manifest = [ordered]@{
+    artifact = Split-Path -Leaf $zipPath
+    checksum = Split-Path -Leaf $checksumPath
+    sha256 = $zipHash.Hash
+    gnuboardVersion = $Version
+    postInstallOverlay = $true
+    requiresExistingGnuboardInstall = $true
+    requiresDataDbconfig = $true
+    excludedDirectories = $excludeDirectories
+    deniedPaths = $releaseDenyPaths
+    deniedFilePatterns = $releaseDenyFilePatterns
+    createdAt = (Get-Date).ToString("o")
+}
+$manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+
 Write-Host "Release artifact created: $zipPath"
 Write-Host "Release checksum created: $checksumPath"
+Write-Host "Release manifest created: $manifestPath"
