@@ -37,6 +37,7 @@ $point_paging_url = $point_paging_script.'?'.$point_paging_query;
                 $row_expired = isset($row['po_expired']) ? (int) $row['po_expired'] : 0;
                 $row_datetime = isset($row['po_datetime']) ? $row['po_datetime'] : '';
                 $row_expire_date = isset($row['po_expire_date']) ? $row['po_expire_date'] : '';
+                $row_datetime_attr = $row_datetime !== '' ? str_replace(' ', 'T', $row_datetime) : '';
                 if ($row_point > 0) {
                     $point1 = '+' .number_format($row_point);
                     $sum_point1 += $row_point;
@@ -58,7 +59,7 @@ $point_paging_url = $point_paging_script.'?'.$point_paging_query;
                     <span class="point_tit"><?php echo get_text($po_content); ?></span>
                     <span class="point_num"><?php echo get_text($point_value); ?></span>
                 </div>
-                <span class="point_date1"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row_datetime); ?></span>
+                <time class="point_date1" datetime="<?php echo get_text($row_datetime_attr); ?>"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo get_text($row_datetime); ?></time>
                 <span class="point_date<?php echo $expr; ?>">
                     <?php if ($row_expired == 1) { ?>
                     만료 <?php echo get_text(substr(str_replace('-', '', $row_expire_date), 2)); ?>

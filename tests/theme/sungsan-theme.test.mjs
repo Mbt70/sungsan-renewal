@@ -1227,6 +1227,14 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_paging\(G5_IS_MOBILE \? \$config\['cf_mobile_pages'\] : \$config\['cf_write_pages'\], \$page, \$total_page, \$_SERVER\['SCRIPT_NAME'\]\.'\?'\.\$qstr\.'&amp;page='\)/);
   });
 
+  it('renders point popup transaction dates as semantic time elements', () => {
+    const source = read('src/skin/member/sungsan/point.skin.php');
+
+    assert.match(source, /\$row_datetime_attr = \$row_datetime !== '' \? str_replace\(' ', 'T', \$row_datetime\) : '';/);
+    assert.match(source, /<time class="point_date1" datetime="<\?php echo get_text\(\$row_datetime_attr\); \?>"><i class="fa fa-clock-o" aria-hidden="true"><\/i> <\?php echo get_text\(\$row_datetime\); \?><\/time>/);
+    assert.doesNotMatch(source, /<span class="point_date1">/);
+  });
+
   it('shows visible text on popup icon action links', () => {
     const cases = [
       {
