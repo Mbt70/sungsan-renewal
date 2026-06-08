@@ -64,11 +64,14 @@ node tools/migration/rehearsal-summary.mjs .\rehearsal-bundle.json .\rehearsal-s
 회원 비밀번호 해시는 이전하지 않으며, 첨부 계획은 `news/free`로 실제 이전된 글만 대상으로 합니다. PHP, HTML, JS, SVG 계열 첨부는 `blockedRecords`에 표시하고 복사하지 않습니다. 자세한 기준은 `docs/migration/rehearsal-tools.md`를 확인합니다.
 `z6_2`, `z6_3`, 소개 페이지 대상 글은 redirect에서 제외되고 `news/free`로 실제 이전된 글만 포함됩니다. `wr_7=review_required` 글은 운영자 검토가 끝날 때까지 redirect CSV/Apache output에서도 제외됩니다.
 
-그누보드5 코어를 내려받은 뒤 설정 SQL을 갱신하려면 다음을 실행합니다.
+설정 SQL은 추적 파일인 `tools/setup/sql_write.template.sql`을 기본 입력으로 사용하므로 `www/` 부트스트랩 산출물이 없어도 GitHub 체크아웃에서 재현할 수 있습니다.
+그누보드5 코어를 새로 내려받아 `www/adm/sql_write.sql` 기준으로 템플릿 차이를 검토하려면 다음처럼 실행합니다.
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/bootstrap-gnuboard.ps1
+Copy-Item .\www\adm\sql_write.sql .\tools\setup\sql_write.template.sql
 npm run export:setup-sql
 ```
+코어 템플릿을 복사하지 않고 일회성으로만 비교할 때는 `GNUBOARD_WRITE_SQL_TEMPLATE` 환경변수에 `www/adm/sql_write.sql` 경로를 지정해 실행합니다.
 
 PHP와 Docker가 설치된 환경에서는 추가로 다음을 실행합니다.
 ```powershell

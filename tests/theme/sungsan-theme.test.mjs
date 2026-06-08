@@ -4,6 +4,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 const repoRoot = process.cwd();
+const gnuboardFormmailSendFixture = 'tests/fixtures/gnuboard/formmail_send.php';
 
 function read(relativePath) {
   return readFileSync(path.join(repoRoot, relativePath), 'utf8');
@@ -2497,7 +2498,7 @@ describe('sungsan theme static contract', () => {
 
   it('blocks executable form mail attachments before the core send handler stores them', () => {
     const extend = read('src/extend/sungsan.php');
-    const coreSend = read('www/bbs/formmail_send.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
 
     assert.match(extend, /function sungsan_reject_blocked_formmail_uploads\(\$files\)/);
     assert.match(extend, /foreach \(array\('file1', 'file2'\) as \$field\)/);
@@ -2513,7 +2514,7 @@ describe('sungsan theme static contract', () => {
 
   it('normalizes form mail attachment count before the core send loop', () => {
     const extend = read('src/extend/sungsan.php');
-    const coreSend = read('www/bbs/formmail_send.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
 
     assert.match(extend, /function sungsan_normalize_formmail_attach_count\(\)/);
     assert.match(extend, /global \$attach;/);
@@ -2529,7 +2530,7 @@ describe('sungsan theme static contract', () => {
   it('normalizes form mail type before the core send handler chooses html mode', () => {
     const extend = read('src/extend/sungsan.php');
     const skin = read('src/skin/member/sungsan/formmail.skin.php');
-    const coreSend = read('www/bbs/formmail_send.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
 
     for (const value of ['0', '1', '2']) {
       assert.match(skin, new RegExp(`name="type" value="${value}"`), `form mail skin should only offer type ${value}`);
@@ -2549,7 +2550,7 @@ describe('sungsan theme static contract', () => {
 
   it('validates required form mail message fields before the core send handler', () => {
     const extend = read('src/extend/sungsan.php');
-    const coreSend = read('www/bbs/formmail_send.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
 
     assert.match(extend, /function sungsan_validate_formmail_required_fields\(\)/);
     assert.match(extend, /global \$subject, \$content;/);
@@ -2566,7 +2567,7 @@ describe('sungsan theme static contract', () => {
 
   it('validates guest form mail sender identity before the core send handler', () => {
     const extend = read('src/extend/sungsan.php');
-    const coreSend = read('www/bbs/formmail_send.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
 
     assert.match(extend, /global \$is_member, \$fnick, \$fmail;/);
     assert.match(extend, /if \(!\$is_member\) \{/);

@@ -23,4 +23,12 @@ describe('README release handoff instructions', () => {
     assert.match(source, /wr_7=review_required/);
     assert.match(source, /redirect CSV\/Apache output/);
   });
+
+  it('documents reproducible setup SQL export inputs', () => {
+    const source = readFileSync('README.md', 'utf8');
+
+    assert.match(source, /tools\/setup\/sql_write\.template\.sql/);
+    assert.match(source, /GNUBOARD_WRITE_SQL_TEMPLATE/);
+    assert.match(source, /www\/adm\/sql_write\.sql/);
+  });
 });

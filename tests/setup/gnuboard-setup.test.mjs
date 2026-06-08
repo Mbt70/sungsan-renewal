@@ -80,10 +80,12 @@ describe('sungsan gnuboard setup config', () => {
 
   it('normalizes write table DDL to the requested table and utf8mb4', () => {
     const sql = buildWriteTableSql('news', writeSqlTemplate, { tablePrefix: 'g5_' });
+    const crlfSql = buildWriteTableSql('news', writeSqlTemplate.replace(/\n/g, '\r\n'), { tablePrefix: 'g5_' });
 
     assert.match(sql, /CREATE TABLE IF NOT EXISTS `g5_write_news`/);
     assert.match(sql, /DEFAULT CHARSET=utf8mb4/);
     assert.doesNotMatch(sql, /__TABLE_NAME__/);
+    assert.doesNotMatch(crlfSql, /\r/);
   });
 
   it('builds complete setup SQL with theme, group, boards, and write tables', () => {
@@ -135,10 +137,23 @@ describe('sungsan gnuboard setup config', () => {
     assert.match(sql, /-- free access: 목록은 공개, 본문\/작성\/댓글\/첨부\/다운로드는 회원 이상/);
   });
 
+  it('keeps setup SQL reproducible from a tracked write-table template', async () => {
+    const [generatedSql, writeTableTemplate, exportScript] = await Promise.all([
+      readFile(path.join(process.cwd(), 'docs', 'generated', 'sungsan-setup.sql'), 'utf8'),
+      readFile(path.join(process.cwd(), 'tools', 'setup', 'sql_write.template.sql'), 'utf8'),
+      readFile(path.join(process.cwd(), 'tools', 'setup', 'export-setup-sql.mjs'), 'utf8'),
+    ]);
+
+    assert.match(writeTableTemplate, /CREATE TABLE `__TABLE_NAME__`/);
+    assert.match(exportScript, /tools['"], ['"]setup['"], ['"]sql_write\.template\.sql/);
+    assert.doesNotMatch(exportScript, /www['"], ['"]adm['"], ['"]sql_write\.sql/);
+    assert.equal(generatedSql, buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate: writeTableTemplate }));
+  });
+
   it('keeps the tracked generated setup SQL in sync with policy comments', async () => {
     const [generatedSql, writeTableTemplate] = await Promise.all([
       readFile(path.join(process.cwd(), 'docs', 'generated', 'sungsan-setup.sql'), 'utf8'),
-      readFile(path.join(process.cwd(), 'www', 'adm', 'sql_write.sql'), 'utf8'),
+      readFile(path.join(process.cwd(), 'tools', 'setup', 'sql_write.template.sql'), 'utf8'),
     ]);
 
     const expectedSql = buildSetupSql({ tablePrefix: 'g5_', writeSqlTemplate: writeTableTemplate });

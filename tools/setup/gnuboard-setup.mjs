@@ -182,6 +182,8 @@ export function buildWriteTableSql(boardId, writeSqlTemplate, { tablePrefix = DE
   const tableName = `${tablePrefix}write_${boardId}`;
 
   return writeSqlTemplate
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
     .replace(/CREATE TABLE\s+`__TABLE_NAME__`/i, `CREATE TABLE IF NOT EXISTS \`${tableName}\``)
     .replaceAll('`__TABLE_NAME__`', `\`${tableName}\``)
     .replace(/DEFAULT CHARSET=utf8\b/gi, 'DEFAULT CHARSET=utf8mb4')
