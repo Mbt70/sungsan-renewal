@@ -2,11 +2,13 @@
 if (!defined('_GNUBOARD_')) {
     exit;
 }
+
+$sungsan_latest_rows = (isset($list) && is_array($list)) ? $list : array();
 ?>
 <div class="ss-post-list">
-<?php for ($i = 0; $i < count($list); $i++) { ?>
+<?php for ($i = 0; $i < count($sungsan_latest_rows); $i++) { ?>
     <?php
-    $sungsan_latest_row = $list[$i];
+    $sungsan_latest_row = $sungsan_latest_rows[$i];
     $sungsan_latest_href = isset($sungsan_latest_row['href']) ? $sungsan_latest_row['href'] : '#';
     $sungsan_latest_subject = isset($sungsan_latest_row['subject']) ? $sungsan_latest_row['subject'] : '';
     $sungsan_latest_category = isset($sungsan_latest_row['ca_name']) ? $sungsan_latest_row['ca_name'] : '';
@@ -22,7 +24,7 @@ if (!defined('_GNUBOARD_')) {
         </div>
     </a>
 <?php } ?>
-<?php if (count($list) === 0) { ?>
+<?php if (count($sungsan_latest_rows) === 0) { ?>
     <div class="ss-post-row">
         <p class="ss-post-title">등록된 글이 없습니다.</p>
     </div>

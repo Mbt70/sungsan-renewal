@@ -2474,7 +2474,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(index, /get_text\(\$posts\[\$i\]\['date'\]\)/);
     assert.doesNotMatch(index, /echo \$posts\[\$i\]\['subject'\]/);
 
-    assert.match(latest, /\$sungsan_latest_row = \$list\[\$i\];/);
+    assert.match(latest, /\$sungsan_latest_row = \$sungsan_latest_rows\[\$i\];/);
     assert.match(latest, /\$sungsan_latest_href = isset\(\$sungsan_latest_row\['href'\]\) \? \$sungsan_latest_row\['href'\] : '#';/);
     assert.match(latest, /\$sungsan_latest_subject = isset\(\$sungsan_latest_row\['subject'\]\) \? \$sungsan_latest_row\['subject'\] : '';/);
     assert.match(latest, /\$sungsan_latest_category = isset\(\$sungsan_latest_row\['ca_name'\]\) \? \$sungsan_latest_row\['ca_name'\] : '';/);
@@ -2488,6 +2488,18 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['subject'\]\)/);
     assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['ca_name'\]\)/);
     assert.doesNotMatch(latest, /get_text\(\$list\[\$i\]\['datetime2'\]\)/);
+    assert.doesNotMatch(latest, /\$sungsan_latest_row = \$list\[\$i\];/);
+  });
+
+  it('normalizes latest skin rows before rendering', () => {
+    const latest = read('src/skin/latest/sungsan_list/latest.skin.php');
+
+    assert.match(latest, /\$sungsan_latest_rows = \(isset\(\$list\) && is_array\(\$list\)\) \? \$list : array\(\);/);
+    assert.match(latest, /for \(\$i = 0; \$i < count\(\$sungsan_latest_rows\); \$i\+\+\)/);
+    assert.match(latest, /\$sungsan_latest_row = \$sungsan_latest_rows\[\$i\];/);
+    assert.match(latest, /if \(count\(\$sungsan_latest_rows\) === 0\)/);
+    assert.doesNotMatch(latest, /count\(\$list\)/);
+    assert.doesNotMatch(latest, /\$list\[\$i\]/);
   });
 
   it('escapes home page static action and section URLs before rendering attributes', () => {
