@@ -42,7 +42,7 @@ if ($profile_homepage_raw !== '') {
         <tbody>
         <tr>
             <th scope="row"><i class="fa fa-star-o" aria-hidden="true"></i>  회원권한</th>
-            <td><?php echo $profile_member_level; ?></td>
+            <td><?php echo number_format($profile_member_level); ?></td>
             <th scope="row"><i class="fa fa-database" aria-hidden="true"></i> 포인트</th>
             <td><?php echo number_format($profile_member_point); ?></td>
         </tr>

@@ -806,7 +806,7 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$profile_member_today_login = isset\(\$mb\['mb_today_login'\]\) \? \$mb\['mb_today_login'\] : '';/);
     assert.ok(source.includes("$profile_member_today_login_attr = ($profile_member_today_login !== '0000-00-00 00:00:00' && preg_match('/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/', $profile_member_today_login)) ? str_replace(' ', 'T', $profile_member_today_login) : '';"));
     assert.match(source, /get_member_profile_img\(\$profile_member_id\)/);
-    assert.match(source, /<td><\?php echo \$profile_member_level; \?><\/td>/);
+    assert.match(source, /<td><\?php echo number_format\(\$profile_member_level\); \?><\/td>/);
     assert.match(source, /number_format\(\$profile_member_point\)/);
     assert.match(source, /<table>\s*<caption>회원 프로필 요약<\/caption>\s*<tbody>/);
     assert.match(source, /<\?php if \(\$profile_can_view_activity_dates && \$profile_member_join_date_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$profile_member_join_date_attr\); \?>"><\?php echo get_text\(\$profile_member_join_date\); \?><\/time>/);
@@ -820,6 +820,7 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$mb_profile/);
     assert.doesNotMatch(source, /get_text\(\$mb_profile\)/);
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
+    assert.doesNotMatch(source, /<td><\?php echo \$profile_member_level; \?><\/td>/);
     assert.doesNotMatch(source, /get_member_profile_img\(\$mb\['mb_id'\]\)/);
   });
 
