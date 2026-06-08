@@ -2,6 +2,9 @@
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 $memo_send_point = isset($config['cf_memo_send_point']) ? (int) $config['cf_memo_send_point'] : 0;
+$memo_form_action_url = isset($memo_action_url) ? $memo_action_url : './memo_form_update.php';
+$memo_form_recipient_id = isset($me_recv_mb_id) ? $me_recv_mb_id : '';
+$memo_form_content = isset($content) ? $content : '';
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -17,14 +20,14 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             <li class="selected"><a href="./memo_form.php">쪽지쓰기</a></li>
         </ul>
 
-        <form name="fmemoform" action="<?php echo get_text($memo_action_url); ?>" onsubmit="return fmemoform_submit(this);" method="post" autocomplete="off">
+        <form name="fmemoform" action="<?php echo get_text($memo_form_action_url); ?>" onsubmit="return fmemoform_submit(this);" method="post" autocomplete="off">
         <div class="form_01">
             <h2 class="sound_only">쪽지쓰기</h2>
             <ul>
                 <li>
                     <label for="me_recv_mb_id">받는 회원아이디 <strong>필수</strong></label>
                     
-                    <input type="text" name="me_recv_mb_id" value="<?php echo get_text($me_recv_mb_id); ?>" id="me_recv_mb_id" required class="frm_input full_input required" aria-describedby="me_recv_help<?php if ($memo_send_point > 0) { ?> me_point_help<?php } ?>" size="47">
+                    <input type="text" name="me_recv_mb_id" value="<?php echo get_text($memo_form_recipient_id); ?>" id="me_recv_mb_id" required class="frm_input full_input required" aria-describedby="me_recv_help<?php if ($memo_send_point > 0) { ?> me_point_help<?php } ?>" size="47">
                     <span id="me_recv_help" class="frm_info">여러 회원에게 보낼때는 컴마(,)로 구분하세요.</span>
                     <?php if ($memo_send_point > 0) { ?>
                     <br ><span id="me_point_help" class="frm_info">쪽지 보낼때 회원당 <?php echo number_format($memo_send_point); ?>점의 포인트를 차감합니다.</span>
@@ -32,7 +35,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
                 </li>
                 <li>
                     <label for="me_memo">내용 <strong>필수</strong></label>
-                    <textarea name="me_memo" id="me_memo" required class="required"><?php echo get_text($content); ?></textarea>
+                    <textarea name="me_memo" id="me_memo" required class="required"><?php echo get_text($memo_form_content); ?></textarea>
                 </li>
                 <li>
                     <span class="sound_only">자동등록방지</span>

@@ -1011,19 +1011,22 @@ describe('sungsan theme static contract', () => {
       {
         file: 'src/skin/member/sungsan/memo_form.skin.php',
         expected: [
-          /action="<\?php echo get_text\(\$memo_action_url\); \?>"/,
+          /action="<\?php echo get_text\(\$memo_form_action_url\); \?>"/,
           /\$memo_send_point = isset\(\$config\['cf_memo_send_point'\]\) \? \(int\) \$config\['cf_memo_send_point'\] : 0;/,
-          /name="me_recv_mb_id" value="<\?php echo get_text\(\$me_recv_mb_id\); \?>"/,
+          /name="me_recv_mb_id" value="<\?php echo get_text\(\$memo_form_recipient_id\); \?>"/,
           /if \(\$memo_send_point > 0\)/,
           /number_format\(\$memo_send_point\)/,
-          /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo get_text\(\$content\); \?><\/textarea>/,
+          /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo get_text\(\$memo_form_content\); \?><\/textarea>/,
         ],
         forbidden: [
           /action="<\?php echo \$memo_action_url/,
+          /get_text\(\$memo_action_url\)/,
           /if \(\$config\['cf_memo_send_point'\]\)/,
           /name="me_recv_mb_id" value="<\?php echo \$me_recv_mb_id/,
+          /get_text\(\$me_recv_mb_id\)/,
           /number_format\(\$config\['cf_memo_send_point'\]\)/,
           /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo \$content/,
+          /get_text\(\$content\)/,
         ],
       },
       {
@@ -1061,6 +1064,20 @@ describe('sungsan theme static contract', () => {
         assert.doesNotMatch(source, pattern, `${file} should not render raw form values`);
       }
     }
+  });
+
+  it('normalizes memo compose action recipient and content before rendering', () => {
+    const source = read('src/skin/member/sungsan/memo_form.skin.php');
+
+    assert.match(source, /\$memo_form_action_url = isset\(\$memo_action_url\) \? \$memo_action_url : '\.\/memo_form_update\.php';/);
+    assert.match(source, /\$memo_form_recipient_id = isset\(\$me_recv_mb_id\) \? \$me_recv_mb_id : '';/);
+    assert.match(source, /\$memo_form_content = isset\(\$content\) \? \$content : '';/);
+    assert.match(source, /action="<\?php echo get_text\(\$memo_form_action_url\); \?>"/);
+    assert.match(source, /name="me_recv_mb_id" value="<\?php echo get_text\(\$memo_form_recipient_id\); \?>"/);
+    assert.match(source, /<textarea name="me_memo" id="me_memo" required class="required"><\?php echo get_text\(\$memo_form_content\); \?><\/textarea>/);
+    assert.doesNotMatch(source, /get_text\(\$memo_action_url\)/);
+    assert.doesNotMatch(source, /get_text\(\$me_recv_mb_id\)/);
+    assert.doesNotMatch(source, /get_text\(\$content\)/);
   });
 
   it('normalizes password reset account identifiers before rendering the reset form', () => {
