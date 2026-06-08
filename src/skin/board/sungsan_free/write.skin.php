@@ -7,7 +7,14 @@ $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table,
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
 $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 $sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
+$sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
+$sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
 ?>
+<script>
+var char_min = parseInt(<?php echo $sungsan_write_min; ?>, 10);
+var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
+</script>
+
 <section class="ss-section">
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
@@ -32,7 +39,10 @@ $sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
             </div>
             <div class="ss-field">
                 <label for="wr_content">본문 <span class="ss-required">필수</span></label>
-                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help"><?php echo get_text($content); ?></textarea>
+                <?php if ($sungsan_write_min || $sungsan_write_max) { ?>
+                    <p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"></span>글자</p>
+                <?php } ?>
+                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($content); ?></textarea>
             </div>
             <?php if ($is_file) { ?>
                 <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진·영상과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG, .htaccess, .user.ini처럼 브라우저나 서버에서 실행될 수 있는 파일은 업로드할 수 없습니다. shell.php7, shell.php8, shell.php.jpg처럼 실행형 또는 여러 확장자를 붙인 파일도 차단됩니다.</p>
@@ -112,6 +122,22 @@ $sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
                     f.wr_content.focus();
                 }
                 return false;
+            }
+
+            if (document.getElementById('char_count')) {
+                if (char_min > 0 || char_max > 0) {
+                    var cnt = parseInt(check_byte('wr_content', 'char_count'), 10);
+
+                    if (char_min > 0 && char_min > cnt) {
+                        alert('본문은 ' + char_min + '글자 이상 입력해 주세요.');
+                        return false;
+                    }
+
+                    if (char_max > 0 && char_max < cnt) {
+                        alert('본문은 ' + char_max + '글자 이하로 입력해 주세요.');
+                        return false;
+                    }
+                }
             }
 
             <?php echo $captcha_js; ?>

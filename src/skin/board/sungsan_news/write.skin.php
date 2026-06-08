@@ -19,7 +19,14 @@ $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.h
 $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $board : array());
 $sungsan_visibility_options = array('public', 'member', 'officer');
 $sungsan_submit_label = $w === 'u' ? '수정 완료' : '소식 등록';
+$sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
+$sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
 ?>
+<script>
+var char_min = parseInt(<?php echo $sungsan_write_min; ?>, 10);
+var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
+</script>
+
 <section class="ss-section">
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '소식 수정' : '소식 글쓰기'; ?></h1>
@@ -91,7 +98,10 @@ $sungsan_submit_label = $w === 'u' ? '수정 완료' : '소식 등록';
 
             <div class="ss-field">
                 <label for="wr_content">본문 <span class="ss-required">필수</span></label>
-                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help"><?php echo get_text($content); ?></textarea>
+                <?php if ($sungsan_write_min || $sungsan_write_max) { ?>
+                    <p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"></span>글자</p>
+                <?php } ?>
+                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($content); ?></textarea>
             </div>
 
             <?php if ($is_file) { ?>
@@ -174,6 +184,22 @@ $sungsan_submit_label = $w === 'u' ? '수정 완료' : '소식 등록';
                     f.wr_content.focus();
                 }
                 return false;
+            }
+
+            if (document.getElementById('char_count')) {
+                if (char_min > 0 || char_max > 0) {
+                    var cnt = parseInt(check_byte('wr_content', 'char_count'), 10);
+
+                    if (char_min > 0 && char_min > cnt) {
+                        alert('본문은 ' + char_min + '글자 이상 입력해 주세요.');
+                        return false;
+                    }
+
+                    if (char_max > 0 && char_max < cnt) {
+                        alert('본문은 ' + char_max + '글자 이하로 입력해 주세요.');
+                        return false;
+                    }
+                }
             }
 
             <?php echo $captcha_js; ?>

@@ -1757,7 +1757,7 @@ describe('sungsan theme static contract', () => {
 
       assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/, `${file} should escape action_url`);
       assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
-      assert.match(source, /<textarea id="wr_content" name="wr_content" required[^>]*><\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
+      assert.match(source, /<textarea id="wr_content" name="wr_content" required[\s\S]*?>\s*<\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
       assert.match(source, /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>"/, `${file} should escape cancel url`);
       assert.match(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/, `${file} should normalize existing file rows`);
       assert.match(source, /\$sungsan_write_file_exists = isset\(\$sungsan_write_file\['file'\]\) \? \$sungsan_write_file\['file'\] : '';/, `${file} should normalize existing file state`);
@@ -2677,7 +2677,7 @@ describe('sungsan theme static contract', () => {
 
       assert.match(source, /<p id="ss-write-required-help" class="ss-form-help ss-form-summary">/, `${file} should expose a required-field summary`);
       assert.match(source, /id="wr_subject"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect subject help`);
-      assert.match(source, /id="wr_content"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect content help`);
+      assert.match(source, /id="wr_content"[\s\S]*?aria-describedby="ss-write-required-help/, `${file} should connect content help`);
       assert.match(source, /\$sungsan_upload_limit_mb = isset\(\$board\['bo_upload_size'\]\) \? max\(1, \(int\) ceil\(\(int\) \$board\['bo_upload_size'\] \/ 1048576\)\) : 10;/, `${file} should calculate the upload size limit from board settings`);
       assert.match(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should group attachment guidance before file fields`);
       assert.match(source, /<p id="ss-attachment-help" class="ss-form-help ss-attachment-help">/, `${file} should expose attachment guidance once`);
@@ -2705,6 +2705,24 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /content: f\.wr_content\.value/, `${file} should filter the submitted content`);
       assert.match(source, /<\?php echo \$captcha_js; \?>/, `${file} should run GnuBoard captcha validation when enabled`);
       assert.match(source, /document\.getElementById\('btn_submit'\)\.disabled = true;/, `${file} should prevent duplicate submits`);
+    }
+  });
+
+  it('keeps board write character limits visible and validated before submit', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /\$sungsan_write_min = isset\(\$write_min\) \? \(int\) \$write_min : 0;/, `${file} should normalize the board minimum length`);
+      assert.match(source, /\$sungsan_write_max = isset\(\$write_max\) \? \(int\) \$write_max : 0;/, `${file} should normalize the board maximum length`);
+      assert.match(source, /var char_min = parseInt\(<\?php echo \$sungsan_write_min; \?>, 10\);/, `${file} should expose the minimum length to GnuBoard's byte checker`);
+      assert.match(source, /var char_max = parseInt\(<\?php echo \$sungsan_write_max; \?>, 10\);/, `${file} should expose the maximum length to GnuBoard's byte checker`);
+      assert.match(source, /<p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"><\/span>글자<\/p>/, `${file} should show a live character counter when limits are active`);
+      assert.match(source, /<textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<\?php if \(\$sungsan_write_min \|\| \$sungsan_write_max\) \{ \?> char_cnt<\?php \} \?>"/, `${file} should connect the counter to the content textarea`);
+      assert.match(source, /onkeyup="check_byte\('wr_content', 'char_count'\);"/, `${file} should update the counter while typing`);
+      assert.match(source, /if \(document\.getElementById\('char_count'\)\) \{[\s\S]*?parseInt\(check_byte\('wr_content', 'char_count'\), 10\)/, `${file} should check content length before submit`);
     }
   });
 
