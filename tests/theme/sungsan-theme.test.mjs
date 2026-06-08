@@ -2001,6 +2001,31 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps the public warm visual system beyond plain gray panels', () => {
+    const css = read('src/scss/main.scss');
+    const bodyBlock = css.match(/body\s*\{([^}]*)\}/);
+    const heroBlock = css.match(/\.ss-hero\s*\{([^}]*)\}/);
+    const heroSummaryBlock = css.match(/\.ss-hero-summary\s*\{([^}]*)\}/);
+    const sectionLinkBlock = css.match(/\.ss-section-header a\s*\{([^}]*)\}/);
+    const postListBlock = css.match(/\.ss-post-list\s*\{([^}]*)\}/);
+
+    assert.match(css, /--ss-color-page:\s*#fbfaf7;/);
+    assert.match(css, /--ss-color-warm-surface:\s*#fff9f1;/);
+    assert.match(css, /--ss-color-warm-border:\s*#ead7c0;/);
+    assert.match(css, /--ss-shadow-soft:/);
+    assert.ok(bodyBlock, 'body should use the page surface token');
+    assert.match(bodyBlock[1], /background:\s*var\(--ss-color-page\);/);
+    assert.ok(heroBlock, 'hero should be styled');
+    assert.match(heroBlock[1], /background:\s*var\(--ss-color-warm-surface\);/);
+    assert.ok(heroSummaryBlock, 'hero summary should be styled');
+    assert.match(heroSummaryBlock[1], /border:\s*1px solid var\(--ss-color-warm-border\);/);
+    assert.match(heroSummaryBlock[1], /box-shadow:\s*var\(--ss-shadow-soft\);/);
+    assert.ok(sectionLinkBlock, 'section links should have a touch target');
+    assert.match(sectionLinkBlock[1], /min-height:\s*44px;/);
+    assert.ok(postListBlock, 'post lists should have a refined panel surface');
+    assert.match(postListBlock[1], /box-shadow:\s*var\(--ss-shadow-soft\);/);
+  });
+
   it('styles board list search labels without changing the compact header search', () => {
     const css = read('src/scss/main.scss');
     const boardSearchInputBlock = css.match(/\.ss-board-search input\s*\{([^}]*)\}/);
