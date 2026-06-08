@@ -105,6 +105,7 @@ $sungsan_home_is_member = !empty($is_member);
                 $sungsan_home_media_subject = isset($sungsan_home_media_post['subject']) ? $sungsan_home_media_post['subject'] : '';
                 $sungsan_home_media_date = isset($sungsan_home_media_post['date']) ? $sungsan_home_media_post['date'] : '';
                 $sungsan_home_media_datetime = isset($sungsan_home_media_post['datetime']) ? $sungsan_home_media_post['datetime'] : $sungsan_home_media_date;
+                $sungsan_home_media_datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_home_media_datetime) ? str_replace(' ', 'T', $sungsan_home_media_datetime) : '';
                 $sungsan_home_media_visibility = isset($sungsan_home_media_post['wr_2']) ? $sungsan_home_media_post['wr_2'] : '';
                 $sungsan_home_media_visibility_label = $sungsan_home_media_visibility !== '' ? sungsan_get_visibility_label($sungsan_home_media_visibility) : '';
                 $sungsan_home_media_can_read = $sungsan_home_media_visibility === '' || sungsan_can_read_visibility($sungsan_home_media_visibility);
@@ -119,7 +120,11 @@ $sungsan_home_is_member = !empty($is_member);
                     <?php } ?>
                     <strong><?php echo get_text($sungsan_home_media_subject); ?></strong>
                     <?php if ($sungsan_home_media_visibility_label !== '') { ?><span class="ss-access-label"><?php echo get_text($sungsan_home_media_visibility_label); ?></span><?php } ?>
-                    <time datetime="<?php echo get_text($sungsan_home_media_datetime); ?>"><?php echo get_text($sungsan_home_media_date); ?></time>
+                    <?php if ($sungsan_home_media_datetime_attr !== '') { ?>
+                        <time datetime="<?php echo get_text($sungsan_home_media_datetime_attr); ?>"><?php echo get_text($sungsan_home_media_date); ?></time>
+                    <?php } else { ?>
+                        <span><?php echo get_text($sungsan_home_media_date); ?></span>
+                    <?php } ?>
                 </a>
             <?php } ?>
             <?php if (count($photo_posts) === 0) { ?>
@@ -153,6 +158,7 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
             $sungsan_home_post_date = isset($sungsan_home_post['date']) ? $sungsan_home_post['date'] : '';
             $sungsan_home_post_datetime = $show_event_date && $sungsan_home_post_event_date !== '' ? $sungsan_home_post_event_date : (isset($sungsan_home_post['datetime']) ? $sungsan_home_post['datetime'] : $sungsan_home_post_date);
             $sungsan_home_post_display_date = $show_event_date && $sungsan_home_post_event_date !== '' ? $sungsan_home_post_event_date : $sungsan_home_post_date;
+            $sungsan_home_post_datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_home_post_datetime) ? str_replace(' ', 'T', $sungsan_home_post_datetime) : '';
             $sungsan_home_post_is_notice = !empty($sungsan_home_post['is_notice']);
             $sungsan_home_post_visibility = isset($sungsan_home_post['wr_2']) ? $sungsan_home_post['wr_2'] : '';
             $sungsan_home_post_visibility_label = $sungsan_home_post_visibility !== '' ? sungsan_get_visibility_label($sungsan_home_post_visibility) : '';
@@ -177,7 +183,11 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
                         <?php } ?>
                         <?php if ($sungsan_home_post_visibility_label !== '') { ?><span class="ss-access-label"><?php echo get_text($sungsan_home_post_visibility_label); ?></span><?php } ?>
                         <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
-                        <time datetime="<?php echo get_text($sungsan_home_post_datetime); ?>"><?php echo get_text($sungsan_home_post_display_date); ?></time>
+                        <?php if ($sungsan_home_post_datetime_attr !== '') { ?>
+                            <time datetime="<?php echo get_text($sungsan_home_post_datetime_attr); ?>"><?php echo get_text($sungsan_home_post_display_date); ?></time>
+                        <?php } else { ?>
+                            <span><?php echo get_text($sungsan_home_post_display_date); ?></span>
+                        <?php } ?>
                     <?php } ?>
                 </div>
             </a>

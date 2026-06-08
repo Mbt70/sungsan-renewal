@@ -2491,16 +2491,19 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /'datetime'\s*=>\s*\$row\['wr_datetime'\]/);
 
     assert.match(index, /\$sungsan_home_media_datetime = isset\(\$sungsan_home_media_post\['datetime'\]\) \? \$sungsan_home_media_post\['datetime'\] : \$sungsan_home_media_date;/);
-    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
+    assert.ok(index.includes("$sungsan_home_media_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_home_media_datetime) ? str_replace(' ', 'T', $sungsan_home_media_datetime) : '';"));
+    assert.match(index, /<\?php if \(\$sungsan_home_media_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
+    assert.doesNotMatch(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
     assert.match(index, /\$sungsan_home_post_datetime = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \(isset\(\$sungsan_home_post\['datetime'\]\) \? \$sungsan_home_post\['datetime'\] : \$sungsan_home_post_date\);/);
     assert.match(index, /\$sungsan_home_post_display_date = \$show_event_date && \$sungsan_home_post_event_date !== '' \? \$sungsan_home_post_event_date : \$sungsan_home_post_date;/);
-    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_post_display_date\); \?><\/time>/);
-    assert.doesNotMatch(index, /<span><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/span>/);
-    assert.doesNotMatch(index, /<span><\?php echo get_text\(\$sungsan_home_post_date\); \?><\/span>/);
+    assert.ok(index.includes("$sungsan_home_post_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_home_post_datetime) ? str_replace(' ', 'T', $sungsan_home_post_datetime) : '';"));
+    assert.match(index, /<\?php if \(\$sungsan_home_post_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_home_post_display_date\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_home_post_display_date\); \?><\/span>/);
+    assert.doesNotMatch(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_post_display_date\); \?><\/time>/);
 
     assert.match(mypage, /\$sungsan_recent_post_datetime = isset\(\$recent_posts\[\$i\]\['datetime'\]\) \? \$recent_posts\[\$i\]\['datetime'\] : \$recent_posts\[\$i\]\['date'\];/);
-    assert.match(mypage, /<time datetime="<\?php echo get_text\(\$sungsan_recent_post_datetime\); \?>"><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/time>/);
-    assert.doesNotMatch(mypage, /<span><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/span>/);
+    assert.ok(mypage.includes("$sungsan_recent_post_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_recent_post_datetime) ? str_replace(' ', 'T', $sungsan_recent_post_datetime) : '';"));
+    assert.match(mypage, /<\?php if \(\$sungsan_recent_post_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_recent_post_datetime_attr\); \?>"><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/span>/);
+    assert.doesNotMatch(mypage, /<time datetime="<\?php echo get_text\(\$sungsan_recent_post_datetime\); \?>"><\?php echo get_text\(\$recent_posts\[\$i\]\['date'\]\); \?><\/time>/);
   });
 
   it('renders home media posts with GnuBoard thumbnails when available', () => {
@@ -2597,7 +2600,7 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /src="<\?php echo get_text\(\$sungsan_home_media_thumb\); \?>"/);
     assert.match(index, /alt="<\?php echo get_text\(\$sungsan_home_media_alt\); \?>"/);
     assert.match(index, /<strong><\?php echo get_text\(\$sungsan_home_media_subject\); \?><\/strong>/);
-    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
+    assert.match(index, /<time datetime="<\?php echo get_text\(\$sungsan_home_media_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_home_media_date\); \?><\/time>/);
     assert.match(index, /\$sungsan_home_post = \$posts\[\$i\];/);
     assert.match(index, /\$sungsan_home_post_raw_href = isset\(\$sungsan_home_post\['href'\]\) \? \$sungsan_home_post\['href'\] : '#';/);
     assert.match(index, /\$sungsan_home_post_subject = isset\(\$sungsan_home_post\['subject'\]\) \? \$sungsan_home_post\['subject'\] : '';/);
@@ -2611,7 +2614,7 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /get_text\(\$sungsan_home_post_subject\)/);
     assert.match(index, /get_text\(\$sungsan_home_post_category\)/);
     assert.match(index, /sungsan_get_group_label\(\$sungsan_home_post_group\)/);
-    assert.match(index, /get_text\(\$sungsan_home_post_datetime\)/);
+    assert.match(index, /get_text\(\$sungsan_home_post_datetime_attr\)/);
     assert.match(index, /get_text\(\$sungsan_home_post_display_date\)/);
     assert.doesNotMatch(index, /href="<\?php echo \$photo_posts\[\$i\]\['href'\]/);
     assert.doesNotMatch(index, /get_text\(\$photo_posts\[\$i\]\['href'\]\)/);
@@ -2700,7 +2703,7 @@ describe('sungsan theme static contract', () => {
     );
     assert.match(
       index,
-      /<div class="ss-meta">\s*<\?php if \(\$access_label && !\$sungsan_home_is_member\) \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>">[\s\S]*?<\?php \} \?>\s*<\/div>/,
+      /<div class="ss-meta">\s*<\?php if \(\$access_label && !\$sungsan_home_is_member\) \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<\?php if \(\$sungsan_home_post_datetime_attr !== ''\) \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime_attr\); \?>">[\s\S]*?<\?php \} \?>\s*<\/div>/,
     );
     assert.match(index, /function sungsan_render_home_list\(\$posts, \$empty_text, \$show_event_date = false, \$show_category = true, \$access_label = ''\)[\s\S]*?\$sungsan_home_is_member = !empty\(\$is_member\);/);
     assert.doesNotMatch(

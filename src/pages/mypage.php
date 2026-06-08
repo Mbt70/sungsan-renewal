@@ -73,6 +73,7 @@ $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_
                 <?php for ($i = 0; $i < count($recent_posts); $i++) { ?>
                     <?php
                     $sungsan_recent_post_datetime = isset($recent_posts[$i]['datetime']) ? $recent_posts[$i]['datetime'] : $recent_posts[$i]['date'];
+                    $sungsan_recent_post_datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_recent_post_datetime) ? str_replace(' ', 'T', $sungsan_recent_post_datetime) : '';
                     ?>
                     <a class="ss-post-row" href="<?php echo get_text($recent_posts[$i]['href']); ?>">
                         <p class="ss-post-title">
@@ -80,7 +81,11 @@ $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_
                             <?php echo get_text($recent_posts[$i]['subject']); ?>
                         </p>
                         <div class="ss-meta">
-                            <time datetime="<?php echo get_text($sungsan_recent_post_datetime); ?>"><?php echo get_text($recent_posts[$i]['date']); ?></time>
+                            <?php if ($sungsan_recent_post_datetime_attr !== '') { ?>
+                                <time datetime="<?php echo get_text($sungsan_recent_post_datetime_attr); ?>"><?php echo get_text($recent_posts[$i]['date']); ?></time>
+                            <?php } else { ?>
+                                <span><?php echo get_text($recent_posts[$i]['date']); ?></span>
+                            <?php } ?>
                         </div>
                     </a>
                 <?php } ?>
