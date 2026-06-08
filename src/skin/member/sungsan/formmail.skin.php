@@ -9,6 +9,7 @@ $formmail_recipient_name = isset($name) ? $name : '';
 $formmail_recipient_email = isset($email) ? $email : '';
 $formmail_member_nick = isset($member['mb_nick']) ? $member['mb_nick'] : '';
 $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
+$formmail_is_member = !empty($is_member);
 $formmail_upload_limit_mb = 20;
 $formmail_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 ?>
@@ -20,7 +21,7 @@ $formmail_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.
     <form name="fformmail" action="<?php echo get_text($formmail_action_url); ?>" onsubmit="return fformmail_submit(this);" method="post" enctype="multipart/form-data">
     <input type="hidden" name="to" value="<?php echo get_text($formmail_recipient_email); ?>">
     <input type="hidden" name="attach" value="2">
-    <?php if ($is_member) { // 회원이면  ?>
+    <?php if ($formmail_is_member) { // 회원이면  ?>
     <input type="hidden" name="fnick" value="<?php echo get_text($formmail_member_nick); ?>">
     <input type="hidden" name="fmail" value="<?php echo get_text($formmail_member_email); ?>">
     <?php }  ?>
@@ -28,7 +29,7 @@ $formmail_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.
     <div class="form_01 new_win_con">
         <h2 class="sound_only">메일쓰기</h2>
         <ul>
-            <?php if (!$is_member) {  ?>
+            <?php if (!$formmail_is_member) {  ?>
             <li>
                 <label for="fnick">이름 <strong>필수</strong></label>
                 <input type="text" name="fnick" id="fnick" required class="frm_input full_input required">

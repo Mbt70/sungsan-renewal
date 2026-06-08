@@ -863,8 +863,13 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /name="to" value="<\?php echo get_text\(\$formmail_recipient_email\); \?>"/);
     assert.match(source, /\$formmail_member_nick = isset\(\$member\['mb_nick'\]\) \? \$member\['mb_nick'\] : '';/);
     assert.match(source, /\$formmail_member_email = isset\(\$member\['mb_email'\]\) \? \$member\['mb_email'\] : '';/);
+    assert.match(source, /\$formmail_is_member = !empty\(\$is_member\);/);
+    assert.match(source, /<\?php if \(\$formmail_is_member\) \{/);
+    assert.match(source, /<\?php if \(!\$formmail_is_member\) \{/);
     assert.match(source, /name="fnick" value="<\?php echo get_text\(\$formmail_member_nick\); \?>"/);
     assert.match(source, /name="fmail" value="<\?php echo get_text\(\$formmail_member_email\); \?>"/);
+    assert.doesNotMatch(source, /<\?php if \(\$is_member\) \{/);
+    assert.doesNotMatch(source, /<\?php if \(!\$is_member\) \{/);
     assert.doesNotMatch(source, /echo\s+\$name(?:\s|\?>)/);
     assert.doesNotMatch(source, /echo\s+\$email(?:\s|\?>)/);
     assert.doesNotMatch(source, /get_text\(\$name\)/);
