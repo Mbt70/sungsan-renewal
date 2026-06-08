@@ -2689,6 +2689,25 @@ describe('sungsan theme static contract', () => {
     assert.match(news, /id="ca_name"[\s\S]*?aria-describedby="ss-write-required-help"/, 'news write should connect category help');
   });
 
+  it('keeps board write submissions on the GnuBoard validation path', () => {
+    for (const file of [
+      'src/skin/board/sungsan_news/write.skin.php',
+      'src/skin/board/sungsan_free/write.skin.php',
+    ]) {
+      const source = read(file);
+
+      assert.match(source, /<form name="fwrite" id="fwrite"[\s\S]*?onsubmit="return fwrite_submit\(this\);"/, `${file} should call fwrite_submit on submit`);
+      assert.match(source, /<button type="submit" id="btn_submit" accesskey="s" class="ss-button">/, `${file} should expose the submit button expected by fwrite_submit`);
+      assert.match(source, /function fwrite_submit\(f\)/, `${file} should define the board write submit guard`);
+      assert.match(source, /<\?php echo \$editor_js; \?>/, `${file} should run editor synchronization before filtering`);
+      assert.match(source, /g5_bbs_url \+ '\/ajax\.filter\.php'/, `${file} should check the GnuBoard word filter before submit`);
+      assert.match(source, /subject: f\.wr_subject\.value/, `${file} should filter the submitted title`);
+      assert.match(source, /content: f\.wr_content\.value/, `${file} should filter the submitted content`);
+      assert.match(source, /<\?php echo \$captcha_js; \?>/, `${file} should run GnuBoard captcha validation when enabled`);
+      assert.match(source, /document\.getElementById\('btn_submit'\)\.disabled = true;/, `${file} should prevent duplicate submits`);
+    }
+  });
+
   it('connects free-board attachment inputs to privacy guidance', () => {
     const source = read('src/skin/board/sungsan_free/write.skin.php');
 

@@ -6,13 +6,14 @@ if (!defined('_GNUBOARD_')) {
 $sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
 $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
+$sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
 ?>
 <section class="ss-section">
     <div class="ss-container">
         <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
         <p id="ss-write-required-help" class="ss-form-help ss-form-summary">제목과 본문은 필수입니다. 회원끼리 나누는 글이므로 개인정보가 포함된 자료는 올리기 전에 한 번 더 확인해 주세요.</p>
         <p id="ss-free-privacy-help" class="ss-form-help">자유게시판은 회원 전용 공간이지만 개인정보나 민감한 자료는 본문과 첨부에 올리기 전 다시 확인해 주세요.</p>
-        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
+        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
             <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
@@ -68,9 +69,57 @@ $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.h
                 </div>
             <?php } ?>
             <div class="ss-action-bar">
-                <button type="submit" class="ss-button">저장</button>
+                <button type="submit" id="btn_submit" accesskey="s" class="ss-button"><?php echo get_text($sungsan_submit_label); ?></button>
                 <a class="ss-button secondary" href="<?php echo get_text($sungsan_cancel_url); ?>">취소</a>
             </div>
         </form>
+
+        <script>
+        function fwrite_submit(f)
+        {
+            <?php echo $editor_js; ?>
+
+            var subject = '';
+            var content = '';
+
+            $.ajax({
+                url: g5_bbs_url + '/ajax.filter.php',
+                type: 'POST',
+                data: {
+                    subject: f.wr_subject.value,
+                    content: f.wr_content.value
+                },
+                dataType: 'json',
+                async: false,
+                cache: false,
+                success: function(data) {
+                    subject = data.subject;
+                    content = data.content;
+                }
+            });
+
+            if (subject) {
+                alert('제목에 금지단어(' + subject + ')가 포함되어 있습니다.');
+                f.wr_subject.focus();
+                return false;
+            }
+
+            if (content) {
+                alert('내용에 금지단어(' + content + ')가 포함되어 있습니다.');
+                if (typeof ed_wr_content !== 'undefined') {
+                    ed_wr_content.returnFalse();
+                } else {
+                    f.wr_content.focus();
+                }
+                return false;
+            }
+
+            <?php echo $captcha_js; ?>
+
+            document.getElementById('btn_submit').disabled = true;
+
+            return true;
+        }
+        </script>
     </div>
 </section>
