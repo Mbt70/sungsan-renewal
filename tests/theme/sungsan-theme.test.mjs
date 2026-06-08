@@ -1119,6 +1119,11 @@ describe('sungsan theme static contract', () => {
           /\$scrap_board_subject = isset\(\$scrap_row\['bo_subject'\]\) \? \$scrap_row\['bo_subject'\] : '';/,
           /\$scrap_datetime = isset\(\$scrap_row\['ms_datetime'\]\) \? \$scrap_row\['ms_datetime'\] : '';/,
           /\$scrap_del_href = isset\(\$scrap_row\['del_href'\]\) \? \$scrap_row\['del_href'\] : '';/,
+          /\$scrap_paging_pages = isset\(\$config\['cf_write_pages'\]\) \? \(int\) \$config\['cf_write_pages'\] : 0;/,
+          /\$scrap_paging_page = isset\(\$page\) \? \(int\) \$page : 1;/,
+          /\$scrap_paging_total = isset\(\$total_page\) \? \(int\) \$total_page : 1;/,
+          /\$scrap_paging_qstr = isset\(\$qstr\) \? get_text\(\$qstr\) : '';/,
+          /\$scrap_paging_url = '\?'\.\(\$scrap_paging_qstr !== '' \? \$scrap_paging_qstr\.'&amp;page=' : 'page='\);/,
           /href="<\?php echo get_text\(\$scrap_post_href\); \?>"/,
           /class="scrap_tit" target="_blank" rel="noopener noreferrer"/,
           /onclick="return sungsanOpenScrapLink\(this\);"/,
@@ -1128,6 +1133,7 @@ describe('sungsan theme static contract', () => {
           /<\?php echo get_text\(\$scrap_board_subject\); \?>/,
           /<\?php echo get_text\(\$scrap_datetime\); \?>/,
           /href="<\?php echo get_text\(\$scrap_del_href\); \?>"/,
+          /get_paging\(\$scrap_paging_pages, \$scrap_paging_page, \$scrap_paging_total, \$scrap_paging_url\)/,
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
@@ -1145,6 +1151,7 @@ describe('sungsan theme static contract', () => {
           /get_text\(\$list\[\$i\]\['ms_datetime'\]\)/,
           /href="<\?php echo \$list\[\$i\]\['del_href'\]/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
+          /get_paging\(\$config\['cf_write_pages'\], \$page, \$total_page, "\?\$qstr&amp;page="\)/,
         ],
       },
     ];

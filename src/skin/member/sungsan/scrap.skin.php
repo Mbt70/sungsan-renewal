@@ -3,6 +3,12 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
+
+$scrap_paging_pages = isset($config['cf_write_pages']) ? (int) $config['cf_write_pages'] : 0;
+$scrap_paging_page = isset($page) ? (int) $page : 1;
+$scrap_paging_total = isset($total_page) ? (int) $total_page : 1;
+$scrap_paging_qstr = isset($qstr) ? get_text($qstr) : '';
+$scrap_paging_url = '?'.($scrap_paging_qstr !== '' ? $scrap_paging_qstr.'&amp;page=' : 'page=');
 ?>
 <script>
 function sungsanOpenScrapLink(link) {
@@ -42,7 +48,7 @@ function sungsanOpenScrapLink(link) {
 
         <?php if ($i == 0) echo "<li class=\"empty_li\">자료가 없습니다.</li>";  ?>
     </ul>
-    <?php echo get_paging($config['cf_write_pages'], $page, $total_page, "?$qstr&amp;page="); ?>
+    <?php echo get_paging($scrap_paging_pages, $scrap_paging_page, $scrap_paging_total, $scrap_paging_url); ?>
 
     <div class="win_btn">
         <button type="button" onclick="window.close();" class="btn_close">창닫기</button>
