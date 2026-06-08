@@ -9,7 +9,9 @@ $profile_member_level = isset($mb['mb_level']) ? (int) $mb['mb_level'] : 0;
 $profile_member_point = isset($mb['mb_point']) ? (int) $mb['mb_point'] : 0;
 $profile_viewer_level = isset($member['mb_level']) ? (int) $member['mb_level'] : 0;
 $profile_member_join_date = isset($mb['mb_datetime']) ? substr($mb['mb_datetime'], 0, 10) : '';
+$profile_member_join_date_attr = preg_match('/^\d{4}-\d{2}-\d{2}$/', $profile_member_join_date) ? $profile_member_join_date : '';
 $profile_member_today_login = isset($mb['mb_today_login']) ? $mb['mb_today_login'] : '';
+$profile_member_today_login_attr = ($profile_member_today_login !== '0000-00-00 00:00:00' && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $profile_member_today_login)) ? str_replace(' ', 'T', $profile_member_today_login) : '';
 $profile_member_reg_after = isset($mb_reg_after) ? (int) $mb_reg_after : 0;
 $profile_can_view_activity_dates = $profile_viewer_level >= $profile_member_level;
 $profile_homepage_raw = isset($mb['mb_homepage']) ? trim($mb['mb_homepage']) : '';
@@ -42,9 +44,21 @@ if ($profile_homepage_raw !== '') {
         </tr>
         <tr>
             <th scope="row"><i class="fa fa-clock-o" aria-hidden="true"></i> 회원가입일</th>
-            <td><?php echo $profile_can_view_activity_dates ? get_text($profile_member_join_date)." (".number_format($profile_member_reg_after)." 일)" : "알 수 없음"; ?></td>
+            <td>
+                <?php if ($profile_can_view_activity_dates && $profile_member_join_date_attr !== '') { ?>
+                    <time datetime="<?php echo get_text($profile_member_join_date_attr); ?>"><?php echo get_text($profile_member_join_date); ?></time> (<?php echo number_format($profile_member_reg_after); ?> 일)
+                <?php } else { ?>
+                    알 수 없음
+                <?php } ?>
+            </td>
             <th scope="row"><i class="fa fa-clock-o" aria-hidden="true"></i> 최종접속일</th>
-            <td><?php echo $profile_can_view_activity_dates ? get_text($profile_member_today_login) : "알 수 없음"; ?></td>
+            <td>
+                <?php if ($profile_can_view_activity_dates && $profile_member_today_login_attr !== '') { ?>
+                    <time datetime="<?php echo get_text($profile_member_today_login_attr); ?>"><?php echo get_text($profile_member_today_login); ?></time>
+                <?php } else { ?>
+                    알 수 없음
+                <?php } ?>
+            </td>
         </tr>
         <?php if ($profile_homepage_url !== '') {  ?>
         <tr>

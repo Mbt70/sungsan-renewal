@@ -756,12 +756,16 @@ describe('sungsan theme static contract', () => {
     assert.match(source, /\$profile_member_point = isset\(\$mb\['mb_point'\]\) \? \(int\) \$mb\['mb_point'\] : 0;/);
     assert.match(source, /\$profile_viewer_level = isset\(\$member\['mb_level'\]\) \? \(int\) \$member\['mb_level'\] : 0;/);
     assert.match(source, /\$profile_member_join_date = isset\(\$mb\['mb_datetime'\]\) \? substr\(\$mb\['mb_datetime'\], 0, 10\) : '';/);
+    assert.ok(source.includes("$profile_member_join_date_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}$/', $profile_member_join_date) ? $profile_member_join_date : '';"));
     assert.match(source, /\$profile_member_today_login = isset\(\$mb\['mb_today_login'\]\) \? \$mb\['mb_today_login'\] : '';/);
+    assert.ok(source.includes("$profile_member_today_login_attr = ($profile_member_today_login !== '0000-00-00 00:00:00' && preg_match('/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/', $profile_member_today_login)) ? str_replace(' ', 'T', $profile_member_today_login) : '';"));
     assert.match(source, /get_member_profile_img\(\$profile_member_id\)/);
     assert.match(source, /<td><\?php echo \$profile_member_level; \?><\/td>/);
     assert.match(source, /number_format\(\$profile_member_point\)/);
-    assert.match(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_join_date\)/);
-    assert.match(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_today_login\)/);
+    assert.match(source, /<\?php if \(\$profile_can_view_activity_dates && \$profile_member_join_date_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$profile_member_join_date_attr\); \?>"><\?php echo get_text\(\$profile_member_join_date\); \?><\/time>/);
+    assert.match(source, /<\?php if \(\$profile_can_view_activity_dates && \$profile_member_today_login_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$profile_member_today_login_attr\); \?>"><\?php echo get_text\(\$profile_member_today_login\); \?><\/time>/);
+    assert.doesNotMatch(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_join_date\)/);
+    assert.doesNotMatch(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_today_login\)/);
     assert.doesNotMatch(source, /echo \$mb_nick/);
     assert.doesNotMatch(source, /echo \$mb_homepage/);
     assert.doesNotMatch(source, /echo \$mb_profile/);
