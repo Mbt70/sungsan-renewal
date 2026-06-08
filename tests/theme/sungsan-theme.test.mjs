@@ -2464,6 +2464,18 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /@media \(max-width: 430px\)[\s\S]*?\.ss-comment\.depth-5\s*\{[\s\S]*?margin-left:\s*36px/);
   });
 
+  it('keeps free-board comments member-only without guest identity fields', () => {
+    const view = read('src/skin/board/sungsan_free/view.skin.php');
+    const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
+
+    assert.match(view, /if \(\$is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
+    assert.doesNotMatch(comment, /\$is_guest/);
+    assert.doesNotMatch(comment, /name="wr_name"/);
+    assert.doesNotMatch(comment, /name="wr_password"/);
+    assert.doesNotMatch(comment, /\$captcha_html/);
+    assert.doesNotMatch(comment, /chk_captcha_js/);
+  });
+
   it('does not override hidden comment placeholders before reply or edit actions', () => {
     const css = read('src/scss/main.scss');
 

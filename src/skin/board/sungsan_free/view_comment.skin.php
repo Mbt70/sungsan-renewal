@@ -103,18 +103,6 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
 
             <textarea id="wr_content" name="wr_content" maxlength="10000" required class="required" aria-describedby="ss-comment-help<?php if ($sungsan_comment_min || $sungsan_comment_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_comment_min || $sungsan_comment_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_comment_content_value); ?></textarea>
 
-            <?php if ($is_guest) { ?>
-                <div class="ss-comment-guest-fields">
-                    <label for="wr_name">이름 <span class="ss-required">필수</span></label>
-                    <input type="text" name="wr_name" id="wr_name" required class="required" value="<?php echo get_text(get_cookie('ck_sns_name')); ?>">
-                    <label for="wr_password">비밀번호 <span class="ss-required">필수</span></label>
-                    <input type="password" name="wr_password" id="wr_password" required class="required">
-                </div>
-                <div class="ss-captcha">
-                    <?php echo $captcha_html; ?>
-                </div>
-            <?php } ?>
-
             <div class="ss-comment-form-footer">
                 <label class="ss-checkline" for="wr_secret">
                     <input type="checkbox" name="wr_secret" value="secret" id="wr_secret">
@@ -177,26 +165,6 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
             f.wr_content.focus();
             return false;
         }
-
-        if (typeof f.wr_name !== 'undefined') {
-            f.wr_name.value = f.wr_name.value.replace(pattern, '');
-            if (!f.wr_name.value) {
-                alert('이름을 입력해 주세요.');
-                f.wr_name.focus();
-                return false;
-            }
-        }
-
-        if (typeof f.wr_password !== 'undefined') {
-            f.wr_password.value = f.wr_password.value.replace(pattern, '');
-            if (!f.wr_password.value) {
-                alert('비밀번호를 입력해 주세요.');
-                f.wr_password.focus();
-                return false;
-            }
-        }
-
-        <?php if ($is_guest) { echo chk_captcha_js(); } ?>
 
         set_comment_token(f);
         document.getElementById('btn_submit').disabled = true;
