@@ -5,6 +5,8 @@ if (!defined('_GNUBOARD_')) {
 
 global $is_member;
 
+$sungsan_news_download_is_member = !empty($is_member);
+
 if (!isset($write) || !is_array($write)) {
     alert('첨부 파일 권한을 확인할 수 없습니다.');
 }
@@ -16,7 +18,7 @@ if (!function_exists('sungsan_can_read_news_post')) {
 $visibility = isset($write['wr_2']) ? $write['wr_2'] : 'member';
 $visibility_label = get_text(sungsan_get_visibility_label($visibility));
 $is_review_restricted = function_exists('sungsan_is_review_restricted') && sungsan_is_review_restricted($write);
-$sungsan_show_login_redirect = !$is_member && !$is_review_restricted;
+$sungsan_show_login_redirect = !$sungsan_news_download_is_member && !$is_review_restricted;
 
 if (!sungsan_can_read_news_post($write)) {
     if ($is_review_restricted) {

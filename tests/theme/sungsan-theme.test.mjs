@@ -2749,8 +2749,9 @@ describe('sungsan theme static contract', () => {
     const source = read('src/skin/board/sungsan_news/download.head.skin.php');
 
     assert.match(source, /global \$is_member;/);
+    assert.match(source, /\$sungsan_news_download_is_member = !empty\(\$is_member\);/);
     assert.match(source, /\$is_review_restricted = function_exists\('sungsan_is_review_restricted'\) && sungsan_is_review_restricted\(\$write\);/);
-    assert.match(source, /\$sungsan_show_login_redirect = !\$is_member && !\$is_review_restricted;/);
+    assert.match(source, /\$sungsan_show_login_redirect = !\$sungsan_news_download_is_member && !\$is_review_restricted;/);
     assert.match(source, /권한이 있는 계정으로 로그인하면 첨부를 내려받을 수 있습니다\./);
     assert.match(source, /현재 계정으로는 이 첨부 파일을 내려받을 수 없습니다\./);
     assert.match(source, /if \(\$sungsan_show_login_redirect\) \{[\s\S]*?sungsan_login_url\(\$sungsan_news_download_return_url\)[\s\S]*?\}[\s\S]*?alert\(\$message\);/);
@@ -3058,13 +3059,15 @@ describe('sungsan theme static contract', () => {
     const source = read(file);
 
     assert.match(source, /global \$is_member;/);
-    assert.match(source, /if \(!\$is_member\) \{/);
+    assert.match(source, /\$sungsan_free_download_is_member = !empty\(\$is_member\);/);
+    assert.match(source, /if \(!\$sungsan_free_download_is_member\) \{/);
     assert.match(source, /\$sungsan_free_download_return_url = get_pretty_url\(\$bo_table, \$wr_id\);/);
     assert.match(source, /\$sungsan_free_download_login_url = sungsan_login_url\(\$sungsan_free_download_return_url\);/);
     assert.doesNotMatch(source, /G5_BBS_URL\.'\/login\.php\?wr_id='/);
     assert.doesNotMatch(source, /\$qstr\.'&url='/);
     assert.match(source, /회원 전용 자유게시판 첨부 파일입니다/);
     assert.match(source, /alert\(\$message, \$sungsan_free_download_login_url\);/);
+    assert.doesNotMatch(source, /if \(!\$is_member\) \{/);
   });
 
   it('blocks executable or browser-active board upload extensions before storage', () => {
