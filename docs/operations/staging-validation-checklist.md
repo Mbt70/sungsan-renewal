@@ -19,7 +19,9 @@
 | 모바일 `375px`, 태블릿, 데스크톱에서 홈/소개/소식/자유게시판 화면이 겹치지 않음 |  |  | 대기 |  |  |
 | `비회원`, `회원`, `임원`, `운영자` 계정으로 목록/본문/작성/수정/삭제 권한을 확인함 |  |  | 대기 |  |  |
 | `PHP/HTML/JS/SVG`, `shell.php7`, `shell.php8`, `shell.php.jpg`, `.htaccess`, `.user.ini` 첨부 업로드와 직접 접근이 차단됨 |  |  | 대기 |  |  |
+| `news/free` 게시판 첨부는 `jpg/jpeg/png/gif/webp/mp4/mov/webm/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt`만 저장 전 허용됨 |  |  | 대기 |  |  |
 | `formmail_send.php` 폼메일 첨부 `file1/file2`가 20MB 초과 파일과 `shell.php7`, `shell.php8`, `shell.php.jpg`, `.htaccess`, `.user.ini`를 전송 전에 차단함 |  |  | 대기 |  |  |
+| `formmail_send.php` 폼메일 첨부 `file1/file2`는 `jpg/jpeg/png/gif/webp/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt`만 전송 전 허용됨 |  |  | 대기 |  |  |
 | `news` 임원/운영자 공개 글의 첨부 다운로드 권한이 글 공개 범위와 일치함 |  |  | 대기 |  |  |
 | `wr_7=review_required` 글은 운영자 검토 전 공개되지 않음 |  |  | 대기 |  |  |
 | `z6_2`, `z6_3` 원본 글과 첨부가 공개 게시판 또는 redirect 산출물에 포함되지 않음 |  |  | 대기 |  |  |

@@ -173,4 +173,20 @@ describe('Cafe24 staging validation handoff', () => {
       }
     }
   });
+
+  it('documents allowed upload extension sets for staging operators', () => {
+    for (const path of [
+      checklistPath,
+      'docs/operations/security-checklist.md',
+    ]) {
+      const source = readFileSync(path, 'utf8');
+
+      for (const expected of [
+        'jpg/jpeg/png/gif/webp/mp4/mov/webm/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt',
+        'jpg/jpeg/png/gif/webp/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt',
+      ]) {
+        expectIncludes(source, expected, path);
+      }
+    }
+  });
 });

@@ -180,6 +180,10 @@ $sungsan_blocked_upload_extensions = array(
     'inc',
 );
 
+$sungsan_board_allowed_upload_extensions = array('jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm', 'pdf', 'hwp', 'hwpx', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt');
+
+$sungsan_formmail_allowed_upload_extensions = array('jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'hwp', 'hwpx', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt');
+
 function sungsan_get_group_label($slug)
 {
     global $sungsan_groups;
@@ -307,27 +311,71 @@ function sungsan_is_blocked_upload_filename($filename)
     return false;
 }
 
+function sungsan_get_upload_filename_extension($filename)
+{
+    $filename = trim((string) $filename);
+    if ($filename === '' || strpos($filename, '.') === false) {
+        return '';
+    }
+
+    $filename_parts = explode('.', strtolower($filename));
+    $extension = trim(end($filename_parts));
+
+    return $extension;
+}
+
+function sungsan_is_allowed_upload_filename($filename, $allowed_extensions)
+{
+    if (!is_array($allowed_extensions)) {
+        return false;
+    }
+
+    $extension = sungsan_get_upload_filename_extension($filename);
+    if ($extension === '') {
+        return false;
+    }
+
+    return in_array($extension, $allowed_extensions, true);
+}
+
 function sungsan_reject_blocked_uploads($files)
 {
+    global $sungsan_board_allowed_upload_extensions;
+
     if (empty($files['bf_file']['name']) || !is_array($files['bf_file']['name'])) {
         return;
     }
 
     foreach ($files['bf_file']['name'] as $filename) {
+        $filename = trim((string) $filename);
+        if ($filename === '') {
+            continue;
+        }
+
         if (sungsan_is_blocked_upload_filename($filename)) {
             alert('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 첨부할 수 없습니다.');
+        }
+
+        if (!sungsan_is_allowed_upload_filename($filename, $sungsan_board_allowed_upload_extensions)) {
+            alert('허용된 형식의 첨부 파일만 업로드할 수 있습니다.');
         }
     }
 }
 
 function sungsan_reject_blocked_formmail_uploads($files)
 {
+    global $sungsan_formmail_allowed_upload_extensions;
+
     foreach (array('file1', 'file2') as $field) {
-        $filename = isset($files[$field]['name']) ? $files[$field]['name'] : '';
+        $filename = isset($files[$field]['name']) ? trim((string) $files[$field]['name']) : '';
         $size = isset($files[$field]['size']) ? (int) $files[$field]['size'] : 0;
 
-        if (sungsan_is_blocked_upload_filename($filename)) {
+        if ($filename !== '' && sungsan_is_blocked_upload_filename($filename)) {
             alert_close('실행 파일 또는 브라우저에서 실행될 수 있는 파일은 메일에 첨부할 수 없습니다.');
+        }
+
+        if ($filename !== '' && !sungsan_is_allowed_upload_filename($filename, $sungsan_formmail_allowed_upload_extensions)) {
+            alert_close('사진과 문서 파일만 메일에 첨부할 수 있습니다.');
         }
 
         if ($size > SUNGSAN_FORMMAIL_UPLOAD_LIMIT_BYTES) {

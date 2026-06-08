@@ -19,6 +19,8 @@
 
 ## Uploads
 - 허용 확장자만 업로드합니다.
+- `news/free` 서버 허용 확장자는 `jpg/jpeg/png/gif/webp/mp4/mov/webm/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt`로 유지합니다.
+- `formmail_send.php` 폼메일 첨부 `file1/file2` 서버 허용 확장자는 `jpg/jpeg/png/gif/webp/pdf/hwp/hwpx/doc/docx/xls/xlsx/ppt/pptx/txt`로 유지합니다.
 - PHP, PHP7/PHP8, HTML, JS, SVG, `.htaccess`, `.user.ini` 업로드를 차단합니다.
 - `news/free` 작성 화면에서 PHP, PHP7/PHP8, HTML, JS, SVG 계열 첨부, `shell.php7`, `shell.php8`, `shell.php.jpg` 같은 실행형 또는 다중 확장자 파일, `.htaccess`, `.user.ini`가 저장 전에 차단되는지 확인합니다.
 - `formmail_send.php` 폼메일 첨부 `file1/file2`도 20MB 초과 파일과 PHP, PHP7/PHP8, HTML, JS, SVG 계열 첨부, `shell.php7`, `shell.php8`, `shell.php.jpg` 같은 실행형 또는 다중 확장자 파일, `.htaccess`, `.user.ini`가 전송 전에 차단되는지 확인합니다.

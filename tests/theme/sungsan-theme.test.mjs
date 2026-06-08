@@ -2496,6 +2496,22 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('enforces board attachment allowed extensions before storage', () => {
+    const extend = read('src/extend/sungsan.php');
+
+    assert.match(
+      extend,
+      /\$sungsan_board_allowed_upload_extensions = array\('jpg', 'jpeg', 'png', 'gif', 'webp', 'mp4', 'mov', 'webm', 'pdf', 'hwp', 'hwpx', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'\);/,
+    );
+    assert.match(extend, /function sungsan_get_upload_filename_extension\(\$filename\)/);
+    assert.match(extend, /function sungsan_is_allowed_upload_filename\(\$filename, \$allowed_extensions\)/);
+    assert.match(extend, /end\(\$filename_parts\)/);
+    assert.match(extend, /in_array\(\$extension, \$allowed_extensions, true\)/);
+    assert.match(extend, /global \$sungsan_board_allowed_upload_extensions;/);
+    assert.match(extend, /!\s*sungsan_is_allowed_upload_filename\(\$filename, \$sungsan_board_allowed_upload_extensions\)/);
+    assert.match(extend, /허용된 형식의 첨부 파일만 업로드할 수 있습니다\./);
+  });
+
   it('blocks executable form mail attachments before the core send handler stores them', () => {
     const extend = read('src/extend/sungsan.php');
     const coreSend = read(gnuboardFormmailSendFixture);
@@ -2510,6 +2526,20 @@ describe('sungsan theme static contract', () => {
     assert.match(extend, /basename\(\$_SERVER\['SCRIPT_NAME'\]\) === 'formmail_send\.php'/);
     assert.match(extend, /sungsan_reject_blocked_formmail_uploads\(\$_FILES\)/);
     assert.doesNotMatch(coreSend, /sungsan_reject_blocked_formmail_uploads/);
+  });
+
+  it('enforces form mail attachment allowed extensions before the core send handler', () => {
+    const extend = read('src/extend/sungsan.php');
+    const coreSend = read(gnuboardFormmailSendFixture);
+
+    assert.match(
+      extend,
+      /\$sungsan_formmail_allowed_upload_extensions = array\('jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'hwp', 'hwpx', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt'\);/,
+    );
+    assert.match(extend, /global \$sungsan_formmail_allowed_upload_extensions;/);
+    assert.match(extend, /!\s*sungsan_is_allowed_upload_filename\(\$filename, \$sungsan_formmail_allowed_upload_extensions\)/);
+    assert.match(extend, /사진과 문서 파일만 메일에 첨부할 수 있습니다\./);
+    assert.doesNotMatch(coreSend, /sungsan_is_allowed_upload_filename/);
   });
 
   it('normalizes form mail attachment count before the core send loop', () => {
