@@ -9,7 +9,8 @@ $point_paging_pages = G5_IS_MOBILE ? (int) $config['cf_mobile_pages'] : (int) $c
 $point_paging_page = isset($page) ? (int) $page : 1;
 $point_paging_total = isset($total_page) ? (int) $total_page : 1;
 $point_paging_script = isset($_SERVER['SCRIPT_NAME']) ? get_text($_SERVER['SCRIPT_NAME']) : '';
-$point_paging_query = isset($qstr) && $qstr !== '' ? $qstr.'&amp;page=' : 'page=';
+$point_paging_qstr = isset($qstr) ? get_text($qstr) : '';
+$point_paging_query = $point_paging_qstr !== '' ? $point_paging_qstr.'&amp;page=' : 'page=';
 $point_paging_url = $point_paging_script.'?'.$point_paging_query;
 ?>
 
