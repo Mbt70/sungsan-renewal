@@ -55,7 +55,7 @@ describe('sungsan theme static contract', () => {
   it('escapes mypage action links before rendering member navigation', () => {
     const source = read('src/pages/mypage.php');
 
-    for (const variable of ['edit_url', 'my_posts_url', 'logout_url']) {
+    for (const variable of ['edit_url', 'my_posts_url', 'logout_url', 'leave_url']) {
       assert.match(
         source,
         new RegExp(`href="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
@@ -77,11 +77,25 @@ describe('sungsan theme static contract', () => {
     assert.match(mypage, /href="<\?php echo get_text\(\$edit_url\); \?>">내 정보·비밀번호 수정<\/a>/);
     assert.match(
       mypage,
-      /<p class="ss-action-help">비밀번호 변경은 본인 확인 후 내 정보 수정 화면에서 함께 할 수 있습니다\.<\/p>/,
+      /<p class="ss-action-help">비밀번호 변경과 회원 탈퇴는 모두 본인 확인 후 진행됩니다\.<\/p>/,
     );
     assert.match(css, /\.ss-member-actions\s*\{[\s\S]*?display:\s*grid/);
     assert.match(css, /\.ss-member-action-buttons\s*\{[\s\S]*?display:\s*flex/);
     assert.match(css, /\.ss-action-help\s*\{/);
+  });
+
+  it('exposes member withdrawal from mypage through password confirmation', () => {
+    const mypage = read('src/pages/mypage.php');
+    const confirm = read('src/skin/member/sungsan/member_confirm.skin.php');
+
+    assert.match(mypage, /\$leave_url = G5_BBS_URL\.'\/member_confirm\.php\?url=member_leave\.php';/);
+    assert.match(mypage, /href="<\?php echo get_text\(\$leave_url\); \?>">회원 탈퇴<\/a>/);
+    assert.match(
+      mypage,
+      /비밀번호 변경과 회원 탈퇴는 모두 본인 확인 후 진행됩니다\./,
+    );
+    assert.match(confirm, /\$url == 'member_leave\.php'/);
+    assert.match(confirm, /비밀번호를 입력하시면 회원탈퇴가 완료됩니다\./);
   });
 
   it('shows a recent own-post list on mypage using news and free boards', () => {
