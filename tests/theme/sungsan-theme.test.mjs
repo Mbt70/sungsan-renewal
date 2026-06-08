@@ -849,14 +849,18 @@ describe('sungsan theme static contract', () => {
   it('escapes form mail recipient details before rendering the popup', () => {
     const source = read('src/skin/member/sungsan/formmail.skin.php');
 
-    assert.match(source, /id="win_title"><\?php echo get_text\(\$name\); \?>/);
-    assert.match(source, /name="to" value="<\?php echo get_text\(\$email\); \?>"/);
+    assert.match(source, /\$formmail_recipient_name = isset\(\$name\) \? \$name : '';/);
+    assert.match(source, /\$formmail_recipient_email = isset\(\$email\) \? \$email : '';/);
+    assert.match(source, /id="win_title"><\?php echo get_text\(\$formmail_recipient_name\); \?>/);
+    assert.match(source, /name="to" value="<\?php echo get_text\(\$formmail_recipient_email\); \?>"/);
     assert.match(source, /\$formmail_member_nick = isset\(\$member\['mb_nick'\]\) \? \$member\['mb_nick'\] : '';/);
     assert.match(source, /\$formmail_member_email = isset\(\$member\['mb_email'\]\) \? \$member\['mb_email'\] : '';/);
     assert.match(source, /name="fnick" value="<\?php echo get_text\(\$formmail_member_nick\); \?>"/);
     assert.match(source, /name="fmail" value="<\?php echo get_text\(\$formmail_member_email\); \?>"/);
     assert.doesNotMatch(source, /echo\s+\$name(?:\s|\?>)/);
     assert.doesNotMatch(source, /echo\s+\$email(?:\s|\?>)/);
+    assert.doesNotMatch(source, /get_text\(\$name\)/);
+    assert.doesNotMatch(source, /get_text\(\$email\)/);
     assert.doesNotMatch(source, /get_text\(\$member\['mb_nick'\]\)/);
     assert.doesNotMatch(source, /get_text\(\$member\['mb_email'\]\)/);
     assert.doesNotMatch(source, /\sstyle=/);

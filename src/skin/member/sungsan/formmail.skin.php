@@ -5,6 +5,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $formmail_action_url = './formmail_send.php';
+$formmail_recipient_name = isset($name) ? $name : '';
+$formmail_recipient_email = isset($email) ? $email : '';
 $formmail_member_nick = isset($member['mb_nick']) ? $member['mb_nick'] : '';
 $formmail_member_email = isset($member['mb_email']) ? $member['mb_email'] : '';
 $formmail_upload_limit_mb = 20;
@@ -13,10 +15,10 @@ $formmail_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.pdf,.hwp,.hwpx,.doc,.
 
 <!-- 폼메일 시작 { -->
 <div id="formmail" class="new_win">
-    <h1 id="win_title"><?php echo get_text($name); ?>님께 메일보내기</h1>
+    <h1 id="win_title"><?php echo get_text($formmail_recipient_name); ?>님께 메일보내기</h1>
 
     <form name="fformmail" action="<?php echo get_text($formmail_action_url); ?>" onsubmit="return fformmail_submit(this);" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="to" value="<?php echo get_text($email); ?>">
+    <input type="hidden" name="to" value="<?php echo get_text($formmail_recipient_email); ?>">
     <input type="hidden" name="attach" value="2">
     <?php if ($is_member) { // 회원이면  ?>
     <input type="hidden" name="fnick" value="<?php echo get_text($formmail_member_nick); ?>">
