@@ -10,7 +10,6 @@ include_once G5_THEME_PATH.'/head.php';
 
 $ss_home_news_url = G5_BBS_URL.'/board.php?bo_table=news';
 $ss_home_intro_url = G5_URL.'/theme/sungsan/page/intro.php';
-$ss_home_hero_image_url = G5_THEME_URL.'/img/hero-sungsan-hanok.png';
 $sungsan_home_news_categories = sungsan_get_current_news_categories();
 $sungsan_home_notice_category = sungsan_get_news_category_at($sungsan_home_news_categories, '공지', 0);
 $sungsan_home_event_category = sungsan_get_news_category_at($sungsan_home_news_categories, '행사', 1);
@@ -32,7 +31,7 @@ $sungsan_home_is_member = !empty($is_member);
 ?>
 <section class="ss-hero ss-home-hero">
     <div class="ss-container ss-hero-layout">
-        <div>
+        <div class="ss-home-copy">
             <p class="ss-eyebrow">성산회 공식 홈페이지</p>
             <h1>중요한 공지와 자료를 더 빠르고 또렷하게 확인하세요</h1>
             <p>성산회의 공지, 일정, 자료, 활동 소식을 한곳에 모아 회원 누구나 편하게 찾고 읽을 수 있도록 새롭게 정리했습니다.</p>
@@ -40,16 +39,35 @@ $sungsan_home_is_member = !empty($is_member);
                 <a class="ss-button" href="<?php echo get_text($ss_home_news_url); ?>">소식 보기</a>
                 <a class="ss-button secondary" href="<?php echo get_text($ss_home_intro_url); ?>">성산회 소개</a>
             </div>
+            <div class="ss-home-quick-links" aria-label="자주 찾는 메뉴">
+                <a class="ss-home-quick-link" href="<?php echo get_text($ss_home_notice_url); ?>">
+                    <strong>공지사항</strong>
+                    <span>중요 공지 먼저 확인</span>
+                </a>
+                <a class="ss-home-quick-link" href="<?php echo get_text($ss_home_event_url); ?>">
+                    <strong>다가오는 일정</strong>
+                    <span>가까운 행사와 모임</span>
+                </a>
+                <a class="ss-home-quick-link" href="<?php echo get_text($ss_home_resource_url); ?>">
+                    <strong>자료와 규정</strong>
+                    <span>회보와 문서 찾기</span>
+                </a>
+                <a class="ss-home-quick-link" href="<?php echo get_text($ss_home_free_url); ?>">
+                    <strong>자유게시판</strong>
+                    <span>회원 소통 공간</span>
+                </a>
+            </div>
         </div>
-        <aside class="ss-hero-visual" aria-label="홈페이지 주요 이미지와 기능">
-            <img class="ss-hero-image" src="<?php echo get_text($ss_home_hero_image_url); ?>" alt="" loading="eager" decoding="async">
-            <div class="ss-hero-summary">
-                <strong>홈페이지 이용</strong>
-                <ul>
-                    <li>공지와 행사를 먼저 확인합니다.</li>
-                    <li>자료와 규정은 소식에서 종류별로 찾습니다.</li>
-                    <li>자유게시판은 로그인한 회원이 이용합니다.</li>
-                </ul>
+        <aside class="ss-home-priority" aria-label="오늘 확인할 일">
+            <div class="ss-home-priority-heading">
+                <div>
+                    <p class="ss-eyebrow">오늘 확인할 일</p>
+                    <h2>공지와 일정을 먼저 봅니다</h2>
+                </div>
+                <a href="<?php echo get_text($ss_home_news_url); ?>">전체 소식</a>
+            </div>
+            <div class="ss-home-priority-list">
+                <?php sungsan_render_home_priority_items($notice_posts, $event_posts); ?>
             </div>
         </aside>
     </div>
@@ -142,6 +160,56 @@ $sungsan_home_is_member = !empty($is_member);
 </section>
 <?php
 include_once G5_THEME_PATH.'/tail.php';
+
+function sungsan_render_home_priority_items($notice_posts, $event_posts)
+{
+    $items = array();
+
+    for ($i = 0; $i < count($notice_posts) && count($items) < 2; $i++) {
+        $post = $notice_posts[$i];
+        $items[] = array(
+            'label' => isset($post['ca_name']) && $post['ca_name'] !== '' ? $post['ca_name'] : '공지',
+            'subject' => isset($post['subject']) ? $post['subject'] : '',
+            'href' => isset($post['href']) ? $post['href'] : '#',
+            'date' => isset($post['date']) ? $post['date'] : '',
+            'datetime' => isset($post['datetime']) ? $post['datetime'] : (isset($post['date']) ? $post['date'] : ''),
+        );
+    }
+
+    for ($i = 0; $i < count($event_posts) && count($items) < 4; $i++) {
+        $post = $event_posts[$i];
+        $event_date = isset($post['wr_3']) ? $post['wr_3'] : '';
+        $items[] = array(
+            'label' => isset($post['ca_name']) && $post['ca_name'] !== '' ? $post['ca_name'] : '행사',
+            'subject' => isset($post['subject']) ? $post['subject'] : '',
+            'href' => isset($post['href']) ? $post['href'] : '#',
+            'date' => $event_date !== '' ? $event_date : (isset($post['date']) ? $post['date'] : ''),
+            'datetime' => $event_date !== '' ? $event_date : (isset($post['datetime']) ? $post['datetime'] : ''),
+        );
+    }
+
+    for ($i = 0; $i < count($items); $i++) {
+        $item = $items[$i];
+        $datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $item['datetime']) ? str_replace(' ', 'T', $item['datetime']) : '';
+        ?>
+        <a href="<?php echo get_text($item['href']); ?>">
+            <span class="ss-badge<?php echo $item['label'] === '행사' ? ' accent' : ''; ?>"><?php echo get_text($item['label']); ?></span>
+            <strong><?php echo get_text($item['subject']); ?></strong>
+            <?php if ($datetime_attr !== '') { ?>
+                <time datetime="<?php echo get_text($datetime_attr); ?>"><?php echo get_text($item['date']); ?></time>
+            <?php } else { ?>
+                <span><?php echo get_text($item['date']); ?></span>
+            <?php } ?>
+        </a>
+        <?php
+    }
+
+    if (count($items) === 0) {
+        ?>
+        <div class="ss-home-priority-empty">등록된 공지나 일정이 없습니다.</div>
+        <?php
+    }
+}
 
 function sungsan_render_home_list($posts, $empty_text, $show_event_date = false, $show_category = true, $access_label = '')
 {
