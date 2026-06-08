@@ -2166,7 +2166,8 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$sungsan_write_subject\); \?>"/, `${file} should escape normalized subject`);
       assert.match(source, /<textarea id="wr_content" name="wr_content" required[\s\S]*?>\s*<\?php echo get_text\(\$sungsan_write_content\); \?><\/textarea>/, `${file} should escape normalized content`);
       assert.match(source, /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>"/, `${file} should escape cancel url`);
-      assert.match(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/, `${file} should normalize existing file rows`);
+      assert.match(source, /\$sungsan_write_files = \(isset\(\$file\) && is_array\(\$file\)\) \? \$file : array\(\);/, `${file} should normalize existing file rows`);
+      assert.match(source, /\$sungsan_write_file = isset\(\$sungsan_write_files\[\$i\]\) \? \$sungsan_write_files\[\$i\] : array\(\);/, `${file} should read existing file rows from the normalized list`);
       assert.match(source, /\$sungsan_write_file_exists = isset\(\$sungsan_write_file\['file'\]\) \? \$sungsan_write_file\['file'\] : '';/, `${file} should normalize existing file state`);
       assert.match(source, /\$sungsan_write_file_source = isset\(\$sungsan_write_file\['source'\]\) \? \$sungsan_write_file\['source'\] : '';/, `${file} should normalize existing file label`);
       assert.match(source, /\$sungsan_write_file_size = isset\(\$sungsan_write_file\['size'\]\) \? \$sungsan_write_file\['size'\] : '';/, `${file} should normalize existing file size`);
@@ -2188,6 +2189,7 @@ describe('sungsan theme static contract', () => {
       assert.doesNotMatch(source, /get_text\(\$content\)/);
       assert.doesNotMatch(source, /href="<\?php echo \$sungsan_cancel_url/);
       assert.doesNotMatch(source, /\$w === 'u'/);
+      assert.doesNotMatch(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/);
       assert.doesNotMatch(source, /isset\(\$file\[\$i\]\['file'\]\)/);
       assert.doesNotMatch(source, /get_text\(\$file\[\$i\]\['source'\]\)/);
     }
@@ -3178,8 +3180,16 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /<p id="ss-write-required-help" class="ss-form-help ss-form-summary">/, `${file} should expose a required-field summary`);
       assert.match(source, /id="wr_subject"[\s\S]*?aria-describedby="ss-write-required-help"/, `${file} should connect subject help`);
       assert.match(source, /id="wr_content"[\s\S]*?aria-describedby="ss-write-required-help/, `${file} should connect content help`);
+      assert.match(source, /\$sungsan_option_hidden = isset\(\$option_hidden\) \? \$option_hidden : '';/, `${file} should normalize option hidden fields before rendering`);
+      assert.match(source, /<\?php echo \$sungsan_option_hidden; \?>/, `${file} should render normalized option hidden fields`);
+      assert.doesNotMatch(source, /<\?php if \(isset\(\$option_hidden\)\) \{ echo \$option_hidden; \} \?>/, `${file} should not render raw option_hidden inline`);
       assert.match(source, /\$sungsan_upload_limit_mb = isset\(\$board\['bo_upload_size'\]\) \? max\(1, \(int\) ceil\(\(int\) \$board\['bo_upload_size'\] \/ 1048576\)\) : 10;/, `${file} should calculate the upload size limit from board settings`);
-      assert.match(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should group attachment guidance before file fields`);
+      assert.match(source, /\$sungsan_write_uses_files = isset\(\$is_file\) \? \(bool\) \$is_file : false;/, `${file} should normalize the attachment flag before rendering`);
+      assert.match(source, /\$sungsan_write_file_count = isset\(\$file_count\) \? max\(0, \(int\) \$file_count\) : 0;/, `${file} should normalize the attachment count before rendering`);
+      assert.match(source, /<\?php if \(\$sungsan_write_uses_files\) \{ \?>/, `${file} should group attachment guidance before file fields`);
+      assert.match(source, /for \(\$i = 0; \$i < \$sungsan_write_file_count; \$i\+\+\)/, `${file} should render the normalized file count`);
+      assert.doesNotMatch(source, /<\?php if \(\$is_file\) \{ \?>/, `${file} should not render from raw is_file`);
+      assert.doesNotMatch(source, /for \(\$i = 0; \$i < \$file_count; \$i\+\+\)/, `${file} should not loop over raw file_count`);
       assert.match(source, /<p id="ss-attachment-help" class="ss-form-help ss-attachment-help">/, `${file} should expose attachment guidance once`);
       assert.match(source, /파일 한 개당 <\?php echo number_format\(\(int\) \$sungsan_upload_limit_mb\); \?>MB 이하/, `${file} should show the per-file upload size limit`);
       assert.match(source, /id="bf_file_<\?php echo \$i \+ 1; \?>"[\s\S]*?aria-describedby="ss-attachment-help(?: ss-free-privacy-help)?"/, `${file} should connect attachment help`);
@@ -3199,11 +3209,20 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /<form name="fwrite" id="fwrite"[\s\S]*?onsubmit="return fwrite_submit\(this\);"/, `${file} should call fwrite_submit on submit`);
       assert.match(source, /<button type="submit" id="btn_submit" accesskey="s" class="ss-button">/, `${file} should expose the submit button expected by fwrite_submit`);
       assert.match(source, /function fwrite_submit\(f\)/, `${file} should define the board write submit guard`);
-      assert.match(source, /<\?php echo \$editor_js; \?>/, `${file} should run editor synchronization before filtering`);
+      assert.match(source, /\$sungsan_editor_js = isset\(\$editor_js\) \? \$editor_js : '';/, `${file} should normalize editor synchronization before rendering`);
+      assert.match(source, /<\?php echo \$sungsan_editor_js; \?>/, `${file} should run editor synchronization before filtering`);
       assert.match(source, /g5_bbs_url \+ '\/ajax\.filter\.php'/, `${file} should check the GnuBoard word filter before submit`);
       assert.match(source, /subject: f\.wr_subject\.value/, `${file} should filter the submitted title`);
       assert.match(source, /content: f\.wr_content\.value/, `${file} should filter the submitted content`);
-      assert.match(source, /<\?php echo \$captcha_js; \?>/, `${file} should run GnuBoard captcha validation when enabled`);
+      assert.match(source, /\$sungsan_captcha_js = isset\(\$captcha_js\) \? \$captcha_js : '';/, `${file} should normalize captcha JS before rendering`);
+      assert.match(source, /<\?php echo \$sungsan_captcha_js; \?>/, `${file} should run GnuBoard captcha validation when enabled`);
+      assert.match(source, /\$sungsan_uses_captcha = !empty\(\$is_use_captcha\);/, `${file} should normalize captcha usage before rendering`);
+      assert.match(source, /\$sungsan_captcha_html = isset\(\$captcha_html\) \? \$captcha_html : '';/, `${file} should normalize captcha HTML before rendering`);
+      assert.match(source, /<\?php if \(\$sungsan_uses_captcha && \$sungsan_captcha_html !== ''\) \{ \?>/, `${file} should render captcha from normalized state`);
+      assert.match(source, /<\?php echo \$sungsan_captcha_html; \?>/, `${file} should render normalized captcha HTML`);
+      assert.doesNotMatch(source, /<\?php echo \$editor_js; \?>/, `${file} should not render raw editor_js`);
+      assert.doesNotMatch(source, /<\?php echo \$captcha_js; \?>/, `${file} should not render raw captcha_js`);
+      assert.doesNotMatch(source, /<\?php if \(!empty\(\$is_use_captcha\) && isset\(\$captcha_html\)\) \{ \?>/, `${file} should not render raw captcha state inline`);
       assert.match(source, /document\.getElementById\('btn_submit'\)\.disabled = true;/, `${file} should prevent duplicate submits`);
     }
   });

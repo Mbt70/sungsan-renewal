@@ -18,6 +18,14 @@ $sungsan_write_spt = isset($spt) ? $spt : '';
 $sungsan_write_sst = isset($sst) ? $sst : '';
 $sungsan_write_sod = isset($sod) ? $sod : '';
 $sungsan_write_page = isset($page) ? (int) $page : 0;
+$sungsan_option_hidden = isset($option_hidden) ? $option_hidden : '';
+$sungsan_write_uses_files = isset($is_file) ? (bool) $is_file : false;
+$sungsan_write_file_count = isset($file_count) ? max(0, (int) $file_count) : 0;
+$sungsan_write_files = (isset($file) && is_array($file)) ? $file : array();
+$sungsan_uses_captcha = !empty($is_use_captcha);
+$sungsan_captcha_html = isset($captcha_html) ? $captcha_html : '';
+$sungsan_editor_js = isset($editor_js) ? $editor_js : '';
+$sungsan_captcha_js = isset($captcha_js) ? $captcha_js : '';
 $visibility = isset($write['wr_2']) && $write['wr_2'] ? $write['wr_2'] : 'member';
 $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
 $sungsan_event_start_date = isset($write['wr_3']) ? $write['wr_3'] : '';
@@ -61,7 +69,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
             <input type="hidden" name="wr_6" value="<?php echo get_text($legacy_post_id); ?>">
             <input type="hidden" name="wr_7" value="<?php echo get_text($review_flag); ?>">
             <input type="hidden" name="wr_8" value="<?php echo get_text($review_reason); ?>">
-            <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
+            <?php echo $sungsan_option_hidden; ?>
 
             <div class="ss-field">
                 <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
@@ -118,11 +126,11 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                 <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_write_content); ?></textarea>
             </div>
 
-            <?php if ($is_file) { ?>
+            <?php if ($sungsan_write_uses_files) { ?>
                 <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진·영상과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG, .htaccess, .user.ini처럼 브라우저나 서버에서 실행될 수 있는 파일은 업로드할 수 없습니다. shell.php7, shell.php8, shell.php.jpg처럼 실행형 또는 여러 확장자를 붙인 파일도 차단됩니다.</p>
-                <?php for ($i = 0; $i < $file_count; $i++) { ?>
+                <?php for ($i = 0; $i < $sungsan_write_file_count; $i++) { ?>
                     <?php
-                    $sungsan_write_file = isset($file[$i]) ? $file[$i] : array();
+                    $sungsan_write_file = isset($sungsan_write_files[$i]) ? $sungsan_write_files[$i] : array();
                     $sungsan_write_file_exists = isset($sungsan_write_file['file']) ? $sungsan_write_file['file'] : '';
                     $sungsan_write_file_source = isset($sungsan_write_file['source']) ? $sungsan_write_file['source'] : '';
                     $sungsan_write_file_size = isset($sungsan_write_file['size']) ? $sungsan_write_file['size'] : '';
@@ -148,9 +156,9 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                 <?php } ?>
             <?php } ?>
 
-            <?php if (!empty($is_use_captcha) && isset($captcha_html)) { ?>
+            <?php if ($sungsan_uses_captcha && $sungsan_captcha_html !== '') { ?>
                 <div class="ss-field ss-captcha">
-                    <?php echo $captcha_html; ?>
+                    <?php echo $sungsan_captcha_html; ?>
                 </div>
             <?php } ?>
 
@@ -163,7 +171,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
         <script>
         function fwrite_submit(f)
         {
-            <?php echo $editor_js; ?>
+            <?php echo $sungsan_editor_js; ?>
 
             var subject = '';
             var content = '';
@@ -216,7 +224,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                 }
             }
 
-            <?php echo $captcha_js; ?>
+            <?php echo $sungsan_captcha_js; ?>
 
             document.getElementById('btn_submit').disabled = true;
 
