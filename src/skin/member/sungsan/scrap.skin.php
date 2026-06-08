@@ -4,6 +4,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
+$scrap_title = isset($g5['title']) ? $g5['title'] : '스크랩';
+$scrap_rows = (isset($list) && is_array($list)) ? $list : array();
 $scrap_paging_pages = isset($config['cf_write_pages']) ? (int) $config['cf_write_pages'] : 0;
 $scrap_paging_page = isset($page) ? (int) $page : 1;
 $scrap_paging_total = isset($total_page) ? (int) $total_page : 1;
@@ -31,10 +33,10 @@ function sungsanOpenScrapLink(link) {
 
 <!-- 스크랩 목록 시작 { -->
 <div id="scrap" class="new_win">
-    <h1 id="win_title"><?php echo get_text($g5['title']); ?></h1>
+    <h1 id="win_title"><?php echo get_text($scrap_title); ?></h1>
     <ul>
-        <?php for ($i=0; $i<count($list); $i++) {
-            $scrap_row = isset($list[$i]) ? $list[$i] : array();
+        <?php for ($i=0; $i<count($scrap_rows); $i++) {
+            $scrap_row = $scrap_rows[$i];
             $scrap_post_href = isset($scrap_row['opener_href_wr_id']) ? $scrap_row['opener_href_wr_id'] : '';
             $scrap_subject = isset($scrap_row['subject']) ? $scrap_row['subject'] : '';
             $scrap_board_href = isset($scrap_row['opener_href']) ? $scrap_row['opener_href'] : '';
@@ -51,7 +53,7 @@ function sungsanOpenScrapLink(link) {
         </li>
         <?php }  ?>
 
-        <?php if ($i == 0) echo "<li class=\"empty_li\">자료가 없습니다.</li>";  ?>
+        <?php if (count($scrap_rows) === 0) echo "<li class=\"empty_li\">자료가 없습니다.</li>";  ?>
     </ul>
     <?php echo get_paging($scrap_paging_pages, $scrap_paging_page, $scrap_paging_total, $scrap_paging_url); ?>
 

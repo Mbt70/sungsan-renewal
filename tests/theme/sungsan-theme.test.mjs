@@ -1041,14 +1041,16 @@ describe('sungsan theme static contract', () => {
       {
         file: 'src/skin/member/sungsan/scrap_popin.skin.php',
         expected: [
-          /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/,
-          /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/,
+          /name="bo_table" value="<\?php echo get_text\(\$scrap_popin_board_id\); \?>"/,
+          /name="wr_id" value="<\?php echo \(int\) \$scrap_popin_wr_id; \?>"/,
           /\$scrap_popin_subject = isset\(\$write\['wr_subject'\]\) \? \$write\['wr_subject'\] : '';/,
           /<\?php echo get_text\(cut_str\(\$scrap_popin_subject, 255\)\) \?>/,
         ],
         forbidden: [
           /name="bo_table" value="<\?php echo \$bo_table/,
+          /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/,
           /name="wr_id" value="<\?php echo \$wr_id/,
+          /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/,
           /cut_str\(\$write\['wr_subject'\]/,
         ],
       },
@@ -1273,8 +1275,8 @@ describe('sungsan theme static contract', () => {
       {
         file: 'src/skin/member/sungsan/scrap.skin.php',
         expected: [
-          /<h1 id="win_title"><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
-          /\$scrap_row = isset\(\$list\[\$i\]\) \? \$list\[\$i\] : array\(\);/,
+          /<h1 id="win_title"><\?php echo get_text\(\$scrap_title\); \?><\/h1>/,
+          /\$scrap_row = \$scrap_rows\[\$i\];/,
           /\$scrap_post_href = isset\(\$scrap_row\['opener_href_wr_id'\]\) \? \$scrap_row\['opener_href_wr_id'\] : '';/,
           /\$scrap_subject = isset\(\$scrap_row\['subject'\]\) \? \$scrap_row\['subject'\] : '';/,
           /\$scrap_board_href = isset\(\$scrap_row\['opener_href'\]\) \? \$scrap_row\['opener_href'\] : '';/,
@@ -1299,6 +1301,8 @@ describe('sungsan theme static contract', () => {
         ],
         forbidden: [
           /echo \$g5\['title'\]/,
+          /get_text\(\$g5\['title'\]\)/,
+          /\$scrap_row = isset\(\$list\[\$i\]\) \? \$list\[\$i\] : array\(\);/,
           /href="<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['opener_href_wr_id'\]\); \?>"/,
           /opener\.document\.location\.href='<\?php echo \$list\[\$i\]\['opener_href_wr_id'\]/,
@@ -1314,6 +1318,7 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo \$list\[\$i\]\['del_href'\]/,
           /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
           /get_paging\(\$config\['cf_write_pages'\], \$page, \$total_page, "\?\$qstr&amp;page="\)/,
+          /count\(\$list\)/,
         ],
       },
     ];
@@ -1491,6 +1496,27 @@ describe('sungsan theme static contract', () => {
       source,
       /<div class="win_btn">[\s\S]*?<button type="submit" class="btn_submit">스크랩 확인<\/button>[\s\S]*?<button type="button" onclick="window\.close\(\);" class="btn_close">창닫기<\/button>[\s\S]*?<\/div>/,
     );
+  });
+
+  it('normalizes scrap popup values before rendering', () => {
+    const scrap = read('src/skin/member/sungsan/scrap.skin.php');
+
+    assert.match(scrap, /\$scrap_title = isset\(\$g5\['title'\]\) \? \$g5\['title'\] : '스크랩';/);
+    assert.match(scrap, /\$scrap_rows = \(isset\(\$list\) && is_array\(\$list\)\) \? \$list : array\(\);/);
+    assert.match(scrap, /for \(\$i=0; \$i<count\(\$scrap_rows\); \$i\+\+\)/);
+    assert.match(scrap, /\$scrap_row = \$scrap_rows\[\$i\];/);
+    assert.match(scrap, /if \(count\(\$scrap_rows\) === 0\)/);
+    assert.doesNotMatch(scrap, /count\(\$list\)/);
+    assert.doesNotMatch(scrap, /\$list\[\$i\]/);
+
+    const popin = read('src/skin/member/sungsan/scrap_popin.skin.php');
+
+    assert.match(popin, /\$scrap_popin_board_id = isset\(\$bo_table\) \? \$bo_table : '';/);
+    assert.match(popin, /\$scrap_popin_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/);
+    assert.match(popin, /name="bo_table" value="<\?php echo get_text\(\$scrap_popin_board_id\); \?>"/);
+    assert.match(popin, /name="wr_id" value="<\?php echo \(int\) \$scrap_popin_wr_id; \?>"/);
+    assert.doesNotMatch(popin, /get_text\(\$bo_table\)/);
+    assert.doesNotMatch(popin, /get_text\(\$wr_id\)/);
   });
 
   it('shows visible labels on account utility form fields instead of relying on placeholders', () => {
