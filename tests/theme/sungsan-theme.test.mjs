@@ -2003,6 +2003,8 @@ describe('sungsan theme static contract', () => {
 
   it('styles board list search labels without changing the compact header search', () => {
     const css = read('src/scss/main.scss');
+    const boardSearchInputBlock = css.match(/\.ss-board-search input\s*\{([^}]*)\}/);
+    const boardSearchButtonBlock = css.match(/\.ss-board-search button\s*\{([^}]*)\}/);
 
     assert.match(css, /\.ss-board-search\s*\{/);
     assert.match(css, /\.ss-board-search\s+label:not\(\.sound_only\)/);
@@ -2010,6 +2012,10 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /overflow:\s*visible/);
     assert.match(css, /\.ss-search-row\s*\{/);
     assert.match(css, /border:\s*1px solid var\(--ss-color-border\)/);
+    assert.ok(boardSearchInputBlock, 'board search input should be styled');
+    assert.ok(boardSearchButtonBlock, 'board search button should be styled');
+    assert.match(boardSearchInputBlock[1], /min-height:\s*44px;/);
+    assert.match(boardSearchButtonBlock[1], /min-height:\s*44px;/);
   });
 
   it('uses search input semantics for board list search fields', () => {

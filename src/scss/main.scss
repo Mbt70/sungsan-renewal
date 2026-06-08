@@ -517,6 +517,32 @@ img {
   font-weight: 800;
 }
 
+.ss-board-search input {
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  border: 0;
+  padding: var(--ss-space-2) var(--ss-space-3);
+  font: inherit;
+}
+
+.ss-board-search button {
+  display: inline-flex;
+  min-height: 44px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ss-color-primary);
+  border-radius: 0;
+  padding: var(--ss-space-2) var(--ss-space-4);
+  background: var(--ss-color-primary);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  line-height: 1.35;
+  cursor: pointer;
+}
+
 .ss-search-row {
   display: flex;
   width: 100%;
