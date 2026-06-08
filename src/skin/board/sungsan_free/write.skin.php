@@ -3,14 +3,26 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-$sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
-$sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
-$sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
-$sungsan_submit_label = $w === 'u' ? '수정 완료' : '자유글 등록';
-$sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
-$sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
+$sungsan_write_mode = isset($w) ? $w : '';
+$sungsan_write_action_url = isset($action_url) ? $action_url : '';
+$sungsan_write_subject = isset($subject) ? $subject : '';
+$sungsan_write_content = isset($content) ? $content : '';
 $sungsan_write_board_id = isset($bo_table) ? $bo_table : 'free';
 $sungsan_write_wr_id = isset($wr_id) ? (int) $wr_id : 0;
+$sungsan_write_sca = isset($sca) ? $sca : '';
+$sungsan_write_sfl = isset($sfl) ? $sfl : '';
+$sungsan_write_stx = isset($stx) ? $stx : '';
+$sungsan_write_spt = isset($spt) ? $spt : '';
+$sungsan_write_sst = isset($sst) ? $sst : '';
+$sungsan_write_sod = isset($sod) ? $sod : '';
+$sungsan_write_page = isset($page) ? (int) $page : 0;
+$sungsan_write_list_href = isset($list_href) ? $list_href : get_pretty_url($sungsan_write_board_id);
+$sungsan_cancel_url = ($sungsan_write_mode === 'u' && $sungsan_write_wr_id > 0) ? get_pretty_url($sungsan_write_board_id, $sungsan_write_wr_id) : $sungsan_write_list_href;
+$sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
+$sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
+$sungsan_submit_label = $sungsan_write_mode === 'u' ? '수정 완료' : '자유글 등록';
+$sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
+$sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
 ?>
 <script>
 var char_min = parseInt(<?php echo $sungsan_write_min; ?>, 10);
@@ -19,32 +31,32 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
 
 <section class="ss-section">
     <div class="ss-container">
-        <h1 class="ss-section-title"><?php echo $w === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
+        <h1 class="ss-section-title"><?php echo $sungsan_write_mode === 'u' ? '자유 글 수정' : '자유 글쓰기'; ?></h1>
         <p id="ss-write-required-help" class="ss-form-help ss-form-summary">제목과 본문은 필수입니다. 회원끼리 나누는 글이므로 개인정보가 포함된 자료는 올리기 전에 한 번 더 확인해 주세요.</p>
         <p id="ss-free-privacy-help" class="ss-form-help">자유게시판은 회원 전용 공간이지만 개인정보나 민감한 자료는 본문과 첨부에 올리기 전 다시 확인해 주세요.</p>
-        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
+        <form name="fwrite" id="fwrite" action="<?php echo get_text($sungsan_write_action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
-            <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+            <input type="hidden" name="w" value="<?php echo get_text($sungsan_write_mode); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_write_board_id); ?>">
             <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_write_wr_id; ?>">
-            <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
-            <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
-            <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
-            <input type="hidden" name="spt" value="<?php echo get_text($spt); ?>">
-            <input type="hidden" name="sst" value="<?php echo get_text($sst); ?>">
-            <input type="hidden" name="sod" value="<?php echo get_text($sod); ?>">
-            <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
+            <input type="hidden" name="sca" value="<?php echo get_text($sungsan_write_sca); ?>">
+            <input type="hidden" name="sfl" value="<?php echo get_text($sungsan_write_sfl); ?>">
+            <input type="hidden" name="stx" value="<?php echo get_text($sungsan_write_stx); ?>">
+            <input type="hidden" name="spt" value="<?php echo get_text($sungsan_write_spt); ?>">
+            <input type="hidden" name="sst" value="<?php echo get_text($sungsan_write_sst); ?>">
+            <input type="hidden" name="sod" value="<?php echo get_text($sungsan_write_sod); ?>">
+            <input type="hidden" name="page" value="<?php echo (int) $sungsan_write_page; ?>">
             <?php if (isset($option_hidden)) { echo $option_hidden; } ?>
             <div class="ss-field">
                 <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
-                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($subject); ?>" required aria-describedby="ss-write-required-help">
+                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($sungsan_write_subject); ?>" required aria-describedby="ss-write-required-help">
             </div>
             <div class="ss-field">
                 <label for="wr_content">본문 <span class="ss-required">필수</span></label>
                 <?php if ($sungsan_write_min || $sungsan_write_max) { ?>
                     <p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"></span>글자</p>
                 <?php } ?>
-                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($content); ?></textarea>
+                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_write_content); ?></textarea>
             </div>
             <?php if ($is_file) { ?>
                 <p id="ss-attachment-help" class="ss-form-help ss-attachment-help">사진·영상과 문서 파일을 첨부할 수 있습니다. 파일 한 개당 <?php echo number_format((int) $sungsan_upload_limit_mb); ?>MB 이하로 올려 주세요. PHP, HTML, JS, SVG, .htaccess, .user.ini처럼 브라우저나 서버에서 실행될 수 있는 파일은 업로드할 수 없습니다. shell.php7, shell.php8, shell.php.jpg처럼 실행형 또는 여러 확장자를 붙인 파일도 차단됩니다.</p>
@@ -59,7 +71,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                         <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" accept="<?php echo get_text($sungsan_attachment_accept); ?>" aria-describedby="ss-attachment-help ss-free-privacy-help">
-                        <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
+                        <?php if ($sungsan_write_mode === 'u' && $sungsan_write_file_exists !== '') { ?>
                             <div class="ss-existing-file">
                                 <p>
                                     <strong>현재 첨부</strong>

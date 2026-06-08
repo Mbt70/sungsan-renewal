@@ -1,12 +1,18 @@
 <?php
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
+$sungsan_password_mode = isset($w) ? $w : '';
+$sungsan_password_action = isset($action) ? $action : '';
+$sungsan_password_sfl = isset($sfl) ? $sfl : '';
+$sungsan_password_stx = isset($stx) ? $stx : '';
+$sungsan_password_page = isset($page) ? (int) $page : 0;
+$sungsan_password_title = isset($g5['title']) ? $g5['title'] : '';
 $delete_str = "";
-if ($w == 'x') $delete_str = "댓";
-if ($w == 'u') $g5['title'] = $delete_str."글 수정";
-else if ($w == 'd' || $w == 'x') $g5['title'] = $delete_str."글 삭제";
-else $g5['title'] = $g5['title'];
-$sungsan_password_board_id = isset($bo_table) ? $bo_table : '';
+if ($sungsan_password_mode == 'x') $delete_str = "댓";
+if ($sungsan_password_mode == 'u') $g5['title'] = $delete_str."글 수정";
+else if ($sungsan_password_mode == 'd' || $sungsan_password_mode == 'x') $g5['title'] = $delete_str."글 삭제";
+else $g5['title'] = $sungsan_password_title;
 $sungsan_password_wr_id = isset($wr_id) ? (int) $wr_id : 0;
+$sungsan_password_board_id = isset($bo_table) ? $bo_table : '';
 $sungsan_password_comment_id = isset($comment_id) ? (int) $comment_id : 0;
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
@@ -17,10 +23,10 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <div id="pw_confirm" class="mbskin">
     <h1><?php echo get_text($g5['title']); ?></h1>
     <p id="board_password_help">
-        <?php if ($w == 'u') { ?>
+        <?php if ($sungsan_password_mode == 'u') { ?>
         <strong>작성자만 글을 수정할 수 있습니다.</strong>
         작성자 본인이라면, 글 작성시 입력한 비밀번호를 입력하여 글을 수정할 수 있습니다.
-        <?php } else if ($w == 'd' || $w == 'x') {  ?>
+        <?php } else if ($sungsan_password_mode == 'd' || $sungsan_password_mode == 'x') {  ?>
         <strong>작성자만 글을 삭제할 수 있습니다.</strong>
         작성자 본인이라면, 글 작성시 입력한 비밀번호를 입력하여 글을 삭제할 수 있습니다.
         <?php } else {  ?>
@@ -29,14 +35,14 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <?php }  ?>
     </p>
 
-    <form name="fboardpassword" action="<?php echo get_text($action); ?>" method="post">
-    <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+    <form name="fboardpassword" action="<?php echo get_text($sungsan_password_action); ?>" method="post">
+    <input type="hidden" name="w" value="<?php echo get_text($sungsan_password_mode); ?>">
     <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_password_board_id); ?>">
     <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_password_wr_id; ?>">
     <input type="hidden" name="comment_id" value="<?php echo (int) $sungsan_password_comment_id; ?>">
-    <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
-    <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
-    <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
+    <input type="hidden" name="sfl" value="<?php echo get_text($sungsan_password_sfl); ?>">
+    <input type="hidden" name="stx" value="<?php echo get_text($sungsan_password_stx); ?>">
+    <input type="hidden" name="page" value="<?php echo (int) $sungsan_password_page; ?>">
 
     <fieldset>
         <label for="password_wr_password">비밀번호 <strong>필수</strong></label>

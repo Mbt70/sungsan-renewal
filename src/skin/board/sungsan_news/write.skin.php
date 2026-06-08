@@ -5,6 +5,19 @@ if (!defined('_GNUBOARD_')) {
 
 global $sungsan_groups;
 
+$sungsan_write_mode = isset($w) ? $w : '';
+$sungsan_write_action_url = isset($action_url) ? $action_url : '';
+$sungsan_write_subject = isset($subject) ? $subject : '';
+$sungsan_write_content = isset($content) ? $content : '';
+$sungsan_write_board_id = isset($bo_table) ? $bo_table : 'news';
+$sungsan_write_wr_id = isset($wr_id) ? (int) $wr_id : 0;
+$sungsan_write_sca = isset($sca) ? $sca : '';
+$sungsan_write_sfl = isset($sfl) ? $sfl : '';
+$sungsan_write_stx = isset($stx) ? $stx : '';
+$sungsan_write_spt = isset($spt) ? $spt : '';
+$sungsan_write_sst = isset($sst) ? $sst : '';
+$sungsan_write_sod = isset($sod) ? $sod : '';
+$sungsan_write_page = isset($page) ? (int) $page : 0;
 $visibility = isset($write['wr_2']) && $write['wr_2'] ? $write['wr_2'] : 'member';
 $group_slug = isset($write['wr_1']) ? $write['wr_1'] : '';
 $sungsan_event_start_date = isset($write['wr_3']) ? $write['wr_3'] : '';
@@ -13,14 +26,13 @@ $legacy_board_id = isset($write['wr_5']) ? get_text($write['wr_5']) : '';
 $legacy_post_id = isset($write['wr_6']) ? get_text($write['wr_6']) : '';
 $review_flag = isset($write['wr_7']) ? get_text($write['wr_7']) : '';
 $review_reason = isset($write['wr_8']) ? get_text($write['wr_8']) : '';
-$sungsan_write_board_id = isset($bo_table) ? $bo_table : 'news';
-$sungsan_write_wr_id = isset($wr_id) ? (int) $wr_id : 0;
-$sungsan_cancel_url = ($w === 'u' && !empty($wr_id)) ? get_pretty_url($bo_table, $wr_id) : $list_href;
+$sungsan_write_list_href = isset($list_href) ? $list_href : get_pretty_url($sungsan_write_board_id);
+$sungsan_cancel_url = ($sungsan_write_mode === 'u' && $sungsan_write_wr_id > 0) ? get_pretty_url($sungsan_write_board_id, $sungsan_write_wr_id) : $sungsan_write_list_href;
 $sungsan_upload_limit_mb = isset($board['bo_upload_size']) ? max(1, (int) ceil((int) $board['bo_upload_size'] / 1048576)) : 10;
 $sungsan_attachment_accept = '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt';
 $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $board : array());
 $sungsan_visibility_options = array('public', 'member', 'officer');
-$sungsan_submit_label = $w === 'u' ? '수정 완료' : '소식 등록';
+$sungsan_submit_label = $sungsan_write_mode === 'u' ? '수정 완료' : '소식 등록';
 $sungsan_write_min = isset($write_min) ? (int) $write_min : 0;
 $sungsan_write_max = isset($write_max) ? (int) $write_max : 0;
 ?>
@@ -31,20 +43,20 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
 
 <section class="ss-section">
     <div class="ss-container">
-        <h1 class="ss-section-title"><?php echo $w === 'u' ? '소식 수정' : '소식 글쓰기'; ?></h1>
+        <h1 class="ss-section-title"><?php echo $sungsan_write_mode === 'u' ? '소식 수정' : '소식 글쓰기'; ?></h1>
         <p id="ss-write-required-help" class="ss-form-help ss-form-summary">종류, 제목, 본문은 필수입니다. 소속과 공개 범위는 글의 성격에 맞게 선택해 주세요.</p>
-        <form name="fwrite" id="fwrite" action="<?php echo get_text($action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
+        <form name="fwrite" id="fwrite" action="<?php echo get_text($sungsan_write_action_url); ?>" onsubmit="return fwrite_submit(this);" method="post" enctype="multipart/form-data" autocomplete="off" class="ss-form-grid ss-write-form">
             <input type="hidden" name="uid" value="<?php echo get_uniqid(); ?>">
-            <input type="hidden" name="w" value="<?php echo get_text($w); ?>">
+            <input type="hidden" name="w" value="<?php echo get_text($sungsan_write_mode); ?>">
             <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_write_board_id); ?>">
             <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_write_wr_id; ?>">
-            <input type="hidden" name="sca" value="<?php echo get_text($sca); ?>">
-            <input type="hidden" name="sfl" value="<?php echo get_text($sfl); ?>">
-            <input type="hidden" name="stx" value="<?php echo get_text($stx); ?>">
-            <input type="hidden" name="spt" value="<?php echo get_text($spt); ?>">
-            <input type="hidden" name="sst" value="<?php echo get_text($sst); ?>">
-            <input type="hidden" name="sod" value="<?php echo get_text($sod); ?>">
-            <input type="hidden" name="page" value="<?php echo get_text($page); ?>">
+            <input type="hidden" name="sca" value="<?php echo get_text($sungsan_write_sca); ?>">
+            <input type="hidden" name="sfl" value="<?php echo get_text($sungsan_write_sfl); ?>">
+            <input type="hidden" name="stx" value="<?php echo get_text($sungsan_write_stx); ?>">
+            <input type="hidden" name="spt" value="<?php echo get_text($sungsan_write_spt); ?>">
+            <input type="hidden" name="sst" value="<?php echo get_text($sungsan_write_sst); ?>">
+            <input type="hidden" name="sod" value="<?php echo get_text($sungsan_write_sod); ?>">
+            <input type="hidden" name="page" value="<?php echo (int) $sungsan_write_page; ?>">
             <input type="hidden" name="wr_5" value="<?php echo get_text($legacy_board_id); ?>">
             <input type="hidden" name="wr_6" value="<?php echo get_text($legacy_post_id); ?>">
             <input type="hidden" name="wr_7" value="<?php echo get_text($review_flag); ?>">
@@ -53,7 +65,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
 
             <div class="ss-field">
                 <label for="wr_subject">제목 <span class="ss-required">필수</span></label>
-                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($subject); ?>" required aria-describedby="ss-write-required-help">
+                <input id="wr_subject" name="wr_subject" value="<?php echo get_text($sungsan_write_subject); ?>" required aria-describedby="ss-write-required-help">
             </div>
 
             <p id="ss-news-meta-help" class="ss-form-help">소속, 공개 범위, 행사일은 소식 목록에서 함께 보입니다. 해당 사항이 없으면 소속 없음과 기본 공개 범위를 그대로 두어도 됩니다.</p>
@@ -103,7 +115,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                 <?php if ($sungsan_write_min || $sungsan_write_max) { ?>
                     <p id="char_cnt" class="ss-form-help" aria-live="polite"><span id="char_count"></span>글자</p>
                 <?php } ?>
-                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($content); ?></textarea>
+                <textarea id="wr_content" name="wr_content" required aria-describedby="ss-write-required-help<?php if ($sungsan_write_min || $sungsan_write_max) { ?> char_cnt<?php } ?>" <?php if ($sungsan_write_min || $sungsan_write_max) { ?>onkeyup="check_byte('wr_content', 'char_count');"<?php } ?>><?php echo get_text($sungsan_write_content); ?></textarea>
             </div>
 
             <?php if ($is_file) { ?>
@@ -119,7 +131,7 @@ var char_max = parseInt(<?php echo $sungsan_write_max; ?>, 10);
                     <div class="ss-field">
                         <label for="bf_file_<?php echo $i + 1; ?>">첨부 파일 <?php echo $i + 1; ?></label>
                         <input type="file" name="bf_file[]" id="bf_file_<?php echo $i + 1; ?>" accept="<?php echo get_text($sungsan_attachment_accept); ?>" aria-describedby="ss-attachment-help">
-                        <?php if ($w === 'u' && $sungsan_write_file_exists !== '') { ?>
+                        <?php if ($sungsan_write_mode === 'u' && $sungsan_write_file_exists !== '') { ?>
                             <div class="ss-existing-file">
                                 <p>
                                     <strong>현재 첨부</strong>

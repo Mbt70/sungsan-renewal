@@ -1005,9 +1005,9 @@ describe('sungsan theme static contract', () => {
         file: 'src/skin/member/sungsan/password.skin.php',
         expected: [
           /<h1><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/,
-          /action="<\?php echo get_text\(\$action\); \?>"/,
+          /action="<\?php echo get_text\(\$sungsan_password_action\); \?>"/,
         ],
-        forbidden: [/<h1><\?php echo \$g5\['title'\]/, /action="<\?php echo \$action/],
+        forbidden: [/<h1><\?php echo \$g5\['title'\]/, /action="<\?php echo \$action/, /action="<\?php echo get_text\(\$action\); \?>"/],
       },
       {
         file: 'src/skin/member/sungsan/memo_form.skin.php',
@@ -2041,23 +2041,33 @@ describe('sungsan theme static contract', () => {
   });
 
   it('escapes board return parameters before rendering hidden form attributes', () => {
-    for (const file of [
-      'src/skin/board/sungsan_news/write.skin.php',
-      'src/skin/board/sungsan_free/write.skin.php',
-      'src/skin/member/sungsan/password.skin.php',
+    for (const { file, prefix } of [
+      { file: 'src/skin/board/sungsan_news/write.skin.php', prefix: 'sungsan_write' },
+      { file: 'src/skin/board/sungsan_free/write.skin.php', prefix: 'sungsan_write' },
+      { file: 'src/skin/member/sungsan/password.skin.php', prefix: 'sungsan_password' },
     ]) {
       const source = read(file);
 
       for (const variable of ['sfl', 'stx', 'page']) {
-        assert.match(
-          source,
-          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
-          `${file} should escape ${variable}`,
-        );
+        const normalizedVariable = `$${prefix}_${variable}`;
+        const expectedDefinition = variable === 'page'
+          ? new RegExp(`\\${normalizedVariable} = isset\\(\\$${variable}\\) \\? \\(int\\) \\$${variable} : 0;`)
+          : new RegExp(`\\${normalizedVariable} = isset\\(\\$${variable}\\) \\? \\$${variable} : '';`);
+        const expectedRender = variable === 'page'
+          ? new RegExp(`name="${variable}" value="<\\?php echo \\(int\\) \\${normalizedVariable}; \\?>"`)
+          : new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\${normalizedVariable}\\); \\?>"`);
+
+        assert.match(source, expectedDefinition, `${file} should normalize ${variable} before rendering`);
+        assert.match(source, expectedRender, `${file} should escape normalized ${variable}`);
         assert.doesNotMatch(
           source,
           new RegExp(`name="${variable}" value="<\\?php echo \\$${variable};? \\?>"`),
           `${file} should not echo raw ${variable}`,
+        );
+        assert.doesNotMatch(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+          `${file} should not render raw ${variable}`,
         );
       }
     }
@@ -2069,15 +2079,27 @@ describe('sungsan theme static contract', () => {
       const source = read(file);
 
       for (const variable of ['sca', 'spt', 'sst', 'sod']) {
+        const normalizedVariable = `$sungsan_write_${variable}`;
+
         assert.match(
           source,
-          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
-          `${file} should escape ${variable}`,
+          new RegExp(`\\${normalizedVariable} = isset\\(\\$${variable}\\) \\? \\$${variable} : '';`),
+          `${file} should normalize ${variable} before rendering`,
+        );
+        assert.match(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\${normalizedVariable}\\); \\?>"`),
+          `${file} should escape normalized ${variable}`,
         );
         assert.doesNotMatch(
           source,
           new RegExp(`name="${variable}" value="<\\?php echo \\$${variable};? \\?>"`),
           `${file} should not echo raw ${variable}`,
+        );
+        assert.doesNotMatch(
+          source,
+          new RegExp(`name="${variable}" value="<\\?php echo get_text\\(\\$${variable}\\); \\?>"`),
+          `${file} should not render raw ${variable}`,
         );
       }
     }
@@ -2098,10 +2120,13 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
+      assert.match(source, /\$sungsan_write_mode = isset\(\$w\) \? \$w : '';/, `${file} should normalize write mode`);
       assert.match(source, new RegExp(`\\$${boardId} = isset\\(\\$bo_table\\) \\? \\$bo_table : '${fallbackId}';`), `${file} should default the board id`);
       assert.match(source, /\$sungsan_write_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/, `${file} should normalize wr_id as an integer`);
+      assert.match(source, /name="w" value="<\?php echo get_text\(\$sungsan_write_mode\); \?>"/, `${file} should render the normalized write mode`);
       assert.match(source, new RegExp(`name="bo_table" value="<\\?php echo get_text\\(\\$${boardId}\\); \\?>"`), `${file} should render the normalized board id`);
       assert.match(source, /name="wr_id" value="<\?php echo \(int\) \$sungsan_write_wr_id; \?>"/, `${file} should render the normalized write id`);
+      assert.doesNotMatch(source, /name="w" value="<\?php echo get_text\(\$w\); \?>"/, `${file} should not render raw write mode directly`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should not render raw bo_table directly`);
       assert.doesNotMatch(source, /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/, `${file} should not render raw wr_id directly`);
     }
@@ -2110,12 +2135,18 @@ describe('sungsan theme static contract', () => {
   it('normalizes board password identifiers before rendering hidden form attributes', () => {
     const source = read('src/skin/member/sungsan/password.skin.php');
 
+    assert.match(source, /\$sungsan_password_title = isset\(\$g5\['title'\]\) \? \$g5\['title'\] : '';/);
+    assert.match(source, /\$sungsan_password_mode = isset\(\$w\) \? \$w : '';/);
     assert.match(source, /\$sungsan_password_board_id = isset\(\$bo_table\) \? \$bo_table : '';/);
     assert.match(source, /\$sungsan_password_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/);
     assert.match(source, /\$sungsan_password_comment_id = isset\(\$comment_id\) \? \(int\) \$comment_id : 0;/);
+    assert.match(source, /name="w" value="<\?php echo get_text\(\$sungsan_password_mode\); \?>"/);
     assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$sungsan_password_board_id\); \?>"/);
     assert.match(source, /name="wr_id" value="<\?php echo \(int\) \$sungsan_password_wr_id; \?>"/);
     assert.match(source, /name="comment_id" value="<\?php echo \(int\) \$sungsan_password_comment_id; \?>"/);
+    assert.match(source, /else \$g5\['title'\] = \$sungsan_password_title;/);
+    assert.doesNotMatch(source, /else \$g5\['title'\] = \$g5\['title'\];/);
+    assert.doesNotMatch(source, /name="w" value="<\?php echo get_text\(\$w\); \?>"/);
     assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/);
     assert.doesNotMatch(source, /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/);
     assert.doesNotMatch(source, /name="comment_id" value="<\?php echo get_text\(\$comment_id\); \?>"/);
@@ -2128,16 +2159,19 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
-      assert.match(source, /action="<\?php echo get_text\(\$action_url\); \?>"/, `${file} should escape action_url`);
-      assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$subject\); \?>"/, `${file} should escape subject`);
-      assert.match(source, /<textarea id="wr_content" name="wr_content" required[\s\S]*?>\s*<\?php echo get_text\(\$content\); \?><\/textarea>/, `${file} should escape content`);
+      assert.match(source, /\$sungsan_write_action_url = isset\(\$action_url\) \? \$action_url : '';/, `${file} should normalize action_url`);
+      assert.match(source, /\$sungsan_write_subject = isset\(\$subject\) \? \$subject : '';/, `${file} should normalize subject`);
+      assert.match(source, /\$sungsan_write_content = isset\(\$content\) \? \$content : '';/, `${file} should normalize content`);
+      assert.match(source, /action="<\?php echo get_text\(\$sungsan_write_action_url\); \?>"/, `${file} should escape normalized action_url`);
+      assert.match(source, /id="wr_subject" name="wr_subject" value="<\?php echo get_text\(\$sungsan_write_subject\); \?>"/, `${file} should escape normalized subject`);
+      assert.match(source, /<textarea id="wr_content" name="wr_content" required[\s\S]*?>\s*<\?php echo get_text\(\$sungsan_write_content\); \?><\/textarea>/, `${file} should escape normalized content`);
       assert.match(source, /href="<\?php echo get_text\(\$sungsan_cancel_url\); \?>"/, `${file} should escape cancel url`);
       assert.match(source, /\$sungsan_write_file = isset\(\$file\[\$i\]\) \? \$file\[\$i\] : array\(\);/, `${file} should normalize existing file rows`);
       assert.match(source, /\$sungsan_write_file_exists = isset\(\$sungsan_write_file\['file'\]\) \? \$sungsan_write_file\['file'\] : '';/, `${file} should normalize existing file state`);
       assert.match(source, /\$sungsan_write_file_source = isset\(\$sungsan_write_file\['source'\]\) \? \$sungsan_write_file\['source'\] : '';/, `${file} should normalize existing file label`);
       assert.match(source, /\$sungsan_write_file_size = isset\(\$sungsan_write_file\['size'\]\) \? \$sungsan_write_file\['size'\] : '';/, `${file} should normalize existing file size`);
       assert.match(source, /\$sungsan_write_file_delete_id = 'bf_file_del_'\.\$i;/, `${file} should create a stable delete checkbox id`);
-      assert.match(source, /if \(\$w === 'u' && \$sungsan_write_file_exists !== ''\)/, `${file} should test normalized file state`);
+      assert.match(source, /if \(\$sungsan_write_mode === 'u' && \$sungsan_write_file_exists !== ''\)/, `${file} should test normalized file state`);
       assert.match(source, /<div class="ss-existing-file">/, `${file} should render existing attachments as a distinct state`);
       assert.match(source, /<strong>현재 첨부<\/strong>/, `${file} should label the current attachment before delete controls`);
       assert.match(source, /get_text\(\$sungsan_write_file_source\)/, `${file} should escape normalized existing file label`);
@@ -2147,9 +2181,13 @@ describe('sungsan theme static contract', () => {
       assert.match(source, /이 파일 삭제/, `${file} should make the delete action explicit`);
 
       assert.doesNotMatch(source, /action="<\?php echo \$action_url/);
+      assert.doesNotMatch(source, /action="<\?php echo get_text\(\$action_url\); \?>"/);
       assert.doesNotMatch(source, /value="<\?php echo \$subject/);
+      assert.doesNotMatch(source, /value="<\?php echo get_text\(\$subject\); \?>"/);
       assert.doesNotMatch(source, /<textarea id="wr_content" name="wr_content" required><\?php echo \$content/);
+      assert.doesNotMatch(source, /get_text\(\$content\)/);
       assert.doesNotMatch(source, /href="<\?php echo \$sungsan_cancel_url/);
+      assert.doesNotMatch(source, /\$w === 'u'/);
       assert.doesNotMatch(source, /isset\(\$file\[\$i\]\['file'\]\)/);
       assert.doesNotMatch(source, /get_text\(\$file\[\$i\]\['source'\]\)/);
     }
@@ -2184,7 +2222,12 @@ describe('sungsan theme static contract', () => {
 
       assert.match(
         source,
-        /\$sungsan_cancel_url = \(\$w === 'u' && !empty\(\$wr_id\)\) \? get_pretty_url\(\$bo_table, \$wr_id\) : \$list_href;/,
+        /\$sungsan_write_list_href = isset\(\$list_href\) \? \$list_href : get_pretty_url\(\$sungsan_write_board_id\);/,
+        `${file} should default the list cancellation target`,
+      );
+      assert.match(
+        source,
+        /\$sungsan_cancel_url = \(\$sungsan_write_mode === 'u' && \$sungsan_write_wr_id > 0\) \? get_pretty_url\(\$sungsan_write_board_id, \$sungsan_write_wr_id\) : \$sungsan_write_list_href;/,
         `${file} should return edit cancellations to the current post`,
       );
       assert.match(
