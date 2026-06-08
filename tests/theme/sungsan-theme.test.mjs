@@ -104,7 +104,8 @@ describe('sungsan theme static contract', () => {
       mypage,
       /비밀번호 변경과 회원 탈퇴는 모두 본인 확인 후 진행됩니다\./,
     );
-    assert.match(confirm, /\$url == 'member_leave\.php'/);
+    assert.match(confirm, /\$member_confirm_is_leave = \$member_confirm_action_url === 'member_leave\.php';/);
+    assert.match(confirm, /<\?php if \(\$member_confirm_is_leave\) \{ \?>/);
     assert.match(confirm, /비밀번호를 입력하시면 회원탈퇴가 완료됩니다\./);
   });
 
@@ -894,13 +895,18 @@ describe('sungsan theme static contract', () => {
   it('escapes member confirmation form values before rendering the password confirmation screen', () => {
     const source = read('src/skin/member/sungsan/member_confirm.skin.php');
 
+    assert.match(source, /\$member_confirm_raw_url = isset\(\$url\) \? trim\(\(string\) \$url\) : '';/);
+    assert.ok(source.includes("$member_confirm_action_url = preg_match('/^\\/?\\w[\\w\\.\\/-]*$/', $member_confirm_raw_url) ? $member_confirm_raw_url : 'register_form.php';"));
+    assert.match(source, /\$member_confirm_is_leave = \$member_confirm_action_url === 'member_leave\.php';/);
     assert.match(source, /<h1><\?php echo get_text\(\$g5\['title'\]\); \?><\/h1>/);
-    assert.match(source, /action="<\?php echo get_text\(\$url\); \?>"/);
+    assert.match(source, /action="<\?php echo get_text\(\$member_confirm_action_url\); \?>"/);
     assert.match(source, /\$member_confirm_mb_id = isset\(\$member\['mb_id'\]\) \? \$member\['mb_id'\] : '';/);
     assert.match(source, /name="mb_id" value="<\?php echo get_text\(\$member_confirm_mb_id\); \?>"/);
     assert.match(source, /id="mb_confirm_id"><\?php echo get_text\(\$member_confirm_mb_id\); \?><\/span>/);
     assert.doesNotMatch(source, /echo\s+\$g5\['title'\]/);
     assert.doesNotMatch(source, /echo\s+\$url(?:\s|\?>)/);
+    assert.doesNotMatch(source, /action="<\?php echo get_text\(\$url\); \?>"/);
+    assert.doesNotMatch(source, /\$url == 'member_leave\.php'/);
     assert.doesNotMatch(source, /get_text\(\$member\['mb_id'\]\)/);
   });
 

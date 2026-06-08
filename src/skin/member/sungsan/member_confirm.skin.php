@@ -5,6 +5,9 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $member_confirm_mb_id = isset($member['mb_id']) ? $member['mb_id'] : '';
+$member_confirm_raw_url = isset($url) ? trim((string) $url) : '';
+$member_confirm_action_url = preg_match('/^\/?\w[\w\.\/-]*$/', $member_confirm_raw_url) ? $member_confirm_raw_url : 'register_form.php';
+$member_confirm_is_leave = $member_confirm_action_url === 'member_leave.php';
 ?>
 
 <!-- 회원 비밀번호 확인 시작 { -->
@@ -13,14 +16,14 @@ $member_confirm_mb_id = isset($member['mb_id']) ? $member['mb_id'] : '';
 
     <p id="member_confirm_help">
         <strong>비밀번호를 한번 더 입력해주세요.</strong>
-        <?php if ($url == 'member_leave.php') { ?>
+        <?php if ($member_confirm_is_leave) { ?>
         비밀번호를 입력하시면 회원탈퇴가 완료됩니다.
         <?php }else{ ?>
         회원님의 정보를 안전하게 보호하기 위해 비밀번호를 한번 더 확인합니다.
         <?php }  ?>
     </p>
 
-    <form name="fmemberconfirm" action="<?php echo get_text($url); ?>" onsubmit="return fmemberconfirm_submit(this);" method="post">
+    <form name="fmemberconfirm" action="<?php echo get_text($member_confirm_action_url); ?>" onsubmit="return fmemberconfirm_submit(this);" method="post">
     <input type="hidden" name="mb_id" value="<?php echo get_text($member_confirm_mb_id); ?>">
     <input type="hidden" name="w" value="u">
 
