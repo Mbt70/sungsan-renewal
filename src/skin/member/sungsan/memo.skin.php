@@ -2,6 +2,10 @@
 if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 
 $memo_retention_days = isset($config['cf_memo_del']) ? (int) $config['cf_memo_del'] : 0;
+$memo_current_kind = (isset($kind) && $kind === 'send') ? 'send' : 'recv';
+$memo_kind_title = isset($kind_title) ? $kind_title : ($memo_current_kind === 'send' ? '보낸' : '받은');
+$memo_total_count = isset($total_count) ? (int) $total_count : 0;
+$memo_write_pages = isset($write_pages) ? $write_pages : '';
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -11,12 +15,12 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <div id="memo_list" class="new_win">
     <h1 id="win_title">
         <?php echo get_text($g5['title']); ?>
-        <div class="win_total">전체 <?php echo get_text($kind_title); ?>쪽지 <?php echo number_format((int) $total_count); ?>통<br></div>
+        <div class="win_total">전체 <?php echo get_text($memo_kind_title); ?>쪽지 <?php echo number_format($memo_total_count); ?>통<br></div>
     </h1>
     <div class="new_win_con2">
         <ul class="win_ul">
-            <li class="<?php if ($kind == 'recv') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=recv">받은쪽지</a></li>
-            <li class="<?php if ($kind == 'send') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=send">보낸쪽지</a></li>
+            <li class="<?php if ($memo_current_kind == 'recv') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=recv">받은쪽지</a></li>
+            <li class="<?php if ($memo_current_kind == 'send') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=send">보낸쪽지</a></li>
             <li><a href="./memo_form.php">쪽지쓰기</a></li>
         </ul>
         
@@ -55,7 +59,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         </div>
 
         <!-- 페이지 -->
-        <?php echo $write_pages; ?>
+        <?php if ($memo_write_pages !== '') { echo $memo_write_pages; } ?>
 
         <p class="win_desc"><i class="fa fa-info-circle" aria-hidden="true"></i> 쪽지 보관일수는 최장 <strong><?php echo number_format($memo_retention_days); ?></strong>일 입니다.
         </p>

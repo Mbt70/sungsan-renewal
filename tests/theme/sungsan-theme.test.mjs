@@ -1080,6 +1080,24 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_text\(\$content\)/);
   });
 
+  it('normalizes memo list kind count and pagination before rendering', () => {
+    const source = read('src/skin/member/sungsan/memo.skin.php');
+
+    assert.match(source, /\$memo_current_kind = \(isset\(\$kind\) && \$kind === 'send'\) \? 'send' : 'recv';/);
+    assert.match(source, /\$memo_kind_title = isset\(\$kind_title\) \? \$kind_title : \(\$memo_current_kind === 'send' \? '보낸' : '받은'\);/);
+    assert.match(source, /\$memo_total_count = isset\(\$total_count\) \? \(int\) \$total_count : 0;/);
+    assert.match(source, /\$memo_write_pages = isset\(\$write_pages\) \? \$write_pages : '';/);
+    assert.match(source, /전체 <\?php echo get_text\(\$memo_kind_title\); \?>쪽지 <\?php echo number_format\(\$memo_total_count\); \?>통/);
+    assert.match(source, /<li class="<\?php if \(\$memo_current_kind == 'recv'\) \{  \?>selected<\?php \}  \?>"/);
+    assert.match(source, /<li class="<\?php if \(\$memo_current_kind == 'send'\) \{  \?>selected<\?php \}  \?>"/);
+    assert.match(source, /<\?php if \(\$memo_write_pages !== ''\) \{ echo \$memo_write_pages; \} \?>/);
+    assert.doesNotMatch(source, /get_text\(\$kind_title\)/);
+    assert.doesNotMatch(source, /number_format\(\(int\) \$total_count\)/);
+    assert.doesNotMatch(source, /if \(\$kind == 'recv'\)/);
+    assert.doesNotMatch(source, /if \(\$kind == 'send'\)/);
+    assert.doesNotMatch(source, /echo \$write_pages/);
+  });
+
   it('normalizes memo detail navigation before rendering', () => {
     const source = read('src/skin/member/sungsan/memo_view.skin.php');
 
@@ -1130,8 +1148,12 @@ describe('sungsan theme static contract', () => {
         file: 'src/skin/member/sungsan/memo.skin.php',
         expected: [
           /<\?php echo get_text\(\$g5\['title'\]\); \?>/,
-          /<\?php echo get_text\(\$kind_title\); \?>/,
-          /<\?php echo number_format\(\(int\) \$total_count\); \?>/,
+          /\$memo_current_kind = \(isset\(\$kind\) && \$kind === 'send'\) \? 'send' : 'recv';/,
+          /\$memo_kind_title = isset\(\$kind_title\) \? \$kind_title : \(\$memo_current_kind === 'send' \? '보낸' : '받은'\);/,
+          /\$memo_total_count = isset\(\$total_count\) \? \(int\) \$total_count : 0;/,
+          /\$memo_write_pages = isset\(\$write_pages\) \? \$write_pages : '';/,
+          /<\?php echo get_text\(\$memo_kind_title\); \?>/,
+          /<\?php echo number_format\(\$memo_total_count\); \?>/,
           /\$memo_row = isset\(\$list\[\$i\]\) \? \$list\[\$i\] : array\(\);/,
           /\$memo_read_datetime = isset\(\$memo_row\['me_read_datetime'\]\) \? \$memo_row\['me_read_datetime'\] : '';/,
           /\$memo_body = isset\(\$memo_row\['me_memo'\]\) \? \$memo_row\['me_memo'\] : '';/,
@@ -1152,7 +1174,12 @@ describe('sungsan theme static contract', () => {
         forbidden: [
           /echo \$g5\['title'\]/,
           /echo \$kind_title/,
+          /get_text\(\$kind_title\)/,
           /echo \$total_count/,
+          /number_format\(\(int\) \$total_count\)/,
+          /if \(\$kind == 'recv'\)/,
+          /if \(\$kind == 'send'\)/,
+          /echo \$write_pages/,
           /substr\(\$list\[\$i\]\['me_read_datetime'\]/,
           /strip_tags\(\$list\[\$i\]\['me_memo'\]\)/,
           /get_member_profile_img\(\$list\[\$i\]\['mb_id'\]\)/,
