@@ -1633,6 +1633,20 @@ describe('sungsan theme static contract', () => {
     assert.match(paginationBlock[1], /min-height:\s*44px;/);
   });
 
+  it('keeps scannable badges and required markers readable for older members', () => {
+    const scss = read('src/scss/main.scss');
+    const css = read('src/theme/sungsan/css/sungsan.css');
+
+    for (const selector of ['ss-badge', 'ss-pin-label', 'ss-access-label', 'ss-required']) {
+      const scssBlock = scss.match(new RegExp(`\\.${selector}\\s*\\{([^}]*)\\}`));
+
+      assert.ok(scssBlock, `${selector} should be styled`);
+      assert.match(scssBlock[1], /font-size:\s*0\.94rem;/, `${selector} should stay readable in source CSS`);
+      assert.match(css, new RegExp(`\\.${selector}\\{[^}]*font-size:0\\.94rem`), `${selector} should stay readable in generated CSS`);
+      assert.doesNotMatch(css, new RegExp(`\\.${selector}\\{[^}]*font-size:0\\.88rem`), `${selector} should not regress to tiny generated text`);
+    }
+  });
+
   it('styles board list search labels without changing the compact header search', () => {
     const css = read('src/scss/main.scss');
 
