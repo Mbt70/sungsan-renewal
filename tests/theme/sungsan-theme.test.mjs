@@ -784,10 +784,10 @@ describe('sungsan theme static contract', () => {
   it('escapes public member profile fields before rendering the profile popup', () => {
     const source = read('src/skin/member/sungsan/profile.skin.php');
 
-    assert.match(source, /get_text\(\$mb_nick\)/);
+    assert.match(source, /get_text\(\$profile_member_nick_text\)/);
     assert.match(source, /get_text\(\$profile_homepage_text\)/);
     assert.match(source, /get_text\(\$profile_homepage_url\)/);
-    assert.match(source, /get_text\(\$mb_profile\)/);
+    assert.match(source, /get_text\(\$profile_member_intro_text\)/);
     assert.match(source, /\$profile_member_id = isset\(\$mb\['mb_id'\]\) \? \$mb\['mb_id'\] : '';/);
     assert.match(source, /\$profile_member_level = isset\(\$mb\['mb_level'\]\) \? \(int\) \$mb\['mb_level'\] : 0;/);
     assert.match(source, /\$profile_member_point = isset\(\$mb\['mb_point'\]\) \? \(int\) \$mb\['mb_point'\] : 0;/);
@@ -805,11 +805,25 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_join_date\)/);
     assert.doesNotMatch(source, /\$profile_can_view_activity_dates \? get_text\(\$profile_member_today_login\)/);
     assert.doesNotMatch(source, /echo \$mb_nick/);
+    assert.doesNotMatch(source, /get_text\(\$mb_nick\)/);
     assert.doesNotMatch(source, /echo \$mb_homepage/);
     assert.doesNotMatch(source, /get_text\(\$mb_homepage\)/);
     assert.doesNotMatch(source, /echo \$mb_profile/);
+    assert.doesNotMatch(source, /get_text\(\$mb_profile\)/);
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
     assert.doesNotMatch(source, /get_member_profile_img\(\$mb\['mb_id'\]\)/);
+  });
+
+  it('normalizes profile nickname and intro text before rendering the profile popup', () => {
+    const source = read('src/skin/member/sungsan/profile.skin.php');
+
+    assert.match(source, /\$profile_member_nick_text = isset\(\$mb_nick\) \? \$mb_nick : \(isset\(\$mb\['mb_nick'\]\) \? \$mb\['mb_nick'\] : ''\);/);
+    assert.match(source, /\$profile_member_intro_text = isset\(\$mb_profile\) \? \$mb_profile : \(isset\(\$mb\['mb_profile'\]\) \? \$mb\['mb_profile'\] : ''\);/);
+    assert.match(source, /<h1 id="win_title"><\?php echo get_text\(\$profile_member_nick_text\); \?>님의 프로필<\/h1>/);
+    assert.match(source, /<\?php echo get_text\(\$profile_member_nick_text\); \?>\s*<\/div>/);
+    assert.match(source, /<p><\?php echo get_text\(\$profile_member_intro_text\); \?><\/p>/);
+    assert.doesNotMatch(source, /get_text\(\$mb_nick\)/);
+    assert.doesNotMatch(source, /get_text\(\$mb_profile\)/);
   });
 
   it('limits profile homepage links to http and https URLs', () => {

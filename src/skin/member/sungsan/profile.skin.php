@@ -5,6 +5,8 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
 
 $profile_member_id = isset($mb['mb_id']) ? $mb['mb_id'] : '';
+$profile_member_nick_text = isset($mb_nick) ? $mb_nick : (isset($mb['mb_nick']) ? $mb['mb_nick'] : '');
+$profile_member_intro_text = isset($mb_profile) ? $mb_profile : (isset($mb['mb_profile']) ? $mb['mb_profile'] : '');
 $profile_member_level = isset($mb['mb_level']) ? (int) $mb['mb_level'] : 0;
 $profile_member_point = isset($mb['mb_point']) ? (int) $mb['mb_point'] : 0;
 $profile_viewer_level = isset($member['mb_level']) ? (int) $member['mb_level'] : 0;
@@ -27,12 +29,12 @@ if ($profile_homepage_raw !== '') {
 
 <!-- 자기소개 시작 { -->
 <div id="profile" class="new_win">
-    <h1 id="win_title"><?php echo get_text($mb_nick); ?>님의 프로필</h1>
+    <h1 id="win_title"><?php echo get_text($profile_member_nick_text); ?>님의 프로필</h1>
     <div class="profile_name">
         <span class="my_profile_img">
             <?php echo get_member_profile_img($profile_member_id); ?>
         </span>
-        <?php echo get_text($mb_nick); ?>
+        <?php echo get_text($profile_member_nick_text); ?>
     </div>
     <div class="tbl_head02 tbl_wrap new_win_con">
         <table>
@@ -75,7 +77,7 @@ if ($profile_homepage_raw !== '') {
 
         <section>
             <h2>인사말</h2>
-            <p><?php echo get_text($mb_profile); ?></p>
+            <p><?php echo get_text($profile_member_intro_text); ?></p>
         </section>
     </div>
     <div class="win_btn">
