@@ -2366,6 +2366,19 @@ describe('sungsan theme static contract', () => {
     assert.match(list, /get_text\(\$sungsan_free_post_writer\)[\s\S]*?<span class="ss-access-label">회원 열람<\/span>/);
   });
 
+  it('keeps guest free-board rows title-only until login', () => {
+    const list = read('src/skin/board/sungsan_free/list.skin.php');
+
+    assert.match(
+      list,
+      /<div class="ss-meta">\s*<\?php if \(\$is_member\) \{ \?>[\s\S]*?get_text\(\$sungsan_free_post_writer\)[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>">[\s\S]*?number_format\(\$sungsan_free_post_hits\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} \?>\s*<\/div>/,
+    );
+    assert.doesNotMatch(
+      list,
+      /<div class="ss-meta">\s*<span>\s*<\?php echo get_text\(\$sungsan_free_post_writer\); \?>\s*<\/span>/,
+    );
+  });
+
   it('sends guest free-board row clicks to login with the post as return target', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 

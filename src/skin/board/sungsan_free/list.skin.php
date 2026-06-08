@@ -41,10 +41,14 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             <a class="ss-post-row<?php echo $is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_free_post_subject); ?></p>
                 <div class="ss-meta">
-                    <span><?php echo get_text($sungsan_free_post_writer); ?></span>
-                    <span class="ss-access-label">회원 열람</span>
-                    <time datetime="<?php echo get_text($sungsan_free_post_datetime); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>
-                    <span>조회 <?php echo number_format($sungsan_free_post_hits); ?></span>
+                    <?php if ($is_member) { ?>
+                        <span><?php echo get_text($sungsan_free_post_writer); ?></span>
+                        <span class="ss-access-label">회원 열람</span>
+                        <time datetime="<?php echo get_text($sungsan_free_post_datetime); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>
+                        <span>조회 <?php echo number_format($sungsan_free_post_hits); ?></span>
+                    <?php } else { ?>
+                        <span class="ss-access-label">회원 전용 글입니다. 로그인하면 작성자와 날짜를 볼 수 있습니다.</span>
+                    <?php } ?>
                 </div>
             </a>
         <?php } ?>
