@@ -44,7 +44,7 @@
 .ss-login-note,
 .ss-login-links p {
   margin: 0;
-  color: var(--ss-color-muted, #58616f);
+  color: var(--ss-color-text-muted, #464c53);
 }
 
 .ss-login-links {
@@ -93,7 +93,7 @@
 #pw_confirm fieldset > label:not(.sound_only) strong,
 .form_01 li > label:not(.sound_only) strong,
 .form_01 li > .frm_label strong {
-  color: var(--ss-color-danger, #b42318);
+  color: var(--ss-color-error, #d92d20);
   font-size: 0.95em;
 }
 

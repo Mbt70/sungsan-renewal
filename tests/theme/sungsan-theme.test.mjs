@@ -1561,6 +1561,15 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /min-height:\s*180px/);
   });
 
+  it('uses defined Sungsan theme tokens in member skin CSS', () => {
+    const css = read('src/skin/member/sungsan/style.css');
+
+    assert.match(css, /var\(--ss-color-text-muted,\s*#464c53\)/);
+    assert.match(css, /var\(--ss-color-error,\s*#d92d20\)/);
+    assert.doesNotMatch(css, /--ss-color-muted/);
+    assert.doesNotMatch(css, /--ss-color-danger/);
+  });
+
   it('keeps static label targets connected to fields in custom PHP templates', () => {
     for (const file of phpFilesUnder('src')) {
       const source = read(file);
