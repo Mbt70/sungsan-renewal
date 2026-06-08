@@ -5,18 +5,23 @@ if (!defined('_GNUBOARD_')) {
 
 global $is_member;
 
+$sungsan_free_board_id = isset($bo_table) ? $bo_table : 'free';
+$sungsan_free_board_subject = isset($board['bo_subject']) ? $board['bo_subject'] : '자유게시판';
+$sungsan_free_write_href = isset($write_href) ? $write_href : '';
+$sungsan_free_write_pages = isset($write_pages) ? $write_pages : '';
+$sungsan_free_rows = (isset($list) && is_array($list)) ? $list : array();
 $sungsan_free_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
 $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
 ?>
 <section class="ss-section">
     <div class="ss-container">
         <div class="ss-section-header">
-            <h1 class="ss-section-title"><?php echo get_text($board['bo_subject']); ?></h1>
-            <?php if ($write_href) { ?><a class="ss-button" href="<?php echo get_text($write_href); ?>">글쓰기</a><?php } ?>
+            <h1 class="ss-section-title"><?php echo get_text($sungsan_free_board_subject); ?></h1>
+            <?php if ($sungsan_free_write_href !== '') { ?><a class="ss-button" href="<?php echo get_text($sungsan_free_write_href); ?>">글쓰기</a><?php } ?>
         </div>
 
         <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($sungsan_free_search_action); ?>">
-            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_free_board_id); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
             <label for="free_board_stx">제목과 내용 검색어</label>
@@ -27,9 +32,9 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
         </form>
 
         <div class="ss-post-list">
-        <?php for ($i = 0; $i < count($list); $i++) { ?>
+        <?php for ($i = 0; $i < count($sungsan_free_rows); $i++) { ?>
             <?php
-            $sungsan_free_row = $list[$i];
+            $sungsan_free_row = $sungsan_free_rows[$i];
             $sungsan_free_post_href = isset($sungsan_free_row['href']) ? $sungsan_free_row['href'] : '#';
             $sungsan_free_post_subject = isset($sungsan_free_row['subject']) ? $sungsan_free_row['subject'] : '';
             $sungsan_free_post_writer = isset($sungsan_free_row['wr_name']) ? $sungsan_free_row['wr_name'] : '';
@@ -52,8 +57,8 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
                 </div>
             </a>
         <?php } ?>
-        <?php if (count($list) === 0) { ?><div class="ss-post-row"><p class="ss-post-title">등록된 글이 없습니다.</p></div><?php } ?>
+        <?php if (count($sungsan_free_rows) === 0) { ?><div class="ss-post-row"><p class="ss-post-title">등록된 글이 없습니다.</p></div><?php } ?>
         </div>
-        <?php if ($write_pages) { ?><nav class="ss-pagination" aria-label="페이지 이동"><?php echo $write_pages; ?></nav><?php } ?>
+        <?php if ($sungsan_free_write_pages !== '') { ?><nav class="ss-pagination" aria-label="페이지 이동"><?php echo $sungsan_free_write_pages; ?></nav><?php } ?>
     </div>
 </section>

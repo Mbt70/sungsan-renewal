@@ -5,11 +5,16 @@ if (!defined('_GNUBOARD_')) {
 
 global $is_admin, $is_member;
 
+$sungsan_news_board_id = isset($bo_table) ? $bo_table : 'news';
+$sungsan_news_board_subject = isset($board['bo_subject']) ? $board['bo_subject'] : '소식';
+$sungsan_news_write_href = isset($write_href) ? $write_href : '';
+$sungsan_news_write_pages = isset($write_pages) ? $write_pages : '';
+$sungsan_news_rows = (isset($list) && is_array($list)) ? $list : array();
 $current_category = isset($sca) ? $sca : '';
 $sungsan_news_search_action = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : '';
 $sungsan_news_search_term = isset($stx) ? stripslashes($stx) : '';
 $visible_count = 0;
-$sungsan_news_board_param = urlencode($bo_table);
+$sungsan_news_board_param = urlencode($sungsan_news_board_id);
 $sungsan_news_search_query = '';
 if ($sungsan_news_search_term !== '') {
     $sungsan_news_search_query = '&sfl=wr_subject%7C%7Cwr_content&sop=and&stx='.urlencode($sungsan_news_search_term);
@@ -20,9 +25,9 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
 <section class="ss-section">
     <div class="ss-container">
         <div class="ss-section-header">
-            <h1 class="ss-section-title"><?php echo get_text($board['bo_subject']); ?></h1>
-            <?php if ($write_href) { ?>
-                <a class="ss-button" href="<?php echo get_text($write_href); ?>">글쓰기</a>
+            <h1 class="ss-section-title"><?php echo get_text($sungsan_news_board_subject); ?></h1>
+            <?php if ($sungsan_news_write_href !== '') { ?>
+                <a class="ss-button" href="<?php echo get_text($sungsan_news_write_href); ?>">글쓰기</a>
             <?php } ?>
         </div>
 
@@ -35,7 +40,7 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
         </div>
 
         <form class="ss-search-form ss-board-search" method="get" action="<?php echo get_text($sungsan_news_search_action); ?>">
-            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_news_board_id); ?>">
             <input type="hidden" name="sca" value="<?php echo get_text($current_category); ?>">
             <input type="hidden" name="sop" value="and">
             <input type="hidden" name="sfl" value="wr_subject||wr_content">
@@ -47,9 +52,9 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
         </form>
 
         <div class="ss-post-list">
-        <?php for ($i = 0; $i < count($list); $i++) { ?>
+        <?php for ($i = 0; $i < count($sungsan_news_rows); $i++) { ?>
             <?php
-            $sungsan_news_row = $list[$i];
+            $sungsan_news_row = $sungsan_news_rows[$i];
 
             if (sungsan_is_review_restricted($sungsan_news_row) && !$is_admin) {
                 continue;
@@ -88,8 +93,8 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
         <?php } ?>
         </div>
 
-        <?php if ($write_pages) { ?>
-            <nav class="ss-pagination" aria-label="페이지 이동"><?php echo $write_pages; ?></nav>
+        <?php if ($sungsan_news_write_pages !== '') { ?>
+            <nav class="ss-pagination" aria-label="페이지 이동"><?php echo $sungsan_news_write_pages; ?></nav>
         <?php } ?>
     </div>
 </section>

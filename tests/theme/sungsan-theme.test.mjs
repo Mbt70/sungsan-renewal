@@ -409,9 +409,10 @@ describe('sungsan theme static contract', () => {
   it('URL-encodes news board ids before building category filter links', () => {
     const source = read('src/skin/board/sungsan_news/list.skin.php');
 
-    assert.match(source, /\$sungsan_news_board_param = urlencode\(\$bo_table\);/);
+    assert.match(source, /\$sungsan_news_board_param = urlencode\(\$sungsan_news_board_id\);/);
     assert.match(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param.\$sungsan_news_search_query;/);
     assert.match(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\).\$sungsan_news_search_query;/);
+    assert.doesNotMatch(source, /\$sungsan_news_board_param = urlencode\(\$bo_table\);/);
     assert.doesNotMatch(source, /\$sungsan_news_list_url = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table;/);
     assert.doesNotMatch(source, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='\.\$bo_table/);
   });
@@ -1962,15 +1963,17 @@ describe('sungsan theme static contract', () => {
         file: 'src/skin/board/sungsan_news/list.skin.php',
         actionVariable: 'sungsan_news_search_action',
         termVariable: 'sungsan_news_search_term',
+        boardVariable: 'sungsan_news_board_id',
       },
       {
         file: 'src/skin/board/sungsan_free/list.skin.php',
         actionVariable: 'sungsan_free_search_action',
         termVariable: 'sungsan_free_search_term',
+        boardVariable: 'sungsan_free_board_id',
       },
     ];
 
-    for (const { file, actionVariable, termVariable } of cases) {
+    for (const { file, actionVariable, termVariable, boardVariable } of cases) {
       const source = read(file);
 
       assert.match(
@@ -1988,10 +1991,11 @@ describe('sungsan theme static contract', () => {
         new RegExp(`action="<\\?php echo get_text\\(\\$${actionVariable}\\); \\?>"`),
         `${file} should escape normalized form action`,
       );
-      assert.match(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should escape bo_table`);
+      assert.match(source, new RegExp(`name="bo_table" value="<\\?php echo get_text\\(\\$${boardVariable}\\); \\?>"`), `${file} should escape bo_table`);
       assert.match(source, new RegExp(`<input[^\\n]+name="stx"[^\\n]+value="<\\?php echo get_text\\(\\$${termVariable}\\); \\?>"`), `${file} should escape normalized stx`);
       assert.doesNotMatch(source, /action="<\?php echo get_text\(\$_SERVER\['SCRIPT_NAME'\]\); \?>"/, `${file} should not render superglobal directly`);
       assert.doesNotMatch(source, /action="<\?php echo \$_SERVER\['SCRIPT_NAME'\]; \?>"/, `${file} should not echo raw form action`);
+      assert.doesNotMatch(source, /name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>"/, `${file} should not render raw bo_table variable`);
       assert.doesNotMatch(source, /name="bo_table" value="<\?php echo \$bo_table; \?>"/, `${file} should not echo raw bo_table`);
       assert.doesNotMatch(source, /get_text\(stripslashes\(\$stx\)\)/, `${file} should not normalize stx inline while rendering`);
       assert.doesNotMatch(source, /echo\s+stripslashes\(\$stx\)/, `${file} should not echo raw stx`);
@@ -2127,8 +2131,8 @@ describe('sungsan theme static contract', () => {
   it('escapes board list and view links and text metadata before rendering posts', () => {
     const freeList = read('src/skin/board/sungsan_free/list.skin.php');
 
-    assert.match(freeList, /href="<\?php echo get_text\(\$write_href\); \?>"/);
-    assert.match(freeList, /\$sungsan_free_row = \$list\[\$i\];/);
+    assert.match(freeList, /href="<\?php echo get_text\(\$sungsan_free_write_href\); \?>"/);
+    assert.match(freeList, /\$sungsan_free_row = \$sungsan_free_rows\[\$i\];/);
     assert.match(freeList, /\$sungsan_free_post_href = isset\(\$sungsan_free_row\['href'\]\) \? \$sungsan_free_row\['href'\] : '#';/);
     assert.match(freeList, /\$sungsan_free_post_subject = isset\(\$sungsan_free_row\['subject'\]\) \? \$sungsan_free_row\['subject'\] : '';/);
     assert.match(freeList, /\$sungsan_free_post_writer = isset\(\$sungsan_free_row\['wr_name'\]\) \? \$sungsan_free_row\['wr_name'\] : '';/);
@@ -2141,6 +2145,7 @@ describe('sungsan theme static contract', () => {
     assert.match(freeList, /get_text\(\$sungsan_free_post_date\)/);
     assert.match(freeList, /number_format\(\$sungsan_free_post_hits\)/);
     assert.doesNotMatch(freeList, /href="<\?php echo \$write_href/);
+    assert.doesNotMatch(freeList, /href="<\?php echo get_text\(\$write_href\); \?>"/);
     assert.doesNotMatch(freeList, /href="<\?php echo get_text\(\$list\[\$i\]\['href'\]\); \?>"/);
     assert.doesNotMatch(freeList, /get_text\(\$list\[\$i\]\['subject'\]\)/);
     assert.doesNotMatch(freeList, /get_text\(\$list\[\$i\]\['wr_name'\]\)/);
@@ -2150,7 +2155,7 @@ describe('sungsan theme static contract', () => {
 
     const newsList = read('src/skin/board/sungsan_news/list.skin.php');
 
-    assert.match(newsList, /\$sungsan_news_row = \$list\[\$i\];/);
+    assert.match(newsList, /\$sungsan_news_row = \$sungsan_news_rows\[\$i\];/);
     assert.match(newsList, /\$sungsan_news_post_raw_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
     assert.match(newsList, /\$sungsan_news_post_href = \(!\$is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
     assert.match(newsList, /\$sungsan_news_post_subject = isset\(\$sungsan_news_row\['subject'\]\) \? \$sungsan_news_row\['subject'\] : '';/);
@@ -2171,7 +2176,7 @@ describe('sungsan theme static contract', () => {
     assert.match(newsList, /\$sungsan_category_href = G5_BBS_URL\.'\/board\.php\?bo_table='.\$sungsan_news_board_param\.'&sca='\.urlencode\(\$category\).\$sungsan_news_search_query;/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_news_list_url\); \?>"/);
     assert.match(newsList, /href="<\?php echo get_text\(\$sungsan_category_href\); \?>"/);
-    assert.match(newsList, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$bo_table\); \?>">/);
+    assert.match(newsList, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$sungsan_news_board_id\); \?>">/);
     assert.match(newsList, /<\?php echo get_text\(\$category\); \?><\/a>/);
     assert.doesNotMatch(newsList, /href="<\?php echo G5_BBS_URL; \?>\/board\.php\?bo_table=/);
     assert.doesNotMatch(newsList, /bo_table=<\?php echo \$bo_table; \?>/);
@@ -2224,6 +2229,55 @@ describe('sungsan theme static contract', () => {
     assert.match(newsView, /\$sungsan_view_category = isset\(\$view\['ca_name'\]\) \? \$view\['ca_name'\] : '';/);
     assert.match(newsView, /if \(\$sungsan_view_category !== ''\) \{ \?><span class="ss-badge"><\?php echo get_text\(\$sungsan_view_category\); \?><\/span><\?php \} \?>/);
     assert.doesNotMatch(newsView, /get_text\(\$view\['ca_name'\]\)/);
+  });
+
+  it('normalizes board list chrome values before rendering', () => {
+    const cases = [
+      {
+        file: 'src/skin/board/sungsan_news/list.skin.php',
+        boardId: 'sungsan_news_board_id',
+        subject: 'sungsan_news_board_subject',
+        writeHref: 'sungsan_news_write_href',
+        writePages: 'sungsan_news_write_pages',
+        rows: 'sungsan_news_rows',
+        fallbackId: 'news',
+        fallbackSubject: '소식',
+      },
+      {
+        file: 'src/skin/board/sungsan_free/list.skin.php',
+        boardId: 'sungsan_free_board_id',
+        subject: 'sungsan_free_board_subject',
+        writeHref: 'sungsan_free_write_href',
+        writePages: 'sungsan_free_write_pages',
+        rows: 'sungsan_free_rows',
+        fallbackId: 'free',
+        fallbackSubject: '자유게시판',
+      },
+    ];
+
+    for (const item of cases) {
+      const source = read(item.file);
+
+      assert.match(source, new RegExp(`\\$${item.boardId} = isset\\(\\$bo_table\\) \\? \\$bo_table : '${item.fallbackId}';`));
+      assert.match(source, new RegExp(`\\$${item.subject} = isset\\(\\$board\\['bo_subject'\\]\\) \\? \\$board\\['bo_subject'\\] : '${item.fallbackSubject}';`));
+      assert.match(source, new RegExp(`\\$${item.writeHref} = isset\\(\\$write_href\\) \\? \\$write_href : '';`));
+      assert.match(source, new RegExp(`\\$${item.writePages} = isset\\(\\$write_pages\\) \\? \\$write_pages : '';`));
+      assert.match(source, new RegExp(`\\$${item.rows} = \\(isset\\(\\$list\\) && is_array\\(\\$list\\)\\) \\? \\$list : array\\(\\);`));
+      assert.match(source, new RegExp(`<h1 class="ss-section-title"><\\?php echo get_text\\(\\$${item.subject}\\); \\?></h1>`));
+      assert.match(source, new RegExp(`if \\(\\$${item.writeHref} !== ''\\)`));
+      assert.match(source, new RegExp(`href="<\\?php echo get_text\\(\\$${item.writeHref}\\); \\?>"`));
+      assert.match(source, new RegExp(`count\\(\\$${item.rows}\\)`));
+      assert.match(source, new RegExp(`\\$${item.rows}\\[\\$i\\]`));
+      assert.match(source, new RegExp(`if \\(\\$${item.writePages} !== ''\\)`));
+      assert.match(source, new RegExp(`<nav class="ss-pagination" aria-label="페이지 이동"><\\?php echo \\$${item.writePages}; \\?></nav>`));
+      assert.doesNotMatch(source, /get_text\(\$board\['bo_subject'\]\)/);
+      assert.doesNotMatch(source, /if \(\$write_href\)/);
+      assert.doesNotMatch(source, /href="<\?php echo get_text\(\$write_href\); \?>"/);
+      assert.doesNotMatch(source, /count\(\$list\)/);
+      assert.doesNotMatch(source, /\$list\[\$i\]/);
+      assert.doesNotMatch(source, /if \(\$write_pages\)/);
+      assert.doesNotMatch(source, /echo \$write_pages/);
+    }
   });
 
   it('renders board list and detail dates as semantic time elements', () => {
@@ -2653,7 +2707,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       list,
-      /\$sungsan_news_row = \$list\[\$i\];[\s\S]*?if \(sungsan_is_review_restricted\(\$sungsan_news_row\) && !\$is_admin\) \{\s*continue;\s*\}/,
+      /\$sungsan_news_row = \$sungsan_news_rows\[\$i\];[\s\S]*?if \(sungsan_is_review_restricted\(\$sungsan_news_row\) && !\$is_admin\) \{\s*continue;\s*\}/,
       'news list should only hide operator-review migrated posts',
     );
     assert.match(list, /\$can_read_post = sungsan_can_read_news_post\(\$sungsan_news_row\);/);
