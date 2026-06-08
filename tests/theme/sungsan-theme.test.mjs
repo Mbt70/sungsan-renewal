@@ -2926,7 +2926,7 @@ describe('sungsan theme static contract', () => {
     assert.match(comment, /\$sungsan_comment_content = isset\(\$sungsan_comment_row\['content'\]\) \? \$sungsan_comment_row\['content'\] : '';/);
     assert.match(comment, /echo \$sungsan_comment_content;/);
     assert.match(comment, /get_text\(\$sungsan_comment_author\)/);
-    assert.match(comment, /\$sungsan_comment_reply_href = \$comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=c#bo_vc_w';/);
+    assert.match(comment, /\$sungsan_comment_reply_href = \$sungsan_comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=c#bo_vc_w';/);
     assert.match(comment, /str_replace\('&amp;', '&', \$sungsan_comment_row\['del_link'\]\)/);
     assert.doesNotMatch(comment, /\$comment_common_url\.'&amp;c_id='/);
     assert.doesNotMatch(comment, /count\(\$list\)/);
@@ -2969,13 +2969,23 @@ describe('sungsan theme static contract', () => {
     assert.match(comment, /\$sungsan_comment_count = count\(\$sungsan_comment_rows\);/);
     assert.match(comment, /\$sungsan_comment_board_id = isset\(\$bo_table\) \? \$bo_table : 'free';/);
     assert.match(comment, /\$sungsan_comment_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/);
+    assert.match(comment, /\$sungsan_comment_can_write = !empty\(\$is_comment_write\);/);
+    assert.match(comment, /\$sungsan_comment_action_url = isset\(\$comment_action_url\) \? \$comment_action_url : '';/);
+    assert.match(comment, /\$sungsan_comment_common_url = isset\(\$comment_common_url\) \? \$comment_common_url : '';/);
     assert.match(comment, /\$sungsan_comment_row = \$sungsan_comment_rows\[\$i\];/);
+    assert.match(comment, /\$sungsan_comment_reply_href = \$sungsan_comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=c#bo_vc_w';/);
+    assert.match(comment, /\$sungsan_comment_edit_href = \$sungsan_comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=cu#bo_vc_w';/);
     assert.match(comment, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$sungsan_comment_board_id\); \?>">/);
     assert.match(comment, /<input type="hidden" name="wr_id" value="<\?php echo \(int\) \$sungsan_comment_wr_id; \?>">/);
+    assert.match(comment, /<\?php if \(\$sungsan_comment_can_write\) \{ \?>/);
+    assert.match(comment, /<form name="fviewcomment" id="fviewcomment" action="<\?php echo get_text\(\$sungsan_comment_action_url\); \?>"/);
     assert.doesNotMatch(comment, /\$sungsan_comment_count = count\(\$list\);/);
     assert.doesNotMatch(comment, /\$sungsan_comment_row = \$list\[\$i\];/);
     assert.doesNotMatch(comment, /get_text\(\$bo_table\)/);
     assert.doesNotMatch(comment, /get_text\(\$wr_id\)/);
+    assert.doesNotMatch(comment, /<\?php if \(\$is_comment_write\) \{ \?>/);
+    assert.doesNotMatch(comment, /get_text\(\$comment_action_url\)/);
+    assert.doesNotMatch(comment, /\$comment_common_url\.'&c_id='/);
   });
 
   it('does not override hidden comment placeholders before reply or edit actions', () => {
