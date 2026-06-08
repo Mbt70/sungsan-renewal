@@ -7,6 +7,7 @@ $memo_sender_homepage = isset($mb['mb_homepage']) ? $mb['mb_homepage'] : '';
 $memo_sent_at = isset($memo['me_send_datetime']) ? $memo['me_send_datetime'] : '';
 $memo_body = isset($memo['me_memo']) ? $memo['me_memo'] : '';
 $memo_id = isset($memo['me_id']) ? (int) $memo['me_id'] : 0;
+$memo_reply_href = './memo_form.php?me_recv_mb_id='.urlencode($memo_sender_id).'&amp;me_id='.$memo_id;
 $nick = get_sideview(get_text($memo_sender_id), get_text($memo_sender_nick), get_text($memo_sender_email), get_text($memo_sender_homepage));
 if($kind == "recv") {
     $kind_str = "보낸";
@@ -63,7 +64,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
             </p>
         </article>
 		<div class="win_btn">
-			<?php if ($kind == 'recv') {  ?><a href="./memo_form.php?me_recv_mb_id=<?php echo get_text($memo_sender_id); ?>&amp;me_id=<?php echo $memo_id; ?>" class="reply_btn">답장</a><?php }  ?>
+			<?php if ($kind == 'recv') {  ?><a href="<?php echo get_text($memo_reply_href); ?>" class="reply_btn">답장</a><?php }  ?>
 			<button type="button" onclick="window.close();" class="btn_close">창닫기</button>
     	</div>
     </div>
