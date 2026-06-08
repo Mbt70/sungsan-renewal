@@ -6,6 +6,8 @@ if (!defined('_GNUBOARD_')) {
 global $is_admin, $is_member;
 
 $sungsan_news_board_id = isset($bo_table) ? $bo_table : 'news';
+$sungsan_news_is_admin = !empty($is_admin);
+$sungsan_news_is_member = !empty($is_member);
 $sungsan_news_board_subject = isset($board['bo_subject']) ? $board['bo_subject'] : '소식';
 $sungsan_news_write_href = isset($write_href) ? $write_href : '';
 $sungsan_news_write_pages = isset($write_pages) ? $write_pages : '';
@@ -56,14 +58,14 @@ $sungsan_news_category_options = sungsan_get_news_categories(isset($board) ? $bo
             <?php
             $sungsan_news_row = $sungsan_news_rows[$i];
 
-            if (sungsan_is_review_restricted($sungsan_news_row) && !$is_admin) {
+            if (sungsan_is_review_restricted($sungsan_news_row) && !$sungsan_news_is_admin) {
                 continue;
             }
 
             $visible_count++;
             $can_read_post = sungsan_can_read_news_post($sungsan_news_row);
             $sungsan_news_post_raw_href = isset($sungsan_news_row['href']) ? $sungsan_news_row['href'] : '#';
-            $sungsan_news_post_href = (!$is_member && !$can_read_post) ? sungsan_login_url($sungsan_news_post_raw_href) : $sungsan_news_post_raw_href;
+            $sungsan_news_post_href = (!$sungsan_news_is_member && !$can_read_post) ? sungsan_login_url($sungsan_news_post_raw_href) : $sungsan_news_post_raw_href;
             $sungsan_news_post_subject = isset($sungsan_news_row['subject']) ? $sungsan_news_row['subject'] : '';
             $sungsan_news_post_category = isset($sungsan_news_row['ca_name']) ? $sungsan_news_row['ca_name'] : '';
             $sungsan_news_post_date = isset($sungsan_news_row['datetime2']) ? $sungsan_news_row['datetime2'] : '';

@@ -6,6 +6,7 @@ if (!defined('_GNUBOARD_')) {
 global $is_member;
 
 $sungsan_free_board_id = isset($bo_table) ? $bo_table : 'free';
+$sungsan_free_is_member = !empty($is_member);
 $sungsan_free_board_subject = isset($board['bo_subject']) ? $board['bo_subject'] : '자유게시판';
 $sungsan_free_write_href = isset($write_href) ? $write_href : '';
 $sungsan_free_write_pages = isset($write_pages) ? $write_pages : '';
@@ -41,12 +42,12 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             $sungsan_free_post_date = isset($sungsan_free_row['datetime2']) ? $sungsan_free_row['datetime2'] : '';
             $sungsan_free_post_datetime = isset($sungsan_free_row['datetime']) ? $sungsan_free_row['datetime'] : $sungsan_free_post_date;
             $sungsan_free_post_hits = isset($sungsan_free_row['wr_hit']) ? (int) $sungsan_free_row['wr_hit'] : 0;
-            $sungsan_post_href = $is_member ? $sungsan_free_post_href : sungsan_login_url($sungsan_free_post_href);
+            $sungsan_post_href = $sungsan_free_is_member ? $sungsan_free_post_href : sungsan_login_url($sungsan_free_post_href);
             ?>
-            <a class="ss-post-row<?php echo $is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
+            <a class="ss-post-row<?php echo $sungsan_free_is_member ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_free_post_subject); ?></p>
                 <div class="ss-meta">
-                    <?php if ($is_member) { ?>
+                    <?php if ($sungsan_free_is_member) { ?>
                         <span><?php echo get_text($sungsan_free_post_writer); ?></span>
                         <span class="ss-access-label">회원 열람</span>
                         <time datetime="<?php echo get_text($sungsan_free_post_datetime); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>

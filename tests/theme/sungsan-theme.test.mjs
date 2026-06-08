@@ -298,7 +298,7 @@ describe('sungsan theme static contract', () => {
     assert.match(mypage, /\$sungsan_mypage_login_url = sungsan_login_url\(G5_URL\.'\/sungsan\/mypage\.php'\);/);
     assert.match(newsDownload, /\$sungsan_news_download_login_url = sungsan_login_url\(\$sungsan_news_download_return_url\);/);
     assert.match(newsView, /\$sungsan_login_url = sungsan_login_url\(\$sungsan_request_uri\);/);
-    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
+    assert.match(freeList, /\$sungsan_post_href = \$sungsan_free_is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(freeView, /\$sungsan_free_login_url = sungsan_login_url\(\$sungsan_free_request_uri\);/);
     assert.match(freeDownload, /\$sungsan_free_download_login_url = sungsan_login_url\(\$sungsan_free_download_return_url\);/);
 
@@ -2262,7 +2262,7 @@ describe('sungsan theme static contract', () => {
     assert.match(freeList, /\$sungsan_free_post_writer = isset\(\$sungsan_free_row\['wr_name'\]\) \? \$sungsan_free_row\['wr_name'\] : '';/);
     assert.match(freeList, /\$sungsan_free_post_date = isset\(\$sungsan_free_row\['datetime2'\]\) \? \$sungsan_free_row\['datetime2'\] : '';/);
     assert.match(freeList, /\$sungsan_free_post_hits = isset\(\$sungsan_free_row\['wr_hit'\]\) \? \(int\) \$sungsan_free_row\['wr_hit'\] : 0;/);
-    assert.match(freeList, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
+    assert.match(freeList, /\$sungsan_post_href = \$sungsan_free_is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
     assert.match(freeList, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
     assert.match(freeList, /get_text\(\$sungsan_free_post_subject\)/);
     assert.match(freeList, /get_text\(\$sungsan_free_post_writer\)/);
@@ -2281,7 +2281,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(newsList, /\$sungsan_news_row = \$sungsan_news_rows\[\$i\];/);
     assert.match(newsList, /\$sungsan_news_post_raw_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
-    assert.match(newsList, /\$sungsan_news_post_href = \(!\$is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
+    assert.match(newsList, /\$sungsan_news_post_href = \(!\$sungsan_news_is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
     assert.match(newsList, /\$sungsan_news_post_subject = isset\(\$sungsan_news_row\['subject'\]\) \? \$sungsan_news_row\['subject'\] : '';/);
     assert.match(newsList, /\$sungsan_news_post_category = isset\(\$sungsan_news_row\['ca_name'\]\) \? \$sungsan_news_row\['ca_name'\] : '';/);
     assert.match(newsList, /\$sungsan_news_post_date = isset\(\$sungsan_news_row\['datetime2'\]\) \? \$sungsan_news_row\['datetime2'\] : '';/);
@@ -2857,9 +2857,10 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       list,
-      /\$sungsan_news_row = \$sungsan_news_rows\[\$i\];[\s\S]*?if \(sungsan_is_review_restricted\(\$sungsan_news_row\) && !\$is_admin\) \{\s*continue;\s*\}/,
+      /\$sungsan_news_row = \$sungsan_news_rows\[\$i\];[\s\S]*?if \(sungsan_is_review_restricted\(\$sungsan_news_row\) && !\$sungsan_news_is_admin\) \{\s*continue;\s*\}/,
       'news list should only hide operator-review migrated posts',
     );
+    assert.match(list, /\$sungsan_news_is_admin = !empty\(\$is_admin\);/);
     assert.match(list, /\$can_read_post = sungsan_can_read_news_post\(\$sungsan_news_row\);/);
     assert.match(
       list,
@@ -2876,8 +2877,9 @@ describe('sungsan theme static contract', () => {
     const list = read('src/skin/board/sungsan_news/list.skin.php');
 
     assert.match(list, /global \$is_admin, \$is_member;/);
+    assert.match(list, /\$sungsan_news_is_member = !empty\(\$is_member\);/);
     assert.match(list, /\$sungsan_news_post_raw_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
-    assert.match(list, /\$sungsan_news_post_href = \(!\$is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
+    assert.match(list, /\$sungsan_news_post_href = \(!\$sungsan_news_is_member && !\$can_read_post\) \? sungsan_login_url\(\$sungsan_news_post_raw_href\) : \$sungsan_news_post_raw_href;/);
     assert.doesNotMatch(list, /\$sungsan_news_post_href = isset\(\$sungsan_news_row\['href'\]\) \? \$sungsan_news_row\['href'\] : '#';/);
   });
 
@@ -2903,8 +2905,10 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       list,
-      /<div class="ss-meta">\s*<\?php if \(\$is_member\) \{ \?>[\s\S]*?get_text\(\$sungsan_free_post_writer\)[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>">[\s\S]*?number_format\(\$sungsan_free_post_hits\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} \?>\s*<\/div>/,
+      /<div class="ss-meta">\s*<\?php if \(\$sungsan_free_is_member\) \{ \?>[\s\S]*?get_text\(\$sungsan_free_post_writer\)[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>">[\s\S]*?number_format\(\$sungsan_free_post_hits\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} \?>\s*<\/div>/,
     );
+    assert.match(list, /\$sungsan_free_is_member = !empty\(\$is_member\);/);
+    assert.doesNotMatch(list, /<\?php if \(\$is_member\) \{ \?>/);
     assert.doesNotMatch(
       list,
       /<div class="ss-meta">\s*<span>\s*<\?php echo get_text\(\$sungsan_free_post_writer\); \?>\s*<\/span>/,
@@ -2915,8 +2919,9 @@ describe('sungsan theme static contract', () => {
     const list = read('src/skin/board/sungsan_free/list.skin.php');
 
     assert.match(list, /global \$is_member;/);
-    assert.match(list, /\$sungsan_post_href = \$is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
-    assert.match(list, /class="ss-post-row<\?php echo \$is_member \? '' : ' restricted'; \?>"/);
+    assert.match(list, /\$sungsan_free_is_member = !empty\(\$is_member\);/);
+    assert.match(list, /\$sungsan_post_href = \$sungsan_free_is_member \? \$sungsan_free_post_href : sungsan_login_url\(\$sungsan_free_post_href\);/);
+    assert.match(list, /class="ss-post-row<\?php echo \$sungsan_free_is_member \? '' : ' restricted'; \?>"/);
     assert.match(list, /href="<\?php echo get_text\(\$sungsan_post_href\); \?>"/);
   });
 
