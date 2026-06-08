@@ -571,6 +571,18 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.cd-actions button\s*\{[\s\S]*?min-height:\s*44px;/);
   });
 
+  it('constrains registration consent modal selectors before DOM lookup', () => {
+    const modal = read('src/skin/member/sungsan/consent_modal.inc.php');
+
+    assert.match(modal, /const isSafeSelector = \(selector, prefix\) =>/);
+    assert.match(modal, /isSafeSelector\(tplSel, '#tpl_'\)\s*\?\s*document\.querySelector\(tplSel\)\s*:\s*null/);
+    assert.match(modal, /const checkSel\s*=\s*isSafeSelector\(dlg\.dataset\.check, '#reg_'\)\s*\?\s*dlg\.dataset\.check\s*:\s*'';/);
+    assert.match(modal, /const groupSel\s*=\s*isSafeSelector\(dlg\.dataset\.checkGroup, '\.'\)\s*\?\s*dlg\.dataset\.checkGroup\s*:\s*'';/);
+    assert.doesNotMatch(modal, /tplSel\s*\?\s*document\.querySelector\(tplSel\)\s*:\s*null/);
+    assert.doesNotMatch(modal, /const sel\s*=\s*dlg\.dataset\.check;/);
+    assert.doesNotMatch(modal, /const groupSel\s*=\s*dlg\.dataset\.checkGroup;/);
+  });
+
   it('starts registration membership screens with visible page headings', () => {
     const register = read('src/skin/member/sungsan/register.skin.php');
     const registerForm = read('src/skin/member/sungsan/register_form.skin.php');

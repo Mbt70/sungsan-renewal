@@ -22,12 +22,17 @@
   const body   = document.getElementById('consentDialogBody');
   const titleE = document.getElementById('consentDialogTitle');
   let opener   = null;
+  const isSafeSelector = (selector, prefix) =>
+    typeof selector === 'string'
+    && selector.startsWith(prefix)
+    && !selector.includes(',')
+    && /^[#.][A-Za-z0-9_-]+$/.test(selector);
 
   const openFrom = (btn) => {
     opener = btn;
     const tplSel = btn.getAttribute('data-template');
     const title  = btn.getAttribute('data-title') || '안내';
-    const tpl    = tplSel ? document.querySelector(tplSel) : null;
+    const tpl    = isSafeSelector(tplSel, '#tpl_') ? document.querySelector(tplSel) : null;
 
     titleE.textContent = title;
     body.innerHTML     = tpl ? tpl.innerHTML : '';
@@ -48,8 +53,8 @@
     if (trigger) { openFrom(trigger); return; }
 
     if (e.target.classList.contains('cd-agree')) {
-      const sel      = dlg.dataset.check;
-      const groupSel = dlg.dataset.checkGroup;
+      const checkSel = isSafeSelector(dlg.dataset.check, '#reg_') ? dlg.dataset.check : '';
+      const groupSel = isSafeSelector(dlg.dataset.checkGroup, '.') ? dlg.dataset.checkGroup : '';
 
       if (groupSel) {
         document.querySelectorAll(groupSel).forEach(cb => {
@@ -57,8 +62,8 @@
           cb.dispatchEvent(new Event('change', {bubbles:true}));
         });
       }
-      if (sel) {
-        const cb = document.querySelector(sel);
+      if (checkSel) {
+        const cb = document.querySelector(checkSel);
         if (cb) { cb.checked = true; cb.dispatchEvent(new Event('change', {bubbles:true})); }
       }
       closeDialog();
