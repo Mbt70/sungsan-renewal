@@ -2461,12 +2461,14 @@ describe('sungsan theme static contract', () => {
     const freeList = read('src/skin/board/sungsan_free/list.skin.php');
 
     assert.match(newsList, /\$sungsan_news_post_datetime = isset\(\$sungsan_news_row\['datetime'\]\) \? \$sungsan_news_row\['datetime'\] : \$sungsan_news_post_date;/);
-    assert.match(newsList, /<time datetime="<\?php echo get_text\(\$sungsan_news_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/time>/);
-    assert.doesNotMatch(newsList, /<span><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/span>/);
+    assert.ok(newsList.includes("$sungsan_news_post_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_news_post_datetime) ? str_replace(' ', 'T', $sungsan_news_post_datetime) : '';"));
+    assert.match(newsList, /<\?php if \(\$sungsan_news_post_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_news_post_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/span>/);
+    assert.doesNotMatch(newsList, /<time datetime="<\?php echo get_text\(\$sungsan_news_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_news_post_date\); \?><\/time>/);
 
     assert.match(freeList, /\$sungsan_free_post_datetime = isset\(\$sungsan_free_row\['datetime'\]\) \? \$sungsan_free_row\['datetime'\] : \$sungsan_free_post_date;/);
-    assert.match(freeList, /<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/time>/);
-    assert.doesNotMatch(freeList, /<span><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/span>/);
+    assert.ok(freeList.includes("$sungsan_free_post_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_free_post_datetime) ? str_replace(' ', 'T', $sungsan_free_post_datetime) : '';"));
+    assert.match(freeList, /<\?php if \(\$sungsan_free_post_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/span>/);
+    assert.doesNotMatch(freeList, /<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>"><\?php echo get_text\(\$sungsan_free_post_date\); \?><\/time>/);
 
     for (const file of [
       'src/skin/board/sungsan_news/view.skin.php',
@@ -2474,8 +2476,9 @@ describe('sungsan theme static contract', () => {
     ]) {
       const source = read(file);
 
-      assert.match(source, /<time datetime="<\?php echo get_text\(\$sungsan_view_date\); \?>"><\?php echo get_text\(\$sungsan_view_date\); \?><\/time>/, `${file} should expose detail date as time`);
-      assert.doesNotMatch(source, /<span><\?php echo get_text\(\$sungsan_view_date\); \?><\/span>/, `${file} should not render detail date as a plain span`);
+      assert.ok(source.includes("$sungsan_view_date_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_view_date) ? str_replace(' ', 'T', $sungsan_view_date) : '';"), `${file} should normalize detail datetime attributes`);
+      assert.match(source, /<\?php if \(\$sungsan_view_date_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_view_date_attr\); \?>"><\?php echo get_text\(\$sungsan_view_date\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_view_date\); \?><\/span>/, `${file} should expose valid detail date attributes as time`);
+      assert.doesNotMatch(source, /<time datetime="<\?php echo get_text\(\$sungsan_view_date\); \?>"><\?php echo get_text\(\$sungsan_view_date\); \?><\/time>/, `${file} should not use raw display dates as datetime attributes`);
     }
   });
 
@@ -2949,7 +2952,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(
       list,
-      /<div class="ss-meta">\s*<\?php if \(\$sungsan_free_is_member\) \{ \?>[\s\S]*?get_text\(\$sungsan_free_post_writer\)[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime\); \?>">[\s\S]*?number_format\(\$sungsan_free_post_hits\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} \?>\s*<\/div>/,
+      /<div class="ss-meta">\s*<\?php if \(\$sungsan_free_is_member\) \{ \?>[\s\S]*?get_text\(\$sungsan_free_post_writer\)[\s\S]*?<\?php if \(\$sungsan_free_post_datetime_attr !== ''\) \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_free_post_datetime_attr\); \?>">[\s\S]*?number_format\(\$sungsan_free_post_hits\)[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} \?>\s*<\/div>/,
     );
     assert.match(list, /\$sungsan_free_is_member = !empty\(\$is_member\);/);
     assert.doesNotMatch(list, /<\?php if \(\$is_member\) \{ \?>/);

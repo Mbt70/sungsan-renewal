@@ -41,6 +41,7 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
             $sungsan_free_post_writer = isset($sungsan_free_row['wr_name']) ? $sungsan_free_row['wr_name'] : '';
             $sungsan_free_post_date = isset($sungsan_free_row['datetime2']) ? $sungsan_free_row['datetime2'] : '';
             $sungsan_free_post_datetime = isset($sungsan_free_row['datetime']) ? $sungsan_free_row['datetime'] : $sungsan_free_post_date;
+            $sungsan_free_post_datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_free_post_datetime) ? str_replace(' ', 'T', $sungsan_free_post_datetime) : '';
             $sungsan_free_post_hits = isset($sungsan_free_row['wr_hit']) ? (int) $sungsan_free_row['wr_hit'] : 0;
             $sungsan_post_href = $sungsan_free_is_member ? $sungsan_free_post_href : sungsan_login_url($sungsan_free_post_href);
             ?>
@@ -50,7 +51,11 @@ $sungsan_free_search_term = isset($stx) ? stripslashes($stx) : '';
                     <?php if ($sungsan_free_is_member) { ?>
                         <span><?php echo get_text($sungsan_free_post_writer); ?></span>
                         <span class="ss-access-label">회원 열람</span>
-                        <time datetime="<?php echo get_text($sungsan_free_post_datetime); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>
+                        <?php if ($sungsan_free_post_datetime_attr !== '') { ?>
+                            <time datetime="<?php echo get_text($sungsan_free_post_datetime_attr); ?>"><?php echo get_text($sungsan_free_post_date); ?></time>
+                        <?php } else { ?>
+                            <span><?php echo get_text($sungsan_free_post_date); ?></span>
+                        <?php } ?>
                         <span>조회 <?php echo number_format($sungsan_free_post_hits); ?></span>
                     <?php } else { ?>
                         <span class="ss-access-label">회원 전용 글입니다. 로그인하면 작성자와 날짜를 볼 수 있습니다.</span>

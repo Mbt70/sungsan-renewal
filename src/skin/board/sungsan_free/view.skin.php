@@ -10,6 +10,7 @@ $sungsan_view_is_member = !empty($is_member);
 $sungsan_view_subject = isset($view['wr_subject']) ? $view['wr_subject'] : '';
 $sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
 $sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
+$sungsan_view_date_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_view_date) ? str_replace(' ', 'T', $sungsan_view_date) : '';
 $sungsan_view_hits = isset($view['wr_hit']) ? (int) $view['wr_hit'] : 0;
 $sungsan_view_content = isset($view['content']) ? $view['content'] : '';
 $sungsan_view_list_href = isset($list_href) ? $list_href : get_pretty_url($sungsan_view_board_id);
@@ -26,7 +27,11 @@ $sungsan_free_login_url = sungsan_login_url($sungsan_free_request_uri);
             <h1 class="ss-section-title"><?php echo get_text($sungsan_view_subject); ?></h1>
             <div class="ss-meta">
                 <span><?php echo get_text($sungsan_view_writer); ?></span>
-                <time datetime="<?php echo get_text($sungsan_view_date); ?>"><?php echo get_text($sungsan_view_date); ?></time>
+                <?php if ($sungsan_view_date_attr !== '') { ?>
+                    <time datetime="<?php echo get_text($sungsan_view_date_attr); ?>"><?php echo get_text($sungsan_view_date); ?></time>
+                <?php } else { ?>
+                    <span><?php echo get_text($sungsan_view_date); ?></span>
+                <?php } ?>
                 <span>조회 <?php echo number_format($sungsan_view_hits); ?></span>
             </div>
         </header>
