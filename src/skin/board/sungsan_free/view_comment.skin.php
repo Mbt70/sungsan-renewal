@@ -3,7 +3,10 @@ if (!defined('_GNUBOARD_')) {
     exit;
 }
 
-$sungsan_comment_count = count($list);
+$sungsan_comment_rows = (isset($list) && is_array($list)) ? $list : array();
+$sungsan_comment_count = count($sungsan_comment_rows);
+$sungsan_comment_board_id = isset($bo_table) ? $bo_table : 'free';
+$sungsan_comment_wr_id = isset($wr_id) ? (int) $wr_id : 0;
 $sungsan_comment_min = isset($comment_min) ? (int) $comment_min : 0;
 $sungsan_comment_max = isset($comment_max) ? (int) $comment_max : 0;
 $sungsan_comment_work = isset($w) && in_array($w, array('c', 'cu'), true) ? $w : 'c';
@@ -27,15 +30,15 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
 
     <?php if ($sungsan_comment_count > 0) { ?>
         <div class="ss-comment-list">
-            <?php for ($i = 0; $i < count($list); $i++) { ?>
+            <?php for ($i = 0; $i < count($sungsan_comment_rows); $i++) { ?>
                 <?php
-                $sungsan_comment_row = $list[$i];
+                $sungsan_comment_row = $sungsan_comment_rows[$i];
                 $sungsan_comment_id = isset($sungsan_comment_row['wr_id']) ? (int) $sungsan_comment_row['wr_id'] : 0;
                 $sungsan_comment_reply = isset($sungsan_comment_row['wr_comment_reply']) ? $sungsan_comment_row['wr_comment_reply'] : '';
                 $sungsan_comment_depth = min(5, strlen($sungsan_comment_reply));
                 $sungsan_comment_author = isset($sungsan_comment_row['wr_name']) ? $sungsan_comment_row['wr_name'] : '';
                 $sungsan_comment_datetime = isset($sungsan_comment_row['datetime']) ? $sungsan_comment_row['datetime'] : '';
-                $sungsan_comment_content = isset($list[$i]['content']) ? $list[$i]['content'] : '';
+                $sungsan_comment_content = isset($sungsan_comment_row['content']) ? $sungsan_comment_row['content'] : '';
                 $sungsan_comment_saved_content = isset($sungsan_comment_row['content1']) ? $sungsan_comment_row['content1'] : '';
                 $sungsan_comment_secret = isset($sungsan_comment_row['wr_option']) && strpos($sungsan_comment_row['wr_option'], 'secret') !== false;
                 $sungsan_comment_reply_href = $comment_common_url.'&c_id='.$sungsan_comment_id.'&w=c#bo_vc_w';
@@ -85,8 +88,8 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
         <p id="ss-comment-help" class="ss-form-help">회원 간 안부와 의견을 남기는 공간입니다. 개인정보나 공개하기 어려운 내용은 입력 전 다시 확인해 주세요.</p>
         <form name="fviewcomment" id="fviewcomment" action="<?php echo get_text($comment_action_url); ?>" onsubmit="return fviewcomment_submit(this);" method="post" autocomplete="off">
             <input type="hidden" name="w" value="<?php echo get_text($sungsan_comment_work); ?>" id="w">
-            <input type="hidden" name="bo_table" value="<?php echo get_text($bo_table); ?>">
-            <input type="hidden" name="wr_id" value="<?php echo get_text($wr_id); ?>">
+            <input type="hidden" name="bo_table" value="<?php echo get_text($sungsan_comment_board_id); ?>">
+            <input type="hidden" name="wr_id" value="<?php echo (int) $sungsan_comment_wr_id; ?>">
             <input type="hidden" name="comment_id" value="<?php echo get_text($sungsan_comment_current_id); ?>" id="comment_id">
             <input type="hidden" name="sca" value="<?php echo get_text($sungsan_comment_sca); ?>">
             <input type="hidden" name="sfl" value="<?php echo get_text($sungsan_comment_sfl); ?>">

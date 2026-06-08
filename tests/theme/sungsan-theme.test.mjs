@@ -2819,13 +2819,15 @@ describe('sungsan theme static contract', () => {
 
     assert.match(view, /if \(\$is_member\) \{\s*include_once\(G5_BBS_PATH\.'\/view_comment\.php'\);\s*\}/);
     assert.match(comment, /<section id="bo_vc" class="ss-comment-section"[^>]*>/);
-    assert.match(comment, /for \(\$i = 0; \$i < count\(\$list\); \$i\+\+\)/);
-    assert.match(comment, /\$sungsan_comment_content = isset\(\$list\[\$i\]\['content'\]\) \? \$list\[\$i\]\['content'\] : '';/);
+    assert.match(comment, /for \(\$i = 0; \$i < count\(\$sungsan_comment_rows\); \$i\+\+\)/);
+    assert.match(comment, /\$sungsan_comment_content = isset\(\$sungsan_comment_row\['content'\]\) \? \$sungsan_comment_row\['content'\] : '';/);
     assert.match(comment, /echo \$sungsan_comment_content;/);
     assert.match(comment, /get_text\(\$sungsan_comment_author\)/);
     assert.match(comment, /\$sungsan_comment_reply_href = \$comment_common_url\.'&c_id='\.\$sungsan_comment_id\.'&w=c#bo_vc_w';/);
     assert.match(comment, /str_replace\('&amp;', '&', \$sungsan_comment_row\['del_link'\]\)/);
     assert.doesNotMatch(comment, /\$comment_common_url\.'&amp;c_id='/);
+    assert.doesNotMatch(comment, /count\(\$list\)/);
+    assert.doesNotMatch(comment, /\$list\[\$i\]/);
     assert.match(comment, /<form name="fviewcomment" id="fviewcomment"/);
     assert.match(comment, /name="token" value=""/);
     assert.match(comment, /id="wr_content" name="wr_content"/);
@@ -2855,6 +2857,22 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(comment, /chk_captcha_js/);
     assert.doesNotMatch(scss, /\.ss-comment-guest-fields/);
     assert.doesNotMatch(css, /\.ss-comment-guest-fields/);
+  });
+
+  it('normalizes free-board comment list and form identifiers before rendering', () => {
+    const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
+
+    assert.match(comment, /\$sungsan_comment_rows = \(isset\(\$list\) && is_array\(\$list\)\) \? \$list : array\(\);/);
+    assert.match(comment, /\$sungsan_comment_count = count\(\$sungsan_comment_rows\);/);
+    assert.match(comment, /\$sungsan_comment_board_id = isset\(\$bo_table\) \? \$bo_table : 'free';/);
+    assert.match(comment, /\$sungsan_comment_wr_id = isset\(\$wr_id\) \? \(int\) \$wr_id : 0;/);
+    assert.match(comment, /\$sungsan_comment_row = \$sungsan_comment_rows\[\$i\];/);
+    assert.match(comment, /<input type="hidden" name="bo_table" value="<\?php echo get_text\(\$sungsan_comment_board_id\); \?>">/);
+    assert.match(comment, /<input type="hidden" name="wr_id" value="<\?php echo \(int\) \$sungsan_comment_wr_id; \?>">/);
+    assert.doesNotMatch(comment, /\$sungsan_comment_count = count\(\$list\);/);
+    assert.doesNotMatch(comment, /\$sungsan_comment_row = \$list\[\$i\];/);
+    assert.doesNotMatch(comment, /get_text\(\$bo_table\)/);
+    assert.doesNotMatch(comment, /get_text\(\$wr_id\)/);
   });
 
   it('does not override hidden comment placeholders before reply or edit actions', () => {
