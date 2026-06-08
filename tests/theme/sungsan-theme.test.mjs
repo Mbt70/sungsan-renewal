@@ -2512,7 +2512,8 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /\$sungsan_home_media_visibility = isset\(\$sungsan_home_media_post\['wr_2'\]\) \? \$sungsan_home_media_post\['wr_2'\] : '';/);
     assert.match(index, /\$sungsan_home_media_visibility_label = \$sungsan_home_media_visibility !== '' \? sungsan_get_visibility_label\(\$sungsan_home_media_visibility\) : '';/);
     assert.match(index, /\$sungsan_home_media_can_read = \$sungsan_home_media_visibility === '' \|\| sungsan_can_read_visibility\(\$sungsan_home_media_visibility\);/);
-    assert.match(index, /\$sungsan_home_media_requires_login = !\$is_member && !\$sungsan_home_media_can_read;/);
+    assert.match(index, /\$photo_posts = sungsan_latest_board_posts\('news', array\('category' => \$sungsan_home_activity_category, 'mediaOnly' => true, 'thumbnail' => true, 'limit' => 4\)\);\s*\$sungsan_home_is_member = !empty\(\$is_member\);/);
+    assert.match(index, /\$sungsan_home_media_requires_login = !\$sungsan_home_is_member && !\$sungsan_home_media_can_read;/);
     assert.match(index, /\$sungsan_home_media_href = \$sungsan_home_media_requires_login \? sungsan_login_url\(\$sungsan_home_media_raw_href\) : \$sungsan_home_media_raw_href;/);
     assert.match(index, /<a class="ss-media-tile<\?php echo \$sungsan_home_media_can_read \? '' : ' restricted'; \?>" href="<\?php echo get_text\(\$sungsan_home_media_href\); \?>">/);
     assert.match(index, /<\?php if \(\$sungsan_home_media_visibility_label !== ''\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$sungsan_home_media_visibility_label\); \?><\/span><\?php \} \?>/);
@@ -2657,8 +2658,9 @@ describe('sungsan theme static contract', () => {
     );
     assert.match(
       index,
-      /<div class="ss-meta">\s*<\?php if \(\$access_label && !\$is_member\) \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>">[\s\S]*?<\?php \} \?>\s*<\/div>/,
+      /<div class="ss-meta">\s*<\?php if \(\$access_label && !\$sungsan_home_is_member\) \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>">[\s\S]*?<\?php \} \?>\s*<\/div>/,
     );
+    assert.match(index, /function sungsan_render_home_list\(\$posts, \$empty_text, \$show_event_date = false, \$show_category = true, \$access_label = ''\)[\s\S]*?\$sungsan_home_is_member = !empty\(\$is_member\);/);
     assert.doesNotMatch(
       index,
       /<div class="ss-meta">\s*<\?php if \(\$sungsan_home_post_is_notice\)/,
@@ -2669,11 +2671,13 @@ describe('sungsan theme static contract', () => {
     const index = read('src/theme/sungsan/index.php');
 
     assert.match(index, /global \$is_member;/);
-    assert.match(index, /\$sungsan_requires_login = !\$is_member && \(\$access_label \|\| !\$sungsan_home_post_can_read\);/);
+    assert.match(index, /\$sungsan_home_is_member = !empty\(\$is_member\);/);
+    assert.match(index, /\$sungsan_requires_login = !\$sungsan_home_is_member && \(\$access_label \|\| !\$sungsan_home_post_can_read\);/);
     assert.match(index, /\$sungsan_home_post_href = \$sungsan_requires_login \? sungsan_login_url\(\$sungsan_home_post_raw_href\) : \$sungsan_home_post_raw_href;/);
     assert.match(index, /\$sungsan_home_post_restricted = \$sungsan_requires_login \|\| !\$sungsan_home_post_can_read;/);
     assert.match(index, /class="ss-post-row<\?php echo \$sungsan_home_post_restricted \? ' restricted' : ''; \?>"/);
     assert.match(index, /href="<\?php echo get_text\(\$sungsan_home_post_href\); \?>"/);
+    assert.doesNotMatch(index, /!\$is_member/);
   });
 
   it('keeps restricted news posts visible in home summaries while marking visibility', () => {

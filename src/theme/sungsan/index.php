@@ -27,6 +27,7 @@ $event_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_h
 $resource_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_resource_categories, 'limit' => 5));
 $free_posts = sungsan_latest_board_posts('free', array('limit' => 5));
 $photo_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_home_activity_category, 'mediaOnly' => true, 'thumbnail' => true, 'limit' => 4));
+$sungsan_home_is_member = !empty($is_member);
 ?>
 <section class="ss-hero">
     <div class="ss-container ss-hero-layout">
@@ -107,7 +108,7 @@ $photo_posts = sungsan_latest_board_posts('news', array('category' => $sungsan_h
                 $sungsan_home_media_visibility = isset($sungsan_home_media_post['wr_2']) ? $sungsan_home_media_post['wr_2'] : '';
                 $sungsan_home_media_visibility_label = $sungsan_home_media_visibility !== '' ? sungsan_get_visibility_label($sungsan_home_media_visibility) : '';
                 $sungsan_home_media_can_read = $sungsan_home_media_visibility === '' || sungsan_can_read_visibility($sungsan_home_media_visibility);
-                $sungsan_home_media_requires_login = !$is_member && !$sungsan_home_media_can_read;
+                $sungsan_home_media_requires_login = !$sungsan_home_is_member && !$sungsan_home_media_can_read;
                 $sungsan_home_media_href = $sungsan_home_media_requires_login ? sungsan_login_url($sungsan_home_media_raw_href) : $sungsan_home_media_raw_href;
                 ?>
                 <a class="ss-media-tile<?php echo $sungsan_home_media_can_read ? '' : ' restricted'; ?>" href="<?php echo get_text($sungsan_home_media_href); ?>">
@@ -137,6 +138,8 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
 {
     global $is_member;
 
+    $sungsan_home_is_member = !empty($is_member);
+
     ?>
     <div class="ss-post-list">
         <?php for ($i = 0; $i < count($posts); $i++) { ?>
@@ -154,14 +157,14 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
             $sungsan_home_post_visibility = isset($sungsan_home_post['wr_2']) ? $sungsan_home_post['wr_2'] : '';
             $sungsan_home_post_visibility_label = $sungsan_home_post_visibility !== '' ? sungsan_get_visibility_label($sungsan_home_post_visibility) : '';
             $sungsan_home_post_can_read = $sungsan_home_post_visibility === '' || sungsan_can_read_visibility($sungsan_home_post_visibility);
-            $sungsan_requires_login = !$is_member && ($access_label || !$sungsan_home_post_can_read);
+            $sungsan_requires_login = !$sungsan_home_is_member && ($access_label || !$sungsan_home_post_can_read);
             $sungsan_home_post_restricted = $sungsan_requires_login || !$sungsan_home_post_can_read;
             $sungsan_home_post_href = $sungsan_requires_login ? sungsan_login_url($sungsan_home_post_raw_href) : $sungsan_home_post_raw_href;
             ?>
             <a class="ss-post-row<?php echo $sungsan_home_post_restricted ? ' restricted' : ''; ?>" href="<?php echo get_text($sungsan_home_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_home_post_subject); ?></p>
                 <div class="ss-meta">
-                    <?php if ($access_label && !$is_member) { ?>
+                    <?php if ($access_label && !$sungsan_home_is_member) { ?>
                         <span class="ss-access-label">회원 전용 글입니다. 로그인하면 작성자와 날짜를 볼 수 있습니다.</span>
                     <?php } else { ?>
                         <?php if ($sungsan_home_post_is_notice) { ?><span class="ss-pin-label">중요</span><?php } ?>
