@@ -5,12 +5,18 @@ if (!defined('_GNUBOARD_')) {
 
 global $is_member;
 
+$sungsan_view_board_id = isset($bo_table) ? $bo_table : 'news';
 $sungsan_view_subject = isset($view['wr_subject']) ? $view['wr_subject'] : '';
 $sungsan_view_writer = isset($view['wr_name']) ? $view['wr_name'] : '';
 $sungsan_view_date = isset($view['datetime']) ? $view['datetime'] : '';
 $sungsan_view_hits = isset($view['wr_hit']) ? (int) $view['wr_hit'] : 0;
 $sungsan_view_content = isset($view['content']) ? $view['content'] : '';
 $sungsan_view_category = isset($view['ca_name']) ? $view['ca_name'] : '';
+$sungsan_view_list_href = isset($list_href) ? $list_href : get_pretty_url($sungsan_view_board_id);
+$sungsan_view_update_href = isset($update_href) ? $update_href : '';
+$sungsan_view_delete_href = isset($delete_href) ? $delete_href : '';
+$sungsan_view_files = (isset($view['file']) && is_array($view['file'])) ? $view['file'] : array();
+$sungsan_view_file_count = isset($sungsan_view_files['count']) ? max(0, (int) $sungsan_view_files['count']) : 0;
 $visibility = isset($view['wr_2']) ? $view['wr_2'] : 'member';
 $visibility_label = get_text(sungsan_get_visibility_label($visibility));
 $group_label = sungsan_get_group_label(isset($view['wr_1']) ? $view['wr_1'] : '');
@@ -46,13 +52,13 @@ if (sungsan_is_review_restricted($view)) {
                     <?php echo get_view_thumbnail($sungsan_view_content); ?>
                 </div>
 
-                <?php if (!empty($view['file']['count'])) { ?>
+                <?php if ($sungsan_view_file_count > 0) { ?>
                     <section class="ss-attachment-section">
                         <h2 class="ss-section-title">첨부 파일</h2>
                         <div class="ss-attachment-list">
-                        <?php for ($i = 0; $i < $view['file']['count']; $i++) { ?>
+                        <?php for ($i = 0; $i < $sungsan_view_file_count; $i++) { ?>
                             <?php
-                            $sungsan_view_file = isset($view['file'][$i]) ? $view['file'][$i] : array();
+                            $sungsan_view_file = isset($sungsan_view_files[$i]) ? $sungsan_view_files[$i] : array();
                             $sungsan_view_file_href = isset($sungsan_view_file['href']) ? $sungsan_view_file['href'] : '#';
                             $sungsan_view_file_source = isset($sungsan_view_file['source']) ? $sungsan_view_file['source'] : '';
                             ?>
@@ -72,15 +78,15 @@ if (sungsan_is_review_restricted($view)) {
                 <?php if ($sungsan_show_login_cta) { ?>
                     <a class="ss-button" href="<?php echo get_text($sungsan_login_url); ?>">로그인</a>
                 <?php } else { ?>
-                    <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">목록으로 돌아가기</a>
+                    <a class="ss-button secondary" href="<?php echo get_text($sungsan_view_list_href); ?>">목록으로 돌아가기</a>
                 <?php } ?>
             <?php } ?>
         </div>
 
         <div class="ss-action-bar">
-            <a class="ss-button secondary" href="<?php echo get_text($list_href); ?>">목록</a>
-            <?php if ($update_href) { ?><a class="ss-button secondary" href="<?php echo get_text($update_href); ?>">수정</a><?php } ?>
-            <?php if ($delete_href) { ?><a class="ss-button secondary" href="<?php echo get_text($delete_href); ?>" onclick="del(this.href); return false;">삭제</a><?php } ?>
+            <a class="ss-button secondary" href="<?php echo get_text($sungsan_view_list_href); ?>">목록</a>
+            <?php if ($sungsan_view_update_href !== '') { ?><a class="ss-button secondary" href="<?php echo get_text($sungsan_view_update_href); ?>">수정</a><?php } ?>
+            <?php if ($sungsan_view_delete_href !== '') { ?><a class="ss-button secondary" href="<?php echo get_text($sungsan_view_delete_href); ?>" onclick="del(this.href); return false;">삭제</a><?php } ?>
         </div>
     </div>
 </article>
