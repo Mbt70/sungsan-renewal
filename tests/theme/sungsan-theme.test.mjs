@@ -2134,6 +2134,23 @@ describe('sungsan theme static contract', () => {
     assert.match(index, /<\?php if \(\$access_label\) \{ \?><span class="ss-access-label"><\?php echo get_text\(\$access_label\); \?><\/span><\?php \} \?>/);
   });
 
+  it('keeps guest home free-board rows title-only until login', () => {
+    const index = read('src/theme/sungsan/index.php');
+
+    assert.match(
+      index,
+      /sungsan_render_home_list\(\$free_posts, '등록된 자유게시판 글이 없습니다\.', false, false, '회원 열람'\)/,
+    );
+    assert.match(
+      index,
+      /<div class="ss-meta">\s*<\?php if \(\$access_label && !\$is_member\) \{ \?>[\s\S]*?<span class="ss-access-label">회원 전용 글입니다\. 로그인하면 작성자와 날짜를 볼 수 있습니다\.<\/span>[\s\S]*?<\?php \} else \{ \?>[\s\S]*?<time datetime="<\?php echo get_text\(\$sungsan_home_post_datetime\); \?>">[\s\S]*?<\?php \} \?>\s*<\/div>/,
+    );
+    assert.doesNotMatch(
+      index,
+      /<div class="ss-meta">\s*<\?php if \(\$sungsan_home_post_is_notice\)/,
+    );
+  });
+
   it('sends guest home free-board post clicks to login with the post as return target', () => {
     const index = read('src/theme/sungsan/index.php');
 

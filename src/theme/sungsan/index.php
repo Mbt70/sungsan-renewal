@@ -161,17 +161,21 @@ function sungsan_render_home_list($posts, $empty_text, $show_event_date = false,
             <a class="ss-post-row<?php echo $sungsan_home_post_restricted ? ' restricted' : ''; ?>" href="<?php echo get_text($sungsan_home_post_href); ?>">
                 <p class="ss-post-title"><?php echo get_text($sungsan_home_post_subject); ?></p>
                 <div class="ss-meta">
-                    <?php if ($sungsan_home_post_is_notice) { ?><span class="ss-pin-label">중요</span><?php } ?>
-                    <?php if ($show_category && $sungsan_home_post_category !== '') { ?>
-                        <span class="ss-badge"><?php echo get_text($sungsan_home_post_category); ?></span>
+                    <?php if ($access_label && !$is_member) { ?>
+                        <span class="ss-access-label">회원 전용 글입니다. 로그인하면 작성자와 날짜를 볼 수 있습니다.</span>
+                    <?php } else { ?>
+                        <?php if ($sungsan_home_post_is_notice) { ?><span class="ss-pin-label">중요</span><?php } ?>
+                        <?php if ($show_category && $sungsan_home_post_category !== '') { ?>
+                            <span class="ss-badge"><?php echo get_text($sungsan_home_post_category); ?></span>
+                        <?php } ?>
+                        <?php if ($sungsan_home_post_group !== '') { ?>
+                            <?php $group_label = sungsan_get_group_label($sungsan_home_post_group); ?>
+                            <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
+                        <?php } ?>
+                        <?php if ($sungsan_home_post_visibility_label !== '') { ?><span class="ss-access-label"><?php echo get_text($sungsan_home_post_visibility_label); ?></span><?php } ?>
+                        <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
+                        <time datetime="<?php echo get_text($sungsan_home_post_datetime); ?>"><?php echo get_text($sungsan_home_post_display_date); ?></time>
                     <?php } ?>
-                    <?php if ($sungsan_home_post_group !== '') { ?>
-                        <?php $group_label = sungsan_get_group_label($sungsan_home_post_group); ?>
-                        <?php if ($group_label) { ?><span class="ss-badge accent"><?php echo get_text($group_label); ?></span><?php } ?>
-                    <?php } ?>
-                    <?php if ($sungsan_home_post_visibility_label !== '') { ?><span class="ss-access-label"><?php echo get_text($sungsan_home_post_visibility_label); ?></span><?php } ?>
-                    <?php if ($access_label) { ?><span class="ss-access-label"><?php echo get_text($access_label); ?></span><?php } ?>
-                    <time datetime="<?php echo get_text($sungsan_home_post_datetime); ?>"><?php echo get_text($sungsan_home_post_display_date); ?></time>
                 </div>
             </a>
         <?php } ?>
