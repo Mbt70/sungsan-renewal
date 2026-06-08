@@ -1059,6 +1059,8 @@ describe('sungsan theme static contract', () => {
       {
         file: 'src/skin/member/sungsan/scrap_popin.skin.php',
         expected: [
+          /\$scrap_popin_action_url = '\.\/scrap_popin_update\.php';/,
+          /action="<\?php echo get_text\(\$scrap_popin_action_url\); \?>"/,
           /name="bo_table" value="<\?php echo get_text\(\$scrap_popin_board_id\); \?>"/,
           /name="wr_id" value="<\?php echo \(int\) \$scrap_popin_wr_id; \?>"/,
           /\$scrap_popin_subject = isset\(\$write\['wr_subject'\]\) \? \$write\['wr_subject'\] : '';/,
@@ -1070,6 +1072,7 @@ describe('sungsan theme static contract', () => {
           /name="wr_id" value="<\?php echo \$wr_id/,
           /name="wr_id" value="<\?php echo get_text\(\$wr_id\); \?>"/,
           /cut_str\(\$write\['wr_subject'\]/,
+          /action="\.\/scrap_popin_update\.php"/,
         ],
       },
     ];

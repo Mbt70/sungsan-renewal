@@ -4,6 +4,7 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 $scrap_popin_subject = isset($write['wr_subject']) ? $write['wr_subject'] : '';
 $scrap_popin_board_id = isset($bo_table) ? $bo_table : '';
 $scrap_popin_wr_id = isset($wr_id) ? (int) $wr_id : 0;
+$scrap_popin_action_url = './scrap_popin_update.php';
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -12,7 +13,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 <!-- 스크랩 시작 { -->
 <div id="scrap_do" class="new_win">
     <h1 id="win_title">스크랩하기</h1>
-    <form name="f_scrap_popin" action="./scrap_popin_update.php" method="post">
+    <form name="f_scrap_popin" action="<?php echo get_text($scrap_popin_action_url); ?>" method="post">
     <input type="hidden" name="bo_table" value="<?php echo get_text($scrap_popin_board_id); ?>">
     <input type="hidden" name="wr_id" value="<?php echo (int) $scrap_popin_wr_id; ?>">
     <div class="new_win_con">
