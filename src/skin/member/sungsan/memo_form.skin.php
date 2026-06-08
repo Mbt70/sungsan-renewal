@@ -5,6 +5,9 @@ $memo_send_point = isset($config['cf_memo_send_point']) ? (int) $config['cf_memo
 $memo_form_action_url = isset($memo_action_url) ? $memo_action_url : './memo_form_update.php';
 $memo_form_recipient_id = isset($me_recv_mb_id) ? $me_recv_mb_id : '';
 $memo_form_content = isset($content) ? $content : '';
+$memo_recv_href = './memo.php?kind=recv';
+$memo_send_href = './memo.php?kind=send';
+$memo_write_href = './memo_form.php';
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -15,9 +18,9 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     <h1 id="win_title"><i class="fa fa-envelope-o" aria-hidden="true"></i> 쪽지 보내기</h1>
     <div class="new_win_con2">
         <ul class="win_ul">
-            <li><a href="./memo.php?kind=recv">받은쪽지</a></li>
-            <li><a href="./memo.php?kind=send">보낸쪽지</a></li>
-            <li class="selected"><a href="./memo_form.php">쪽지쓰기</a></li>
+            <li><a href="<?php echo get_text($memo_recv_href); ?>">받은쪽지</a></li>
+            <li><a href="<?php echo get_text($memo_send_href); ?>">보낸쪽지</a></li>
+            <li class="selected"><a href="<?php echo get_text($memo_write_href); ?>">쪽지쓰기</a></li>
         </ul>
 
         <form name="fmemoform" action="<?php echo get_text($memo_form_action_url); ?>" onsubmit="return fmemoform_submit(this);" method="post" autocomplete="off">

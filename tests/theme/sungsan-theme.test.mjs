@@ -1104,6 +1104,28 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /get_text\(\$content\)/);
   });
 
+  it('normalizes memo popup tab links before rendering', () => {
+    const files = [
+      'src/skin/member/sungsan/memo.skin.php',
+      'src/skin/member/sungsan/memo_view.skin.php',
+      'src/skin/member/sungsan/memo_form.skin.php',
+    ];
+
+    for (const file of files) {
+      const source = read(file);
+
+      assert.match(source, /\$memo_recv_href = '\.\/memo\.php\?kind=recv';/, `${file} should normalize the received memo tab URL`);
+      assert.match(source, /\$memo_send_href = '\.\/memo\.php\?kind=send';/, `${file} should normalize the sent memo tab URL`);
+      assert.match(source, /\$memo_write_href = '\.\/memo_form\.php';/, `${file} should normalize the compose memo tab URL`);
+      assert.match(source, /href="<\?php echo get_text\(\$memo_recv_href\); \?>"/, `${file} should escape the received memo tab URL`);
+      assert.match(source, /href="<\?php echo get_text\(\$memo_send_href\); \?>"/, `${file} should escape the sent memo tab URL`);
+      assert.match(source, /href="<\?php echo get_text\(\$memo_write_href\); \?>"/, `${file} should escape the compose memo tab URL`);
+      assert.doesNotMatch(source, /href="\.\/memo\.php\?kind=recv"/, `${file} should not render the received memo URL literally`);
+      assert.doesNotMatch(source, /href="\.\/memo\.php\?kind=send"/, `${file} should not render the sent memo URL literally`);
+      assert.doesNotMatch(source, /href="\.\/memo_form\.php"/, `${file} should not render the compose memo URL literally`);
+    }
+  });
+
   it('normalizes memo list kind count and pagination before rendering', () => {
     const source = read('src/skin/member/sungsan/memo.skin.php');
 

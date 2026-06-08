@@ -7,6 +7,9 @@ $memo_kind_title = isset($kind_title) ? $kind_title : ($memo_current_kind === 's
 $memo_rows = (isset($list) && is_array($list)) ? $list : array();
 $memo_total_count = isset($total_count) ? (int) $total_count : 0;
 $memo_write_pages = isset($write_pages) ? $write_pages : '';
+$memo_recv_href = './memo.php?kind=recv';
+$memo_send_href = './memo.php?kind=send';
+$memo_write_href = './memo_form.php';
 
 // add_stylesheet('css 구문', 출력순서); 숫자가 작을 수록 먼저 출력됨
 add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 0);
@@ -20,9 +23,9 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     </h1>
     <div class="new_win_con2">
         <ul class="win_ul">
-            <li class="<?php if ($memo_current_kind == 'recv') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=recv">받은쪽지</a></li>
-            <li class="<?php if ($memo_current_kind == 'send') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=send">보낸쪽지</a></li>
-            <li><a href="./memo_form.php">쪽지쓰기</a></li>
+            <li class="<?php if ($memo_current_kind == 'recv') {  ?>selected<?php }  ?>"><a href="<?php echo get_text($memo_recv_href); ?>">받은쪽지</a></li>
+            <li class="<?php if ($memo_current_kind == 'send') {  ?>selected<?php }  ?>"><a href="<?php echo get_text($memo_send_href); ?>">보낸쪽지</a></li>
+            <li><a href="<?php echo get_text($memo_write_href); ?>">쪽지쓰기</a></li>
         </ul>
         
         <div class="memo_list">

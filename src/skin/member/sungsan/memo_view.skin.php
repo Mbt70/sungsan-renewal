@@ -14,6 +14,9 @@ $memo_delete_href = isset($del_link) ? $del_link : '';
 $memo_prev_href = isset($prev_link) ? $prev_link : '';
 $memo_next_href = isset($next_link) ? $next_link : '';
 $memo_reply_href = './memo_form.php?me_recv_mb_id='.urlencode($memo_sender_id).'&amp;me_id='.$memo_id;
+$memo_recv_href = './memo.php?kind=recv';
+$memo_send_href = './memo.php?kind=send';
+$memo_write_href = './memo_form.php';
 $memo_sender_sideview = get_sideview(get_text($memo_sender_id), get_text($memo_sender_nick), get_text($memo_sender_email), get_text($memo_sender_homepage));
 if($memo_current_kind == "recv") {
     $kind_str = "보낸";
@@ -34,9 +37,9 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
     <div class="new_win_con2">
         <!-- 쪽지함 선택 시작 { -->
         <ul class="win_ul">
-            <li class="<?php if ($memo_current_kind == 'recv') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=recv">받은쪽지</a></li>
-            <li class="<?php if ($memo_current_kind == 'send') {  ?>selected<?php }  ?>"><a href="./memo.php?kind=send">보낸쪽지</a></li>
-            <li><a href="./memo_form.php">쪽지쓰기</a></li>
+            <li class="<?php if ($memo_current_kind == 'recv') {  ?>selected<?php }  ?>"><a href="<?php echo get_text($memo_recv_href); ?>">받은쪽지</a></li>
+            <li class="<?php if ($memo_current_kind == 'send') {  ?>selected<?php }  ?>"><a href="<?php echo get_text($memo_send_href); ?>">보낸쪽지</a></li>
+            <li><a href="<?php echo get_text($memo_write_href); ?>">쪽지쓰기</a></li>
         </ul>
         <!-- } 쪽지함 선택 끝 -->
 
