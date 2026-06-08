@@ -3090,7 +3090,9 @@ describe('sungsan theme static contract', () => {
     const comment = read('src/skin/board/sungsan_free/view_comment.skin.php');
 
     assert.match(comment, /\$sungsan_comment_datetime = isset\(\$sungsan_comment_row\['datetime'\]\) \? \$sungsan_comment_row\['datetime'\] : '';/);
-    assert.match(comment, /<time datetime="<\?php echo get_text\(\$sungsan_comment_datetime\); \?>"><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>/);
+    assert.ok(comment.includes("$sungsan_comment_datetime_attr = preg_match('/^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$/', $sungsan_comment_datetime) ? str_replace(' ', 'T', $sungsan_comment_datetime) : '';"));
+    assert.match(comment, /<\?php if \(\$sungsan_comment_datetime_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_comment_datetime_attr\); \?>"><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>\s*<\?php \} else \{ \?>\s*<span><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/span>/);
+    assert.doesNotMatch(comment, /<time datetime="<\?php echo get_text\(\$sungsan_comment_datetime\); \?>"><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>/);
     assert.doesNotMatch(comment, /<time><\?php echo get_text\(\$sungsan_comment_datetime\); \?><\/time>/);
   });
 

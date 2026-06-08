@@ -41,6 +41,7 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
                 $sungsan_comment_depth = min(5, strlen($sungsan_comment_reply));
                 $sungsan_comment_author = isset($sungsan_comment_row['wr_name']) ? $sungsan_comment_row['wr_name'] : '';
                 $sungsan_comment_datetime = isset($sungsan_comment_row['datetime']) ? $sungsan_comment_row['datetime'] : '';
+                $sungsan_comment_datetime_attr = preg_match('/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/', $sungsan_comment_datetime) ? str_replace(' ', 'T', $sungsan_comment_datetime) : '';
                 $sungsan_comment_content = isset($sungsan_comment_row['content']) ? $sungsan_comment_row['content'] : '';
                 $sungsan_comment_saved_content = isset($sungsan_comment_row['content1']) ? $sungsan_comment_row['content1'] : '';
                 $sungsan_comment_secret = isset($sungsan_comment_row['wr_option']) && strpos($sungsan_comment_row['wr_option'], 'secret') !== false;
@@ -53,7 +54,11 @@ var char_max = parseInt(<?php echo $sungsan_comment_max; ?>, 10);
                     <header class="ss-comment-header">
                         <strong><?php echo get_text($sungsan_comment_author); ?></strong>
                         <?php if ($sungsan_comment_secret) { ?><span class="ss-badge">비밀댓글</span><?php } ?>
-                        <time datetime="<?php echo get_text($sungsan_comment_datetime); ?>"><?php echo get_text($sungsan_comment_datetime); ?></time>
+                        <?php if ($sungsan_comment_datetime_attr !== '') { ?>
+                            <time datetime="<?php echo get_text($sungsan_comment_datetime_attr); ?>"><?php echo get_text($sungsan_comment_datetime); ?></time>
+                        <?php } else { ?>
+                            <span><?php echo get_text($sungsan_comment_datetime); ?></span>
+                        <?php } ?>
                     </header>
                     <div class="ss-comment-content">
                         <?php echo $sungsan_comment_content; ?>
