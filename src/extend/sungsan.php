@@ -408,12 +408,13 @@ function sungsan_validate_formmail_required_fields()
 
     $formmail_subject = isset($subject) ? trim((string) $subject) : '';
     $formmail_content = isset($content) ? trim((string) $content) : '';
+    $sungsan_formmail_is_member = !empty($is_member);
 
     if ($formmail_subject === '' || $formmail_content === '') {
         alert_close('메일 제목과 내용을 입력해 주세요.');
     }
 
-    if (!$is_member) {
+    if (!$sungsan_formmail_is_member) {
         $formmail_sender_name = isset($fnick) ? trim(strip_tags((string) $fnick)) : '';
         $formmail_sender_email = isset($fmail) ? get_email_address(trim((string) $fmail)) : '';
 

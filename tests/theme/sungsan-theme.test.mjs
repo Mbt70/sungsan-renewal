@@ -3208,7 +3208,9 @@ describe('sungsan theme static contract', () => {
     const coreSend = read(gnuboardFormmailSendFixture);
 
     assert.match(extend, /global \$is_member, \$fnick, \$fmail;/);
-    assert.match(extend, /if \(!\$is_member\) \{/);
+    assert.match(extend, /\$sungsan_formmail_is_member = !empty\(\$is_member\);/);
+    assert.match(extend, /if \(!\$sungsan_formmail_is_member\) \{/);
+    assert.doesNotMatch(extend, /if \(!\$is_member\) \{/);
     assert.match(extend, /\$formmail_sender_name = isset\(\$fnick\) \? trim\(strip_tags\(\(string\) \$fnick\)\) : '';/);
     assert.match(extend, /\$formmail_sender_email = isset\(\$fmail\) \? get_email_address\(trim\(\(string\) \$fmail\)\) : '';/);
     assert.match(extend, /if \(\$formmail_sender_name === '' \|\| \$formmail_sender_email === ''\) \{/);
