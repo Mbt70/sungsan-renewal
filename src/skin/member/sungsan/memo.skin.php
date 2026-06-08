@@ -4,6 +4,7 @@ if (!defined('_GNUBOARD_')) exit; // 개별 페이지 접근 불가
 $memo_retention_days = isset($config['cf_memo_del']) ? (int) $config['cf_memo_del'] : 0;
 $memo_current_kind = (isset($kind) && $kind === 'send') ? 'send' : 'recv';
 $memo_kind_title = isset($kind_title) ? $kind_title : ($memo_current_kind === 'send' ? '보낸' : '받은');
+$memo_rows = (isset($list) && is_array($list)) ? $list : array();
 $memo_total_count = isset($total_count) ? (int) $total_count : 0;
 $memo_write_pages = isset($write_pages) ? $write_pages : '';
 
@@ -27,8 +28,8 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
         <div class="memo_list">
             <ul>
 	            <?php
-                for ($i=0; $i<count($list); $i++) {
-                $memo_row = isset($list[$i]) ? $list[$i] : array();
+                for ($i=0; $i<count($memo_rows); $i++) {
+                $memo_row = $memo_rows[$i];
                 $memo_read_datetime = isset($memo_row['me_read_datetime']) ? $memo_row['me_read_datetime'] : '';
                 $memo_body = isset($memo_row['me_memo']) ? $memo_row['me_memo'] : '';
                 $memo_member_id = isset($memo_row['mb_id']) ? $memo_row['mb_id'] : '';
@@ -54,7 +55,7 @@ add_stylesheet('<link rel="stylesheet" href="'.$member_skin_url.'/style.css">', 
 					<a href="<?php echo get_text($memo_del_href); ?>" onclick="del(this.href); return false;" class="memo_del"><i class="fa fa-trash-o" aria-hidden="true"></i> 삭제</a>
 	            </li>
 	            <?php } ?>
-	            <?php if ($i==0) { echo '<li class="empty_table">자료가 없습니다.</li>'; }  ?>
+	            <?php if (count($memo_rows) === 0) { echo '<li class="empty_table">자료가 없습니다.</li>'; }  ?>
             </ul>
         </div>
 

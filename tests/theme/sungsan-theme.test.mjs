@@ -1088,17 +1088,23 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /\$memo_current_kind = \(isset\(\$kind\) && \$kind === 'send'\) \? 'send' : 'recv';/);
     assert.match(source, /\$memo_kind_title = isset\(\$kind_title\) \? \$kind_title : \(\$memo_current_kind === 'send' \? '보낸' : '받은'\);/);
+    assert.match(source, /\$memo_rows = \(isset\(\$list\) && is_array\(\$list\)\) \? \$list : array\(\);/);
     assert.match(source, /\$memo_total_count = isset\(\$total_count\) \? \(int\) \$total_count : 0;/);
     assert.match(source, /\$memo_write_pages = isset\(\$write_pages\) \? \$write_pages : '';/);
     assert.match(source, /전체 <\?php echo get_text\(\$memo_kind_title\); \?>쪽지 <\?php echo number_format\(\$memo_total_count\); \?>통/);
     assert.match(source, /<li class="<\?php if \(\$memo_current_kind == 'recv'\) \{  \?>selected<\?php \}  \?>"/);
     assert.match(source, /<li class="<\?php if \(\$memo_current_kind == 'send'\) \{  \?>selected<\?php \}  \?>"/);
     assert.match(source, /<\?php if \(\$memo_write_pages !== ''\) \{ echo \$memo_write_pages; \} \?>/);
+    assert.match(source, /for \(\$i=0; \$i<count\(\$memo_rows\); \$i\+\+\)/);
+    assert.match(source, /\$memo_row = \$memo_rows\[\$i\];/);
+    assert.match(source, /if \(count\(\$memo_rows\) === 0\)/);
     assert.doesNotMatch(source, /get_text\(\$kind_title\)/);
     assert.doesNotMatch(source, /number_format\(\(int\) \$total_count\)/);
     assert.doesNotMatch(source, /if \(\$kind == 'recv'\)/);
     assert.doesNotMatch(source, /if \(\$kind == 'send'\)/);
     assert.doesNotMatch(source, /echo \$write_pages/);
+    assert.doesNotMatch(source, /count\(\$list\)/);
+    assert.doesNotMatch(source, /\$list\[\$i\]/);
   });
 
   it('normalizes memo detail navigation before rendering', () => {
@@ -1157,7 +1163,7 @@ describe('sungsan theme static contract', () => {
           /\$memo_write_pages = isset\(\$write_pages\) \? \$write_pages : '';/,
           /<\?php echo get_text\(\$memo_kind_title\); \?>/,
           /<\?php echo number_format\(\$memo_total_count\); \?>/,
-          /\$memo_row = isset\(\$list\[\$i\]\) \? \$list\[\$i\] : array\(\);/,
+          /\$memo_row = \$memo_rows\[\$i\];/,
           /\$memo_read_datetime = isset\(\$memo_row\['me_read_datetime'\]\) \? \$memo_row\['me_read_datetime'\] : '';/,
           /\$memo_body = isset\(\$memo_row\['me_memo'\]\) \? \$memo_row\['me_memo'\] : '';/,
           /\$memo_member_id = isset\(\$memo_row\['mb_id'\]\) \? \$memo_row\['mb_id'\] : '';/,
@@ -1197,6 +1203,8 @@ describe('sungsan theme static contract', () => {
           /href="<\?php echo get_text\(\$list\[\$i\]\['del_href'\]\); \?>"/,
           /echo \$config\['cf_memo_del'\]/,
           /number_format\(\(int\) \$config\['cf_memo_del'\]\)/,
+          /\$memo_row = isset\(\$list\[\$i\]\) \? \$list\[\$i\] : array\(\);/,
+          /count\(\$list\)/,
         ],
       },
       {
