@@ -797,24 +797,6 @@ img {
   font: inherit;
 }
 
-.ss-comment-guest-fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--ss-space-3);
-}
-
-.ss-comment-guest-fields label {
-  font-weight: 800;
-}
-
-.ss-comment-guest-fields input {
-  min-height: 44px;
-  border: 1px solid var(--ss-color-border-strong);
-  border-radius: var(--ss-radius-md);
-  padding: var(--ss-space-3);
-  font: inherit;
-}
-
 .ss-pagination {
   margin-top: var(--ss-space-8);
   text-align: center;
@@ -1015,9 +997,6 @@ img {
     margin-left: 36px;
   }
 
-  .ss-comment-guest-fields {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (min-width: 760px) {
