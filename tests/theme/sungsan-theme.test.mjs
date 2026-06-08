@@ -226,6 +226,10 @@ describe('sungsan theme static contract', () => {
   it('escapes shared header navigation and search URLs before rendering attributes', () => {
     const head = read('src/theme/sungsan/head.php');
 
+    assert.match(head, /\$ss_site_title = \(isset\(\$config\['cf_title'\]\) && \$config\['cf_title'\] !== ''\) \? \$config\['cf_title'\] : '성산회';/);
+    assert.match(head, /<span><\?php echo get_text\(\$ss_site_title\); \?><\/span>/);
+    assert.doesNotMatch(head, /\$config\['cf_title'\] \? \$config\['cf_title'\]/);
+
     for (const variable of [
       'ss_home_url',
       'ss_intro_url',
@@ -251,6 +255,9 @@ describe('sungsan theme static contract', () => {
     const head = read('src/theme/sungsan/head.php');
     const css = read('src/scss/main.scss');
 
+    assert.match(head, /\$ss_is_member = !empty\(\$is_member\);/);
+    assert.match(head, /<\?php if \(\$ss_is_member\) \{ \?>/);
+    assert.doesNotMatch(head, /<\?php if \(\$is_member\) \{ \?>/);
     assert.match(
       head,
       /<a class="ss-account-link ss-account-link-member" href="<\?php echo get_text\(\$ss_mypage_url\); \?>"<\?php echo \$ss_is_mypage \? ' aria-current="page"' : ''; \?>>/,

@@ -16,6 +16,8 @@ if (defined('G5_LIB_PATH') && is_file(G5_LIB_PATH.'/latest.lib.php')) {
 $ss_current = isset($bo_table) ? $bo_table : '';
 $ss_is_intro = isset($sungsan_page) && $sungsan_page === 'intro';
 $ss_is_mypage = isset($sungsan_page) && $sungsan_page === 'mypage';
+$ss_is_member = !empty($is_member);
+$ss_site_title = (isset($config['cf_title']) && $config['cf_title'] !== '') ? $config['cf_title'] : '성산회';
 $ss_home_url = G5_URL;
 $ss_intro_url = G5_URL.'/theme/sungsan/page/intro.php';
 $ss_news_url = G5_BBS_URL.'/board.php?bo_table=news';
@@ -31,7 +33,7 @@ $ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
     <div class="ss-container ss-header-inner">
         <a class="ss-brand" href="<?php echo get_text($ss_home_url); ?>">
             <span class="ss-brand-mark" aria-hidden="true">성</span>
-            <span><?php echo get_text($config['cf_title'] ? $config['cf_title'] : '성산회'); ?></span>
+            <span><?php echo get_text($ss_site_title); ?></span>
         </a>
 
         <nav class="ss-primary-nav" aria-label="주요 메뉴">
@@ -52,7 +54,7 @@ $ss_header_search_value = isset($stx) ? stripslashes($stx) : '';
                     <button type="submit">검색</button>
                 </div>
             </form>
-            <?php if ($is_member) { ?>
+            <?php if ($ss_is_member) { ?>
                 <a class="ss-account-link ss-account-link-member" href="<?php echo get_text($ss_mypage_url); ?>"<?php echo $ss_is_mypage ? ' aria-current="page"' : ''; ?>>
                     <span class="ss-account-icon" aria-hidden="true"></span>
                     <span class="ss-account-text">마이페이지</span>
