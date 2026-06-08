@@ -542,6 +542,23 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.member_cert_refresh_agree input/);
   });
 
+  it('shows visible text on optional registration consent checkbox labels', () => {
+    const source = read('src/skin/member/sungsan/register_form.skin.php');
+
+    for (const [id, label] of [
+      ['reg_mb_marketing_agree', '(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용'],
+      ['reg_mb_promotion_agree', '(선택) 광고성 정보 수신 동의'],
+      ['reg_mb_mailling', '광고성 이메일 수신 동의'],
+      ['reg_mb_sms', '광고성 SMS/카카오톡 수신 동의'],
+      ['reg_mb_thirdparty_agree', '(선택) 개인정보 제3자 제공 동의'],
+    ]) {
+      assert.ok(source.includes(`<label for="${id}"><span></span>${label}</label>`), `register form should show the ${id} consent label`);
+      assert.doesNotMatch(source, new RegExp(`<label for="${id}"><span></span><b class="sound_only">`), `register form should not hide the ${id} consent label`);
+    }
+
+    assert.doesNotMatch(source, /<span class="chk_li">/);
+  });
+
   it('keeps registration consent modal readable and stylesheet-driven', () => {
     const modal = read('src/skin/member/sungsan/consent_modal.inc.php');
     const css = read('src/skin/member/sungsan/style.css');

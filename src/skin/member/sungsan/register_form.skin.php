@@ -180,8 +180,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				<li class="chk_box">
 				<div class="consent-line">
 					<input type="checkbox" name="mb_marketing_agree" value="1" id="reg_mb_marketing_agree" aria-describedby="desc_marketing" <?php echo $sungsan_member_value('mb_marketing_agree') ? 'checked' : ''; ?> class="selec_chk marketing-sync">
-					<label for="reg_mb_marketing_agree"><span></span><b class="sound_only">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</b></label>
-					<span class="chk_li">(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</span>
+					<label for="reg_mb_marketing_agree"><span></span>(선택) 성산회 소식 수신을 위한 개인정보 수집 및 이용</label>
 					<button type="button" class="js-open-consent" data-title="성산회 소식 수신을 위한 개인정보 수집 및 이용" data-template="#tpl_marketing" data-check="#reg_mb_marketing_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
 				<input type="hidden" name="mb_marketing_agree_default" value="<?php echo $sungsan_member_value('mb_marketing_agree'); ?>">
@@ -200,8 +199,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				<li class="chk_box consent-group">
 				<div class="consent-line">
 					<input type="checkbox" name="mb_promotion_agree" value="1" id="reg_mb_promotion_agree" aria-describedby="desc_promotion" class="selec_chk marketing-sync parent-promo">
-					<label for="reg_mb_promotion_agree"><span></span><b class="sound_only">(선택) 광고성 정보 수신 동의</b></label>
-					<span class="chk_li">(선택) 광고성 정보 수신 동의</span>
+					<label for="reg_mb_promotion_agree"><span></span>(선택) 광고성 정보 수신 동의</label>
 					<button type="button" class="js-open-consent" data-title="광고성 정보 수신 동의" data-template="#tpl_promotion" data-check="#reg_mb_promotion_agree" data-check-group=".child-promo" aria-controls="consentDialog">자세히보기</button>
 				</div>
 				
@@ -211,8 +209,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				<ul class="sub-consents">
 					<li class="chk_box is-inline">
 						<input type="checkbox" name="mb_mailling" value="1" id="reg_mb_mailling" <?php echo $sungsan_member_value('mb_mailling') ? 'checked' : ''; ?> class="selec_chk child-promo">
-						<label for="reg_mb_mailling"><span></span><b class="sound_only">광고성 이메일 수신 동의</b></label>
-						<span class="chk_li">광고성 이메일 수신 동의</span>
+						<label for="reg_mb_mailling"><span></span>광고성 이메일 수신 동의</label>
 						<input type="hidden" name="mb_mailling_default" value="<?php echo $sungsan_member_value('mb_mailling'); ?>">
 						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_mailling') == 1 && $sungsan_member_value('mb_mailling_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_mailling_date').")"; ?></div>
 					</li>
@@ -221,8 +218,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 					<?php if ($config['cf_use_hp'] || $config['cf_req_hp']) { ?>
 					<li class="chk_box is-inline">
 						<input type="checkbox" name="mb_sms" value="1" id="reg_mb_sms" <?php echo $sungsan_member_value('mb_sms') ? 'checked' : ''; ?> class="selec_chk child-promo">
-						<label for="reg_mb_sms"><span></span><b class="sound_only">광고성 SMS/카카오톡 수신 동의</b></label>
-						<span class="chk_li">광고성 SMS/카카오톡 수신 동의</span>
+						<label for="reg_mb_sms"><span></span>광고성 SMS/카카오톡 수신 동의</label>
 						<input type="hidden" name="mb_sms_default" value="<?php echo $sungsan_member_value('mb_sms'); ?>">
 						<div class="consent-date"><?php if ($w == 'u' && $sungsan_member_value('mb_sms') == 1 && $sungsan_member_value('mb_sms_date') != "0000-00-00 00:00:00") echo "(동의일자: ".$sungsan_member_value('mb_sms_date').")"; ?></div>
 					</li>
@@ -252,8 +248,7 @@ $sungsan_form_title = $w == 'u' ? '내 정보 수정' : '가입 정보 입력';
 				<li class="chk_box">
 				<div class="consent-line">
 					<input type="checkbox" name="mb_thirdparty_agree" value="1" id="reg_mb_thirdparty_agree" aria-describedby="desc_thirdparty" <?php echo $sungsan_member_value('mb_thirdparty_agree') ? 'checked' : ''; ?> class="selec_chk marketing-sync">
-					<label for="reg_mb_thirdparty_agree"><span></span><b class="sound_only">(선택) 개인정보 제3자 제공 동의</b></label>
-					<span class="chk_li">(선택) 개인정보 제3자 제공 동의</span>
+					<label for="reg_mb_thirdparty_agree"><span></span>(선택) 개인정보 제3자 제공 동의</label>
 					<button type="button" class="js-open-consent" data-title="개인정보 제3자 제공 동의" data-template="#tpl_thirdparty" data-check="#reg_mb_thirdparty_agree" aria-controls="consentDialog">자세히보기</button>
 				</div>
 				<input type="hidden" name="mb_thirdparty_agree_default" value="<?php echo $sungsan_member_value('mb_thirdparty_agree'); ?>">
