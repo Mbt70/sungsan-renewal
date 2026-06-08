@@ -87,5 +87,5 @@ $point_paging_url = $point_paging_script.'?'.$point_paging_query;
 
     <?php echo get_paging($point_paging_pages, $point_paging_page, $point_paging_total, $point_paging_url); ?>
 
-    <button type="button" onclick="javascript:window.close();" class="btn_close">창닫기</button>
+    <button type="button" onclick="window.close();" class="btn_close">창닫기</button>
 </div>

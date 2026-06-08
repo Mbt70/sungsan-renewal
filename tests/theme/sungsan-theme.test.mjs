@@ -1238,6 +1238,13 @@ describe('sungsan theme static contract', () => {
     }
   });
 
+  it('keeps member popup controls free of javascript pseudo-protocols', () => {
+    for (const file of phpFilesUnder('src/skin/member/sungsan')) {
+      const source = read(file);
+      assert.doesNotMatch(source, /javascript:/i, `${file} should not use javascript: pseudo-protocols in controls`);
+    }
+  });
+
   it('lets users close the scrap confirmation popup without submitting', () => {
     const source = read('src/skin/member/sungsan/scrap_popin.skin.php');
 
