@@ -737,7 +737,7 @@ describe('sungsan theme static contract', () => {
 
     assert.match(source, /get_text\(\$mb_nick\)/);
     assert.match(source, /get_text\(\$mb_homepage\)/);
-    assert.match(source, /get_text\(set_http\(\$mb_homepage\)\)/);
+    assert.match(source, /get_text\(\$profile_homepage_url\)/);
     assert.match(source, /get_text\(\$mb_profile\)/);
     assert.match(source, /\$profile_member_id = isset\(\$mb\['mb_id'\]\) \? \$mb\['mb_id'\] : '';/);
     assert.match(source, /\$profile_member_level = isset\(\$mb\['mb_level'\]\) \? \(int\) \$mb\['mb_level'\] : 0;/);
@@ -755,6 +755,18 @@ describe('sungsan theme static contract', () => {
     assert.doesNotMatch(source, /echo \$mb_profile/);
     assert.doesNotMatch(source, /echo \$mb\['mb_level'\]/);
     assert.doesNotMatch(source, /get_member_profile_img\(\$mb\['mb_id'\]\)/);
+  });
+
+  it('limits profile homepage links to http and https URLs', () => {
+    const source = read('src/skin/member/sungsan/profile.skin.php');
+
+    assert.match(source, /\$profile_homepage_raw = isset\(\$mb\['mb_homepage'\]\) \? trim\(\$mb\['mb_homepage'\]\) : '';/);
+    assert.match(source, /\$profile_homepage_scheme = parse_url\(\$profile_homepage_raw, PHP_URL_SCHEME\);/);
+    assert.match(source, /in_array\(strtolower\(\(string\) \$profile_homepage_scheme\), array\('http', 'https'\), true\)/);
+    assert.match(source, /\$profile_homepage_url = set_http\(\$profile_homepage_raw\);/);
+    assert.match(source, /<\?php if \(\$profile_homepage_url !== ''\) \{/);
+    assert.match(source, /href="<\?php echo get_text\(\$profile_homepage_url\); \?>"/);
+    assert.doesNotMatch(source, /href="<\?php echo get_text\(set_http\(\$mb_homepage\)\); \?>"/);
   });
 
   it('escapes form mail recipient details before rendering the popup', () => {

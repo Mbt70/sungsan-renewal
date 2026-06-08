@@ -12,6 +12,14 @@ $profile_member_join_date = isset($mb['mb_datetime']) ? substr($mb['mb_datetime'
 $profile_member_today_login = isset($mb['mb_today_login']) ? $mb['mb_today_login'] : '';
 $profile_member_reg_after = isset($mb_reg_after) ? (int) $mb_reg_after : 0;
 $profile_can_view_activity_dates = $profile_viewer_level >= $profile_member_level;
+$profile_homepage_raw = isset($mb['mb_homepage']) ? trim($mb['mb_homepage']) : '';
+$profile_homepage_url = '';
+if ($profile_homepage_raw !== '') {
+    $profile_homepage_scheme = parse_url($profile_homepage_raw, PHP_URL_SCHEME);
+    if ($profile_homepage_scheme === null || in_array(strtolower((string) $profile_homepage_scheme), array('http', 'https'), true)) {
+        $profile_homepage_url = set_http($profile_homepage_raw);
+    }
+}
 ?>
 
 <!-- 자기소개 시작 { -->
@@ -38,10 +46,10 @@ $profile_can_view_activity_dates = $profile_viewer_level >= $profile_member_leve
             <th scope="row"><i class="fa fa-clock-o" aria-hidden="true"></i> 최종접속일</th>
             <td><?php echo $profile_can_view_activity_dates ? get_text($profile_member_today_login) : "알 수 없음"; ?></td>
         </tr>
-        <?php if ($mb_homepage) {  ?>
+        <?php if ($profile_homepage_url !== '') {  ?>
         <tr>
             <th scope="row"><i class="fa fa-home" aria-hidden="true"></i> 홈페이지</th>
-            <td colspan="3"><a href="<?php echo get_text(set_http($mb_homepage)); ?>" target="_blank" rel="noopener noreferrer"><?php echo get_text($mb_homepage); ?></a></td>
+            <td colspan="3"><a href="<?php echo get_text($profile_homepage_url); ?>" target="_blank" rel="noopener noreferrer"><?php echo get_text($mb_homepage); ?></a></td>
         </tr>
         <?php }  ?>
 
