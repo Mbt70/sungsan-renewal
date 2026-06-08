@@ -75,9 +75,15 @@ npm run export:setup-sql
 
 PHP와 Docker가 설치된 환경에서는 추가로 다음을 실행합니다.
 ```powershell
+powershell -ExecutionPolicy Bypass -File scripts/bootstrap-gnuboard.ps1
 docker compose build
 docker compose up -d
 ```
+
+## 남은 외부 의존 작업
+- PHP와 Docker가 설치된 환경에서 `scripts/bootstrap-gnuboard.ps1`, `docker compose build`, `docker compose up -d`를 실행합니다.
+- 브라우저에서 `http://localhost:8080`을 열어 홈/소개/소식/자유게시판과 로그인·회원 화면을 확인합니다.
+- Cafe24 스테이징에 배포한 뒤 `docs/operations/staging-validation-checklist.md`의 모든 항목에 담당자, 검수일, 증거를 기록합니다.
 
 ## 배포 산출물
 ```powershell

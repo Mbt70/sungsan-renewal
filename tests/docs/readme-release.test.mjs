@@ -45,4 +45,22 @@ describe('README release handoff instructions', () => {
       assert.match(source, /\.manifest\.json/);
     }
   });
+
+  it('documents remaining external dependency checks before production cutover', () => {
+    const source = readFileSync('README.md', 'utf8');
+
+    for (const expected of [
+      '남은 외부 의존 작업',
+      'PHP와 Docker',
+      'scripts/bootstrap-gnuboard.ps1',
+      'docker compose build',
+      'docker compose up -d',
+      'http://localhost:8080',
+      '브라우저',
+      'Cafe24 스테이징',
+      'docs/operations/staging-validation-checklist.md',
+    ]) {
+      assert.match(source, new RegExp(expected.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    }
+  });
 });
