@@ -140,9 +140,21 @@ describe('Cafe24 staging validation handoff', () => {
 
     for (const expected of [
       '`news` 게시판 상세는 댓글 UI를 노출하지 않고 의견 수렴은 `free` 게시판에서 처리함',
+      '`free` 게시판 목록은 비회원에게 제목만 노출하고 작성자, 날짜, 조회수는 로그인 후 확인됨',
       '`free` 게시판 상세에서 회원 댓글 작성/답글/수정/삭제 UX가 동작함',
     ]) {
       expectIncludes(checklist, expected, checklistPath);
+    }
+  });
+
+  it('documents guest free-board title-only checks in the deployment runbook', () => {
+    const deployment = readFileSync('docs/operations/cafe24-deployment.md', 'utf8');
+
+    for (const expected of [
+      '비회원 자유게시판 목록은 제목만 노출되고 작성자, 날짜, 조회수는 로그인 후 보이는지 확인',
+      '비회원 자유게시판 본문 로그인 차단 확인',
+    ]) {
+      expectIncludes(deployment, expected, 'docs/operations/cafe24-deployment.md');
     }
   });
 
