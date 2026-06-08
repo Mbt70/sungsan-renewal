@@ -84,6 +84,16 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.ss-action-help\s*\{/);
   });
 
+  it('renders mypage last login as a semantic time when present', () => {
+    const mypage = read('src/pages/mypage.php');
+
+    assert.match(mypage, /\$sungsan_mypage_last_login = isset\(\$member\['mb_today_login'\]\) \? \$member\['mb_today_login'\] : '';/);
+    assert.ok(mypage.includes("$sungsan_mypage_last_login_attr = ($sungsan_mypage_last_login !== '' && $sungsan_mypage_last_login !== '0000-00-00 00:00:00' && preg_match('/^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$/', $sungsan_mypage_last_login)) ? str_replace(' ', 'T', $sungsan_mypage_last_login) : '';"));
+    assert.match(mypage, /<\?php if \(\$sungsan_mypage_last_login_attr !== ''\) \{ \?>\s*<time datetime="<\?php echo get_text\(\$sungsan_mypage_last_login_attr\); \?>"><\?php echo get_text\(\$sungsan_mypage_last_login\); \?><\/time>/);
+    assert.match(mypage, /<\?php \} else \{ \?>\s*기록 없음\s*<\?php \} \?>/);
+    assert.doesNotMatch(mypage, /<dd><\?php echo get_text\(isset\(\$member\['mb_today_login'\]\) \? \$member\['mb_today_login'\] : ''\); \?><\/dd>/);
+  });
+
   it('exposes member withdrawal from mypage through password confirmation', () => {
     const mypage = read('src/pages/mypage.php');
     const confirm = read('src/skin/member/sungsan/member_confirm.skin.php');

@@ -16,6 +16,8 @@ $my_posts_url = G5_BBS_URL.'/new.php?mb_id='.urlencode($member['mb_id']);
 $edit_url = G5_BBS_URL.'/member_confirm.php?url=register_form.php';
 $logout_url = G5_BBS_URL.'/logout.php';
 $leave_url = G5_BBS_URL.'/member_confirm.php?url=member_leave.php';
+$sungsan_mypage_last_login = isset($member['mb_today_login']) ? $member['mb_today_login'] : '';
+$sungsan_mypage_last_login_attr = ($sungsan_mypage_last_login !== '' && $sungsan_mypage_last_login !== '0000-00-00 00:00:00' && preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $sungsan_mypage_last_login)) ? str_replace(' ', 'T', $sungsan_mypage_last_login) : '';
 $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_recent_posts($member['mb_id'], 5) : array();
 ?>
 <section class="ss-page-header">
@@ -41,7 +43,13 @@ $recent_posts = function_exists('sungsan_member_recent_posts') ? sungsan_member_
                 </div>
                 <div>
                     <dt>최근 로그인</dt>
-                    <dd><?php echo get_text(isset($member['mb_today_login']) ? $member['mb_today_login'] : ''); ?></dd>
+                    <dd>
+                        <?php if ($sungsan_mypage_last_login_attr !== '') { ?>
+                            <time datetime="<?php echo get_text($sungsan_mypage_last_login_attr); ?>"><?php echo get_text($sungsan_mypage_last_login); ?></time>
+                        <?php } else { ?>
+                            기록 없음
+                        <?php } ?>
+                    </dd>
                 </div>
             </dl>
         </article>
