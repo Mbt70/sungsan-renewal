@@ -542,6 +542,18 @@ describe('sungsan theme static contract', () => {
     assert.match(css, /\.member_cert_refresh_agree input/);
   });
 
+  it('keeps registration consent modal readable and stylesheet-driven', () => {
+    const modal = read('src/skin/member/sungsan/consent_modal.inc.php');
+    const css = read('src/skin/member/sungsan/style.css');
+
+    assert.match(modal, /<dialog id="consentDialog" aria-labelledby="consentDialogTitle" aria-describedby="consentDialogBody">/);
+    assert.doesNotMatch(modal, /<style>[\s\S]*?<\/style>/);
+    assert.match(css, /#consentDialog\s*\{/);
+    assert.match(css, /\.cd-body\s*\{[\s\S]*?font-size:\s*1rem;/);
+    assert.doesNotMatch(css, /\.cd-body\s*\{[^}]*font-size:\s*14px/);
+    assert.match(css, /\.cd-actions button\s*\{[\s\S]*?min-height:\s*44px;/);
+  });
+
   it('starts registration membership screens with visible page headings', () => {
     const register = read('src/skin/member/sungsan/register.skin.php');
     const registerForm = read('src/skin/member/sungsan/register_form.skin.php');
